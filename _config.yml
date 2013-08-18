@@ -63,14 +63,14 @@ default_asides: [asides/recent_posts.html, asides/github.html, custom/asides/wei
 # ----------------------- #
 
 # Github repositories
-github_user:
+github_user: zhaozhiming
 github_repo_count: 0
 github_show_profile_link: true
 github_skip_forks: true
 
 # Twitter
 twitter_user:
-twitter_tweet_button: true
+twitter_tweet_button: false
 
 # Google +1
 google_plus_one: false

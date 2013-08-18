@@ -1,5 +1,5 @@
 GEM
-  remote: http://ruby.taobao.org/
+  remote: http://rubygems.org/
   specs:
     RedCloth (4.2.9)
     chunky_png (1.2.5)

@@ -4,6 +4,7 @@ title: "ant里面神奇的fork"
 date: 2012-03-14 10:51
 comments: true
 categories: code
+tags: ant
 ---
 
 最近两天一直在处理ant运行java程序的一个问题，用IDE直接运行类里面的main函数一切正常，但用ant跑该函数就报错误，错误的原因是运行ant任务时调用的是AntClasloader，而IDE里面调用的是jvm里面的classloader。  

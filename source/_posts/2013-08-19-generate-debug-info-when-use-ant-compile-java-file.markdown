@@ -4,6 +4,7 @@ title: "在ant编译java文件时产生debug信息"
 date: 2012-03-06 17:41
 comments: true
 categories: code
+tags: [ant, java]
 ---
 
 使用ant编译java文件时，如果没有设置debug属性，则不会产生编译信息，ant的默认设置是不打印编译信息。  

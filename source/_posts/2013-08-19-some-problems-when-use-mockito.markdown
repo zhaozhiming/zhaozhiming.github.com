@@ -4,6 +4,7 @@ title: "使用Mockito时遇到的一些问题"
 date: 2012-03-02 17:44
 comments: true
 categories: code
+tags: [mockito, java, junit]
 ---
 
 最近在使用Mockito时遇到了几个比较tricking的问题，在这里记录一下。  

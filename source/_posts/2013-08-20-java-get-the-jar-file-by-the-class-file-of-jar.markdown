@@ -4,6 +4,7 @@ title: "Java通过class文件得到所在jar包"
 date: 2012-03-16 18:04
 comments: true
 categories: code
+tags: [ant, java]
 ---
   
 今天遇到一个问题，需要通过知道的class文件得到该文件所在的jar包，试过很多办法都不行，最后在网上找到了一个解决办法，如下：  

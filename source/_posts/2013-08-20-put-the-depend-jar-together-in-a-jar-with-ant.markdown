@@ -4,6 +4,7 @@ title: "在ant中将依赖jar包一并打包的方法"
 date: 2012-03-16 11:10
 comments: true
 categories: code
+tags: ant
 ---
   
 一般jar包里面是不包含jar文件的，如果自己的类有依赖其他jar包，可以通过ant命令将这些jar包解析，然后和自己的class文件打在一起，命令如下：    

@@ -71,7 +71,7 @@ Jenkins插件开发中还涉及到一类文件，就是配置文件。配置文�
 {% codeblock demo.jelly lang:html %}
     <?jelly escape-by-default='true'?>
     <j:jelly xmlns:j="jelly:core">
-        <th>$\{\%allBuildsColumnHeader\}</th>
+        <th>${\%allBuildsColumnHeader}</th>
     </j:jelly>
 {% endcodeblock %}   
    

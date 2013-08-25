@@ -90,8 +90,8 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name: zhaozhimingsblog
-disqus_show_comment_count: true
+#disqus_short_name: zhaozhimingsblog
+#disqus_show_comment_count: true
 
 # Google Analytics
 google_analytics_tracking_id:
@@ -101,3 +101,7 @@ facebook_like: false
 
 #tag dir
 tag_dir: tags
+
+# duoshuo comments
+duoshuo_comments: true
+duoshuo_short_name: zhaozhiming

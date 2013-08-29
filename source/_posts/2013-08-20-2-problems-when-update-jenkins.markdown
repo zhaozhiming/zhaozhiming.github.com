@@ -2,6 +2,8 @@
 layout: post
 title: "jenkins的2个问题"
 date: 2012-05-21 15:52
+description: "jenkins的2个问题"
+keywords: jenkins,问题
 comments: true
 categories: code
 tags: jenkins

@@ -2,6 +2,8 @@
 layout: post
 title: "Java通过class文件得到所在jar包"
 date: 2012-03-16 18:04
+description: "Java通过class文件得到所在jar包"
+keywords: java,class,jar
 comments: true
 categories: code
 tags: [ant, java]

@@ -2,8 +2,10 @@
 layout: post
 title: "在junit中添加fail--有test失败即build failed"
 date: 2012-02-24 11:28
+description: "在junit中添加fail--有test失败即build failed"
+keywords: junit,ant
 comments: true
-categories: code  
+categories: code
 tags: [ant, junit]
 ---
   

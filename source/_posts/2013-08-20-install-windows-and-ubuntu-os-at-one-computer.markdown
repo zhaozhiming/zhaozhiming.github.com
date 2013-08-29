@@ -2,6 +2,8 @@
 layout: post
 title: "安装win7和ubuntu双系统"
 date: 2012-04-16 16:53
+description: "安装win7和ubuntu双系统"
+keywords: win7,ubuntu,双系统,安装
 comments: true
 categories: code
 tags: [windows, ubuntu]

@@ -2,6 +2,8 @@
 layout: post
 title: "bat脚本:通过端口号查找进程号"
 date: 2012-03-26 22:51
+description: "bat脚本:通过端口号查找进程号"
+keywords: jenkins,端口,bat脚本
 comments: true
 categories: code
 tags: [jenkins, auto-deploy, bat]

@@ -2,6 +2,8 @@
 layout: post
 title: "在ant编译java文件时产生debug信息"
 date: 2012-03-06 17:41
+description: "在ant编译java文件时产生debug信息"
+keywords: java,ant
 comments: true
 categories: code
 tags: [ant, java]

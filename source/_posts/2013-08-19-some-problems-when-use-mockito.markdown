@@ -2,6 +2,8 @@
 layout: post
 title: "使用Mockito时遇到的一些问题"
 date: 2012-03-02 17:44
+description: "使用Mockito时遇到的一些问题"
+keywords: mockito, java, junit
 comments: true
 categories: code
 tags: [mockito, java, junit]

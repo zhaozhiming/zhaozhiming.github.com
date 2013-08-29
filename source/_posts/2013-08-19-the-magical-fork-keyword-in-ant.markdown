@@ -2,6 +2,8 @@
 layout: post
 title: "ant里面神奇的fork"
 date: 2012-03-14 10:51
+description: "ant里面神奇的fork"
+keywords: ant, fork
 comments: true
 categories: code
 tags: ant

@@ -2,6 +2,8 @@
 layout: post
 title: "在ant中将依赖jar包一并打包的方法"
 date: 2012-03-16 11:10
+description: "在ant中将依赖jar包一并打包的方法"
+keywords: ant,依赖jar包,打包
 comments: true
 categories: code
 tags: ant

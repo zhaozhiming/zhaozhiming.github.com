@@ -2,6 +2,8 @@
 layout: post
 title: "location对象的页面跳转方法介绍"
 date: 2012-05-22 16:18
+description: "location对象的页面跳转方法介绍"
+keywords: location,页面跳转
 comments: true
 categories: code
 tags: javascript

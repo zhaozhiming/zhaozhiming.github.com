@@ -2,6 +2,8 @@
 layout: post
 title: "jenkins插件开发（二）-- HelloWorld"
 date: 2013-02-02 18:35
+description: "jenkins插件开发（二）-- HelloWorld"
+keywords: jenkins插件,开发
 comments: true
 categories: code
 tags: [jenkins plugins]

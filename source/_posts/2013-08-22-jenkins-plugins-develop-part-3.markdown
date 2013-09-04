@@ -2,6 +2,8 @@
 layout: post
 title: "jenkins插件开发（三）-- 插件编写"
 date: 2013-02-03 20:18
+description: "jenkins插件开发（三）-- 插件编写"
+keywords: jenkins插件,开发
 comments: true
 categories: code
 tags: jenkins plugins

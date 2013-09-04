@@ -2,6 +2,8 @@
 layout: post
 title: "junit4与junt3并存时产生的问题"
 date: 2012-04-16 15:54
+description: "junit4与junt3并存时产生的问题"
+keywords: junit3,junit,并存,问题
 comments: true
 categories: code
 tags: [java, junit]

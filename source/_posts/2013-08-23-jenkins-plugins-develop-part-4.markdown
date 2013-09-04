@@ -2,6 +2,8 @@
 layout: post
 title: "jenkins插件开发（四）-- 插件发布"
 date: 2013-02-04 20:47
+description: "jenkins插件开发（四）-- 插件发布"
+keywords: jenkins插件,开发
 comments: true
 categories: code
 tags: jenkins plugins

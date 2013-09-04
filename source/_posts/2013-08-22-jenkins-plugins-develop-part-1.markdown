@@ -2,6 +2,8 @@
 layout: post
 title: "jenkins插件开发（一）--环境搭建"
 date: 2013-01-31 17:42
+description: "jenkins插件开发（一）--环境搭建"
+keywords: jenkins插件,开发
 comments: true
 categories: code
 tags: jenkins plugins

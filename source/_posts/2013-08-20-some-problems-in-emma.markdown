@@ -2,6 +2,8 @@
 layout: post
 title: "使用emma时遇到的一些问题"
 date: 2012-03-27 22:05
+description: "使用emma时遇到的一些问题"
+keywords: emma,问题
 comments: true
 categories: code
 tags: [ant, jenkins, emma]

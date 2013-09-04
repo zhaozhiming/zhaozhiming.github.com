@@ -2,6 +2,8 @@
 layout: post
 title: "for循环重复代码的重构"
 date: 2012-06-16 16:39
+description: "for循环重复代码的重构"
+keywords: for循环,重构
 comments: true
 categories: code
 tags: refactor

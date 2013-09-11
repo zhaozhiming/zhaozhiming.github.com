@@ -27,14 +27,14 @@ tags: octopress
   
 ###标签云  
   
-octopress默认的只有目录（categories），没有标签（Tag），目录和标签是不一样的，每一篇p ost只能归在一个目录里面，但却可以归在多个标签中。随着post的增多，标签也会慢慢变多，标签多了之后可以将标签做成标签云，放在blog的边栏上，非常美观。想做标签云，需要使用到2个插件，[robbyedwards/octopress-tag-pages][url4]和[robbyedwards/octopress-tag-cloud][url5]。具体安装步骤请参照该github上的说明。  
+octopress默认的只有目录（categories），没有标签（Tag），目录和标签是不一样的，每一篇blog只能归在一个目录里面，但却可以归在多个标签中。随着标签慢慢增多，可以将标签做成标签云，放在blog的边栏上，不仅非常美观，还可以看出你的blog关注方向有哪些。想做标签云，需要使用到2个插件，[robbyedwards/octopress-tag-pages][url4]和[robbyedwards/octopress-tag-cloud][url5]。具体安装步骤请参照该github上的说明。  
 [url4]: https://github.com/robbyedwards/octopress-tag-pages
 [url5]: https://github.com/robbyedwards/octopress-tag-cloud
   
 ###同步插件  
   
-在github上面搭建自己的octopress博客，有个缺点是在搜索引擎中没有收录你的网站，导致别人很难在google或者百度里面找到你的文章，如果你的博客放在比较大的博客网站的话（比如博客园、博客大巴等），在各大搜索网站就可以很容易搜到你的blog。我曾经试过在每篇post上面加上“keywords"标签来记录post的关键字，希望搜索引擎可以搜录，但结果还是不行。  
-在网上搜了一下，发现有人写了一个octopress插件，可以将octopress的post同步到几个比较大的博客网站，可以同步所有的post，也可以同步最近一篇post。网址在[这里][url6]。  
+在github上面搭建自己的octopress博客，有个缺点是在搜索引擎中没有收录你的网站，导致别人很难在google或者百度里面找到你的文章，如果你的blog放在比较大的博客网站的话（比如博客园、博客大巴等），在各大搜索网站就可以很容易搜到你的blog。我曾经试过在每篇blog上面加上“keywords"标签来记录post的关键字，希望搜索引擎可以搜录，但结果还是不行。  
+在网上搜了一下，发现有人写了一个octopress插件，可以将octopress的blog同步到几个比较大的博客网站，可以同步所有的blog，也可以同步最近一篇blog。网址在[这里][url6]。  
 [url6]: https://github.com/huangbowen521/octopress-syncPost
   
 上面几个是我的octopress主要插件，主题上面我还是不大满意，可能以后还会更新。

@@ -393,3 +393,15 @@ task :list do
   puts "Tasks: #{(Rake::Task.tasks - [Rake::Task[:list]]).join(', ')}"
   puts "(type rake -T for more detail)\n\n"
 end
+
+desc "sync latest post to MetaWeblog site"
+task :sync_latest_post, :passwd do |t, args|
+  puts "Sync the latest post to MetaWeblog site"
+  system "ruby plugins/sync_latest_post.rb  " + args[:passwd]
+end
+
+desc "sync all posts to MetaWeblog site(s)"
+task :sync_all_posts, :passwd do |t, args|
+  puts "Sync all posts to MetaWeblog site(s)"
+  system "ruby plugins/sync_all_posts.rb  " + args[:passwd]
+end

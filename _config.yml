@@ -108,10 +108,10 @@ duoshuo_short_name: zhaozhiming
 
 # MetaWeblog
 MetaWeblog:
-   Cnblogs:
-      MetaWeblog_username: kingzzm
-      MetaWeblog_url: http://www.cnblogs.com/<yourname>/services/metaweblog.aspx
-      MetaWeblog_blogid: 1998
+  Cnblogs:
+    MetaWeblog_username: kingzzm
+    MetaWeblog_url: http://www.cnblogs.com/kingzzm/services/metaweblog.aspx
+    MetaWeblog_blogid: 3321685	
 
 
 

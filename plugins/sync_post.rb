@@ -18,7 +18,7 @@ module MetaWeblogSync
       postsPaths = getAllBlogsPaths
       postsPaths.each do | path|
         postBlog path
-        sleep(61) #As time limit in blog wite, there should be a time gap in every loop
+        sleep(120) #As time limit in blog wite, there should be a time gap in every loop
       end
     end
 
@@ -26,6 +26,19 @@ module MetaWeblogSync
       postPath = getLatestBlogPath
       puts postPath
       postBlog postPath 
+    end
+
+    def postBlogsBefore date
+      #find all blogs paths
+      postsPaths = getAllBlogsPaths
+      puts "size:" + postsPaths.size.to_s
+      postsPaths.each do | path|
+        postDate = Date.parse(path[/\d{4}\/\d{2}\/\d{2}/])
+        next if postDate >= date
+        
+        postBlog path
+        sleep(120) #As time limit in blog wite, there should be a time gap in every loop
+      end
     end
 
     def postBlog blogPath
@@ -45,7 +58,7 @@ module MetaWeblogSync
       contents = indexFile.read
       html = Nokogiri::HTML(contents)
 
-      # get latest post path
+      # get all posts path
       paths = html.css('//h1/a')
       paths.shift
       
@@ -63,13 +76,11 @@ module MetaWeblogSync
       path = html.css('//h1[@class="entry-title"]/a')[0]['href']
 
       File.expand_path(File.dirname(__FILE__) + '/../public' + path) + '/index.html'
-
     end
 
     def getBlogHtml(path)
       contents = File.open(path).read
       Nokogiri::HTML(contents)
-
     end
 
     def getPost html
@@ -92,7 +103,7 @@ module MetaWeblogSync
 
       imgList.each do |img|
 
-        if (!img['src'].match(/^http/))
+        if (img['src'] != nil && !img['src'].match(/^http/))
           img['src'] = @globalConfig['url'] + img['src']
         end
       end

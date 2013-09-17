@@ -411,3 +411,9 @@ task :sync_posts_before_date, :passwd, :date do |t, args|
   puts "Sync posts before date to MetaWeblog site(s)"
   system "ruby plugins/sync_posts_before_date.rb  " + args[:passwd] + " " + args[:date]
 end
+
+desc "sync post by title to MetaWeblog site(s)"
+task :sync_post_by_title, :passwd, :title do |t, args|
+  puts "Sync post by title to MetaWeblog site(s)"
+  system "ruby plugins/sync_post_by_title.rb  " + args[:passwd] + " " + args[:title]
+end

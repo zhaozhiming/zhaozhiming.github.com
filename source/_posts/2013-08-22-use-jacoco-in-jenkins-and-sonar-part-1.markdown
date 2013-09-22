@@ -8,10 +8,10 @@ tags: [jacoco, jenkins, sonar]
 ---
   
 之前系统的持续集成覆盖率工具使用的是cobetura，使用的过程中虽然没什么问题，但感觉配置比较麻烦，现在准备改用jacoco这个覆盖率工具来代替它。接下来我介绍一下jenkins配置jacoco，并且在sonar显示单元测试和集成测试覆盖率的过程。  
-  
-<!--more-->  
+
 用jacoco来实现单元测试的覆盖率比较简单，在ant脚本中先增加下面的任务：  
-  
+
+<!--more-->  
 {% codeblock build.xml lang:xml %}
 <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
         <classpath path="${basedir}/jacoco_lib/jacocoant.jar" />

@@ -9,6 +9,7 @@ tags: [js, sonar]
   
 在上一篇blog中，我们将sonar几个需要的环境都搭建好了，包括sonar的服务器，sonar runner，sonar的javascript插件。现在我们就来讲如何自定义JS扫描规则。  
   
+<!--more-->  
 实际上有3种方法可以自定义代码的校验规则：  
   
 * 直接在sonar的web接口中增加XPath规则；

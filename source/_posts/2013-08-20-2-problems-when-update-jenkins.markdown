@@ -11,6 +11,7 @@ tags: jenkins
   
 最近CI服务器从老版本的hudson升级为jenkins，遇到了2个问题，记录一下：  
   
+<!--more-->  
 **1.升级为jenkins后，junit report里面显示的test case数量为原来的两倍，每个test case跑了2遍。**  
   
 在job设置的junit文件路径提示这样写：'myproject/target/test-reports/\*.xml'，老的hudson版本只会读取TEST-\*.xml文件，而新的jenkins不仅会读取所有TEST-\*.xml，还会读取TESTS-TestSuites.xml文件，而这个文件是包含了前面的Test-*.xml里面的test case的，所以会显示为两倍。  

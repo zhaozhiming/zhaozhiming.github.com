@@ -11,6 +11,7 @@ tags: [jenkins plugins]
   
 在上一篇blog中我们讲了如何搭建jenkins插件的开发环境，接下来介绍如何开发我们的插件。  
 
+<!--more-->
 ###创建HelloWorld插件  
 
 学习每门新语言的时候，我们都会写一个HelloWorld程序，这里介绍的是如何创建一个Jenkins的HelloWorld插件。  

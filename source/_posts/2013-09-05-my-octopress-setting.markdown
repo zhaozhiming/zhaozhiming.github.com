@@ -11,7 +11,8 @@ tags: octopress
 在github上用octopress搭建了自己的blog，octopress号称是“专门给黑客打造的博客（A blogging framework for
 把hackers）”，使用Markdown语法来写blog确实感觉像写代码一样，而且写好的
 把blog可以本地调试好了再上传到github的服务器，就像你的应用程序调试好了部署到服务器一样。
-
+  
+<!--more-->  
 我最喜欢的是octopress的代码片段，简洁清晰，而且支持各种语言的高亮显示，你还可以在你的blog中嵌入不同的js框架（比如jquery或angularJs），展示js代码的效果。octopress支持的插件很多，还可以选择各种主题来装饰你的blog，下面我也按照惯例秀秀自己的octopress配置。  
   
 ###主题  

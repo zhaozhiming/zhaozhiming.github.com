@@ -10,7 +10,8 @@ tags: [ant, jenkins, emma]
 ---
 今天在用使用emma的过程中遇到了几个问题，记录一下.  
   
-**1.跑junit过程中没办法产生coverage data文件，导致最后没办法出emma报告，上官网查了一下原因如下：**    
+**1.跑junit过程中没办法产生coverage data文件，导致最后没办法出emma报告，上官网查了一下原因如下：**  
+<!--more-->  
 {% blockquote %}
 I have instrumented my classes but am not getting any coverage data...   
 This question has been asked several times and in all cases the users forgot to package or deploy the instrumented versions of their classes. Please check that your build places EMMA-instrumented classes ahead of the normal application classpath at runtime.

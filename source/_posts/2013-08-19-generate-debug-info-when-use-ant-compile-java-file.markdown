@@ -11,6 +11,7 @@ tags: [ant, java]
 
 使用ant编译java文件时，如果没有设置debug属性，则不会产生编译信息，ant的默认设置是不打印编译信息。  
   
+<!--more-->  
 如果想在编译过程中显示编译信息，需设置debug属性为true，并且设置debugLevel，如下代码所示：  
 
 {% codeblock ant file - build.xml lang:xml %}

@@ -9,6 +9,7 @@ tags: java
   
 java里面的Arrays类有个asList方法，参数是1或多个Object对象，如果传入一个Object数组，则可以将该数组转化为List，但如果传入的是一个基本类型的数据（int,long,short 等），则无法将数组转换成正确的list，测试代码如下：  
   
+<!--more-->  
 {% codeblock Main.java lang:java %}
     public static void main(String[] args) {
         List<int[]> ints = asList(new int[]{1, 2});

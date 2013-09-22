@@ -8,7 +8,7 @@ tags: jenkins
 ---
   
 报错信息如下：  
-
+<!--more-->
 {% codeblock log lang:text %}
 coverage-report:    
 

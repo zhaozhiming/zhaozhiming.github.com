@@ -24,6 +24,7 @@ function createPerson(name, age) {
 优点：创建相同实例只有一处代码。  
 缺点：不知道对象原型。  
   
+<!--more-->  
 {% codeblock test.js lang:javascript %}
 var person1 = createPerson("zhang", 20);
 var person2 = createPerson("li", 30);

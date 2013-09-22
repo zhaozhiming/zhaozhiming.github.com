@@ -9,6 +9,7 @@ tags: [js,sonar]
   
 在上一篇blog中讲了在sonar中如何新增自定义的JS规则，这里面比较难的地方是XPath语句的编写，而要编写正确的XPath语句，首先要拿到语法的AST，下面我们就来介绍如何使用SSLR JavaScript Toolkit 工具来得到源代码的语法树。  
   
+<!--more-->
 首先通过在[这里][url1]下载SSLR JavaScript Toolkit 工具，下载下来是一个jar包，在cmd窗口使用java -jar sslr-javascript-toolkit-1.3.jar打开这个工具，操作界面如下：  
 [url1]: http://repository.codehaus.org/org/codehaus/sonar-plugins/javascript/sslr-javascript-toolkit/1.3/sslr-javascript-toolkit-1.3.jar  
   

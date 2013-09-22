@@ -9,6 +9,7 @@ tags: [jacoco, jenkins, sonar]
   
 首先要得到之前的单元测试和集成测试的覆盖率文件，还有对应的class文件以及单元测试的覆盖率报告，材料准备齐全之后，使用如下命令：  
 
+<!--more-->
 {% codeblock build.xml lang:xml %}
 <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
         <classpath path="${env.SONAR-ANT-TASK.JAR}"/>

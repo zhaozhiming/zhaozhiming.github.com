@@ -13,6 +13,7 @@ tags: [jenkins, auto-deploy, bat]
   
 遇到了这样一个问题：在服务器上执行tomcat的shutdown.bat命令可以正常关机，但用jenkins执行shutdown.bat命令时却经常关闭不了，从而导致重启时报错。后来想到了杀进程的办法来关闭tomcat服务器，但是要怎样才能查到tomcat进程并杀掉呢？  
   
+<!--more-->  
 下面是通过端口号查找进程的命令：  
 {% codeblock lang:bat %}
 netstat -ano | findstr 8888 //我的tomcat端口给我改成8888了。

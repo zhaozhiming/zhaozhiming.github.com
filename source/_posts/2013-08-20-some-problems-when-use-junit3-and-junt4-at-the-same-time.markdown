@@ -10,6 +10,7 @@ tags: [java, junit]
 ---
 目前的项目里用junit写单元测试，使用的是junit4，由于大部分开发之前使用的都是junit3，对junit4还不是很熟悉，所以出现了junit3和4混合使用的情况，导致发生了一些问题，这里列举一下。  
   
+<!--more-->  
 **1.测试类继承了TestCase，方法名是test开头，加Ignore标签，这时Ignore标签失效。错误代码示例：**  
   
 {% codeblock test.java lang:java %}

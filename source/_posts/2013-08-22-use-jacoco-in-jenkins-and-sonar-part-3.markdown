@@ -10,7 +10,8 @@ tags: [jacoco, jenkins, sonar]
 我们系统使用weblogic做服务器，集成测试框架使用的是junit+selenium。  
   
 首先，要把jacoco的jacocoagent.jar包放到部署应用的服务器上，接着在系统服务的JAVA_OPTIONS 后面添加如下参数：  
-  
+
+<!--more-->  
 {% codeblock lang:sh %}
 -javaagent:[yourpath/]jacocoagent.jar=includes=com.xxx.xxx.*,output=tcpserver,address=xxx.xxx.xxx.xxx,port=xxxxx
 {% endcodeblock %}  

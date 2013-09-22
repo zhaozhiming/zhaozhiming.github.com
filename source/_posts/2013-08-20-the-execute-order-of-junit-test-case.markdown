@@ -10,6 +10,7 @@ tags: [ant, junit]
   
 首先运行junit时是按照脚本中文件夹的顺序执行，如下脚本会先执行test1目录下的测试，其实是test2目录的，最后是test3目录的。  
   
+<!--more-->  
 {% codeblock build.xml lang:xml %}
 <batchtest todir="${junit.dir}">
     <fileset dir="${test1.dir}">

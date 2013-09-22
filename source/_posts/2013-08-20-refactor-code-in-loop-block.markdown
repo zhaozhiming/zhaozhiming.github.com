@@ -11,6 +11,7 @@ tags: refactor
   
 **DRY（don't repeat yourself）**，重复往往是代码腐烂的开始，我们一般的处理手法是将重复的代码提取成一个方法，然后用新方法替换掉原来的代码。  
   
+<!--more-->  
 但是对于for循环里面的重复代码要如何处理呢？比如有下面2个方法：  
 
 {% codeblock A.class lang:java %}

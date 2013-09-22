@@ -10,6 +10,7 @@ tags: ant
 ---
   
 一般jar包里面是不包含jar文件的，如果自己的类有依赖其他jar包，可以通过ant命令将这些jar包解析，然后和自己的class文件打在一起，命令如下：    
+<!--more-->
 {% codeblock build.xml lang:xml %}
         <jar basedir="${build.class}" destfile="${build.out}/myjar.jar">
             <manifest>

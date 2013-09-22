@@ -9,6 +9,7 @@ tags: [jacoco, jenkins, sonar]
   
 先要在jenkins上安装jacoco的插件，安装完成之后在job的配置项中可以增加这个选项：  
 
+<!--more-->
 {% img /images/2012112911555041.png %}  
 {% img /images/2012112911561356.png %}
   

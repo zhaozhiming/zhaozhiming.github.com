@@ -10,6 +10,7 @@ tags: [ant, java]
 ---
   
 今天遇到一个问题，需要通过知道的class文件得到该文件所在的jar包，试过很多办法都不行，最后在网上找到了一个解决办法，如下：  
+<!--more-->
 {% codeblock demo.java lang:java %}
 String path = XXX.class.getProtectionDomain().getCodeSource().getLocation().getFile();
 File jarFile = new File(path);

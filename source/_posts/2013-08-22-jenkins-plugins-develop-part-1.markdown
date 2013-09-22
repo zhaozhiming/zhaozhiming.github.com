@@ -11,6 +11,7 @@ tags: jenkins plugins
   
 最近写了一个jenkins插件，功能比较简单，时间主要是花在对jenkins插件框架和Maven的熟悉上。jenkins插件虽然以前也接触过一点，不过现在都忘得差不多了，这个笔记权当知识点记录，顺带介绍介绍经验。  
   
+<!--more-->  
 首先是环境搭建，这里列一下jenkins插件开发所需工具：  
   
 * JDK6.0或更高

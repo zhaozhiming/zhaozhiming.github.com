@@ -11,6 +11,7 @@ tags: jenkins plugins
   
 在上一篇blog 中我们介绍了如何创建我们第一个jenkins插件，在这一篇blog继续介绍在开发我们的插件过程中需要注意的一些问题。  
   
+<!--more-->  
 ###扩展点选择  
   
 Jenkings插件是基于扩展点来实现的，比如基于Builder这个扩展点，那这个插件的功能就是一个构建插件，类似ant-builder（使用ant来执行构建脚本）。Jenkins插件的扩展点有很多，具体可以查询[这里][url1]。该网页列出了Jenkins所有的扩展点，点击每个扩展点下面Implementations，会列出该扩展点对应的实现类。找到实现类的源码就可以知道具体怎么使用该扩展点了，大部分的代码在github上都可以找到。在前面创建的HelloWorld插件是一个基于Builder扩展点的插件，可以在job 配置页面的Build 中增加该插件，以后每次Job每次构建的时候就会去调用该插件了。  

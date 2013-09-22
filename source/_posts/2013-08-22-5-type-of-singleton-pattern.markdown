@@ -8,7 +8,8 @@ tags: [java,design pattern]
 ---
   
 有过编程经验的朋友都知道设计模式中的单例模式，最近又重新看了一遍设计模式，今天将单例模式的几种形式介绍一下：  
-  
+
+<!--more-->  
 ###1、懒汉形式（延迟加载）  
   
 {% codeblock Singleton.java lang:java %}

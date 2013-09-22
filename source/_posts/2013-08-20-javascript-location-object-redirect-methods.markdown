@@ -11,6 +11,7 @@ tags: javascript
   
 JavaScript中使用location对象可以通过很多种方式改变浏览器的位置。最常用的方法应该是下面几种：  
   
+<!--more-->  
 {% codeblock demo.js lang:javascript %}
 　　location.href = "http://www.google.com";
 　　window.location = "http://www.google.com";

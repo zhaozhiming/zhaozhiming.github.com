@@ -1,14 +1,19 @@
-{% capture category %}{{ post.categories | size }}{% endcapture %}
-{% capture tag %}{{ post.tags | size }}{% endcapture %}
-<h1><a href="{{ root_url }}{{ post.url }}">{{post.title}}</a></h1>
-<time datetime="{{ post.date | datetime | date_to_xmlschema }}" pubdate>{{ post.date | date: "<span class='month'>%b</span> <span class='day'>%d</span> <span class='year'>%Y</span>"}}</time>
-{% if category != '0' or tag != '0' %}
-<footer>
-{% if category != '0' %}
-  <span class="categories">posted in {{ post.categories | category_links }}</span>
-{% endif %}
-{% if tag != '0' %}
-  <span class="tags">tagged with {{ post.tags | tag_links }}</span>
-{% endif %}
-</footer>
-{% endif %}
+{% capture date %}{{ post.date }}{% endcapture %}
+{% capture this_year %}{{ date | date: "%Y" }}{% endcapture %}
+{% unless year == this_year %}
+	{% assign year = this_year %}
+	{% unless forloop.first %}
+		</section>
+	{% endunless %}
+	<section class="archives"><h1 class="year">{{ date | date: "%Y" }}</h1>
+{% endunless %}
+<article>
+  <h2 class="title"><a href="{{ root_url }}{{ post.url }}">{% if site.titlecase %}{{ post.title | titlecase }}{% else %}{{ post.title }}{% endif %}</a></h2>
+	<div class="meta">
+		<span class="date">{{ date | date: "%b %e" }}</span>
+		<span class="tags">{% include post/categories.html %}</span>
+	    {% if site.disqus_short_name and post.comments == true and site.disqus_show_comment_count == true %}
+	    <span class="comments"><a href="{{ root_url }}{{ post.url }}#disqus_thread">Comments</a></span>
+	    {% endif %}
+	</div>
+</article>

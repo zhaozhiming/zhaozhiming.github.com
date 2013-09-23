@@ -1,14 +1,28 @@
 {% capture root_url %}{{ site.root | strip_slash }}{% endcapture %}
 {% include head.html %}
-<body {% if page.body_id %} id="{{ page.body_id }}" {% endif %} {% if page.sidebar == false %} class="no-sidebar" {% endif %} {% if page.sidebar == 'collapse' or site.sidebar == 'collapse' %} class="collapse-sidebar sidebar-footer" {% endif %}>
-  <header role="banner">{% include header.html %}</header>
-  <!-- <nav role="navigation">{% include navigation.html %}</nav> -->
-  <div id="main">
-    <div id="content">
-      {{ content | expand_urls: root_url }}
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner">{% include header.html %}</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        {{ content | expand_urls: root_url }}
     </div>
-  </div>
-  <footer role="contentinfo">{% include footer.html %}</footer>
-  {% include after_footer.html %}
+    <footer id="footer">
+    {% include footer.html %}
+    </footer>
+    {% include after_footer.html %}
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
 </body>
 </html>

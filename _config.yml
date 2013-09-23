@@ -113,6 +113,11 @@ MetaWeblog:
     MetaWeblog_url: http://www.cnblogs.com/kingzzm/services/metaweblog.aspx
     MetaWeblog_blogid: 3321685	
 
+#tapir for search
+tapir_token: 5240386a70c7430200000002
 
+#linkedin
+linkedin_user: zhaozhiming
 
-
+#weibo
+weibo_user: 2497707964

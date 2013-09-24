@@ -59,6 +59,6 @@ tags: [jacoco, jenkins, sonar]
   
 在sonar 3.3的版本会自动将单元测试和集成测试的覆盖率合并，最后附上sonar上的覆盖率显示：  
 
-{% img /images/2012112914305954.png %}  
-{% img /images/2012112914311753.png %}  
+{% img /images/post/2012112914305954.png %}  
+{% img /images/post/2012112914311753.png %}  
   

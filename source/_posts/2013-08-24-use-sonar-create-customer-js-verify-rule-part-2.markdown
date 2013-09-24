@@ -28,19 +28,19 @@ sonar为大部分流行的语言（C, C#, C++, Cobol, Flex, JavaScript, PL/I, PL
   
 1、首先使用管理员的角色登录sonar，然后去到Settings > Quality Profile页面，选择Js规则（如下图所示）。    
   
-{% img  /images/02070803-9bce5fab1bf543059071fafff2ae37d8.png %}  
+{% img  /images/post/02070803-9bce5fab1bf543059071fafff2ae37d8.png %}  
   
 2、接着在Coding rules页面输入查询条件，找到XPath规则：  
   
-{% img  /images/02070943-c9a5b7732ea6478fba266555c308fc29.png %}  
+{% img  /images/post/02070943-c9a5b7732ea6478fba266555c308fc29.png %}  
   
 3、查询结果出来后，点击Copy rule连接来新增规则：  
   
-{% img  /images/02071054-da90a48498234fc19d34aff75c84a104.png %}  
+{% img  /images/post/02071054-da90a48498234fc19d34aff75c84a104.png %}  
   
 4、按照XPath的语法编写自己的规则：  
   
-{% img  /images/02071436-15c170e9f4eb4f6684d95df76fe6e628.png %}   
+{% img  /images/post/02071436-15c170e9f4eb4f6684d95df76fe6e628.png %}   
   
 如果对XPath不熟悉，建议先学习一些XPath的语法，下面给出3个javascript xpath的规则：  
   
@@ -64,5 +64,5 @@ sonar为大部分流行的语言（C, C#, C++, Cobol, Flex, JavaScript, PL/I, PL
 
 5、创建好规则之后，把规则设置为active，将规则的级别调高一些就会自动变为active，然后重新跑一下规则分析，这样新增的规则就生效了。  
   
-{% img  /images/02072520-4308a5a558d04ded998bb54f452c71f7.png %}  
+{% img  /images/post/02072520-4308a5a558d04ded998bb54f452c71f7.png %}  
   

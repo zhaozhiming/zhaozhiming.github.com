@@ -94,6 +94,6 @@ sonar.my.property=value
   
 使用管理员的角色登录sonar，根据这个路径进入更新中心：Settings > System > Update Center。在Available Plugins窗口找到javascript插件，点击其中的install按钮进行安装（如下图所示）。安装完后重启sonar服务器即可。  
   
-{% img /images/01202231-c4477ac31ac3411686f1a4b98ae3ece1.png %}  
+{% img /images/post/01202231-c4477ac31ac3411686f1a4b98ae3ece1.png %}  
   
 

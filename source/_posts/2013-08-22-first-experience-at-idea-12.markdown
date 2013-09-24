@@ -10,7 +10,7 @@ tags: Idea
 最近将开发工具IDEA升级到了12.0版本，被它新的UI界面深深吸引，看下面，很酷哦~  
 
 <!--more-->  
-{% img /images/20164405-12c5f44041bf43af8351e3812f69cf3b.PNG %} 
+{% img /images/post/20164405-12c5f44041bf43af8351e3812f69cf3b.PNG %} 
   
 ###一、下载安装  
   
@@ -22,7 +22,7 @@ tags: Idea
 
 安装完后的IDEA默认UI可不是上面那个，需要先去到setting里面设置，如下图：  
 
-{% img /images/20165722-72e913a55f7e436b89b87bb1fe1d6126.PNG %}
+{% img /images/post/20165722-72e913a55f7e436b89b87bb1fe1d6126.PNG %}
   
 1. 点击进入setting窗口；
 2. 选择Appearance；
@@ -32,7 +32,7 @@ tags: Idea
   
 使用Darcula主题的时候，发现中文变成了一堆乱码，这个问题可以也可以在setting里面解决：  
   
-{% img /images/20170004-5ac2c44f1bde48c2a842afd551cf9f3c.PNG %}
+{% img /images/post/20170004-5ac2c44f1bde48c2a842afd551cf9f3c.PNG %}
     
 同样进入setting的Appearance页面，将Override default fonts by(not recommended) 勾选上，然后选择字体，如果觉得字体太小，还可以选择字体大小。设置以后，IDEA就可以正常使用了。  
   

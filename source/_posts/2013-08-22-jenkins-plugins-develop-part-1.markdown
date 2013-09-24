@@ -43,10 +43,10 @@ jenkins插件需要用到Maven这个构建工具，大家可以去Maven的官网
 [url3]: http://plugins.intellij.net/plugin/?id=1885  
   
 图1:  
-{% img /images/29152926-97e25c38b1754deca8843030a113cb3e.png 图1 %}
+{% img /images/post/29152926-97e25c38b1754deca8843030a113cb3e.png 图1 %}
   
 图2:  
-{% img /images/29152950-1f91f25eac354a75a44e34287f75cbba.png 图2 %}
+{% img /images/post/29152950-1f91f25eac354a75a44e34287f75cbba.png 图2 %}
    
 ###Jetty(可选)  
   

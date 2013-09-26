@@ -95,3 +95,16 @@ a{
   &.left, &.right { margin-bottom: .8em; }
 }
 
+#toload {
+    overflow: hidden;
+}
+
+.side-bar {
+    float: right;
+    width: 20%;
+    margin-right: 5%
+}
+
+.left-content {
+    overflow: hidden;
+}

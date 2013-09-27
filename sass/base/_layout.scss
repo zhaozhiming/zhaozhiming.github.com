@@ -108,3 +108,14 @@ a{
 .left-content {
     overflow: hidden;
 }
+
+aside.sidebar li {
+    list-style: none;
+    padding: .5em 0;
+    margin: 0;
+    border-bottom: 1px solid $color-gray04;
+}
+
+aside.sidebar section {
+    margin-bottom: 1.5em;
+}

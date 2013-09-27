@@ -119,3 +119,18 @@ aside.sidebar li {
 aside.sidebar section {
     margin-bottom: 1.5em;
 }
+
+aside.sidebar a {
+    color:#7c7873;
+    -webkit-transition:all 1s ease-in-out;
+    -moz-transition:all 1s ease-in-out;
+    -o-transition:all 1s ease-in-out;
+    transition:all 1s ease-in-out;
+}
+
+aside.sidebar a:hover {
+    color: #084B8A;
+    text-shadow: 3px 3px 12px #888;
+    -webkit-transform: scale(1.3);
+    -moz-transform: scale(1.3);
+}

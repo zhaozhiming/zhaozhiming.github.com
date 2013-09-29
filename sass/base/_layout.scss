@@ -95,7 +95,7 @@ a{
   &.left, &.right { margin-bottom: .8em; }
 }
 
-#toload {
+#index-layout {
     overflow: hidden;
 }
 
@@ -108,3 +108,10 @@ a{
 .left-content {
     overflow: hidden;
 }
+
+.left-post {
+    width: 80%;
+    margin-left: 10%;
+}
+
+

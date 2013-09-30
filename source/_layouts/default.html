@@ -6,8 +6,8 @@
     <header id="header" class="inner">{% include header.html %}</header>
 
 	<div id="toload">
-	    <div id="content">
-	        {{ content | expand_urls: root_url }}
+		<div id="content">
+			{{ content | expand_urls: root_url }}
 	    </div>
 	    <footer id="footer">
 	    {% include footer.html %}

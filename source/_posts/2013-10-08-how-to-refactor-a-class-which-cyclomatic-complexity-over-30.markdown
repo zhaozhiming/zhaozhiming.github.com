@@ -14,7 +14,7 @@ tags: [java,refactor]
 代码复杂度是指代码中的分支数量，比如有一个if分支，代码复杂度就加1，如果if中有“||”或者“&&”那么代码复杂度就加2，for和while同理。一般复杂度超过10的类就算是比较复杂的了，而这个类的复杂度竟然达到了30，代码的糟糕程度可见一斑，现在我们就来重构一下这个类的代码。  
 <!--more-->
 原始文件在**[这里][url1]。**  
-[url1]: http://www.github.com/zhaozhiming  
+[url1]: https://github.com/zhaozhiming/zhaozhiming.github.com/blob/source/source/file/SomeClient(old).java  
   
   
 重构开始吧！  
@@ -248,7 +248,7 @@ byte[] bytes1 = ByteStreams.toByteArray(inputStream);
 **代码复杂度变化：原来是很多，修改后为0。**  
 
 最终重构后的版本见**[这里][url2]**，最后的代码复杂度从原来的30降到了3。  
-[url2]: http://www.github.com/zhaozhiming  
+[url2]: https://github.com/zhaozhiming/zhaozhiming.github.com/blob/source/source/file/SomeClient(new).java  
 
 代码写的比较仓促，没有写单元测试，其实最好的做法是在重构之前先写好单元测试，然后再慢慢修改原来的代码，每修改一处地方跑一遍单元测试，这样可以保证你的重构没有破坏原来的代码逻辑。  
 

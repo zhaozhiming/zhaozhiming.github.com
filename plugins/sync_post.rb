@@ -64,7 +64,7 @@ module MetaWeblogSync
       html = getHtmlBy('/../public/blog/archives/index.html')
 
       # get all posts path
-      paths = html.css('//h1/a')
+      paths = html.css('//h2/a')
       paths.shift
       
       paths.map {|path| 
@@ -76,7 +76,7 @@ module MetaWeblogSync
       html = getHtmlBy('/../public/index.html')
 
       # get latest post path
-      path = html.css('//h1[@class="entry-title"]/a')[0]['href']
+      path = html.css('//h2[@class="title"]/a')[0]['href']
 
       File.expand_path(File.dirname(__FILE__) + '/../public' + path) + '/index.html'
     end
@@ -85,7 +85,7 @@ module MetaWeblogSync
       html = getHtmlBy('/../public/blog/archives/index.html')
 
       # get post path by title
-      posts = html.css('//h1/a')
+      posts = html.css('//h2/a')
 
       path = String.new("")
       posts.each do | post|
@@ -107,9 +107,8 @@ module MetaWeblogSync
     end
 
     def getPost html
-
       # get post title
-      title = html.css('//h1[@class="entry-title"]')[0].content
+      title = html.css('//h2[@class="title"]')[0].content
 
       entryContent = replaceImgUrl(html)
 

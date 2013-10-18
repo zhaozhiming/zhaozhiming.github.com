@@ -1,10 +1,23 @@
 ---
 layout: post
-title: "how to know new technique about IT part2"
+title: "如何了解新技术（二）——电子杂志"
 date: 2013-10-17 20:45
-description: 
-keywords: 
+description: 如何了解新技术
+keywords: 如何了解新技术
 comments: true
-categories: 
-tags: 
+categories: code
+tags: technique
 ---
+
+除了平时浏览网站外，我们还可以通过手机来了解技术资讯。这里推荐一下一款APP，多看阅读是一款很不错的阅读APP，它以精品阅读来吸引喜欢读书的朋友，虽然上面的电子书没有亚马逊的多，但他们的电子书制作十分精良，每一本书都让人爱不释手，而且完美匹配各种移动设备的尺寸...不说了，说多了就有广告嫌疑了。下面就说说多看上面的电子杂志。  
+<!--more -->
+  
+##免费的电子杂志——极客公园、码农、虎嗅等  
+  
+[极客公园][url1]，
+
+[url1]: http://www.geekpark.net
+
+
+
+

@@ -1,10 +1,10 @@
 ---
 layout: post
-title: "something like github can build by self"
+title: "和github类似的框架"
 date: 2013-10-25 07:36
-description: 
-keywords: 
+description: 和github类似的框架
+keywords: 和github类似的框架
 comments: true
-categories: 
-tags: 
+categories: code
+tags: github
 ---

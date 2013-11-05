@@ -18,6 +18,8 @@ github是程序员经常上的网站，但如果是在一家苦逼不能访问�
 ##gitlab
 [gitlab][url2]，也是用Ruby On Rails开发的一款开源代码托管框架，
 
+##GitBucket
+[GitBucket][url3]
 
 gitlab
 github enterprise
@@ -26,3 +28,4 @@ Gitorious
 
 [url1]: https://enterprise.github.com/
 [url2]: https://github.com/gitlabhq/gitlabhq
+[url2]: https://github.com/takezoe/gitbucket

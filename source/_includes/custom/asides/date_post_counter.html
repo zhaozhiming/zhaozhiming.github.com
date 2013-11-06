@@ -1,0 +1,12 @@
+{% capture date %}{{ post.date }}{% endcapture %}
+{% capture this_year %}{{ date | date: "%Y" }}{% endcapture %}
+
+<section>
+  <h1>文章归档</h1>
+  <ul>
+    <li>
+      <a href="#" target="_blank">{{ date | date: "%Y" }}[]</a>
+      <a href="#" target="_blank">{{ date | date: "%Y" }}[]</a>
+    </li>
+  </ul>
+</section>

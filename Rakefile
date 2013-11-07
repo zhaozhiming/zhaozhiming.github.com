@@ -109,6 +109,7 @@ task :new_post, :title do |t, args|
     post.puts "layout: post"
     post.puts "title: \"#{title.gsub(/&/,'&amp;')}\""
     post.puts "date: #{Time.now.strftime('%Y-%m-%d %H:%M')}"
+    post.puts "published: false"
     post.puts "description: "
     post.puts "keywords: "
     post.puts "comments: true"
@@ -116,6 +117,7 @@ task :new_post, :title do |t, args|
     post.puts "tags: "
     post.puts "---"
   end
+  system "sublime \"#{filename}\""
 end
 
 # usage rake new_page[my-new-page] or rake new_page[my-new-page.html] or rake new_page (defaults to "new-page.markdown")

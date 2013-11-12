@@ -1,0 +1,30 @@
+.monthly_archive {
+  .year {
+    color: inherit;
+    text-decoration: underline;
+    @include transition(color .5s);
+  }
+  &:hover .year {
+    //color: $sidebar-link-color;
+    text-decoration: underline;
+    &:hover {
+      //color: $sidebar-link-color-hover;
+      cursor: pointer;
+    }
+  }
+  //&:hover li.open {
+  //  color: inherit;
+  //  text-decoration: none;
+  //  &:hover {
+  //    cursor: pointer;
+  //    color: inherit;
+  //    text-decoration: none;
+  //  }
+  //}
+  ul {
+    ul.month_list {
+      margin-left: 1.3em;
+    }
+  }
+}
+

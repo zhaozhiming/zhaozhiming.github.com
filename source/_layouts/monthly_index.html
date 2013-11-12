@@ -1,0 +1,12 @@
+---
+layout: page
+footer: false
+---
+
+<div id="blog-archives" class="monthly">
+{% for post in page.period_posts %}
+<article>
+  {% include archive_post.html %}
+</article>
+{% endfor %}
+</div>

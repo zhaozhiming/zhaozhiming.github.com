@@ -1,12 +1,9 @@
 ---
-layout: page
-footer: false
+layout: default
 ---
 
 <div id="blog-archives">
 {% for post in page.period_posts %}
-<article>
   {% include archive_post.html %}
-</article>
 {% endfor %}
 </div>

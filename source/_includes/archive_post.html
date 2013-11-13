@@ -5,7 +5,8 @@
 	{% unless forloop.first %}
 		</section>
 	{% endunless %}
-	<section class="archives inner"><h1 class="year">{{ date | date: "%Y" }}</h1>
+	<section class="archives inner">
+		<h1 class="year">{{ date | date: "%Y" }}</h1>
 {% endunless %}
 <article>
   <h2 class="title"><a href="{{ root_url }}{{ post.url }}">{% if site.titlecase %}{{ post.title | titlecase }}{% else %}{{ post.title }}{% endif %}</a></h2>

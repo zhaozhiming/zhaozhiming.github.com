@@ -2,8 +2,19 @@
 layout: default
 ---
 
-<div id="blog-archives">
+
+<div id="blog-archives" class="archives inner">
 {% for post in page.period_posts %}
-  {% include archive_post.html %}
+{% capture date %}{{ post.date }}{% endcapture %}
+  <article>
+  <h2 class="title"><a href="{{ root_url }}{{ post.url }}">{% if site.titlecase %}{{ post.title | titlecase }}{% else %}{{ post.title }}{% endif %}</a></h2>
+	<div class="meta">
+		<span class="date">{{ date | date: "%b %e" }}</span>
+		<span class="tags">{% include post/categories.html %}</span>
+	    {% if site.disqus_short_name and post.comments == true and site.disqus_show_comment_count == true %}
+	    <span class="comments"><a href="{{ root_url }}{{ post.url }}#disqus_thread">Comments</a></span>
+	    {% endif %}
+	</div>
+</article>
 {% endfor %}
 </div>

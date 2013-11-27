@@ -10,5 +10,10 @@ categories: code
 tags: [openstack,swift]
 ---
 
+1.swift介绍
+2.搭建环境说明
+3.搭建步骤说明
+4.总结
+
 最近开始研究openstack的swift，openstack是一个开源的Iaas云框架.
 

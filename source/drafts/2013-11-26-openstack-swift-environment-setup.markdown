@@ -17,3 +17,7 @@ tags: [openstack,swift]
 
 最近开始研究openstack的swift，openstack是一个开源的Iaas云框架.
 
+1、环境准备
+操作系统：Ubuntu12.04LTS
+
+

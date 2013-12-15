@@ -27,4 +27,4 @@ tags: [css,semantic-ui]
 
 
 ##semantic-ui兼容性
-
+不兼容IEb

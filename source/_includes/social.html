@@ -5,6 +5,12 @@
   <a href="http://weibo.com/u/{{ site.weibo_user }}" class="weibo" title="sinaWeibo"></a>
   </li>
   {% endif %}
+  {% if site.qq_user %}
+  <!-- QQ -->
+  <li>
+  <a href="http://user.qzone.qq.com/{{ site.qq_user }}" class="qq" title="QQ"></a>
+  </li>
+  {% endif %}
   {% if site.github_user %}
   <!-- GitHub -->
   <li>

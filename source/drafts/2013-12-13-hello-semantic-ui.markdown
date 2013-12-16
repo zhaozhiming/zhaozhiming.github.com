@@ -17,6 +17,14 @@ tags: [css,semantic-ui]
 ##semantic-ui示例
 刚刚进入到semantci-ui的网站的时候，就被它的各种控件样式吸引住了，感觉比bootstrap好看很多，又很符合当前流行的“扁平化设计”的风格,这里列一下几个看起来比较酷的控件。  
 
+####好看的按钮
+<div class="ui buttons">
+  <div class="ui button">Cancel</div>
+  <div class="or"></div>
+  <div class="ui positive button">Save</div>
+</div>
+  
+####代码如下
 {% codeblock lang:html %}
 <div class="ui buttons">
   <div class="ui button">Cancel</div>

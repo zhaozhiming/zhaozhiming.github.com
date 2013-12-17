@@ -99,8 +99,8 @@ your-artifact要写你的插件id，这样页面就会自动去加载插件的�
   
 在上传你插件代码的时候，可能你会想使用持续集成来跑你的测试案例，看看上传的代码是否有破坏原有的功能。没有问题，可以使用BuildHive@CloudBees来为你Github上的代码做持续集成。  
   
-使用很简单，先进入这个网址[https://buildhive.cloudbees.com/job/jenkinsci/][url3]，然后使用你的github帐号登录，接着勾选你想要做持续集成的github项目。这样该项目每次提交代码之后，BuildHive@CloudBees就会为你做持续集成，如果有问题的话会发邮件通知你。    
-[url3]: https://buildhive.cloudbees.com/job/jenkinsci/    
+使用很简单，先进入这个网址[https://buildhive.cloudbees.com/job/jenkinsci/][url4]，然后使用你的github帐号登录，接着勾选你想要做持续集成的github项目。这样该项目每次提交代码之后，BuildHive@CloudBees就会为你做持续集成，如果有问题的话会发邮件通知你。    
+[url4]: https://buildhive.cloudbees.com/job/jenkinsci/    
      
 到这里，jenkins插件开发的所有介绍已经全部结束了，之前做插件开发的时候查到一些中文资料，都是一些比较入门的内容，所以自己就想写一个比较全面的介绍，希望这一系列的文章可以帮到你，谢谢。
 

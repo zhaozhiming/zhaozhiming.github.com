@@ -3,14 +3,20 @@ layout: post
 title: "《黑客》读书笔记"
 date: 2013-10-26 21:41
 published: false
-description: 黑客
-keywords: 黑客
+description: hacker
+keywords: hacker
 comments: true
 categories: read
 tags: harker
 ---
 
+{% img /images/post/hacker.jpg %}
+
+##简介
+
+<!--more-->  
 ##黑客的起源
+起源MIT AI实验室第九大楼
 
 ##黑客马拉松
 

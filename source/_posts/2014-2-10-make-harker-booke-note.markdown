@@ -1,8 +1,7 @@
 ---
 layout: post
 title: "《黑客》读书笔记"
-date: 2013-10-26 21:41
-published: false
+date: 2014-2-10 21:41
 description: hacker
 keywords: hacker
 comments: true
@@ -48,7 +47,7 @@ MIT AI实验室第九大楼是黑客的发源地，"hack"一词大概最早就�
 	def method_name(self):
 		x = y = 2
 		sum = x + y
-		if sum == 4:
+		if sum == 4: #一般会改这里
 			# do something
 			...
 {% endcodeblock %}  
@@ -58,6 +57,7 @@ MIT AI实验室第九大楼是黑客的发源地，"hack"一词大概最早就�
 		x = y = 2
 		sum = x + y
 
+		#在这里加代码...	
 		if sum != 5:
 			sum = 5
 

@@ -12,7 +12,9 @@ tags: [openstack, swift, middleware]
 
 {% img https://s.yunio.com/Orkc2v %}
 
-关于openstack的资料可以看[这里][url1]，这里还有这里。
+关于openstack的资料可以看[这里][url1]，[这里][url2]还有[这里][url3]。
 
 
 [url1]: http://zh.wikipedia.org/wiki/OpenStack
+[url2]: http://zh.wikipedia.org/wiki/OpenStack
+[url3]: http://zh.wikipedia.org/wiki/OpenStack

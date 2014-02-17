@@ -13,9 +13,11 @@ tags: [openstack, swift, middleware]
 {% img /images/post/2014-2/swift.jpg %}
 
 关于openstack swift的资料可以看[这里][url1]，[这里][url2]还有[这里][url3]。  
-  
+<!--more-->  
+
 ##准备环境
-从零开始接触的同学可以先从swift的[all in one][url4]部署开始学习，在本机搭建好swift环境就可以进行简单的测试了。由于swift是用Python语言写的，如果要开发swift的中间件的还需要在本地安装Pythone的IDE，我比较喜欢JETBRAIN（他们比较出名的是JAVA的IDE——IDEA）公司的IDE——Pycharm。准备环境如下：  
+从零开始接触的同学可以先从swift的[all in one][url4]部署开始学习，在本机搭建好swift环境就可以进行简单的测试了。由于swift是用Python语言写的，如果要开发swift的中间件的还需要在本地安装Pythone的IDE，我比较喜欢JETBRAIN（他们比较出名的是JAVA的IDE——IDEA）公司的IDE——Pycharm。准备环境如下:  
+
 * Ububutn 12.04 LTS 64bit
 * Python2.7(虽然现在已经有Python3了，但swift是用2.x的Python写的，Python3不向后兼容Python2) 
 * Pycharm3
@@ -57,6 +59,7 @@ forbidden_chars = '"`<>
 maximum_length = 255
 {% endcodeblock %} 
 在上面的例子中，name_check中间件加在healthcheck这个中间件后面，filter:name_check下面的配置信息是name_check的一些配置参数。
+
 * forbidden_chars: 指url中不能包含的特殊字符
 * maximum_length: 指url的最大长度
   
@@ -100,7 +103,7 @@ if __name__ == '__main__':
 编写完中间件之后，还需要将中间件配置到swift中，这样才算真正完成中间件的创建。  
   
 ####首先先停止swift的服务
-{% codeblock setup.cfg lang:xml %}
+{% codeblock shell lang:xml %}
 swift@ubuntu:~$ swift-init main stop
 {% endcodeblock %} 
   
@@ -125,13 +128,13 @@ paste.filter_factory =
 {% endcodeblock %} 
 
 ####执行命令重新安装swift
-{% codeblock shell lang:shell %}
+{% codeblock shell lang:xml %}
 swift@ubuntu:~$ cd swift目录
 swift@ubuntu:~$ sudo python setyp.py develop
 {% endcodeblock %} 
 
 ####最后重启swift服务
-{% codeblock setup.cfg lang:xml %}
+{% codeblock shell lang:xml %}
 swift@ubuntu:~$ swift-init main start
 {% endcodeblock %} 
 

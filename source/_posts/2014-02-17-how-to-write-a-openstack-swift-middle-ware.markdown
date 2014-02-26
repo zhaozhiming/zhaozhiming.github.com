@@ -2,7 +2,6 @@
 layout: post
 title: "openstack swift中间件编写"
 date: 2014-02-17 20:33
-published: false
 description: openstack swift中间件编写
 keywords: openstack,swift,middleware
 comments: true

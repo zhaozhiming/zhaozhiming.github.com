@@ -9,4 +9,7 @@ categories:
 tags: 
 ---
 
+{% img /images/post/2014-3/read_books.jpg %}  
 
+
+<!--more-->  

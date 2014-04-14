@@ -10,6 +10,194 @@ categories: code
 tags: swift
 ---
 
+### int方法
+
+{% codeblock lang:python %}
+    def __init__(self, conf, memcache=None, logger=None, account_ring=None,
+                 container_ring=None, object_ring=None):
+        if conf is None:
+            conf = {}
+        if logger is None:
+            self.logger = get_logger(conf, log_route='proxy-server')
+        else:
+            self.logger = logger
+{% endcodeblock %}
+* 1~2: proxy server的初始化方法。
+* 3~4: 配置参数字典初始化。
+* 5~7: logger对象初始化。
+  
+{% codeblock lang:python %}
+        swift_dir = conf.get('swift_dir', '/etc/swift')
+        self.node_timeout = int(conf.get('node_timeout', 10))
+        self.recoverable_node_timeout = int(
+            conf.get('recoverable_node_timeout', self.node_timeout))
+        self.conn_timeout = float(conf.get('conn_timeout', 0.5))
+        self.client_timeout = int(conf.get('client_timeout', 60))
+        self.put_queue_depth = int(conf.get('put_queue_depth', 10))
+        self.object_chunk_size = int(conf.get('object_chunk_size', 65536))
+        self.client_chunk_size = int(conf.get('client_chunk_size', 65536))
+        self.trans_id_suffix = conf.get('trans_id_suffix', '')
+        self.post_quorum_timeout = float(conf.get('post_quorum_timeout', 0.5))
+        self.error_suppression_interval = \
+            int(conf.get('error_suppression_interval', 60))
+        self.error_suppression_limit = \
+            int(conf.get('error_suppression_limit', 10))
+{% endcodeblock %}
+* swift_dir: swift的文件夹路径，一般存放ring文件和配置文件。
+* node_timeout: proxy server等待a/c/o server的响应超时时间，默认10秒。
+* recoverable_node_timeout: proxy server等待一个GET或HEAD object请求去读取一个数据块的初始化响应超时时间，默认值是node_time。
+* conn_timeout: 连接超时时间，默认0.5秒。
+* client_timeout: 客户端超时时间，默认60秒。
+* put_queue_depth: proxy的put队列深度，默认10。
+* object_chunk_size: object每次上传的字节大小，默认65536。
+* client_chunk_size: 客户端每次读取的字节大小，默认65536。
+* trans_id_suffix: trans_id的后缀，默认是空。
+* post_quorum_timeout: How long to wait for requests to finish after a quorum has been established。
+* error_suppression_interval: How long without an error before a node's error count is reset. This will also be how long before a node is reenabled after suppression is triggered。
+* error_suppression_limit: 在一个node被临时忽略之前有多少个errors可以堆积。
+
+{% codeblock lang:python %}
+        self.recheck_container_existence = \
+            int(conf.get('recheck_container_existence', 60))
+        self.recheck_account_existence = \
+            int(conf.get('recheck_account_existence', 60))
+        self.allow_account_management = \
+            config_true_value(conf.get('allow_account_management', 'no'))
+        self.object_post_as_copy = \
+            config_true_value(conf.get('object_post_as_copy', 'true'))
+        self.object_ring = object_ring or Ring(swift_dir, ring_name='object')
+        self.container_ring = container_ring or Ring(swift_dir,
+                                                     ring_name='container')
+        self.account_ring = account_ring or Ring(swift_dir,
+                                                 ring_name='account')
+{% endcodeblock %}
+
+{% codeblock lang:python %}
+        self.memcache = memcache
+        mimetypes.init(mimetypes.knownfiles +
+                       [os.path.join(swift_dir, 'mime.types')])
+        self.account_autocreate = \
+            config_true_value(conf.get('account_autocreate', 'no'))
+        self.expiring_objects_account = \
+            (conf.get('auto_create_account_prefix') or '.') + \
+            (conf.get('expiring_objects_account_name') or 'expiring_objects')
+        self.expiring_objects_container_divisor = \
+            int(conf.get('expiring_objects_container_divisor') or 86400)
+        self.max_containers_per_account = \
+            int(conf.get('max_containers_per_account') or 0)
+        self.max_containers_whitelist = [
+            a.strip()
+            for a in conf.get('max_containers_whitelist', '').split(',')
+            if a.strip()]
+{% endcodeblock %}
+  
+{% codeblock lang:python %}
+        self.deny_host_headers = [
+            host.strip() for host in
+            conf.get('deny_host_headers', '').split(',') if host.strip()]
+        self.rate_limit_after_segment = \
+            int(conf.get('rate_limit_after_segment', 10))
+        self.rate_limit_segments_per_sec = \
+            int(conf.get('rate_limit_segments_per_sec', 1))
+        self.log_handoffs = config_true_value(conf.get('log_handoffs', 'true'))
+        self.cors_allow_origin = [
+            a.strip()
+            for a in conf.get('cors_allow_origin', '').split(',')
+            if a.strip()]
+        self.strict_cors_mode = config_true_value(
+            conf.get('strict_cors_mode', 't'))
+        self.node_timings = {}
+        self.timing_expiry = int(conf.get('timing_expiry', 300))
+        self.sorting_method = conf.get('sorting_method', 'shuffle').lower()
+        self.max_large_object_get_time = float(
+            conf.get('max_large_object_get_time', '86400'))
+{% endcodeblock %}
+  
+{% codeblock lang:python %}
+        value = conf.get('request_node_count', '2 * replicas').lower().split()
+        if len(value) == 1:
+            value = int(value[0])
+            self.request_node_count = lambda replicas: value
+        elif len(value) == 3 and value[1] == '*' and value[2] == 'replicas':
+            value = int(value[0])
+            self.request_node_count = lambda replicas: value * replicas
+        else:
+            raise ValueError(
+                'Invalid request_node_count value: %r' % ''.join(value))
+{% endcodeblock %}
+  
+{% codeblock lang:python %}
+        try:
+            self._read_affinity = read_affinity = conf.get('read_affinity', '')
+            self.read_affinity_sort_key = affinity_key_function(read_affinity)
+        except ValueError as err:
+            # make the message a little more useful
+            raise ValueError("Invalid read_affinity value: %r (%s)" %
+                             (read_affinity, err.message))
+  
+        try:
+            write_affinity = conf.get('write_affinity', '')
+            self.write_affinity_is_local_fn \
+                = affinity_locality_predicate(write_affinity)
+        except ValueError as err:
+            # make the message a little more useful
+            raise ValueError("Invalid write_affinity value: %r (%s)" %
+                             (write_affinity, err.message))
+{% endcodeblock %}
+  
+{% codeblock lang:python %}
+        value = conf.get('write_affinity_node_count',
+                         '2 * replicas').lower().split()
+        if len(value) == 1:
+            value = int(value[0])
+            self.write_affinity_node_count = lambda replicas: value
+        elif len(value) == 3 and value[1] == '*' and value[2] == 'replicas':
+            value = int(value[0])
+            self.write_affinity_node_count = lambda replicas: value * replicas
+        else:
+            raise ValueError(
+                'Invalid write_affinity_node_count value: %r' % ''.join(value))
+{% endcodeblock %}
+  
+{% codeblock lang:python %}
+        # swift_owner_headers are stripped by the account and container
+        # controllers; we should extend header stripping to object controller
+        # when a privileged object header is implemented.
+        swift_owner_headers = conf.get(
+            'swift_owner_headers',
+            'x-container-read, x-container-write, '
+            'x-container-sync-key, x-container-sync-to, '
+            'x-account-meta-temp-url-key, x-account-meta-temp-url-key-2, '
+            'x-account-access-control')
+        self.swift_owner_headers = [
+            name.strip().title()
+            for name in swift_owner_headers.split(',') if name.strip()]
+{% endcodeblock %}
+  
+{% codeblock lang:python %}
+        # Initialization was successful, so now apply the client chunk size
+        # parameter as the default read / write buffer size for the network
+        # sockets.
+        #
+        # NOTE WELL: This is a class setting, so until we get set this on a
+        # per-connection basis, this affects reading and writing on ALL
+        # sockets, those between the proxy servers and external clients, and
+        # those between the proxy servers and the other internal servers.
+        #
+        # ** Because it affects the client as well, currently, we use the
+        # client chunk size as the govenor and not the object chunk size.
+        socket._fileobject.default_bufsize = self.client_chunk_size
+        self.expose_info = config_true_value(
+            conf.get('expose_info', 'yes'))
+        self.disallowed_sections = list_from_csv(
+            conf.get('disallowed_sections'))
+        self.admin_key = conf.get('admin_key', None)
+        register_swift_info(
+            version=swift_version,
+            strict_cors_mode=self.strict_cors_mode,
+            **constraints.EFFECTIVE_CONSTRAINTS)
+{% endcodeblock %}
+  
 ### call方法
 
 {% codeblock lang:python %}

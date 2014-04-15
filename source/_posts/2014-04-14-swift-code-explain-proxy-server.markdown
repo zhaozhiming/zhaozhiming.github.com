@@ -10,6 +10,8 @@ categories: code
 tags: swift
 ---
 
+## swift代码截止时间：2014-4-14  
+
 ### int方法
 
 {% codeblock lang:python %}
@@ -21,12 +23,6 @@ tags: swift
             self.logger = get_logger(conf, log_route='proxy-server')
         else:
             self.logger = logger
-{% endcodeblock %}
-* 1~2: proxy server的初始化方法。
-* 3~4: 配置参数字典初始化。
-* 5~7: logger对象初始化。
-  
-{% codeblock lang:python %}
         swift_dir = conf.get('swift_dir', '/etc/swift')
         self.node_timeout = int(conf.get('node_timeout', 10))
         self.recoverable_node_timeout = int(
@@ -42,21 +38,6 @@ tags: swift
             int(conf.get('error_suppression_interval', 60))
         self.error_suppression_limit = \
             int(conf.get('error_suppression_limit', 10))
-{% endcodeblock %}
-* swift_dir: swift的文件夹路径，一般存放ring文件和配置文件。
-* node_timeout: proxy server等待a/c/o server的响应超时时间，默认10秒。
-* recoverable_node_timeout: proxy server等待一个GET或HEAD object请求去读取一个数据块的初始化响应超时时间，默认值是node_time。
-* conn_timeout: 连接超时时间，默认0.5秒。
-* client_timeout: 客户端超时时间，默认60秒。
-* put_queue_depth: proxy的put队列深度，默认10。
-* object_chunk_size: object每次上传的字节大小，默认65536。
-* client_chunk_size: 客户端每次读取的字节大小，默认65536。
-* trans_id_suffix: trans_id的后缀，默认是空。
-* post_quorum_timeout: How long to wait for requests to finish after a quorum has been established。
-* error_suppression_interval: How long without an error before a node's error count is reset. This will also be how long before a node is reenabled after suppression is triggered。
-* error_suppression_limit: 在一个node被临时忽略之前有多少个errors可以堆积。
-
-{% codeblock lang:python %}
         self.recheck_container_existence = \
             int(conf.get('recheck_container_existence', 60))
         self.recheck_account_existence = \
@@ -70,9 +51,6 @@ tags: swift
                                                      ring_name='container')
         self.account_ring = account_ring or Ring(swift_dir,
                                                  ring_name='account')
-{% endcodeblock %}
-
-{% codeblock lang:python %}
         self.memcache = memcache
         mimetypes.init(mimetypes.knownfiles +
                        [os.path.join(swift_dir, 'mime.types')])
@@ -89,9 +67,6 @@ tags: swift
             a.strip()
             for a in conf.get('max_containers_whitelist', '').split(',')
             if a.strip()]
-{% endcodeblock %}
-  
-{% codeblock lang:python %}
         self.deny_host_headers = [
             host.strip() for host in
             conf.get('deny_host_headers', '').split(',') if host.strip()]
@@ -111,9 +86,6 @@ tags: swift
         self.sorting_method = conf.get('sorting_method', 'shuffle').lower()
         self.max_large_object_get_time = float(
             conf.get('max_large_object_get_time', '86400'))
-{% endcodeblock %}
-  
-{% codeblock lang:python %}
         value = conf.get('request_node_count', '2 * replicas').lower().split()
         if len(value) == 1:
             value = int(value[0])
@@ -124,9 +96,6 @@ tags: swift
         else:
             raise ValueError(
                 'Invalid request_node_count value: %r' % ''.join(value))
-{% endcodeblock %}
-  
-{% codeblock lang:python %}
         try:
             self._read_affinity = read_affinity = conf.get('read_affinity', '')
             self.read_affinity_sort_key = affinity_key_function(read_affinity)
@@ -143,9 +112,7 @@ tags: swift
             # make the message a little more useful
             raise ValueError("Invalid write_affinity value: %r (%s)" %
                              (write_affinity, err.message))
-{% endcodeblock %}
-  
-{% codeblock lang:python %}
+
         value = conf.get('write_affinity_node_count',
                          '2 * replicas').lower().split()
         if len(value) == 1:
@@ -157,9 +124,6 @@ tags: swift
         else:
             raise ValueError(
                 'Invalid write_affinity_node_count value: %r' % ''.join(value))
-{% endcodeblock %}
-  
-{% codeblock lang:python %}
         # swift_owner_headers are stripped by the account and container
         # controllers; we should extend header stripping to object controller
         # when a privileged object header is implemented.
@@ -172,9 +136,6 @@ tags: swift
         self.swift_owner_headers = [
             name.strip().title()
             for name in swift_owner_headers.split(',') if name.strip()]
-{% endcodeblock %}
-  
-{% codeblock lang:python %}
         # Initialization was successful, so now apply the client chunk size
         # parameter as the default read / write buffer size for the network
         # sockets.
@@ -197,6 +158,7 @@ tags: swift
             strict_cors_mode=self.strict_cors_mode,
             **constraints.EFFECTIVE_CONSTRAINTS)
 {% endcodeblock %}
+proxy server的初始化函数，具体配置的说明可以参考[这里][url1]。
   
 ### call方法
 
@@ -357,4 +319,4 @@ def handle_request(self, req):
 * 6~10: 捕获异常，记录日志。
 
 
-
+[url1]: http://docs.openstack.org/havana/config-reference/content/proxy-server-conf.html

@@ -160,6 +160,19 @@ tags: swift
 {% endcodeblock %}
 proxy server的初始化函数，具体配置的说明可以参考[这里][url1]。
   
+### check_config方法
+{% codeblock lang:python %}
+    def check_config(self):
+        """
+        Check the configuration for possible errors
+        """
+        if self._read_affinity and self.sorting_method != 'affinity':
+            self.logger.warn("sorting_method is set to '%s', not 'affinity'; "
+                             "read_affinity setting will have no effect." %
+                             self.sorting_method)
+{% endcodeblock %}  
+proxy server初始化后被调用的方法，检查proxy的read_affinity配置和排序方法设置不一致时，记录警告日志。  
+  
 ### call方法
 
 {% codeblock lang:python %}
@@ -317,6 +330,41 @@ def handle_request(self, req):
 {% endcodeblock %}  
 * 4~5: 在日志中记录原始的request方法，防止请求在传播过程中发生突变http请求方法发生改变。
 * 6~10: 捕获异常，记录日志。
+  
+### get_controller方法
+{% codeblock lang:python %}
+    def get_controller(self, path):
+        """
+        Get the controller to handle a request.
+
+        :param path: path from request
+        :returns: tuple of (controller class, path dictionary)
+
+        :raises: ValueError (thrown by split_path) if given invalid path
+        """
+        if path == '/info':
+            d = dict(version=None,
+                     expose_info=self.expose_info,
+                     disallowed_sections=self.disallowed_sections,
+                     admin_key=self.admin_key)
+            return InfoController, d
+
+        version, account, container, obj = split_path(path, 1, 4, True)
+        d = dict(version=version,
+                 account_name=account,
+                 container_name=container,
+                 object_name=obj)
+        if obj and container and account:
+            return ObjectController, d
+        elif container and account:
+            return ContainerController, d
+        elif account and not container and not obj:
+            return AccountController, d
+        return None, d
+{% endcodeblock %}  
+* 10～15: 如果url是'info'，则返回InController和controller字典参数，expose_info表示是否暴露信息，disallowed_sections表示不允许暴露的字段列表，比如container_qutoas, tempurl等。
+* 17～28: 根据url判断是account、container还是object，返回对应的controller和字典参数。
+
 
 
 [url1]: http://docs.openstack.org/havana/config-reference/content/proxy-server-conf.html

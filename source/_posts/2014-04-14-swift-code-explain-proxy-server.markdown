@@ -10,7 +10,7 @@ categories: code
 tags: swift
 ---
 
-## swift代码截止时间：2014-4-14  
+## swift代码截止时间：2014-4-19，源码地址：[https://github.com/zhaozhiming/swift][url1]  
 
 ### int方法
 
@@ -158,9 +158,10 @@ tags: swift
             strict_cors_mode=self.strict_cors_mode,
             **constraints.EFFECTIVE_CONSTRAINTS)
 {% endcodeblock %}
-proxy server的初始化函数，具体配置的说明可以参考[这里][url1]。
+proxy server的初始化函数，具体配置的说明可以参考[这里][url2]。
   
-### check_config方法
+### check_config
+
 {% codeblock lang:python %}
     def check_config(self):
         """
@@ -331,7 +332,8 @@ def handle_request(self, req):
 * 4~5: 在日志中记录原始的request方法，防止请求在传播过程中发生突变http请求方法发生改变。
 * 6~10: 捕获异常，记录日志。
   
-### get_controller方法
+### get_controller
+
 {% codeblock lang:python %}
     def get_controller(self, path):
         """
@@ -363,8 +365,35 @@ def handle_request(self, req):
         return None, d
 {% endcodeblock %}  
 * 10～15: 如果url是'info'，则返回InController和controller字典参数，expose_info表示是否暴露信息，disallowed_sections表示不允许暴露的字段列表，比如container_qutoas, tempurl等。
-* 17～28: 根据url判断是account、container还是object，返回对应的controller和字典参数。
+* 17～28: 根据url判断是account、container还是object，返回对应的controller和字典参数。  
+  
+### sort_nodes
+
+{% codeblock lang:python %}
+    def sort_nodes(self, nodes):
+        '''
+        Sorts nodes in-place (and returns the sorted list) according to
+        the configured strategy. The default "sorting" is to randomly
+        shuffle the nodes. If the "timing" strategy is chosen, the nodes
+        are sorted according to the stored timing data.
+        '''
+        # In the case of timing sorting, shuffling ensures that close timings
+        # (ie within the rounding resolution) won't prefer one over another.
+        # Python's sort is stable (http://wiki.python.org/moin/HowTo/Sorting/)
+        shuffle(nodes)
+        if self.sorting_method == 'timing':
+            now = time()
+
+            def key_func(node):
+                timing, expires = self.node_timings.get(node['ip'], (-1.0, 0))
+                return timing if expires > now else -1.0
+            nodes.sort(key=key_func)
+        elif self.sorting_method == 'affinity':
+            nodes.sort(key=self.read_affinity_sort_key)
+        return nodes
+{% endcodeblock %}  
 
 
 
-[url1]: http://docs.openstack.org/havana/config-reference/content/proxy-server-conf.html
+[url1]: https://github.com/zhaozhiming/swift
+[url2]: http://docs.openstack.org/havana/config-reference/content/proxy-server-conf.html

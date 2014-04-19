@@ -392,7 +392,7 @@ def handle_request(self, req):
             nodes.sort(key=self.read_affinity_sort_key)
         return nodes
 {% endcodeblock %}  
-
+节点的排序方法，将节点根据配置的排序策略进行排序，先将节点顺序打乱（line1)，如果排序策略是timing，则
 
 
 [url1]: https://github.com/zhaozhiming/swift

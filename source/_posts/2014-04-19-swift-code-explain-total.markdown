@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "swift源码分析一——开始"
+title: "swift源码详解（一）——开始"
 date: 2014-04-19 17:19
-description: swift源码分析
+description: swift源码详解
 keywords: swift
 comments: true
 categories: code
@@ -97,6 +97,7 @@ swift的源码因为不断在更新，笔记记录的代码就以2014-4-18的为
 			* base.py
 			* container.py
 			* obj.py
-		* server.py
+		* [server.py][url2]
 
 [url1]: https://github.com/zhaozhiming/swift
+[url2]: http://zhaozhiming.github.io/blog/2014/04/20/swift-code-explain-proxy-server/

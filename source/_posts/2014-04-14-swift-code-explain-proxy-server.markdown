@@ -9,9 +9,9 @@ categories: code
 tags: swift
 ---
 
-
 ### int方法
 
+<!--more-->  
 {% codeblock lang:python %}
     def __init__(self, conf, memcache=None, logger=None, account_ring=None,
                  container_ring=None, object_ring=None):
@@ -596,6 +596,48 @@ def handle_request(self, req):
 {% endcodeblock %}  
 * 8～24: 遍历定义好的中间件required_filters，如果该中间件没有在pipeline中，则将该中间件插入到pipeline，插入位置根据中间件的atfer_fn方法得到。
 * 26～31: 记录人日志信息。
+  
+### required_filters
+  
+{% codeblock lang:python %}
+# List of entry points for mandatory middlewares.
+#
+# Fields:
+#
+# "name" (required) is the entry point name from setup.py.
+#
+# "after_fn" (optional) a function that takes a PipelineWrapper object as its
+# single argument and returns a list of middlewares that this middleware
+# should come after. Any middlewares in the returned list that are not present
+# in the pipeline will be ignored, so you can safely name optional middlewares
+# to come after. For example, ["catch_errors", "bulk"] would install this
+# middleware after catch_errors and bulk if both were present, but if bulk
+# were absent, would just install it after catch_errors.
+
+required_filters = [
+    {'name': 'catch_errors'},
+    {'name': 'gatekeeper',
+     'after_fn': lambda pipe: (['catch_errors']
+                               if pipe.startswith("catch_errors")
+                               else [])},
+    {'name': 'dlo', 'after_fn': lambda _junk: ['catch_errors', 'gatekeeper',
+                                               'proxy_logging']}]
+{% endcodeblock %}  
+* modify_wsgi_pipeline方法用到的required_filters。
+  
+### app_factory
+  
+{% codeblock lang:python %}
+def app_factory(global_conf, **local_conf):
+    """paste.deploy app factory for creating WSGI proxy apps."""
+    conf = global_conf.copy()
+    conf.update(local_conf)
+    app = Application(conf)
+    app.check_config()
+    return app
+{% endcodeblock %}  
+* proxy server的工厂方法，初始化server对象并检查配置，然后返回创建好的对象。  
+  
 
 [url1]: https://github.com/zhaozhiming/swift
 [url2]: http://docs.openstack.org/havana/config-reference/content/proxy-server-conf.html

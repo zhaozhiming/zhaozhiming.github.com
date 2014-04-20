@@ -1,8 +1,7 @@
 ---
 layout: post
-title: "swift源码详解（一）——proxy/server.py"
-date: 2014-04-14 20:52
-published: false
+title: "swift源码详解（二）——proxy/server.py"
+date: 2014-04-20 20:52
 description: swift源码详解
 keywords: swift
 comments: true
@@ -10,7 +9,6 @@ categories: code
 tags: swift
 ---
 
-## swift代码截止时间：2014-4-19，源码地址：[https://github.com/zhaozhiming/swift][url1]  
 
 ### int方法
 
@@ -392,8 +390,212 @@ def handle_request(self, req):
             nodes.sort(key=self.read_affinity_sort_key)
         return nodes
 {% endcodeblock %}  
-节点的排序方法，将节点根据配置的排序策略进行排序，先将节点顺序打乱（line1)，如果排序策略是timing，则
+节点的排序方法，将节点根据配置的排序策略进行排序。  
+* 11: 将节点顺序打乱，确保节点不会按照时间排好序。
+* 12～18: 如果配置的排序策略是按时间排序，则定义一个（节点）按时间排序的方法让节点按照这个方法排序，如果节点已过期则timing为-0.1，即会被排到最后。
+* 19～20: 如果配置的排序策略是按亲和力排序，则节点按照亲和力方法排序。  
+  
+### set_node_timing
 
+{% codeblock lang:python %}
+    def set_node_timing(self, node, timing):
+        if self.sorting_method != 'timing':
+            return
+        now = time()
+        timing = round(timing, 3)  # sort timings to the millisecond
+        self.node_timings[node['ip']] = (timing, now + self.timing_expiry)
+{% endcodeblock %}  
+* 2～3: 如果配置的排序策略不是'timing'，则直接返回不做设置。
+* 4～6: 设置单个节点的排序时间过期时间。
+  
+### error_limited
+
+{% codeblock lang:python %}
+    def error_limited(self, node):
+        """
+        Check if the node is currently error limited.
+
+        :param node: dictionary of node to check
+        :returns: True if error limited, False otherwise
+        """
+        now = time()
+        if 'errors' not in node:
+            return False
+        if 'last_error' in node and node['last_error'] < \
+                now - self.error_suppression_interval:
+            del node['last_error']
+            if 'errors' in node:
+                del node['errors']
+            return False
+        limited = node['errors'] > self.error_suppression_limit
+        if limited:
+            self.logger.debug(
+                _('Node error limited %(ip)s:%(port)s (%(device)s)'), node)
+        return limited
+{% endcodeblock %}  
+* 8～10: 如果节点里面没有'errors'选项，则返回false。
+* 11～10: 如果节点里面的'last_error'选项不正确，则删除该选项和errors选项，并返回false。
+* 12～15: 判断节点的错误个数是否超过配置的错误限制，如果超过则记录日志，并返回是否超限制的结果。
+  
+### error_limit
+
+{% codeblock lang:python %}
+    def error_limit(self, node, msg):
+        """
+        Mark a node as error limited. This immediately pretends the
+        node received enough errors to trigger error suppression. Use
+        this for errors like Insufficient Storage. For other errors
+        use :func:`error_occurred`.
+
+        :param node: dictionary of node to error limit
+        :param msg: error message
+        """
+        node['errors'] = self.error_suppression_limit + 1
+        node['last_error'] = time()
+        self.logger.error(_('%(msg)s %(ip)s:%(port)s/%(device)s'),
+                          {'msg': msg, 'ip': node['ip'],
+                          'port': node['port'], 'device': node['device']})
+{% endcodeblock %}  
+* 11～14: 记录一个节点的错误信息:错误个数，最后错误的时间，并记录日志。
+  
+### error_occurred
+
+{% codeblock lang:python %}
+    def error_occurred(self, node, msg):
+        """
+        Handle logging, and handling of errors.
+
+        :param node: dictionary of node to handle errors for
+        :param msg: error message
+        """
+        node['errors'] = node.get('errors', 0) + 1
+        node['last_error'] = time()
+        self.logger.error(_('%(msg)s %(ip)s:%(port)s/%(device)s'),
+                          {'msg': msg, 'ip': node['ip'],
+                          'port': node['port'], 'device': node['device']})
+{% endcodeblock %}  
+* 8～12: 与前面的方法类似，唯一区别是记录节点错误个数是取当前的错误个数，然后+1。
+  
+### iter_nodes
+
+{% codeblock lang:python %}
+    def iter_nodes(self, ring, partition, node_iter=None):
+        """
+        Yields nodes for a ring partition, skipping over error
+        limited nodes and stopping at the configurable number of
+        nodes. If a node yielded subsequently gets error limited, an
+        extra node will be yielded to take its place.
+
+        Note that if you're going to iterate over this concurrently from
+        multiple greenthreads, you'll want to use a
+        swift.common.utils.GreenthreadSafeIterator to serialize access.
+        Otherwise, you may get ValueErrors from concurrent access. (You also
+        may not, depending on how logging is configured, the vagaries of
+        socket IO and eventlet, and the phase of the moon.)
+
+        :param ring: ring to get yield nodes from
+        :param partition: ring partition to yield nodes for
+        :param node_iter: optional iterable of nodes to try. Useful if you
+            want to filter or reorder the nodes.
+        """
+        part_nodes = ring.get_part_nodes(partition)
+        if node_iter is None:
+            node_iter = itertools.chain(part_nodes,
+                                        ring.get_more_nodes(partition))
+        num_primary_nodes = len(part_nodes)
+
+        # Use of list() here forcibly yanks the first N nodes (the primary
+        # nodes) from node_iter, so the rest of its values are handoffs.
+        primary_nodes = self.sort_nodes(
+            list(itertools.islice(node_iter, num_primary_nodes)))
+        handoff_nodes = node_iter
+        nodes_left = self.request_node_count(len(primary_nodes))
+{% endcodeblock %}  
+* 20～24: 根据partition获取相应的节点，如果node_iter为空，则将之前取到的节点和get_more_nodes节点连接起来为node_iter赋值，并取得节点个数。
+* 28～31: 将node_iter的节点重新排序，并取前面部分作为主要nodes，handoff_nodes为node_iter剩下的nodes， nodes_left为剩下的节点个数。
+  
+{% codeblock lang:python %}
+        for node in primary_nodes:
+            if not self.error_limited(node):
+                yield node
+                if not self.error_limited(node):
+                    nodes_left -= 1
+                    if nodes_left <= 0:
+                        return
+        handoffs = 0
+        for node in handoff_nodes:
+            if not self.error_limited(node):
+                handoffs += 1
+                if self.log_handoffs:
+                    self.logger.increment('handoff_count')
+                    self.logger.warning(
+                        'Handoff requested (%d)' % handoffs)
+                    if handoffs == len(primary_nodes):
+                        self.logger.increment('handoff_all_count')
+                yield node
+                if not self.error_limited(node):
+                    nodes_left -= 1
+                    if nodes_left <= 0:
+                        return
+{% endcodeblock %}  
+* 1～7: 遍历每个主节点，如果节点没有错误则返回该节点，剩余节点数-1,如果剩余节点数<=0,则直接返回。
+* 8～22: 如果主节点中都有错误，则从剩余节点中查找满足条件的节点，查找方法和主节点查找方法雷同，只是多了一些日志的记录。
+  
+### exception_occurred
+
+{% codeblock lang:python %}
+    def exception_occurred(self, node, typ, additional_info):
+        """
+        Handle logging of generic exceptions.
+
+        :param node: dictionary of node to log the error for
+        :param typ: server type
+        :param additional_info: additional information to log
+        """
+        self.logger.exception(
+            _('ERROR with %(type)s server %(ip)s:%(port)s/%(device)s re: '
+              '%(info)s'),
+            {'type': typ, 'ip': node['ip'], 'port': node['port'],
+             'device': node['device'], 'info': additional_info})
+{% endcodeblock %}  
+* 9～13: 当异常发生的时候，记录异常日志。
+
+### modify_wsgi_pipeline
+
+{% codeblock lang:python %}
+    def modify_wsgi_pipeline(self, pipe):
+        """
+        Called during WSGI pipeline creation. Modifies the WSGI pipeline
+        context to ensure that mandatory middleware is present in the pipeline.
+
+        :param pipe: A PipelineWrapper object
+        """
+        pipeline_was_modified = False
+        for filter_spec in reversed(required_filters):
+            filter_name = filter_spec['name']
+            if filter_name not in pipe:
+                afters = filter_spec.get('after_fn', lambda _junk: [])(pipe)
+                insert_at = 0
+                for after in afters:
+                    try:
+                        insert_at = max(insert_at, pipe.index(after) + 1)
+                    except ValueError:  # not in pipeline; ignore it
+                        pass
+                self.logger.info(
+                    'Adding required filter %s to pipeline at position %d' %
+                    (filter_name, insert_at))
+                ctx = pipe.create_filter(filter_name)
+                pipe.insert_filter(ctx, index=insert_at)
+                pipeline_was_modified = True
+
+        if pipeline_was_modified:
+            self.logger.info("Pipeline was modified. New pipeline is \"%s\".",
+                             pipe)
+        else:
+            self.logger.debug("Pipeline is \"%s\"", pipe)
+{% endcodeblock %}  
+* 8～24: 遍历定义好的中间件required_filters，如果该中间件没有在pipeline中，则将该中间件插入到pipeline，插入位置根据中间件的atfer_fn方法得到。
+* 26～31: 记录人日志信息。
 
 [url1]: https://github.com/zhaozhiming/swift
 [url2]: http://docs.openstack.org/havana/config-reference/content/proxy-server-conf.html

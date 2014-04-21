@@ -181,3 +181,90 @@ def headers_to_object_info(headers, status_int=HTTP_OK):
 {% endcodeblock %}  
 * 将object的header进行分类，返回包含object信息的字典。
   
+### cors_validation
+  
+{% codeblock lang:python %}
+def cors_validation(func):
+    """
+    Decorator to check if the request is a CORS request and if so, if it's
+    valid.
+
+    :param func: function to check
+    """
+    @functools.wraps(func)
+    def wrapped(*a, **kw):
+        controller = a[0]
+        req = a[1]
+
+        # The logic here was interpreted from
+        #    http://www.w3.org/TR/cors/#resource-requests
+
+        # Is this a CORS request?
+        req_origin = req.headers.get('Origin', None)
+        if req_origin:
+            # Yes, this is a CORS request so test if the origin is allowed
+            container_info = \
+                controller.container_info(controller.account_name,
+                                          controller.container_name, req)
+            cors_info = container_info.get('cors', {})
+
+            # Call through to the decorated method
+            resp = func(*a, **kw)
+
+            if controller.app.strict_cors_mode and \
+                    not controller.is_origin_allowed(cors_info, req_origin):
+                return resp
+{% endcodeblock %}  
+* 方法标签，对CORS请求进行验证。
+* 先判断该请求是否是一个跨域资源共享（CORS）请求，是的话先获取container的信息，再根据container信息获取cors信息。
+* 如果controller的cors mode存在就判断原请求是否被允许，允许的话返回response。
+  
+{% codeblock lang:python %}
+            # Expose,
+            #  - simple response headers,
+            #    http://www.w3.org/TR/cors/#simple-response-header
+            #  - swift specific: etag, x-timestamp, x-trans-id
+            #  - user metadata headers
+            #  - headers provided by the user in
+            #    x-container-meta-access-control-expose-headers
+            if 'Access-Control-Expose-Headers' not in resp.headers:
+                expose_headers = [
+                    'cache-control', 'content-language', 'content-type',
+                    'expires', 'last-modified', 'pragma', 'etag',
+                    'x-timestamp', 'x-trans-id']
+                for header in resp.headers:
+                    if header.startswith('X-Container-Meta') or \
+                            header.startswith('X-Object-Meta'):
+                        expose_headers.append(header.lower())
+                if cors_info.get('expose_headers'):
+                    expose_headers.extend(
+                        [header_line.strip()
+                         for header_line in
+                         cors_info['expose_headers'].split(' ')
+                         if header_line.strip()])
+                resp.headers['Access-Control-Expose-Headers'] = \
+                    ', '.join(expose_headers)
+{% endcodeblock %}  
+* 方法标签，对CORS请求进行验证。
+* 先判断该请求是否是一个跨域资源共享（CORS）请求，是的话先获取container的信息，再根据container信息获取cors信息。
+* 根据controller的cors mode判断cors请求是否被允许，是的话返回response。
+  
+{% codeblock lang:python %}
+            # The user agent won't process the response if the Allow-Origin
+            # header isn't included
+            if 'Access-Control-Allow-Origin' not in resp.headers:
+                if cors_info['allow_origin'] and \
+                        cors_info['allow_origin'].strip() == '*':
+                    resp.headers['Access-Control-Allow-Origin'] = '*'
+                else:
+                    resp.headers['Access-Control-Allow-Origin'] = req_origin
+
+            return 	resp
+        else:
+            # Not a CORS request so make the call as normal
+            return func(*a, **kw)
+
+    return wrapped
+{% endcodeblock %}  
+* 将object的header进行分类，返回包含object信息的字典。
+  

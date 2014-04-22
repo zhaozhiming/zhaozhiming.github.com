@@ -266,5 +266,51 @@ def cors_validation(func):
 
     return wrapped
 {% endcodeblock %}  
-* 将object的header进行分类，返回包含object信息的字典。
+* 如果response里面不包含'Access-Control-Allow-Origin' header，则加上该header。
+  
+### get_object_info
+  
+{% codeblock lang:python %}
+def get_object_info(env, app, path=None, swift_source=None):
+    """
+    Get the info structure for an object, based on env and app.
+    This is useful to middlewares.
+
+    .. note::
+
+        This call bypasses auth. Success does not imply that the request has
+        authorization to the object.
+    """
+    (version, account, container, obj) = \
+        split_path(path or env['PATH_INFO'], 4, 4, True)
+    info = _get_object_info(app, env, account, container, obj,
+                            swift_source=swift_source)
+    if not info:
+        info = headers_to_object_info({}, 0)
+    return info
+{% endcodeblock %}  
+* 根据env和app获取object的结构信息。
+  
+### get_container_info
+  
+{% codeblock lang:python %}
+def get_container_info(env, app, swift_source=None):
+    """
+    Get the info structure for a container, based on env and app.
+    This is useful to middlewares.
+
+    .. note::
+
+        This call bypasses auth. Success does not imply that the request has
+        authorization to the container.
+    """
+    (version, account, container, unused) = \
+        split_path(env['PATH_INFO'], 3, 4, True)
+    info = get_info(app, env, account, container, ret_not_found=True,
+                    swift_source=swift_source)
+    if not info:
+        info = headers_to_container_info({}, 0)
+    return info
+{% endcodeblock %}  
+* 根据env和app获取container的结构信息。
   

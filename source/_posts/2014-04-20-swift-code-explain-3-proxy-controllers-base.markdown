@@ -652,4 +652,75 @@ def close_swift_conn(src):
 {% endcodeblock %}  
 * 关闭swift连接，用了很底层的一个关闭socket连接的方法。
   
+## GetOrHeadHandler类
+  
+### init方法
+
+{% codeblock lang:python %}
+	def __init__(self, app, req, server_type, ring, partition, path,
+                 backend_headers):
+        self.app = app
+        self.ring = ring
+        self.server_type = server_type
+        self.partition = partition
+        self.path = path
+        self.backend_headers = backend_headers
+        self.used_nodes = []
+        self.used_source_etag = ''
+
+        # stuff from request
+        self.req_method = req.method
+        self.req_path = req.path
+        self.req_query_string = req.query_string
+        self.newest = config_true_value(req.headers.get('x-newest', 'f'))
+
+        # populated when finding source
+        self.statuses = []
+        self.reasons = []
+        self.bodies = []
+        self.source_headers = []
+{% endcodeblock %}  
+* GetOrHeadHandler类的初始化方法。  
+  
+### fast_forward
+
+{% codeblock lang:python %}
+    def fast_forward(self, num_bytes):
+        """
+        Will skip num_bytes into the current ranges.
+
+        :params num_bytes: the number of bytes that have already been read on
+                           this request. This will change the Range header
+                           so that the next req will start where it left off.
+
+        :raises NotImplementedError: if this is a multirange request
+        :raises ValueError: if invalid range header
+        :raises HTTPRequestedRangeNotSatisfiable: if begin + num_bytes
+                                                  > end of range
+        """
+        if 'Range' in self.backend_headers:
+            req_range = Range(self.backend_headers['Range'])
+
+            if len(req_range.ranges) > 1:
+                raise NotImplementedError()
+            begin, end = req_range.ranges.pop()
+            if begin is None:
+                # this is a -50 range req (last 50 bytes of file)
+                end -= num_bytes
+            else:
+                begin += num_bytes
+            if end and begin > end:
+                raise HTTPRequestedRangeNotSatisfiable()
+            req_range.ranges = [(begin, end)]
+            self.backend_headers['Range'] = str(req_range)
+        else:
+            self.backend_headers['Range'] = 'bytes=%d-' % num_bytes
+{% endcodeblock %}  
+* 先判断Range是否在后台进程的header中，如果没有，则在后台进程header中增加Range，值为'bytes='加num_bytes。  
+* 如果有，先创建一个Range对象，判断如果Range对象的ranges如果大于1,则报NotImplementedError的异常。  
+* 从rangs中取到开始和结束字节数，先检查两个字节数是否正确，不正确抛异常，正确的话将其重新放入到后台进程header中。  
+  
+## Match类
+
+
 

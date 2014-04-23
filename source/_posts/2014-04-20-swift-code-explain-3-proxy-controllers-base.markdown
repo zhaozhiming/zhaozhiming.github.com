@@ -538,7 +538,118 @@ def _prepare_pre_auth_info_request(env, path, swift_source):
     # Note that Request.blank expects quoted path
     return Request.blank(quote(path), environ=newenv)
 {% endcodeblock %}  
-* 准备一个HEAD请求来获取信息。
+* 准备一个做过认证的HEAD请求来获取信息。
   
+### get_info
 
+{% codeblock lang:python %}
+def get_info(app, env, account, container=None, ret_not_found=False,
+             swift_source=None):
+    """
+    Get the info about accounts or containers
+
+    Note: This call bypasses auth. Success does not imply that the
+          request has authorization to the info.
+
+    :param app: the application object
+    :param env: the environment used by the current request
+    :param account: The unquoted name of the account
+    :param container: The unquoted name of the container (or None if account)
+    :returns: the cached info or None if cannot be retrieved
+    """
+    info = _get_info_cache(app, env, account, container)
+    if info:
+        if ret_not_found or is_success(info['status']):
+            return info
+        return None
+    # Not in cache, let's try the account servers
+    path = '/v1/%s' % account
+    if container:
+        # Stop and check if we have an account?
+        if not get_info(app, env, account):
+            return None
+        path += '/' + container
+
+    req = _prepare_pre_auth_info_request(
+        env, path, (swift_source or 'GET_INFO'))
+    # Whenever we do a GET/HEAD, the GETorHEAD_base will set the info in
+    # the environment under environ[env_key] and in memcache. We will
+    # pick the one from environ[env_key] and use it to set the caller env
+    resp = req.get_response(app)
+    cache_key, env_key = _get_cache_key(account, container)
+    try:
+        info = resp.environ[env_key]
+        env[env_key] = info
+        if ret_not_found or is_success(info['status']):
+            return info
+    except (KeyError, AttributeError):
+        pass
+    return None
+{% endcodeblock %}  
+* 从缓存中获取info信息，如果缓存中有且状态是success，则返回info。如果缓存没有，则发起1个不用认证的请求获取account和container的info信息。
+  
+### _get_object_info
+
+{% codeblock lang:python %}
+def _get_object_info(app, env, account, container, obj, swift_source=None):
+    """
+    Get the info about object
+
+    Note: This call bypasses auth. Success does not imply that the
+          request has authorization to the info.
+
+    :param app: the application object
+    :param env: the environment used by the current request
+    :param account: The unquoted name of the account
+    :param container: The unquoted name of the container
+    :param obj: The unquoted name of the object
+    :returns: the cached info or None if cannot be retrieved
+    """
+    env_key = get_object_env_key(account, container, obj)
+    info = env.get(env_key)
+    if info:
+        return info
+    # Not in cached, let's try the object servers
+    path = '/v1/%s/%s/%s' % (account, container, obj)
+    req = _prepare_pre_auth_info_request(env, path, swift_source)
+    # Whenever we do a GET/HEAD, the GETorHEAD_base will set the info in
+    # the environment under environ[env_key]. We will
+    # pick the one from environ[env_key] and use it to set the caller env
+    resp = req.get_response(app)
+    try:
+        info = resp.environ[env_key]
+        env[env_key] = info
+        return info
+    except (KeyError, AttributeError):
+        pass
+    return None
+{% endcodeblock %}  
+* 先从env中获取object的info信息，如果没有则发起请求不认证的请求重新获取。
+  
+### close_swift_conn
+
+{% codeblock lang:python %}
+def close_swift_conn(src):
+    """
+    Force close the http connection to the backend.
+
+    :param src: the response from the backend
+    """
+    try:
+        # Since the backends set "Connection: close" in their response
+        # headers, the response object (src) is solely responsible for the
+        # socket. The connection object (src.swift_conn) has no references
+        # to the socket, so calling its close() method does nothing, and
+        # therefore we don't do it.
+        #
+        # Also, since calling the response's close() method might not
+        # close the underlying socket but only decrement some
+        # reference-counter, we have a special method here that really,
+        # really kills the underlying socket with a close() syscall.
+        src.nuke_from_orbit()  # it's the only way to be sure
+    except Exception:
+        pass
+{% endcodeblock %}  
+* 关闭swift连接，用了很底层的一个关闭socket连接的方法。
+  
 

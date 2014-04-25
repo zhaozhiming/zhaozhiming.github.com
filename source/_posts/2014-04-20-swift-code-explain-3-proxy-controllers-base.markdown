@@ -721,6 +721,23 @@ def close_swift_conn(src):
 * 从rangs中取到开始和结束字节数，先检查两个字节数是否正确，不正确抛异常，正确的话将其重新放入到后台进程header中。  
   
 ## Match类
+  
+{% codeblock lang:python %}
+class Match(object):
+    """
+    Wraps a Request's If-[None-]Match header as a friendly object.
 
+    :param headerval: value of the header as a str
+    """
+    def __init__(self, headerval):
+        self.tags = set()
+        for tag in headerval.split(', '):
+            if tag.startswith('"') and tag.endswith('"'):
+                self.tags.add(tag[1:-1])
+            else:
+                self.tags.add(tag)
 
+    def __contains__(self, val):
+        return '*' in self.tags or val in self.tags
+{% endcodeblock %}  
 

@@ -740,4 +740,4 @@ class Match(object):
     def __contains__(self, val):
         return '*' in self.tags or val in self.tags
 {% endcodeblock %}  
-
+* 处理header值的一个类，如果header值有双引号将移除后再添加。

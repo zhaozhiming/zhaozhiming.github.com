@@ -720,188 +720,224 @@ def close_swift_conn(src):
 * 如果有，先创建一个Range对象，判断如果Range对象的ranges如果大于1,则报NotImplementedError的异常。  
 * 从rangs中取到开始和结束字节数，先检查两个字节数是否正确，不正确抛异常，正确的话将其重新放入到后台进程header中。  
   
-## Match类
+### is_good_source
   
 {% codeblock lang:python %}
-class Match(object):
-    """
-    Wraps a Request's If-[None-]Match header as a friendly object.
-
-    :param headerval: value of the header as a str
-    """
-    def __init__(self, headerval):
-        self.tags = set()
-        for tag in headerval.split(', '):
-            if tag.startswith('"') and tag.endswith('"'):
-                self.tags.add(tag[1:-1])
-            else:
-                self.tags.add(tag)
-
-    def __contains__(self, val):
-        return '*' in self.tags or val in self.tags
-{% endcodeblock %}  
-* 处理header值的一个类，如果header值有双引号将移除后再添加。
-  
-## Accept类
-  
-{% codeblock lang:python %}
-class Accept(object):
-    """
-    Wraps a Request's Accept header as a friendly object.
-
-    :param headerval: value of the header as a str
-    """
-
-    # RFC 2616 section 2.2
-    token = r'[^()<>@,;:\"/\[\]?={}\x00-\x20\x7f]+'
-    qdtext = r'[^"]'
-    quoted_pair = r'(?:\\.)'
-    quoted_string = r'"(?:' + qdtext + r'|' + quoted_pair + r')*"'
-    extension = (r'(?:\s*;\s*(?:' + token + r")\s*=\s*" + r'(?:' + token +
-                 r'|' + quoted_string + r'))')
-    acc = (r'^\s*(' + token + r')/(' + token +
-           r')(' + extension + r'*?\s*)$')
-    acc_pattern = re.compile(acc)
-
-    def __init__(self, headerval):
-        self.headerval = headerval
-{% endcodeblock %}  
-* Accept类主要用来封装request的header，上面是一些属性变量和初始化方法。
-
-### _get_types
-  
-{% codeblock lang:python %}
-    def _get_types(self):
-        types = []
-        if not self.headerval:
-            return []
-        for typ in self.headerval.split(','):
-            type_parms = self.acc_pattern.findall(typ)
-            if not type_parms:
-                raise ValueError('Invalid accept header')
-            typ, subtype, parms = type_parms[0]
-            parms = [p.strip() for p in parms.split(';') if p.strip()]
-
-            seen_q_already = False
-            quality = 1.0
-
-            for parm in parms:
-                name, value = parm.split('=')
-                name = name.strip()
-                value = value.strip()
-                if name == 'q':
-                    if seen_q_already:
-                        raise ValueError('Multiple "q" params')
-                    seen_q_already = True
-                    quality = float(value)
-
-            pattern = '^' + \
-                (self.token if typ == '*' else re.escape(typ)) + '/' + \
-                (self.token if subtype == '*' else re.escape(subtype)) + '$'
-            types.append((pattern, quality, '*' not in (typ, subtype)))
-        # sort candidates by quality, then whether or not there were globs
-        types.sort(reverse=True, key=lambda t: (t[1], t[2]))
-        return [t[0] for t in types]
-{% endcodeblock %}  
-* 如果header的值为空，则返回空的list。
-* 将header的值按','号分割并且遍历，再按acc的正则表达式去查找，如果没有返回ValueError。
-* 如果查找到，将找到的第一个type_parms分为3个变量，parms变量再按';'号分割成1个list。
-* 遍历params这个list，每个元素再按'='分割，分别取name和value，如果name等于'q'且seen_q_already为True，则抛异常，否则seen_q_already为True，quality为value的浮点数值。
-* 拼装一个正则表达式给pattern赋值，types添加一个有pattern，quality和布尔值的元素。
-* 最后将types按quality排序，最后返回每个之前拼装好的pattern列表。
-
-### best_match
-  
-{% codeblock lang:python %}
-    def best_match(self, options):
+    def is_good_source(self, src):
         """
-        Returns the item from "options" that best matches the accept header.
-        Returns None if no available options are acceptable to the client.
+        Indicates whether or not the request made to the backend found
+        what it was looking for.
 
-        :param options: a list of content-types the server can respond with
+        :param src: the response from the backend
+        :returns: True if found, False if not
+        """
+        if self.server_type == 'Object' and src.status == 416:
+            return True
+        return is_success(src.status) or is_redirection(src.status)
+{% endcodeblock %}  
+* 如果是一个Object请求，并且返回状态码是416，则返回True，否则返回状态码是否200～399。
+  
+### _make_app_iter
+  
+{% codeblock lang:python %}
+    def _make_app_iter(self, req, node, source):
+        """
+        Returns an iterator over the contents of the source (via its read
+        func).  There is also quite a bit of cleanup to ensure garbage
+        collection works and the underlying socket of the source is closed.
+
+        :param req: incoming request object
+        :param source: The httplib.Response object this iterator should read
+                       from.
+        :param node: The node the source is reading from, for logging purposes.
         """
         try:
-            types = self._get_types()
-        except ValueError:
-            return None
-        if not types and options:
-            return options[0]
-        for pattern in types:
-            for option in options:
-                if re.match(pattern, option):
-                    return option
-        return None
+            nchunks = 0
+            bytes_read_from_source = 0
+            node_timeout = self.app.node_timeout
+            if self.server_type == 'Object':
+                node_timeout = self.app.recoverable_node_timeout
 {% endcodeblock %}  
-* 先取types变量，types就是一个正则表达式的列表，如果取值的过程中抛异常则返回None。
-* 如果types没有但options有，则返回options的第一个值。
-* 如果types和options都有，则遍历types和options，如果option能在按正则表达式找到，则返回option，全部找不到返回None。
-  
-### _req_environ_property
+* 初始化本地变量，如果是object请求，则将节点超时时间设置为object的recoverable_node_timeout。
   
 {% codeblock lang:python %}
-def _req_environ_property(environ_field):
-    """
-    Set and retrieve value of the environ_field entry in self.environ.
-    (Used by both request and response)
-    """
-    def getter(self):
-        return self.environ.get(environ_field, None)
-
-    def setter(self, value):
-        if isinstance(value, unicode):
-            self.environ[environ_field] = value.encode('utf-8')
-        else:
-            self.environ[environ_field] = value
-
-    return property(getter, setter, doc=("Get and set the %s property "
-                    "in the WSGI environment") % environ_field)
+            while True:
+                try:
+                    with ChunkReadTimeout(node_timeout):
+                        chunk = source.read(self.app.object_chunk_size)
+                        nchunks += 1
+                        bytes_read_from_source += len(chunk)
+                except ChunkReadTimeout:
+                    exc_type, exc_value, exc_traceback = exc_info()
+                    if self.newest or self.server_type != 'Object':
+                        raise exc_type, exc_value, exc_traceback
+                    try:
+                        self.fast_forward(bytes_read_from_source)
+                    except (NotImplementedError, HTTPException, ValueError):
+                        raise exc_type, exc_value, exc_traceback
+                    new_source, new_node = self._get_source_and_node()
+                    if new_source:
+                        self.app.exception_occurred(
+                            node, _('Object'),
+                            _('Trying to read during GET (retrying)'))
+                        # Close-out the connection as best as possible.
+                        if getattr(source, 'swift_conn', None):
+                            close_swift_conn(source)
+                        source = new_source
+                        node = new_node
+                        bytes_read_from_source = 0
+                        continue
+                    else:
+                        raise exc_type, exc_value, exc_traceback
+                if not chunk:
+                    break
+                with ChunkWriteTimeout(self.app.client_timeout):
+                    yield chunk                        
 {% endcodeblock %}  
-* 封装了一对setter和getter方法，适用与request和respons。
-  
-### _req_body_property
+* 通过一个无限循环，不断读取response的数据，累加读取的块数大小和字节总长度。
+* 如果读取数据超时，则处理异常，如果请求不是Object则抛出最近的异常信息。
+* 记录已读的字节范围，错误抛异常。
+* 获取新的source和节点，如果source存在的话，则创建一个异常并关闭连接重新初始化，否则抛出异常。
+* 如果读取不到数据，则跳出循环。
   
 {% codeblock lang:python %}
-def _req_body_property():
-    """
-    Set and retrieve the Request.body parameter.  It consumes wsgi.input and
-    returns the results.  On assignment, uses a StringIO to create a new
-    wsgi.input.
-    """
-    def getter(self):
-        body = self.environ['wsgi.input'].read()
-        self.environ['wsgi.input'] = StringIO(body)
-        return body
+                # This is for fairness; if the network is outpacing the CPU,
+                # we'll always be able to read and write data without
+                # encountering an EWOULDBLOCK, and so eventlet will not switch
+                # greenthreads on its own. We do it manually so that clients
+                # don't starve.
+                #
+                # The number 5 here was chosen by making stuff up. It's not
+                # every single chunk, but it's not too big either, so it seemed
+                # like it would probably be an okay choice.
+                #
+                # Note that we may trampoline to other greenthreads more often
+                # than once every 5 chunks, depending on how blocking our
+                # network IO is; the explicit sleep here simply provides a
+                # lower bound on the rate of trampolining.
+                if nchunks % 5 == 0:
+                    sleep()
 
-    def setter(self, value):
-        self.environ['wsgi.input'] = StringIO(value)
-        self.environ['CONTENT_LENGTH'] = str(len(value))
-
-    return property(getter, setter, doc="Get and set the request body str")
+        except ChunkReadTimeout:
+            self.app.exception_occurred(node, _('Object'),
+                                        _('Trying to read during GET'))
+            raise
+        except ChunkWriteTimeout:
+            self.app.logger.warn(
+                _('Client did not read from proxy within %ss') %
+                self.app.client_timeout)
+            self.app.logger.increment('client_timeouts')
+        except GeneratorExit:
+            if not req.environ.get('swift.non_client_disconnect'):
+                self.app.logger.warn(_('Client disconnected on read'))
+        except Exception:
+            self.app.logger.exception(_('Trying to send to client'))
+            raise
+        finally:
+            # Close-out the connection as best as possible.
+            if getattr(source, 'swift_conn', None):
+                close_swift_conn(source)
 {% endcodeblock %}  
-* 封装了一对setter和getter方法来处理request body。
+* 每读取5个字节块，休眠一次。
+* 读取数据超时抛异常。
+* 写入数据超时记日志。
+* 抛出各种异常后关闭连接。
   
-### _host_url_property
+### _get_source_and_node
   
 {% codeblock lang:python %}
-def _host_url_property():
-    """
-    Retrieves the best guess that can be made for an absolute location up to
-    the path, for example: https://host.com:1234
-    """
-    def getter(self):
-        if 'HTTP_HOST' in self.environ:
-            host = self.environ['HTTP_HOST']
-        else:
-            host = '%s:%s' % (self.environ['SERVER_NAME'],
-                              self.environ['SERVER_PORT'])
-        scheme = self.environ.get('wsgi.url_scheme', 'http')
-        if scheme == 'http' and host.endswith(':80'):
-            host, port = host.rsplit(':', 1)
-        elif scheme == 'https' and host.endswith(':443'):
-            host, port = host.rsplit(':', 1)
-        return '%s://%s' % (scheme, host)
+    def _get_source_and_node(self):
+        self.statuses = []
+        self.reasons = []
+        self.bodies = []
+        self.source_headers = []
+        sources = []
 
-    return property(getter, doc="Get url for request/response up to path")
+        node_timeout = self.app.node_timeout
+        if self.server_type == 'Object' and not self.newest:
+            node_timeout = self.app.recoverable_node_timeout
+        for node in self.app.iter_nodes(self.ring, self.partition):
+            if node in self.used_nodes:
+                continue
+            start_node_timing = time.time()
+            try:
+                with ConnectionTimeout(self.app.conn_timeout):
+                    conn = http_connect(
+                        node['ip'], node['port'], node['device'],
+                        self.partition, self.req_method, self.path,
+                        headers=self.backend_headers,
+                        query_string=self.req_query_string)
+                self.app.set_node_timing(node, time.time() - start_node_timing)
+
+                with Timeout(node_timeout):
+                    possible_source = conn.getresponse()
+                    # See NOTE: swift_conn at top of file about this.
+                    possible_source.swift_conn = conn
+            except (Exception, Timeout):
+                self.app.exception_occurred(
+                    node, self.server_type,
+                    _('Trying to %(method)s %(path)s') %
+                    {'method': self.req_method, 'path': self.req_path})
+                continue
+            if self.is_good_source(possible_source):
+                # 404 if we know we don't have a synced copy
+                if not float(possible_source.getheader('X-PUT-Timestamp', 1)):
+                    self.statuses.append(HTTP_NOT_FOUND)
+                    self.reasons.append('')
+                    self.bodies.append('')
+                    self.source_headers.append('')
+                    close_swift_conn(possible_source)
+                else:
+                    if self.used_source_etag:
+                        src_headers = dict(
+                            (k.lower(), v) for k, v in
+                            possible_source.getheaders())
+                        if src_headers.get('etag', '').strip('"') != \
+                                self.used_source_etag:
+                            self.statuses.append(HTTP_NOT_FOUND)
+                            self.reasons.append('')
+                            self.bodies.append('')
+                            self.source_headers.append('')
+                            continue
+
+                    self.statuses.append(possible_source.status)
+                    self.reasons.append(possible_source.reason)
+                    self.bodies.append('')
+                    self.source_headers.append('')
+                    sources.append((possible_source, node))
+                    if not self.newest:  # one good source is enough
+                        break
+            else:
+                self.statuses.append(possible_source.status)
+                self.reasons.append(possible_source.reason)
+                self.bodies.append(possible_source.read())
+                self.source_headers.append(possible_source.getheaders())
+                if possible_source.status == HTTP_INSUFFICIENT_STORAGE:
+                    self.app.error_limit(node, _('ERROR Insufficient Storage'))
+                elif is_server_error(possible_source.status):
+                    self.app.error_occurred(
+                        node, _('ERROR %(status)d %(body)s '
+                                'From %(type)s Server') %
+                        {'status': possible_source.status,
+                         'body': self.bodies[-1][:1024],
+                         'type': self.server_type})
+
+        if sources:
+            sources.sort(key=lambda s: source_key(s[0]))
+            source, node = sources.pop()
+            for src, _junk in sources:
+                close_swift_conn(src)
+            self.used_nodes.append(node)
+            src_headers = dict(
+                (k.lower(), v) for k, v in
+                possible_source.getheaders())
+            self.used_source_etag = src_headers.get('etag', '').strip('"')
+            return source, node
+        return None, None
 {% endcodeblock %}  
-* 。
+* 每读取5个字节块，休眠一次。
   
+
+
+
+

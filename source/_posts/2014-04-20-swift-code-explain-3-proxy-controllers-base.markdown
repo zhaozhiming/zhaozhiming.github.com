@@ -856,6 +856,10 @@ def close_swift_conn(src):
         node_timeout = self.app.node_timeout
         if self.server_type == 'Object' and not self.newest:
             node_timeout = self.app.recoverable_node_timeout
+{% endcodeblock %}  
+* 初始化本地变量，设置node_timeout时间。
+
+{% codeblock lang:python %}
         for node in self.app.iter_nodes(self.ring, self.partition):
             if node in self.used_nodes:
                 continue
@@ -879,6 +883,11 @@ def close_swift_conn(src):
                     _('Trying to %(method)s %(path)s') %
                     {'method': self.req_method, 'path': self.req_path})
                 continue
+{% endcodeblock %}  
+* 循环取节点，如果节点已经被使用了，则跳过该节点，否则封装http连接，设置节点时间。
+* 获取请求结果，如果超时，则抛异常，跳出此次循环。
+
+{% codeblock lang:python %}
             if self.is_good_source(possible_source):
                 # 404 if we know we don't have a synced copy
                 if not float(possible_source.getheader('X-PUT-Timestamp', 1)):
@@ -907,6 +916,12 @@ def close_swift_conn(src):
                     sources.append((possible_source, node))
                     if not self.newest:  # one good source is enough
                         break
+{% endcodeblock %}  
+* 如果返回结果合理，则判断返回结果中的PUT时间是否存在，不存在证明还没有同步，则返回404并关闭连接。
+* 如果时间存在，则继续判断已用etag是否存在，存在的话从返回结果中取出etag值与之比较，不相等就返回404并关闭连接。
+* 已用etag不存在，则将返回结果设置到自身属性中，并判断是否最新，是则跳出循环，取一个good source就足够了。
+
+{% codeblock lang:python %}
             else:
                 self.statuses.append(possible_source.status)
                 self.reasons.append(possible_source.reason)
@@ -935,9 +950,38 @@ def close_swift_conn(src):
             return source, node
         return None, None
 {% endcodeblock %}  
-* 每读取5个字节块，休眠一次。
+* 如果返回结果不是一个good source，则将返回结果信息设置到自身属性，如果返回状态是507,则将节点加入到错误列表，如果返回状态是其他500以上的数字，则抛出异常。
+* 循环结束后，如果取到了source，则先将sources进行排序然后取第一个，接着关闭剩下的source。
+* 添加节点到已用节点，设置易用etag，返回结果，如果取不到source，则返回空。
   
+### get_working_response
 
+{% codeblock lang:python %}
+    def get_working_response(self, req):
+        source, node = self._get_source_and_node()
+        res = None
+        if source:
+            res = Response(request=req)
+            if req.method == 'GET' and \
+                    source.status in (HTTP_OK, HTTP_PARTIAL_CONTENT):
+                res.app_iter = self._make_app_iter(req, node, source)
+                # See NOTE: swift_conn at top of file about this.
+                res.swift_conn = source.swift_conn
+            res.status = source.status
+            update_headers(res, source.getheaders())
+            if not res.environ:
+                res.environ = {}
+            res.environ['swift_x_timestamp'] = \
+                source.getheader('x-timestamp')
+            res.accept_ranges = 'bytes'
+            res.content_length = source.getheader('Content-Length')
+            if source.getheader('Content-Type'):
+                res.charset = None
+                res.content_type = source.getheader('Content-Type')
+        return res
+{% endcodeblock %}
+* 先获取source和node，如果有的话，则根据req参数封装response，如果请求是'GET'并且source的状态是200或206,则设置response的app_iter和conn。
+* 将source的状态码和header设置进response，再分别根据source的内容设置返回的response的值。
 
 
 

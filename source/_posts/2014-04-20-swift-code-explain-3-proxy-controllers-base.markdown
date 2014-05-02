@@ -982,6 +982,265 @@ def close_swift_conn(src):
 {% endcodeblock %}
 * 先获取source和node，如果有的话，则根据req参数封装response，如果请求是'GET'并且source的状态是200或206,则设置response的app_iter和conn。
 * 将source的状态码和header设置进response，再分别根据source的内容设置返回的response的值。
+  
+## Controller类
+  
+### init方法
 
+{% codeblock lang:python %}
+    """Base WSGI controller class for the proxy"""
+    server_type = 'Base'
 
+    # Ensure these are all lowercase
+    pass_through_headers = []
+
+    def __init__(self, app):
+        """
+        Creates a controller attached to an application instance
+
+        :param app: the application instance
+        """
+        self.account_name = None
+        self.app = app
+        self.trans_id = '-'
+        self._allowed_methods = None
+{% endcodeblock %}  
+* 设置类型为base，初始化方法，创建controller时使用。
+  
+### allowed_methods
+
+{% codeblock lang:python %}
+    @property
+    def allowed_methods(self):
+        if self._allowed_methods is None:
+            self._allowed_methods = set()
+            all_methods = inspect.getmembers(self, predicate=inspect.ismethod)
+            for name, m in all_methods:
+                if getattr(m, 'publicly_accessible', False):
+                    self._allowed_methods.add(name)
+        return self._allowed_methods
+{% endcodeblock %}  
+* 类属性变量allowed_methods的初始化方法。
+  
+### transfer_headers
+
+{% codeblock lang:python %}
+    def transfer_headers(self, src_headers, dst_headers):
+        """
+        Transfer legal headers from an original client request to dictionary
+        that will be used as headers by the backend request
+
+        :param src_headers: A dictionary of the original client request headers
+        :param dst_headers: A dictionary of the backend request headers
+        """
+        st = self.server_type.lower()
+
+        x_remove = 'x-remove-%s-meta-' % st
+        dst_headers.update((k.lower().replace('-remove', '', 1), '')
+                           for k in src_headers
+                           if k.lower().startswith(x_remove) or
+                           k.lower() in self._x_remove_headers())
+
+        dst_headers.update((k.lower(), v)
+                           for k, v in src_headers.iteritems()
+                           if k.lower() in self.pass_through_headers or
+                           is_sys_or_user_meta(st, k))
+{% endcodeblock %}  
+* 将一个原始客户端请求的遗留header转换为新的header，给后台进程使用。
+  
+### transfer_headers
+
+{% codeblock lang:python %}
+    def generate_request_headers(self, orig_req=None, additional=None,
+                                 transfer=False):
+        """
+        Create a list of headers to be used in backend requets
+
+        :param orig_req: the original request sent by the client to the proxy
+        :param additional: additional headers to send to the backend
+        :param transfer: If True, transfer headers from original client request
+        :returns: a dictionary of headers
+        """
+        # Use the additional headers first so they don't overwrite the headers
+        # we require.
+        headers = HeaderKeyDict(additional) if additional else HeaderKeyDict()
+        if transfer:
+            self.transfer_headers(orig_req.headers, headers)
+        headers.setdefault('x-timestamp', normalize_timestamp(time.time()))
+        if orig_req:
+            referer = orig_req.as_referer()
+        else:
+            referer = ''
+        headers['x-trans-id'] = self.trans_id
+        headers['connection'] = 'close'
+        headers['user-agent'] = 'proxy-server %s' % os.getpid()
+        headers['referer'] = referer
+        return headers
+{% endcodeblock %}  
+* 生成一组headers为后台进程使用。
+  
+### account_info
+
+{% codeblock lang:python %}
+    def account_info(self, account, req=None):
+        """
+        Get account information, and also verify that the account exists.
+
+        :param account: name of the account to get the info for
+        :param req: caller's HTTP request context object (optional)
+        :returns: tuple of (account partition, account nodes, container_count)
+                  or (None, None, None) if it does not exist
+        """
+        partition, nodes = self.app.account_ring.get_nodes(account)
+        if req:
+            env = getattr(req, 'environ', {})
+        else:
+            env = {}
+        info = get_info(self.app, env, account)
+        if not info:
+            return None, None, None
+        if info.get('container_count') is None:
+            container_count = 0
+        else:
+            container_count = int(info['container_count'])
+        return partition, nodes, container_count
+{% endcodeblock %}  
+* 获取account信息，正常返回分区号，节点和容器数量，获取不到返回3个None。
+  
+### account_info
+
+{% codeblock lang:python %}
+    def container_info(self, account, container, req=None):
+        """
+        Get container information and thusly verify container existence.
+        This will also verify account existence.
+
+        :param account: account name for the container
+        :param container: container name to look up
+        :param req: caller's HTTP request context object (optional)
+        :returns: dict containing at least container partition ('partition'),
+                  container nodes ('containers'), container read
+                  acl ('read_acl'), container write acl ('write_acl'),
+                  and container sync key ('sync_key').
+                  Values are set to None if the container does not exist.
+        """
+        part, nodes = self.app.container_ring.get_nodes(account, container)
+        if req:
+            env = getattr(req, 'environ', {})
+        else:
+            env = {}
+        info = get_info(self.app, env, account, container)
+        if not info:
+            info = headers_to_container_info({}, 0)
+            info['partition'] = None
+            info['nodes'] = None
+        else:
+            info['partition'] = part
+            info['nodes'] = nodes
+        return info
+{% endcodeblock %}  
+* 获取container信息，会顺便校验container是否存在，也会校验account是否存在。
+  
+### make_request(私有方法)
+
+{% codeblock lang:python %}
+    def _make_request(self, nodes, part, method, path, headers, query,
+                      logger_thread_locals):
+        """
+        Iterates over the given node iterator, sending an HTTP request to one
+        node at a time.  The first non-informational, non-server-error
+        response is returned.  If no non-informational, non-server-error
+        response is received from any of the nodes, returns None.
+
+        :param nodes: an iterator of the backend server and handoff servers
+        :param part: the partition number
+        :param method: the method to send to the backend
+        :param path: the path to send to the backend
+                     (full path ends up being /<$device>/<$part>/<$path>)
+        :param headers: a list of dicts, where each dict represents one
+                        backend request that should be made.
+        :param query: query string to send to the backend.
+        :param logger_thread_locals: The thread local values to be set on the
+                                     self.app.logger to retain transaction
+                                     logging information.
+        :returns: a swob.Response object, or None if no responses were received
+        """
+        self.app.logger.thread_locals = logger_thread_locals
+        for node in nodes:
+            try:
+                start_node_timing = time.time()
+                with ConnectionTimeout(self.app.conn_timeout):
+                    conn = http_connect(node['ip'], node['port'],
+                                        node['device'], part, method, path,
+                                        headers=headers, query_string=query)
+                    conn.node = node
+                self.app.set_node_timing(node, time.time() - start_node_timing)
+                with Timeout(self.app.node_timeout):
+                    resp = conn.getresponse()
+                    if not is_informational(resp.status) and \
+                            not is_server_error(resp.status):
+                        return resp.status, resp.reason, resp.getheaders(), \
+                            resp.read()
+                    elif resp.status == HTTP_INSUFFICIENT_STORAGE:
+                        self.app.error_limit(node,
+                                             _('ERROR Insufficient Storage'))
+            except (Exception, Timeout):
+                self.app.exception_occurred(
+                    node, self.server_type,
+                    _('Trying to %(method)s %(path)s') %
+                    {'method': method, 'path': path})
+{% endcodeblock %}  
+* 遍历每个节点，根据节点信息发起请求，如果请求不是100+和500+，则返回请求结果。
+* 如果请求状态码为507，则加入node到异常node列表。
+* 其他异常抛出异常信息。
+  
+### make_requests
+
+{% codeblock lang:python %}
+    def make_requests(self, req, ring, part, method, path, headers,
+                      query_string=''):
+        """
+        Sends an HTTP request to multiple nodes and aggregates the results.
+        It attempts the primary nodes concurrently, then iterates over the
+        handoff nodes as needed.
+
+        :param req: a request sent by the client
+        :param ring: the ring used for finding backend servers
+        :param part: the partition number
+        :param method: the method to send to the backend
+        :param path: the path to send to the backend
+                     (full path ends up being  /<$device>/<$part>/<$path>)
+        :param headers: a list of dicts, where each dict represents one
+                        backend request that should be made.
+        :param query_string: optional query string to send to the backend
+        :returns: a swob.Response object
+        """
+        start_nodes = ring.get_part_nodes(part)
+        nodes = GreenthreadSafeIterator(self.app.iter_nodes(ring, part))
+        pile = GreenAsyncPile(len(start_nodes))
+        for head in headers:
+            pile.spawn(self._make_request, nodes, part, method, path,
+                       head, query_string, self.app.logger.thread_locals)
+        response = []
+        statuses = []
+        for resp in pile:
+            if not resp:
+                continue
+            response.append(resp)
+            statuses.append(resp[0])
+            if self.have_quorum(statuses, len(start_nodes)):
+                break
+        # give any pending requests *some* chance to finish
+        pile.waitall(self.app.post_quorum_timeout)
+        while len(response) < len(start_nodes):
+            response.append((HTTP_SERVICE_UNAVAILABLE, '', '', ''))
+        statuses, reasons, resp_headers, bodies = zip(*response)
+        return self.best_response(req, statuses, reasons, bodies,
+                                  '%s %s' % (self.server_type, req.method),
+                                  headers=resp_headers)
+{% endcodeblock %}  
+* 遍历每个节点，根据节点信息发起请求，如果请求不是100+和500+，则返回请求结果。
+* 如果请求状态码为507，则加入node到异常node列表。
+* 其他异常抛出异常信息。
+  
 

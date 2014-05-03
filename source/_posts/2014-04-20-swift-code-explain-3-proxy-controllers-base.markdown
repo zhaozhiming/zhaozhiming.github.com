@@ -1239,8 +1239,71 @@ def close_swift_conn(src):
                                   '%s %s' % (self.server_type, req.method),
                                   headers=resp_headers)
 {% endcodeblock %}  
-* 遍历每个节点，根据节点信息发起请求，如果请求不是100+和500+，则返回请求结果。
-* 如果请求状态码为507，则加入node到异常node列表。
-* 其他异常抛出异常信息。
+* 先通过partition获取node节点，再根据节点个数创建线程发起每个节点请求。
+* 获取每个线程的返回结果，将状态码和响应结果记录保存到列表中，如果状态码列表个数超过节点的一半，则跳出循环。
+* 将剩下的response设置为503，最后通过best_response方法获取response。
+  
+### have_quorum
+
+{% codeblock lang:python %}
+    def have_quorum(self, statuses, node_count):
+        """
+        Given a list of statuses from several requests, determine if
+        a quorum response can already be decided.
+
+        :param statuses: list of statuses returned
+        :param node_count: number of nodes being queried (basically ring count)
+        :returns: True or False, depending on if quorum is established
+        """
+        quorum = quorum_size(node_count)
+        if len(statuses) >= quorum:
+            for hundred in (HTTP_OK, HTTP_MULTIPLE_CHOICES, HTTP_BAD_REQUEST):
+                if sum(1 for s in statuses
+                       if hundred <= s < hundred + 100) >= quorum:
+                    return True
+        return False
+{% endcodeblock %}  
+* 通过节点个数和一组状态码判断响应是否已经满足限额。
+  
+### best_response
+
+{% codeblock lang:python %}
+    def best_response(self, req, statuses, reasons, bodies, server_type,
+                      etag=None, headers=None):
+        """
+        Given a list of responses from several servers, choose the best to
+        return to the API.
+
+        :param req: swob.Request object
+        :param statuses: list of statuses returned
+        :param reasons: list of reasons for each status
+        :param bodies: bodies of each response
+        :param server_type: type of server the responses came from
+        :param etag: etag
+        :param headers: headers of each response
+        :returns: swob.Response object with the correct status, body, etc. set
+        """
+        resp = Response(request=req)
+        if len(statuses):
+            for hundred in (HTTP_OK, HTTP_MULTIPLE_CHOICES, HTTP_BAD_REQUEST):
+                hstatuses = \
+                    [s for s in statuses if hundred <= s < hundred + 100]
+                if len(hstatuses) >= quorum_size(len(statuses)):
+                    status = max(hstatuses)
+                    status_index = statuses.index(status)
+                    resp.status = '%s %s' % (status, reasons[status_index])
+                    resp.body = bodies[status_index]
+                    if headers:
+                        update_headers(resp, headers[status_index])
+                    if etag:
+                        resp.headers['etag'] = etag.strip('"')
+                    return resp
+        self.app.logger.error(_('%(type)s returning 503 for %(statuses)s'),
+                              {'type': server_type, 'statuses': statuses})
+        resp.status = '503 Internal Server Error'
+        return resp
+{% endcodeblock %}  
+* 给定一组response，返回最佳的response。
+* 比如副本数是3,response列表是[201,201,503],则返回201。
   
 

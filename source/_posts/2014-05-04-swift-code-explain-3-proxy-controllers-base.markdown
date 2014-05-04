@@ -1,13 +1,15 @@
 ---
 layout: post
 title: "swift源码详解（三）——proxy/controllers/base.py"
-date: 2014-04-20 21:36
+date: 2014-05-04 21:36
 description: swift源码详解
-keywords: 
+keywords: swift
 comments: true
 categories: code
 tags: swift
 ---
+
+## [回swift代码结构目录][url1]
 
 ### update_headers
   
@@ -1306,4 +1308,171 @@ def close_swift_conn(src):
 * 给定一组response，返回最佳的response。
 * 比如副本数是3,response列表是[201,201,503],则返回201。
   
+### autocreate_account
+
+{% codeblock lang:python %}
+    def autocreate_account(self, env, account):
+        """
+        Autocreate an account
+
+        :param env: the environment of the request leading to this autocreate
+        :param account: the unquoted account name
+        """
+        partition, nodes = self.app.account_ring.get_nodes(account)
+        path = '/%s' % account
+        headers = {'X-Timestamp': normalize_timestamp(time.time()),
+                   'X-Trans-Id': self.trans_id,
+                   'Connection': 'close'}
+        resp = self.make_requests(Request.blank('/v1' + path),
+                                  self.app.account_ring, partition, 'PUT',
+                                  path, [headers] * len(nodes))
+        if is_success(resp.status_int):
+            self.app.logger.info('autocreate account %r' % path)
+            clear_info_cache(self.app, env, account)
+        else:
+            self.app.logger.warning('Could not autocreate account %r' % path)
+{% endcodeblock %}  
+* 发起一个PUT请求自动创建account，创建失败记录警告信息。
+  
+### GETorHEAD_base
+
+{% codeblock lang:python %}
+    def GETorHEAD_base(self, req, server_type, ring, partition, path):
+        """
+        Base handler for HTTP GET or HEAD requests.
+
+        :param req: swob.Request object
+        :param server_type: server type used in logging
+        :param ring: the ring to obtain nodes from
+        :param partition: partition
+        :param path: path for the request
+        :returns: swob.Response object
+        """
+        backend_headers = self.generate_request_headers(
+            req, additional=req.headers)
+
+        handler = GetOrHeadHandler(self.app, req, self.server_type, ring,
+                                   partition, path, backend_headers)
+        res = handler.get_working_response(req)
+
+        if not res:
+            res = self.best_response(
+                req, handler.statuses, handler.reasons, handler.bodies,
+                '%s %s' % (server_type, req.method),
+                headers=handler.source_headers)
+        try:
+            (vrs, account, container) = req.split_path(2, 3)
+            _set_info_cache(self.app, req.environ, account, container, res)
+        except ValueError:
+            pass
+        try:
+            (vrs, account, container, obj) = req.split_path(4, 4, True)
+            _set_object_info_cache(self.app, req.environ, account,
+                                   container, obj, res)
+        except ValueError:
+            pass
+        return res
+{% endcodeblock %}  
+* 基类controller的get或head请求处理方法，首先构造header和handler发起一个http请求。
+* 如果请求没有响应，则调用best_response方法取到response。
+* 如果请求有响应，则根据request分割出account、container和object信息，设置到缓存中，最后返回response。
+  
+### is_origin_allowed
+
+{% codeblock lang:python %}
+    def is_origin_allowed(self, cors_info, origin):
+        """
+        Is the given Origin allowed to make requests to this resource
+
+        :param cors_info: the resource's CORS related metadata headers
+        :param origin: the origin making the request
+        :return: True or False
+        """
+        allowed_origins = set()
+        if cors_info.get('allow_origin'):
+            allowed_origins.update(
+                [a.strip()
+                 for a in cors_info['allow_origin'].split(' ')
+                 if a.strip()])
+        if self.app.cors_allow_origin:
+            allowed_origins.update(self.app.cors_allow_origin)
+        return origin in allowed_origins or '*' in allowed_origins
+{% endcodeblock %}  
+* 判断该请求方法是否允许发起请求，先从header中获取'allow_origin'的值，如果有的花，更新允许访问列表。
+* 如果原请求方法在允许访问列表中，或者允许访问列表中有'*'，则返回True。
+  
+### OPTIONS
+
+{% codeblock lang:python %}
+    @public
+    def OPTIONS(self, req):
+        """
+        Base handler for OPTIONS requests
+
+        :param req: swob.Request object
+        :returns: swob.Response object
+        """
+        # Prepare the default response
+        headers = {'Allow': ', '.join(self.allowed_methods)}
+        resp = Response(status=200, request=req, headers=headers)
+
+        # If this isn't a CORS pre-flight request then return now
+        req_origin_value = req.headers.get('Origin', None)
+        if not req_origin_value:
+            return resp
+{% endcodeblock %}  
+* options请求的基本handler，准备一个默认的response，如果不是一个CORS请求，则返回默认的response。
+  
+{% codeblock lang:python %}
+        # This is a CORS preflight request so check it's allowed
+        try:
+            container_info = \
+                self.container_info(self.account_name,
+                                    self.container_name, req)
+        except AttributeError:
+            # This should only happen for requests to the Account. A future
+            # change could allow CORS requests to the Account level as well.
+            return resp
+
+        cors = container_info.get('cors', {})
+
+        # If the CORS origin isn't allowed return a 401
+        if not self.is_origin_allowed(cors, req_origin_value) or (
+                req.headers.get('Access-Control-Request-Method') not in
+                self.allowed_methods):
+            resp.status = HTTP_UNAUTHORIZED
+            return resp
+{% endcodeblock %}  
+* 如果对account进行操作的CORS请求，则返回默认reponse，否则获取container信息。
+* 如果CORS请求不允许，则返回401。
+  
+{% codeblock lang:python %}
+        # Allow all headers requested in the request. The CORS
+        # specification does leave the door open for this, as mentioned in
+        # http://www.w3.org/TR/cors/#resource-preflight-requests
+        # Note: Since the list of headers can be unbounded
+        # simply returning headers can be enough.
+        allow_headers = set()
+        if req.headers.get('Access-Control-Request-Headers'):
+            allow_headers.update(
+                list_from_csv(req.headers['Access-Control-Request-Headers']))
+
+        # Populate the response with the CORS preflight headers
+        if cors.get('allow_origin', '').strip() == '*':
+            headers['access-control-allow-origin'] = '*'
+        else:
+            headers['access-control-allow-origin'] = req_origin_value
+        if cors.get('max_age') is not None:
+            headers['access-control-max-age'] = cors.get('max_age')
+        headers['access-control-allow-methods'] = \
+            ', '.join(self.allowed_methods)
+        if allow_headers:
+            headers['access-control-allow-headers'] = ', '.join(allow_headers)
+        resp.headers = headers
+
+        return resp
+{% endcodeblock %}  
+* 在response的header中增加相关header，分别有'access-control-allow-origin','access-control-max-age','access-control-allow-methods'和'access-control-allow-headers'。
+  
+[url1]: http://zhaozhiming.github.io/blog/2014/04/19/swift-code-explain-total/
 

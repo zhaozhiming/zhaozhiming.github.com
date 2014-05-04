@@ -9,6 +9,8 @@ categories: code
 tags: swift
 ---
 
+## [回swift代码结构目录][url3]
+
 ### int方法
 
 <!--more-->  
@@ -641,3 +643,4 @@ def app_factory(global_conf, **local_conf):
 
 [url1]: https://github.com/zhaozhiming/swift
 [url2]: http://docs.openstack.org/havana/config-reference/content/proxy-server-conf.html
+[url3]: http://zhaozhiming.github.io/blog/2014/04/19/swift-code-explain-total/

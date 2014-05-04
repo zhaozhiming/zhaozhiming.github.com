@@ -94,10 +94,11 @@ swift的源码因为不断在更新，笔记记录的代码就以2014-4-18的为
 	* ### proxy
 		* controllers
 			* account.py
-			* base.py
+			* [base.py][url3]
 			* container.py
 			* obj.py
 		* [server.py][url2]
 
 [url1]: https://github.com/zhaozhiming/swift
 [url2]: http://zhaozhiming.github.io/blog/2014/04/20/swift-code-explain-proxy-server/
+[url3]: http://zhaozhiming.github.io/blog/2014/05/04/swift-code-explain-3-proxy-controllers-base/

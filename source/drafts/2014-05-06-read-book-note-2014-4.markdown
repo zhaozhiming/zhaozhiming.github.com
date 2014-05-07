@@ -1,0 +1,16 @@
+---
+layout: post
+title: "读书笔记——沸腾十五年，看板方法，精益创业"
+date: 2014-05-06 06:43
+published: false
+description: 沸腾十五年，看板方法，精益创业
+keywords: 沸腾十五年，看板方法，精益创业
+comments: true
+categories: read
+tags: [kanban,lean]
+---
+
+{% img /images/post/2014-5/april_book.jpg %}  
+
+
+<!--more-->  

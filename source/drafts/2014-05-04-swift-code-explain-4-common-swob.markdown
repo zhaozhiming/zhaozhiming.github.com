@@ -176,7 +176,10 @@ def _header_int_property(header):
 {% endcodeblock %}  
 * 定义整数型header属性的getter和setter方法。
   
+  
+{% codeblock lang:python %}
 
+{% endcodeblock %}  
 
 
 [url1]: http://zhaozhiming.github.io/blog/2014/04/19/swift-code-explain-total/

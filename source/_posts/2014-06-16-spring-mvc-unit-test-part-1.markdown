@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "基于Spring Mvc做单元测试（一）——使用Spring Test框架"
+title: "基于Spring MVC做单元测试（一）——使用Spring Test框架"
 date: 2014-06-16 10:54
 description: 基于Spring Mvc做单元测试
 keywords: spring mvc,unit test

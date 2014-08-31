@@ -117,9 +117,7 @@ task :new_post, :title do |t, args|
     post.puts "tags: "
     post.puts "---"
   end
-  draft_file_name = "#{source_dir}/drafts/#{Time.now.strftime('%Y-%m-%d')}-#{title.to_url}.#{new_post_ext}"
-  system "mv \"#{filename}\" \"#{draft_file_name}\""
-  system "subl \"#{draft_file_name}\""
+  system "subl \"#{filename}\""
 end
 
 # usage rake new_page[my-new-page] or rake new_page[my-new-page.html] or rake new_page (defaults to "new-page.markdown")

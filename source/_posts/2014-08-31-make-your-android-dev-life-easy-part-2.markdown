@@ -11,7 +11,7 @@ tags: [android,genymotion]
   
 {% img /images/post/2014-8/genymotion-logo.jpg %}  
   
-以前听过一个笑话，说是一个APP好不容易拿到100万的融资，但是没几天就花完了，问创始人这钱怎么花的？创始人说:没什么，就是每个型号的Android手机各买了一个来做测试，钱就花完了。  
+以前听过一个笑话，说是一个App好不容易拿到100万的融资，但是没几天就花完了，问创始人这钱怎么花的？创始人说:没什么，就是每个型号的Android手机各买了一个来做测试，钱就花完了。  
   
 Android开发需要有强大的模拟器来避免这种尴尬，[Genymotion][genymotion-index]是一个Android模拟器，比起Google官方的AVD(Android Virtual Devices)，它有着启动快速，安装方便，简单上手的特点。
 <!--more-->
@@ -19,27 +19,27 @@ Android开发需要有强大的模拟器来避免这种尴尬，[Genymotion][gen
 ## 注册安装
 * 进入官网首页，点击`GET GENYMOTION`按钮（官网需要翻墙访问，不过有genymotion的[中文网][genymotion-ch]也可以访问）;
   
-{% img /images/post/2014-9/genymotion-intall-1.png %}  
+{% img /images/post/2014-9/genymotion-install-2.png %}  
   
 * 有3个套餐让你选择，我们当然选择免费的先试用一下，点击download按钮;
   
-{% img /images/post/2014-9/genymotion-intall-2.png %}  
+{% img /images/post/2014-9/genymotion-install-3.png %}  
   
 * 下载要求你先注册一个账号，注册完成后需要到注册邮箱接收邮件，激活你的genymotion账号;
   
-{% img /images/post/2014-9/genymotion-intall-3.png %}  
+{% img /images/post/2014-9/genymotion-install-1.png %}  
   
 * 激活账号后，可以看到网站提示你可以下载了;
   
-{% img /images/post/2014-9/genymotion-intall-4.png %}  
+{% img /images/post/2014-9/genymotion-install-4.png %}  
   
 * 下载页面中，可以看到最上面的genymotion版本包含了Oracle VirtualBox4.2.12这个虚拟机工具，如果是选择下面的genymotion，则需要先下载[VirtualBox][virtualbox]并安装;
   
-{% img /images/post/2014-9/genymotion-intall-5.png %}  
+{% img /images/post/2014-9/genymotion-install-5.png %}  
   
 * 下载页面的下方，还有流行的Java IDE——Intellij IDEA和Eclipse的插件，看你用的IDE是哪个就下载哪个插件，这个后面会用到;
   
-{% img /images/post/2014-9/genymotion-intall-6.png %}  
+{% img /images/post/2014-9/genymotion-install-6.png %}  
   
 * 下载genymotion的安装文件后，安装安装提示进行安装即可。
 
@@ -49,7 +49,7 @@ Android开发需要有强大的模拟器来避免这种尴尬，[Genymotion][gen
   
 {% img /images/post/2014-9/genymotion-use-1.png %}  
   
-* 启动后是genymotion的主界面；  
+* 启动后是genymotion客户端的主界面；  
   
 {% img /images/post/2014-9/genymotion-use-2.jpg %}  
   
@@ -63,9 +63,9 @@ Android开发需要有强大的模拟器来避免这种尴尬，[Genymotion][gen
   
 * 验证通过后就可以添加虚拟设备了，下图是虚拟设备列表，可以选择Android版本和设备型号进行过滤查询（有些比较老的手机型号会查不到），选择你需要的虚拟设备，点击Next；  
   
-{% img /images/post/2014-9/genymotion-use-5.png %}  
-{% img left /images/post/2014-9/genymotion-use-6.png %}  
-{% img right /images/post/2014-9/genymotion-use-7.png %}  
+{% img /images/post/2014-9/genymotion-use-6.png 150 250 %}  
+{% img /images/post/2014-9/genymotion-use-7.png 150 250 %} 
+{% img /images/post/2014-9/genymotion-use-5.png %}   
   
 * genymotion会显示虚拟设备的详细信息，你确定无误后点击Next就会进行下载；  
   
@@ -81,7 +81,7 @@ Android开发需要有强大的模拟器来避免这种尴尬，[Genymotion][gen
   
 * 你马上就可以看到你的虚拟设备已经启动，速度很快。  
   
-{% img /images/post/2014-9/genymotion-use-11.png %}  
+{% img /images/post/2014-9/genymotion-use-11.png 300 500 %}  
   
 ## 与Intellij IDEA集成
 现在我们来看看如何在IDE里面启动虚拟设备，这里以Intellij IDEA为例。  
@@ -108,7 +108,7 @@ Android开发需要有强大的模拟器来避免这种尴尬，[Genymotion][gen
   
 * 可以看到你的App已经在genymotion的虚拟设备中运行了；
 
-{% img /images/post/2014-9/genymotion-idea-6.png %}  
+{% img /images/post/2014-9/genymotion-idea-6.png 300 500 %}  
   
 
 

@@ -16,13 +16,13 @@ tags: [ceph,auth]
 
 ## 原理介绍
 
-Cephx使用共享密钥的方式进行认证，意思是客户端和monitor集群都有一份客户端的密钥。它提供了一个相互认证的机制，意味着集群确定用户拥有密钥，而用户确定集群拥有密钥的备份。  
+Cephx使用共享密钥的方式进行认证，意思是客户端和monitor集群都有一份客户端的密钥。它提供了一个相互认证的机制，集群确定用户拥有密钥，而用户确定集群拥有密钥的备份。  
   
-Ceph不提供统一的认证接口给对象存储，所以客户端必须直接跟OSD交互。为了保护数据，ceph提供了cephx认证系统，用来对用户在客户端的操作进行认证。Cephx认证协议与Kerberos相类似。  
+Ceph不提供统一的认证接口给对象存储，所以客户端必须直接跟OSD交互。为了保护数据，ceph提供了cephx认证系统，用来对用户在客户端的操作进行认证。Cephx认证协议与[Kerberos][kerberos]相类似。  
   
-用户通过客户端与monitor进行交互。跟Kerberos不同，每个monitor都可以进行认证，所以没有单点和性能瓶颈的问题。Monitor返回一个类似Kerberos的数据结构，包含了一个session key来访问ceph服务。Session key是通过加密用户自己的密钥来生成的，所以只有该用户能请求monitor服务。然后客户端使用session key想monitor发起请求，然后monitor提供给客户端一个ticket来使客户端和OSD进行认证。Monitor和OSD共享密钥，所以客户端可以使用Monitor提供的ticket来和OSD进行交互。跟Kerberos一样，cephx的ticket会过期，所以攻击者不能使用过期的ticket或session key来做不正当的事情。这种认证形式将阻止攻击者通过修改用户已泄露信息的方式，或者伪造消息进行通讯访问的方式来进行攻击，只要用户的密钥不要在失效前泄露就没有什么问题。  
+用户调用客户端连接monitor。跟Kerberos不同，每个monitor都可以进行认证，所以没有单点和性能瓶颈的问题。Monitor返回一个类似Kerberos的数据结构，包含了一个session key来访问ceph服务。Session key是通过加密用户自己的密钥来生成的，所以只有该用户能请求monitor服务。然后客户端使用session key向monitor发起请求，monitor于是提供给客户端一个ticket来使客户端和OSD进行认证。Monitor和OSD共享密钥，所以客户端可以使用Monitor提供的ticket来和OSD进行交互。跟Kerberos一样，cephx的ticket会过期，所以攻击者不能使用过期的ticket或session key来做不正当的事情。这种认证形式将阻止攻击者通过修改用户已泄露信息的方式，或者伪造消息进行通讯访问的方式来进行攻击，只要用户的密钥不要在失效前泄露就没有什么问题。  
   
-使用cephx时，管理员需要先设置user。在下面的图表中，client.admin用户调用ceph auth get-or-create-key的命令来生成用户名和密钥，ceph的auth子系统来生成用户名和密钥，保存一份密钥在monitor并将用户的密钥传回给client.admin用户。这使得客户端和monitor共享了一份密钥。  
+使用cephx时，管理员需要先创建user。在下面的图表中，client.admin用户调用`ceph auth get-or-create-key`的命令来生成用户名和密钥，ceph的auth子系统来生成用户名和密钥，保存一份密钥在monitor并将用户的密钥传回给client.admin用户。这使得客户端和monitor共享了一份密钥。  
   
 {% img /images/post/2014-9/rados-auth-1.png %}  
   
@@ -44,7 +44,7 @@ cephx协议验证客户端和Ceph服务器之间的通信。在初始化认证�
 ceph auth get-or-create client.admin mon 'allow *' mds 'allow *' osd 'allow *' -o /etc/ceph/ceph.client.admin.keyring
 {% endcodeblock %}   
   
-注意：这个操作会覆盖原有的ceph.client.admin.keyring文件，请谨慎操作。
+`注意：这个操作会覆盖原有的ceph.client.admin.keyring文件，请谨慎操作。`
  
 * 创建monitor的keyring
   
@@ -132,3 +132,4 @@ rgw socket path = /var/run/ceph/ceph.radosgw.{instance-name}.fastcgi.sock
 log file = /var/log/ceph/client.radosgw.{instance-name}.log
 {% endcodeblock %}   
 
+[kerberos]: http://en.wikipedia.org/wiki/Kerberos_(protocol)

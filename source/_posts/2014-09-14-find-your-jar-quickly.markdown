@@ -17,8 +17,6 @@ tags: [grepcode,maven]
 
 ## [Grepcode][grepcode]
   
-{% img /images/post/2014-9/grep-code-1.jpg %}  
-  
 这个网站可以通过class名称直接搜索到拥有这个class的所有的jar包，比如说我们运行Java程序时报下面的错误，发现`cn/com/starit/io/SystemDemo02`找不到。  
   
 {% codeblock lang:sh %}
@@ -36,22 +34,24 @@ Exception in thread "main"
   
 * 进入grepcode首页，输入`cn/com/starit/io/SystemDemo02`进行查询。
   
-{% img /images/post/2014-9/grep-code-1.jpg %}  
+{% img /images/post/2014-9/grepcode-1.png %}  
   
 * 可以看到查询结果涵盖了所有可能包含这个class的jar包，最前面的是相似度最接近的jar包名称，点开版本号还可以看到具体的源码。
   
-{% img /images/post/2014-9/grep-code-2.jpg %}  
+{% img /images/post/2014-9/grepcode-2.png %}  
   
 ## [mvnrepository][mvn-repository]
 
-知道Jar包的名称后，我们就可以通过mvnrepository这个网站来下载对应的jar包了，操作也很简单，输入jar名称就可以查询到相关的jar版本信息，里面还有maven，gradle等构建工具的XX。
+知道Jar包的名称后，我们就可以通过mvnrepository这个网站来下载对应的jar包了，操作也很简单，输入jar名称就可以查询到相关的jar版本信息，里面还有maven，gradle等构建工具的配置脚本信息。
   
-{% img /images/post/2014-9/mvn-repository-1.jpg %}  
+{% img /images/post/2014-9/mvn-repository-1.png %}  
   
-{% img /images/post/2014-9/mvn-repository-2.jpg %}  
+{% img /images/post/2014-9/mvn-repository-2.png %}  
   
-{% img /images/post/2014-9/mvn-repository-3.jpg %}  
-    
+{% img /images/post/2014-9/mvn-repository-3.png %}  
+  
+结合这两个网站就可以很方便的找到缺失的Jar包了。  
+  
 
 [grepcode]: http://grepcode.com/
 [mvn-repository]: http://mvnrepository.com/

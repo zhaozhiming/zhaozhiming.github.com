@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 使用Vagrant和Ansible搭建Ceph环境
-date: 2014-09-17 22:03
+date: 2014-10-2 22:03
 description: 使用Vagrant和Ansible部署Ceph环境
 keywords: vagrant,ansible,ceph
 comments: true
@@ -82,8 +82,8 @@ end
   
 这个Vagrantfile指定了box的名称，然后创建了一个名称为`rgw`的vm，指定了vm的ip、hostname、内存大小。  
   
-关于vagrant就介绍到这里，想要了解更多信息可以查看[vagrant官网][vagrant]。
-
+关于vagrant就介绍到这里，想要了解更多信息可以查看[vagrant官网][vagrant]。  
+  
 ## [Ansible][ansible]
   
 {% img /images/post/2014-9/ansible.jpg %}  
@@ -165,11 +165,62 @@ Host 机器B
 {% endcodeblock %}   
   
 #### playbook
-ansible还可以通过一个playbook脚本进行
+ansible还可以通过一个playbook脚本进行远程机器的操作。playbook的示例如下:   
+  
+{% codeblock playbook.yml lang:yaml %}
+# playbook.yml
+---
+- hosts: all 
+  remote_user: ceph 
+  tasks:
+    - name: whoami
+      shell: 'whoami > whoami.rst'
+{% endcodeblock %}   
+    
+完了执行如下命令可以看到执行结果。  
+  
+{% codeblock lang:sh %}
+$ ansible-playbook playbook.yml 
 
+PLAY [all] ******************************************************************** 
 
-## Ceph-ansible
+GATHERING FACTS *************************************************************** 
+ok: [ceph-mon0]
+ok: [ceph-osd1]
+ok: [ceph-osd0]
 
+TASK: [whoami] **************************************************************** 
+changed: [ceph-mon0]
+changed: [ceph-osd0]
+changed: [ceph-osd1]
+
+PLAY RECAP ******************************************************************** 
+ceph-mon0                  : ok=2    changed=1    unreachable=0    failed=0   
+ceph-osd0                  : ok=2    changed=1    unreachable=0    failed=0   
+ceph-osd1                  : ok=2    changed=1    unreachable=0    failed=0   
+{% endcodeblock %}   
+    
+这时可以在远程机器的用户目录上可以看到新产生了一个`whoami.rst`的文件。  
+  
+关于ansible就介绍到这里，想要了解更多信息可以查看[ansible的文档][ansible-doc]。  
+
+## [Ceph-ansible][ceph-ansible]
+这个github项目主要是利用了上面介绍的2个工具，使用vagrant来创建ceph需要的服务器vm，然后将ceph的环境搭建通过ansible的playbook脚本执行。  
+  
+#### 执行步骤
+
+* 下载ceph-ansible项目;
+  
+{% codeblock lang:sh %}
+$ git clone https://github.com/ceph/ceph-ansible.git
+{% endcodeblock %}   
+  
+* 一行命令就可以完成环境搭建，完成后ceph的环境是: 3个mon，3个osd，1个rgw;
+  
+{% codeblock lang:sh %}
+$ vagrant up
+{% endcodeblock %}   
+  
 
 [ceph]: http://ceph.com/
 [vagrant]: https://www.vagrantup.com/
@@ -177,3 +228,4 @@ ansible还可以通过一个playbook脚本进行
 [vagrant-license]: https://www.vagrantup.com/vmware
 [ansible]: http://www.ansible.com/home
 [ansible-doc]: http://docs.ansible.com/
+[ceph-ansible]: https://github.com/ceph/ceph-ansible

@@ -14,28 +14,27 @@ tags: [vagrant,ansible,ceph]
 ## [Ceph][ceph]简介  
 Ceph是一个高性能，高可用，高扩展的分布式对象存储框架和文件系统，而且是一个免费开源的项目。  
   
-但是Ceph的环境搭建起来比较麻烦，最简单的环境也需要2台虚拟机(1台做mon和osd，另外一台做gateway)，而且按照官方文档上面的指南进行安装，经常报各种莫名其妙的问题，现在给大家介绍一个简单的方法来进行Ceph环境的搭建。下面先介绍几个要用到的工具。  
+但是Ceph的环境搭建起来比较麻烦，最简单的环境也需要2台VM(虚拟机，1台做mon和osd，另外一台做gateway)，而且按照官方文档上面的指南进行安装，经常报各种莫名其妙的问题，现在给大家介绍一个简单的方法来进行Ceph环境的搭建。下面先介绍几个要用到的工具。  
   
 <!--more-->
 ## [Vagrant][vagrant]
   
 {% img /images/post/2014-9/vagrant.png %}  
   
-以前使用VM(虚拟机)情况是这样的:   
+以前使用VM情况是这样的:   
   
 * 下载操作系统的iso镜像
 * 通过VM管理工具(VMWare，VirtualBox等)将iso镜像转换为VM
 * 登陆到VM进行操作
   
-使用了Vagrant之后就非常方便了，一个命令就可以搞定VM的安装，ssh到VM也无需输入用户名密码，还可以查看所有VM的状态等。  
+整个过程复杂而且漫长，但是使用了Vagrant之后就非常方便了，一个命令就可以搞定VM的安装，ssh到VM也无需输入用户名密码，还可以查看所有VM的状态等。  
   
-#### Box
+### Box
 vagrant通过box来生成VM，box可以理解是一个制作好的VM，这意味着你搭建完自己的开发环境后，也可以将其制作成一个box，供团队其他成员使用。  
   
-box的容量非常小，比如Ubuntu12.04的一个iso镜像一般要500多M，制作成VM可能要10G左右，而一个ubuntu12.04的box只有300多M。Vagrant的box可以在[这里][vagrant-box]下载，除了有各种OS(ubuntu, windosw, CentOS等)的VM外，还有Virtualbox和VMWare这两种虚拟器软件对应的box，不过要使用VMWare的box
-需要安装插件和到购买相关的[License][vagrant-license]，毕竟VMWare不是免费的软件。  
+box的容量非常小，比如Ubuntu12.04的一个iso镜像一般要500多M，制作成VM可能要10G左右，而一个ubuntu12.04的box只有300多M。Vagrant的box可以在[这里][vagrant-box]下载，除了有各种OS(ubuntu, windosw, CentOS等)的VM外，还有Virtualbox和VMWare各自对应的box，不过要使用VMWare的box，需要安装插件和到购买相关的[License][vagrant-license]，毕竟VMWare不是免费的软件。  
   
-下载了box后，执行下面命令就可以添加box了，如果直接输入box名称并发现本地没有box的话，会自动下载box文件。`PS: Vagrant默认使用Virtualbox作为虚拟器软件，所以在安装Vagrant还需要先安装Virtualbox。`  
+下载了box后，执行下面命令就可以添加box了，如果直接输入box名称并发现本地没有box的话，会自动下载box文件。(`PS: Vagrant默认使用Virtualbox作为虚拟器软件，所以在安装Vagrant还需要先安装Virtualbox。`)  
   
 {% codeblock lang:sh %}
 //添加本地box文件
@@ -46,41 +45,42 @@ $ vagrant box add hashicorp/precise32
 $ vagrant box list
 {% endcodeblock %}   
   
-#### Vagrant基本操作
-Vagrant的操作非常简单，现在介绍几个常用的操作指令。`PS: 下面的大部分命令后面可以跟vm名称，不跟的话是对所有的vm进行操作。`  
+### Vagrant基本操作
+Vagrant的操作非常简单，现在介绍几个常用的操作指令。(`PS: 下面的大部分命令后面可以跟VM名称，不跟的话是对所有的VM进行操作。`)  
   
-* vagrant status: 展示vm的信息。
-* vagrant up: 启动vm。
-* vagrant ssh [vm]: ssh到某个vm上，无需输入用户名和密码。
-* vagrant halt: 关闭vm。
-* vagrant destroy: 销毁vm，如果你的vm被你玩残了，销毁它然后重新启动一个就可以了，很方便。  
-#### Vagrant共享
-使用`vagrant ssh`到vm后，可以看到根目录下有个`/vagrant`文件夹，这个是vm和工程间的共享目录，在这个文件夹里面存放东西，可以在存放Vagrantfile的目录里面看到，反之亦然，在vm里面也可以读取到工程下的文件。  
+* vagrant status: 展示VM的信息。
+* vagrant up: 启动VM。
+* vagrant ssh [VM]: ssh到某个VM上，无需输入用户名和密码。
+* vagrant halt: 关闭VM。
+* vagrant destroy: 销毁VM，如果你的VM被你玩残了，销毁它然后重新启动一个就可以了，很方便。  
   
-#### Vagrantfile
-初始化vagrant工程后可以看到一个`Vagrantfile`的文件，这个是配置vm的文件，可以看下面的例子:
+### Vagrant共享
+使用`vagrant ssh`到VM后，可以看到根目录下有个`/vagrant`文件夹，这个是VM和工程间的共享目录，在这个文件夹里面存放东西，可以在存放Vagrantfile的目录里面看到，反之亦然，在VM里面也可以读取到工程下的文件。  
+  
+### Vagrantfile
+初始化vagrant工程后可以看到一个`Vagrantfile`的文件，这个是配置VM的文件，可以看下面的例子:
   
   
 {% codeblock lang:ruby %}
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "hashicorp/precise64"
+  config.VM.box = "hashicorp/precise64"
 
-  config.vm.define :rgw do |rgw|
-    rgw.vm.network :private_network, ip: "192.168.42.2"
-    rgw.vm.host_name = "ceph-rgw"
-    rgw.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--memory", "192"]
+  config.VM.define :rgw do |rgw|
+    rgw.VM.network :private_network, ip: "192.168.42.2"
+    rgw.VM.host_name = "ceph-rgw"
+    rgw.VM.provider :virtualbox do |vb|
+      vb.customize ["modifyVM", :id, "--memory", "192"]
     end
-    rgw.vm.provider :vmware_fusion do |v|
-      v.vmx['memsize'] = '192'
+    rgw.VM.provider :VMware_fusion do |v|
+      v.VMx['memsize'] = '192'
     end
   end
 end
 {% endcodeblock %}   
   
-这个Vagrantfile指定了box的名称，然后创建了一个名称为`rgw`的vm，指定了vm的ip、hostname、内存大小。  
+这个Vagrantfile指定了box的名称，然后创建了一个名称为`rgw`的VM，指定了VM的ip、hostname、内存大小。  
   
 关于vagrant就介绍到这里，想要了解更多信息可以查看[vagrant官网][vagrant]。  
   
@@ -88,9 +88,9 @@ end
   
 {% img /images/post/2014-9/ansible.jpg %}  
   
-Ansible是一个开源的远程机器管理软件，可以批量操作多台远程服务器。`PS: Ansible只适合操作Linux和Unix机器，如果是Windows系统是不可以的。`  
+Ansible是一个开源的远程机器管理软件，可以批量操作多台远程服务器。(`PS: Ansible只适合操作Linux和Unix机器，如果是Windows系统是不可以的。`)  
   
-#### 安装
+### 安装
 要安装Ansible需要先安装Python2.6/7，然后可以通过easy_install或pip进行下载安装。
   
 {% codeblock lang:sh %}
@@ -99,7 +99,7 @@ sudo esay_install ansible
 sudo pip install ansible
 {% endcodeblock %}   
   
-#### 使用示例
+### 使用示例
 创建一个文件夹，在文件夹里面创建一个hosts文件，hosts格式如下:   
   
 {% codeblock lang:sh %}
@@ -126,9 +126,9 @@ ceph-osd1 | success | rc=0 >>
 ceph     pts/0        2014-10-02 08:54 (192.168.42.60)
 {% endcodeblock %}   
       
-从输出信息上可以看到这几台远程机器都成功执行了`who`命令，不过如果要成功执行上面的执行，还需要先在执行机和远程机上面设置无密码ssh连接。  
+从输出信息上可以看到这几台远程机器都成功执行了`who`命令，不过如果要成功执行上面的命令，还需要先在执行机和远程机上面设置无密码ssh连接。  
   
-#### 无密码ssh连接
+### 无密码ssh连接
 假设有2台机器，机器A和机器B，现在想让机器A`ssh`机器B的时候不需要输入用户和密码，操作如下。  
   
 * 在机器B上创建一个用户，并配置好，下面命令的`username`指自己要创建的用户名。
@@ -144,7 +144,7 @@ $ sudo chmod 0440 /etc/sudoers.d/{username}
 * 在机器A上生成密钥，并发送给机器B。
   
 {% codeblock lang:sh %}
-ssh-keygen
+$ ssh-keygen
 
 Generating public/private key pair.
 Enter file in which to save the key (/ceph-admin/.ssh/id_rsa):
@@ -164,8 +164,8 @@ Host 机器B
    User {username}
 {% endcodeblock %}   
   
-#### playbook
-ansible还可以通过一个playbook脚本进行远程机器的操作。playbook的示例如下:   
+### playbook
+ansible还可以通过一个playbook脚本进行远程机器的操作，playbook的示例如下:   
   
 {% codeblock playbook.yml lang:yaml %}
 # playbook.yml
@@ -177,7 +177,7 @@ ansible还可以通过一个playbook脚本进行远程机器的操作。playbook
       shell: 'whoami > whoami.rst'
 {% endcodeblock %}   
     
-完了执行如下命令可以看到执行结果。  
+创建完playbook文件后执行如下命令可以看到执行结果。  
   
 {% codeblock lang:sh %}
 $ ansible-playbook playbook.yml 
@@ -205,9 +205,9 @@ ceph-osd1                  : ok=2    changed=1    unreachable=0    failed=0
 关于ansible就介绍到这里，想要了解更多信息可以查看[ansible的文档][ansible-doc]。  
 
 ## [Ceph-ansible][ceph-ansible]
-这个github项目主要是利用了上面介绍的2个工具，使用vagrant来创建ceph需要的服务器vm，然后将ceph的环境搭建通过ansible的playbook脚本执行。  
+这个github项目主要是利用了上面介绍的2个工具，使用vagrant来创建ceph需要的服务器VM，然后将ceph的环境搭建通过ansible的playbook脚本执行。  
   
-#### 执行步骤
+### 执行步骤
 
 * 下载ceph-ansible项目;
   
@@ -219,13 +219,23 @@ $ git clone https://github.com/ceph/ceph-ansible.git
   
 {% codeblock lang:sh %}
 $ vagrant up
+...
+...
+...
+mon0                       : ok=16   changed=11   unreachable=0    failed=0
+mon1                       : ok=16   changed=10   unreachable=0    failed=0
+mon2                       : ok=16   changed=11   unreachable=0    failed=0
+osd0                       : ok=19   changed=7    unreachable=0    failed=0
+osd1                       : ok=19   changed=7    unreachable=0    failed=0
+osd2                       : ok=19   changed=7    unreachable=0    failed=0
+rgw                        : ok=20   changed=17   unreachable=0    failed=0
 {% endcodeblock %}   
   
 
 [ceph]: http://ceph.com/
 [vagrant]: https://www.vagrantup.com/
 [vagrant-box]: https://vagrantcloud.com/discover/featured
-[vagrant-license]: https://www.vagrantup.com/vmware
+[vagrant-license]: https://www.vagrantup.com/VMware
 [ansible]: http://www.ansible.com/home
 [ansible-doc]: http://docs.ansible.com/
 [ceph-ansible]: https://github.com/ceph/ceph-ansible

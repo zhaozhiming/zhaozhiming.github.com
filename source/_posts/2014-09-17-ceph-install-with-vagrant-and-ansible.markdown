@@ -84,10 +84,89 @@ end
   
 关于vagrant就介绍到这里，想要了解更多信息可以查看[vagrant官网][vagrant]。
 
-## Ansible
+## [Ansible][ansible]
   
 {% img /images/post/2014-9/ansible.jpg %}  
   
+Ansible是一个开源的远程机器管理软件，可以批量操作多台远程服务器。`PS: Ansible只适合操作Linux和Unix机器，如果是Windows系统是不可以的。`  
+  
+#### 安装
+要安装Ansible需要先安装Python2.6/7，然后可以通过easy_install或pip进行下载安装。
+  
+{% codeblock lang:sh %}
+sudo esay_install ansible
+# or
+sudo pip install ansible
+{% endcodeblock %}   
+  
+#### 使用示例
+创建一个文件夹，在文件夹里面创建一个hosts文件，hosts格式如下:   
+  
+{% codeblock lang:sh %}
+# hosts
+[ceph]
+192.168.42.2
+192.168.42.101
+192.168.42.201
+{% endcodeblock %}   
+    
+可以看到hosts文件里面有几个远程机器的ip(这里是虚拟机)，远程机器可以分组，通过中括号里面的组名来划分。  
+  
+然后执行下面的命令执行简单的命令。  
+  
+{% codeblock lang:sh %}
+$ ansible all -a 'who'
+ceph-mon0 | success | rc=0 >>
+ceph     pts/0        2014-10-02 08:54 (192.168.42.60)
+
+ceph-osd0 | success | rc=0 >>
+ceph     pts/0        2014-10-02 08:54 (192.168.42.60)
+
+ceph-osd1 | success | rc=0 >>
+ceph     pts/0        2014-10-02 08:54 (192.168.42.60)
+{% endcodeblock %}   
+      
+从输出信息上可以看到这几台远程机器都成功执行了`who`命令，不过如果要成功执行上面的执行，还需要先在执行机和远程机上面设置无密码ssh连接。  
+  
+#### 无密码ssh连接
+假设有2台机器，机器A和机器B，现在想让机器A`ssh`机器B的时候不需要输入用户和密码，操作如下。  
+  
+* 在机器B上创建一个用户，并配置好，下面命令的`username`指自己要创建的用户名。
+  
+{% codeblock lang:sh %}
+$ sudo useradd -d /home/{username} -m {username}
+$ sudo passwd {username}
+# 输入密码
+$ echo "{username} ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/{username}
+$ sudo chmod 0440 /etc/sudoers.d/{username}
+{% endcodeblock %}   
+  
+* 在机器A上生成密钥，并发送给机器B。
+  
+{% codeblock lang:sh %}
+ssh-keygen
+
+Generating public/private key pair.
+Enter file in which to save the key (/ceph-admin/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /ceph-admin/.ssh/id_rsa.
+Your public key has been saved in /ceph-admin/.ssh/id_rsa.pub.
+
+$ ssh-copy-id {username}@{机器B}
+{% endcodeblock %}   
+  
+* 到这里就可以不用输入密码进行ssh了，如果想连用户名也不想输入的话，需要机器A在`.ssh`文件下创建一个`config`文件，在里面添加如下内容。
+  
+{% codeblock lang:sh %}
+Host 机器B
+   Hostname 机器B
+   User {username}
+{% endcodeblock %}   
+  
+#### playbook
+ansible还可以通过一个playbook脚本进行
+
 
 ## Ceph-ansible
 
@@ -96,3 +175,5 @@ end
 [vagrant]: https://www.vagrantup.com/
 [vagrant-box]: https://vagrantcloud.com/discover/featured
 [vagrant-license]: https://www.vagrantup.com/vmware
+[ansible]: http://www.ansible.com/home
+[ansible-doc]: http://docs.ansible.com/

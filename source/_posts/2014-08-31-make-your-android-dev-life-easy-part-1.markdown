@@ -171,5 +171,11 @@ dependencies {
 }
 
 {% endcodeblock %}   
+  
+## 相关链接
 
+* [让你的安卓开发更容易(二)——Genymotion][part2]  
+* [让你的安卓开发更容易(三)——Picasso][part3]  
 
+[part2]: http://zhaozhiming.github.io/blog/2014/08/31/make-your-android-dev-life-easy-part-2/
+[part3]: http://zhaozhiming.github.io/blog/2014/10/07/make-your-android-dev-life-easy-part-3/

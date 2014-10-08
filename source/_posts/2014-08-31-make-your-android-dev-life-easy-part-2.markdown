@@ -110,9 +110,13 @@ Android开发需要有强大的模拟器来避免这种尴尬，[Genymotion][gen
 
 {% img /images/post/2014-9/genymotion-idea-6.png 300 500 %}  
   
+## 相关链接
 
+* [让你的安卓开发更容易(一)——Intellij IDEA][part1]  
+* [让你的安卓开发更容易(三)——Picasso][part3]  
 
 [genymotion-index]: http://www.genymotion.com/
 [genymotion-ch]: http://www.genymotion.cn/
 [virtualbox]: https://www.virtualbox.org/
-
+[part1]: http://zhaozhiming.github.io/blog/2014/08/31/make-your-android-dev-life-easy-part-1/
+[part3]: http://zhaozhiming.github.io/blog/2014/10/07/make-your-android-dev-life-easy-part-3/

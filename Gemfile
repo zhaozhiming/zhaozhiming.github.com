@@ -16,6 +16,7 @@ group :development do
   gem 'liquid', '~> 2.3.0'
   gem 'metaweblog', '~> 0.1.0'
   gem 'nokogiri', '~> 1.5.9'
+  gem 'octopress-popular-posts'
 end
 
 gem 'sinatra', '~> 1.4.2'

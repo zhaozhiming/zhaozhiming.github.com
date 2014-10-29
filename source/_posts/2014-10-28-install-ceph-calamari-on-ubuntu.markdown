@@ -19,7 +19,7 @@ Calamari是[Ceph][ceph]的一个监控和管理工具，它提供了一些定义
   
 ## 环境准备
 
-* 安装VitrualBox和Vagrant，vagrant的使用可以参照我之前的blog——[使用Vagrant和Ansible搭建Ceph环境][vagrant_blog]。
+* 安装VitrualBox和Vagrant，Vagrant的使用可以参照我之前的blog——[使用Vagrant和Ansible搭建Ceph环境][vagrant_blog]。
 * 下载ubuntu12.04的box文件——[box文件下载地址][vagrant_box]，我们在虚拟机中安装calamari，不污染我们的本机环境。
   
 ## 生成Calamari安装文件  
@@ -28,7 +28,7 @@ Calamari是[Ceph][ceph]的一个监控和管理工具，它提供了一些定义
   
 * 下载calamari工程
   
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ mkdir calamari-node
 $ cd calamari-node
 $ git clone https://github.com/ceph/calamari.git
@@ -37,9 +37,10 @@ $ git clone https://github.com/ceph/Diamond.git
   
 * 使用vagrant生成server安装文件
   
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ cd calamari/vagrant/precise-build
-$ vagrant up //首先要保证你的vagrant已经导入名字为precise的box
+# 首先要保证你的vagrant已经导入名字为precise的box
+$ vagrant up 
 ...
 ...
 Copying salt minion config to vm.
@@ -66,8 +67,8 @@ Total: 11
     
 * 这里的虚拟机将我们创建的根目录`calamari-node`和虚拟机中的`/git`目录关联起来了，我们可以通过在查看这2个目录中的任意一个来查看安装文件是否已经生成。
   
-{% codeblock lang:shell %}
-# 查看`calamari-node`目录
+{% codeblock lang:sh %}
+# 查看calamari-node目录
 $ cd calamari-node
 $ ls -l
 drwxr-xr-x  28 zhaozhiming  staff   952 Oct 20 16:16 Diamond
@@ -76,7 +77,7 @@ drwxr-xr-x  32 zhaozhiming  staff  1088 Oct 20 16:14 calamari
 -rw-r--r--  1 zhaozhiming  staff  16417474 Oct 21 15:58 calamari-server_1.2.1-68-gfdeb0f7_amd64.deb
 -rw-r--r--  1 zhaozhiming  staff    307478 Oct 21 15:58 diamond_3.4.67_all.deb
 
-# 查看虚拟机的`/git`目录
+# 查看虚拟机的/git目录
 $ cd calamari-node/calamari/vagrant/precise-build
 $ vagrant ssh
 $ cd /git
@@ -86,23 +87,22 @@ drwxr-xr-x  32 zhaozhiming  staff  1088 Oct 20 16:14 calamari
 -rw-r--r--  1 zhaozhiming  staff  18883769 Oct 21 15:58 calamari-repo-precise.tar.gz
 -rw-r--r--  1 zhaozhiming  staff  16417474 Oct 21 15:58 calamari-server_1.2.1-68-gfdeb0f7_amd64.deb
 -rw-r--r--  1 zhaozhiming  staff    307478 Oct 21 15:58 diamond_3.4.67_all.deb
-
-# 从上面可以看到安装文件已经生成好了，2个deb文件分别是server和监控服务的安装文件，tar.gz文件是安装服务所需的依赖包安装文件集合，如果是连网安装的话，这个tar.gz文件不需要用到。  
-
 {% endcodeblock %}   
   
+* 从上面可以看到安装文件已经生成好了，2个deb文件分别是server和监控服务的安装文件，tar.gz文件是安装服务所需的依赖包安装文件集合，如果是连网安装的话，这个tar.gz文件不需要用到。  
+
 ### 生成client安装文件
   
 * 下载calamari-client工程  
 
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ cd calamari-node
 $ git clone https://github.com/ceph/calamari-clients.git
 {% endcodeblock %}   
   
 * 使用vagrant生成client安装文件
 
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ cd calamari-client/vagrant/precise-build/
 $ vagrant up
 ...
@@ -131,7 +131,7 @@ Total: 13
   
 * 查看生成的安装文件，可以看到有1个deb文件和一个tar.gz文件，ubuntu的话直接使用deb文件进行安装就可以了，tar.gz文件不需要。
 
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ cd calamari-node
 $ ls -l
 drwxr-xr-x  28 zhaozhiming  staff   952 Oct 20 16:16 Diamond
@@ -148,7 +148,7 @@ drwxr-xr-x  22 zhaozhiming  staff      748 Oct 20 16:46 calamari-clients
   
 * 创建一个ubuntu的虚拟机来安装calamari，首先在根目录下创建一个Vagrantfile文件。
   
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ cd calamari-node
 $ touch Vagrantfile
 {% endcodeblock %}   
@@ -177,14 +177,14 @@ end
   
 * 启动虚拟机并登陆
   
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ vagrant up
 $ vagrant ssh 
 {% endcodeblock %}   
   
 * 在虚拟机上安装salt
   
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ sudo apt-get install python-software-properties
 $ sudo add-apt-repository ppa:saltstack/salt
 $ sudo apt-get update
@@ -194,20 +194,20 @@ $ sudo apt-get install salt-minion
   
 * 在虚拟机上安装所需依赖包
   
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ sudo apt-get update && sudo apt-get install -y apache2 libapache2-mod-wsgi libcairo2 supervisor python-cairo libpq5 postgresql
 {% endcodeblock %}   
   
 * 安装calamari
   
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ cd /vagrant
 $ sudo dpkg -i calamari-server*.deb calamari-clients*.deb
 {% endcodeblock %}   
 
 * 初始化calamari服务，这里会要求你输入用户名、邮箱、密码，这个用户名密码是在浏览器访问calamari服务需要的。
   
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ sudo calamari-ctl initialize
 [INFO] Loading configuration..
 [INFO] Starting/enabling salt...
@@ -238,19 +238,19 @@ Superuser created successfully.
 
 * 登陆其中一台ceph集群机器(这里假设ceph集群都是ubuntu环境)，安装监控服务。
   
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ sudo dpkg -i diamond_3.4.67_all.deb #deb文件是之前生成server安装文件时一起生成的，需要将其先考到ceph集群机器上
 {% endcodeblock %}   
   
 * 创建默认的监控配置文件
   
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ sudo mv /etc/diamond/diamond.conf.example /etc/diamond/diamond.conf
 {% endcodeblock %}   
   
 * 安装salt-minion服务
   
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ sudo apt-get install python-software-properties
 $ sudo add-apt-repository ppa:saltstack/salt
 $ sudo apt-get update
@@ -259,7 +259,7 @@ $ sudo apt-get install salt-minion
     
 * 在`/etc/hosts`文件中增加calamari服务器的映射关系
   
-{% codeblock /etc/hosts lang:shell %}
+{% codeblock /etc/hosts lang:sh %}
 ...
 ...
 192.168.26.10 ceph-calamari
@@ -267,7 +267,7 @@ $ sudo apt-get install salt-minion
   
 * 修改salt-minion的配置文件`/etc/salt/minion`，将master指向calamari服务器
   
-{% codeblock /etc/salt/minion lang:shell %}
+{% codeblock /etc/salt/minion lang:sh %}
 ...
 master: ceph-calamari
 ...
@@ -275,7 +275,7 @@ master: ceph-calamari
   
 * 重启服务
   
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ sudo service salt-minion restart  
 $ sudo service diamond restart
 {% endcodeblock %}   
@@ -286,7 +286,7 @@ $ sudo service diamond restart
   
 * 查看salt-key
   
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ sudo salt-key -L
 Accepted Keys:
 Unaccepted Keys:
@@ -301,7 +301,7 @@ Rejected Keys:
   
 * 添加ceph集群机器到calamari
   
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ sudo salt-key -A
 The following keys are going to be accepted:
 Unaccepted Keys:
@@ -322,7 +322,7 @@ Key for minion ceph-osd2 accepted.
 
 * 再次查看salt-key，可以看到所有节点都已添加。
   
-{% codeblock lang:shell %}
+{% codeblock lang:sh %}
 $ sudo salt-key -L
 Accepted Keys:
 ceph-mon0
@@ -347,8 +347,8 @@ Rejected Keys:
   
 ## 参考资料
 
-文档1：[http://calamari.readthedocs.org/en/latest/operations/index.html][calamari-doc1]
-文档2：[http://ceph.com/category/calamari/][calamari-doc2]
+* 文档1：[http://calamari.readthedocs.org/en/latest/operations/index.html][calamari-doc1]
+* 文档2：[http://ceph.com/category/calamari/][calamari-doc2]
 
 
 [ceph]: http://ceph.com/

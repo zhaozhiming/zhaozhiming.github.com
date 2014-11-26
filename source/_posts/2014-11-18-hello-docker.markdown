@@ -46,7 +46,7 @@ An open platform for distributed applications for developers and sysadmins.
 * docker start [container name]: 启动一个container。
 * docker stop [container name]: 停止一个container。
 * docker rm [container name]: 删除一个container。
-* docker rmi [image name]: 删除一个image镜像。
+* docker rmi [image name]: 删除一个image镜像。  
   
 ## Docker镜像
 在Docker官网上可以看到已经有很多做好的镜像，比如Ubuntu，CentOS，MySql等，而且每天都有一些新的镜像不断在上传，因为上传一个镜像就像github上传代码一样简单。  

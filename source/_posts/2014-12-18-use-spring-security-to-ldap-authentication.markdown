@@ -149,15 +149,30 @@ ldap_user_dn_pattern=uid={0},ou=staff,ou=people,o=ldap.server.com
 </form>
 {% endcodeblock %}
   
+相关的js代码如下:
+{% codeblock lang:js %}
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+if(getParameterByName("error")) {
+	$("#error").show();
+}
+
+if(getParameterByName("logout")) {
+	$("#logout").show();
+}
+{% endcodeblock %}
+
 如果需要的话，可以配置自己的logout页面，只需要一个Form就可以了，方法为`post`，action为`j_spring_security_logout`，只要提交了这个Form就可以成功登出了。
 
 {% codeblock logout.html lang:html %}
 <form action="j_spring_security_logout" method="post" id="logoutForm"></form>
 {% endcodeblock %}
+  
+更多Spring Security的信息请查阅: [Spring Security Reference][spring-security]。  
 
-
-
-
-
-
-
+[spring-security]: http://docs.spring.io/spring-security/site/docs/3.2.x/reference/htmlsingle/

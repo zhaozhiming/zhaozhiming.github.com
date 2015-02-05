@@ -136,6 +136,8 @@ public class MainController {
   
 {% img /images/post/2015-2/wechat_start.png %}  
   
+更多代码可以看这里: https://github.com/zhaozhiming/wechat-blog，觉得好的话请Star一下吧，谢谢  
+  
 
 
 [wechat_register]: http://segmentfault.com/blog/zetd/1190000000356021

@@ -29,8 +29,8 @@ tags: [wechat,java]
 </xml>
 {% endcodeblock %} 
   
-* ToUserName: 加了密的公众账号名称
-* FromUserName: 加了密的微信账号名称
+* ToUserName: 开发者微信号
+* FromUserName: 用户微信账号的OpenID
 * CreateTime: 消息发送时间，秒数
 * MsgType: 消息类型，事件消息为event
 * Event: 事件类型，订阅消息为subscribe
@@ -58,8 +58,8 @@ tags: [wechat,java]
 </xml>
 {% endcodeblock %} 
   
-* ToUserName: `加了密的微信账号名称`
-* FromUserName: `加了密的公众账号名称`
+* ToUserName: `用户微信账号的OpenID`
+* FromUserName: `开发者微信号`
 * CreateTime: 消息发送时间，秒数
 * FuncFlag: 这个暂时不知道是什么，默认值为0
 * MsgType: 消息类型，文档消息可以为text和其他，这里我们以最简单的text文本消息为例

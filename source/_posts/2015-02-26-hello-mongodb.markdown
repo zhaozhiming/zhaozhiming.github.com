@@ -29,7 +29,7 @@ docker run --name somename -d -p 27017:27017 mongo:tag
   
 {% img /images/post/2015-2/robomongo.png %}  
   
-PS: 因为我是OS系统，用boot2docker来启动docker的，所以我的ip不是`localhost`，而是`192.168.59.103`。  
+PS:因为我是OS系统，用boot2docker来启动docker的，所以我的ip不是`localhost`，而是`192.168.59.103`。  
   
 ## sql查询
 
@@ -76,7 +76,7 @@ db.users.remove({age: 132});
   
 ## Java示例
   
-使用Java来操作MongoDB也比较简单，首先要下载Java驱动，在Maven库上可以查询到。  
+使用Java来操作MongoDB也比较简单，首先要下载Java驱动，在Maven库上可以查询到，下面是驱动的Gradle定义。  
   
 {% codeblock lang:sh %}
 org.mongodb:mongo-java-driver:3.0.0-beta2
@@ -121,10 +121,32 @@ public class MyMongoDb {
         collection.updateOne(new Document("name", "time"), new Document("$set", new Document("age", 101)));
     }
 {% endcodeblock %} 
-
-
+  
 ## 数据库设计原则
-
+  
+MongoDB的数据模式有2种结构：引用(References)和内嵌(Embedded)。  
+  
+* 引用和关系型数据库的表设计比较像，不同的对象放在不同的集合(表)中。  
+  
+{% img /images/post/2015-2/mongo-references.png %}  
+  
+* 内嵌比较特殊，是把对象的关联对象放到一个集合(表)中，这个恰恰是关系系数据库做不到的。  
+  
+{% img /images/post/2015-2/mongo-embedded.png %}  
+  
+那问题来了，什么时候使用引用，什么时候使用内嵌呢？下面是官方给的一些建议，总结如下: 
+  
+* 顶级对象，一般使用独立的collection，区别于内嵌
+* 线性明细对象如订单里的订单项，一般使用内嵌
+* 包含关系的对象通常使用内嵌
+* 多对多的关系通常采用引用，dbref
+* 只有少量数据的可以单独作为一个collection，这样可以快速缓存到应用服务器内存
+* 内嵌对象比顶级对象难引用，至少现在还不能对它使用dbref
+* 内嵌对象的获取有时候会比较难，例如各科分数内嵌到学生对象，从所有学生中获取前100个高分，不内嵌会更简单
+* 如果内嵌对象数量很多，可以限制其大小
+* 性能存在问题（应是查询的性能），使用内嵌
+  
+总而言之，数据库的设计需要考虑需求的使用场景，能一次查询到结果的尽量不要分多次进行查询，更多内容可以参考MongoDB官网[Data Modeling][mongo_data_model]的章节。  
   
 [mongodb]: http://www.mongodb.org/
 [nosql]: http://en.wikipedia.org/wiki/NoSQL
@@ -132,3 +154,4 @@ public class MyMongoDb {
 [robomongo]: http://robomongo.org/
 [mongodb_operation]: http://www.cnblogs.com/hoojo/archive/2011/06/01/2066426.html
 [mongodb_java]: http://docs.mongodb.org/ecosystem/tutorial/getting-started-with-3.0-java-driver/
+[mongo_data_model]: http://docs.mongodb.org/manual/core/data-modeling-introduction/

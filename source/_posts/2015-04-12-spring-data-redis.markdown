@@ -76,33 +76,70 @@ spring-data-redis的序列化类有下面这几个:
   
 代码示例如下，使用redis进行set和get操作。  
   
-{% codeblock AccessTokenRepository.java lang:java %}
+{% codeblock MyUserRepository.java lang:java %}
 @Repository
-public class AccessTokenRepository {
+public class MyUserRepository {
 	//直接使用autowire就可以引用到配置文件中的redis-template
     @Autowired
-    private RedisTemplate<String, AccessToken> template;
+    private RedisTemplate<String, MyUser> template;
 
-    private ValueOperations<String, AccessToken> operations;
+    private ValueOperations<String, MyUser> operations;
 
     @PostConstruct
     public void init() {
-    	//这里设置value的序列化方式为JacksonJsonRedisSerializer
-        template.setValueSerializer(new JacksonJsonRedisSerializer<>(AccessToken.class));
+    	//这里设置value的序列化方式为JacksonJsonRedisSerializer	
+        template.setValueSerializer(new JacksonJsonRedisSerializer<>(MyUser.class));
         operations = template.opsForValue();
     }
 
-    public void set(String key, AccessToken value) {
+    public void set(String key, MyUser value) {
         operations.set(key, value);
     }
 
-    public AccessToken get(String key) {
+    public MyUser get(String key) {
         return operations.get(key);
+    }
+}
+
+// model
+public class MyUser {
+    private String username;
+    private int age;
+    // ... setter and getter
+}
+
+// 在Controller中调用
+@Controller
+public class MainController {
+
+    @Autowired
+    private MyUserRepository myUserRepository;
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    ResponseEntity<?> test() throws Exception {
+        MyUser user = new MyUser("zhaozhiming", 100);
+        String key = "my:user:zhaozhiming";
+        myUserRepository.set(key, user);
+        MyUser myUser = myUserRepository.get(key);
+        log.debug(String.format("my user:%s", myUser));
+        String result = mapper.writeValueAsString(user);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
 {% endcodeblock %} 
   
-调用set方法后，就可以在redis里面看到保存后的json字符串了。  
+调用set方法后，可以在日志中看到get后的MyUser对象。  
+
+{% codeblock lang:sh %}
+ - my user:MyUser{age=100, username='zhaozhiming'}
+{% endcodeblock %} 
+  
+也可以在redis里面看到保存后的json字符串了。  
+
+{% img /images/post/2015-4/redis_result.png %}  
+  
   
 [redis]: http://redis.io/
 [redis_java_client]: http://redis.io/clients#java

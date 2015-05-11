@@ -326,7 +326,9 @@ cargo {
   
 然后运行`gradle war CargoRunLocal`，注意首先要打出war包，然后插件会自动部署war包到Jetty9的安装目录下，这种方式不大灵活，比如一些页面的修改都需要重新部署才能进行测试。  
   
+最后附上Spring关于Websocket的文档链接，请见[这里][spring-websocket-doc]。
 
 [spring-websocket]: https://spring.io/guides/gs/messaging-stomp-websocket/
 [gretty]: https://github.com/akhikhl/gretty
 [cargo]: https://github.com/bmuschko/gradle-cargo-plugin
+[spring-websocket-doc]: http://docs.spring.io/spring/docs/current/spring-framework-reference/html/websocket.html

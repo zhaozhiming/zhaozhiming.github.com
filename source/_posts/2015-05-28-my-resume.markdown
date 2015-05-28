@@ -1,0 +1,101 @@
+---
+layout: post
+title: "我的简历"
+date: 2015-05-28 20:04
+published: false
+description: 我的简历
+keywords: 
+comments: true
+categories: 
+tags: 
+---
+
+# 联系方式
+
+- 手机：15928515643
+- Email：zhaozhiming003@gmail.com
+- 微信号(扫描二维码): 
+{% img /images/resume_qrcode.jpg %}  
+
+
+---
+
+# 个人信息
+
+ - 赵芝明/男/1982 
+ - 本科/南昌航空工业大学-计算机科学与应用
+ - 工作年限：10年
+ - 技术博客：http://zhaozhiming.github.io
+ - Github: https://github.com/zhaozhiming
+ - Stackoverflow: http://stackoverflow.com/users/3747607/zhaozhiming
+
+ - 期望职位：Java高级程序员，架构师
+ - 期望薪资：税前月薪15k~20k，特别喜欢的公司可例外
+ - 期望城市：成都
+
+---
+
+# 工作经历
+
+## 九柚时空 （ 2015年1月 ~ 2015年5月 ）
+
+### 电信光猫项目 
+与电信和华为合作的一个项目，使用OSGI开发bundle，使其在电信的光猫上运行，可以自动连接九柚时空的路由器WIFI。
+我在其中主要负责程序设计，代码编写，测试沟通等工作。  
+
+### QQWIFI项目 
+与腾讯QQ合作的一个项目，根据QQ提供的接口开发功能，接入Android版的QQ，可以自动连接九柚时空的路由器WIFI。  
+我在其中主要负责程序设计，代码编写，测试沟通等工作。  
+  
+## 平安科技公司 （ 2008年6月 ~ 2014年12月 ）
+
+### 云存储项目 
+基于Openstack swift和Ceph开发的云存储项目，我在其中主要负责监控服务器的设计和编码工作，和云存储环境的测试工作。  
+
+### 车联网项目 
+手机APP”平安好车主“的后台应用，使用了Redis，ActiveMQ，HBase，Mysql等中间件。我在其中主要负责后台计算逻辑的设计和编码工作。  
+
+### P2P网上金融超市
+使用SpringMVC+Hibernate做的一个Web应用，我在其中主要负责自动化测试案例的编写，bug修复等工作。在这个项目里学习了敏捷开发，自动化测试，持续集成等。  
+
+---
+
+# 开源项目和作品
+
+## 开源项目
+
+ - [MTTR PLUGIN](https://github.com/zhaozhiming/mttr) : Jenkins的一个插件，显示Job的平均修复时间，已经放到了Jenkins的官网上，插件地址--[https://wiki.jenkins-ci.org/display/JENKINS/MTTR+Plugin]([mttr-plugin]: https://wiki.jenkins-ci.org/display/JENKINS/MTTR+Plugin)。
+ - [部门博客系统](https://github.com/zhaozhiming/department-blogs-analyser) : 统计部门发布在CSDN和ITEYE上的博客信息。
+ - [微博应用](https://github.com/zhaozhiming/pretty-pic-storer) : 抓取好友图片并保存。
+
+## 技术文章
+
+- [Jenkins插件开发系列](http://zhaozhiming.github.io/blog/2013/01/31/jenkins-plugins-develop-part-1/)
+- [在JavaScript中进行文件处理系列(翻译文章)](http://zhaozhiming.github.io/blog/2012/07/08/working-with-files-in-javascript-part-1/)
+
+# 技能清单
+
+以下均为我熟练使用的技能
+
+- 语言：(精通)Java，(了解)Ruby/Go/Python/PHP/Javascript
+- Web框架：Spring
+- ORM框架: Hibernate/Mybatis
+- 前端框架：Bootstrap/AngularJS/Semmantic-UI/JQuery/JSP/JSTL
+- 数据库相关：MySQL/PgSQL/Oracle
+- 容器中间件: Tomcat/Jetty/Weblogic
+- 模板框架: Freemarker/Velocity
+- RPC框架: Thrift
+- 搜索引擎: Solr
+- 缓存/Nosql: Redis/Memorycache/MongoDB/Ssdb
+- 版本管理: Svn/Git
+- 构建工具: Gradle/Maven/Ant
+- 单元测试/自动化测试/压力测试：Junit/Mockito/Jbehave/Selenium/Galting
+- 云和开放平台：SAE/BAE/微博开放平台/微信应用开发
+- 敏捷开发: Scrumn/看板/Jenkins/TDD/Refactor/Sonar
+- 操作系统: Ubuntu/Centos/Unix
+- IDE: IntelliJ IDEA/Eclipse
+
+---
+
+# 致谢
+感谢您花时间阅读我的简历，期待能有机会和您共事。

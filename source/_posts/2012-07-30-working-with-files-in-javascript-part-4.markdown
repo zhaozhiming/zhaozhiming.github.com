@@ -64,9 +64,13 @@ File API 不允许在不同网点使用对象URLs。当一个对象URL被创建�
   
 ####相关链接  
   
-1. [File API][url2]
-[url2]: http://www.w3.org/TR/FileAPI/
+* [File API](http://www.w3.org/TR/FileAPI/)
 
+---
 
+- [在JavaScript中进行文件处理，第一部分：基础](http://zhaozhiming.github.io/blog/2012/07/08/working-with-files-in-javascript-part-1/)
+- [在JavaScript中进行文件处理，第二部分：文件读取](http://zhaozhiming.github.io/blog/2012/07/16/working-with-files-in-javascript-part-2/)
+- [在JavaScript中进行文件处理，第三部分：处理事件和错误](http://zhaozhiming.github.io/blog/2012/07/23/working-with-files-in-javascript-part-3/)
+- [在JavaScript中进行文件处理，第五部分：Blobs](http://zhaozhiming.github.io/blog/2012/08/01/working-with-files-in-javascript-part-5/)
 
 

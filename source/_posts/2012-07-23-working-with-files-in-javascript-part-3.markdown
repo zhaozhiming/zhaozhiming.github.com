@@ -123,11 +123,15 @@ FileReader是一个全面的对象，有着非常多的功能，并且和XMLHttp
   
 ####相关链接  
   
-1. [Progress Events][url2]
-2. [File API][url3]
-[url2]: http://www.w3.org/TR/progress-events/
-[url3]: http://www.w3.org/TR/FileAPI/
+* [Progress Events](http://www.w3.org/TR/progress-events/)
+* [File API]([url3]: http://www.w3.org/TR/FileAPI/)
 
+---
+
+- [在JavaScript中进行文件处理，第一部分：基础](http://zhaozhiming.github.io/blog/2012/07/08/working-with-files-in-javascript-part-1/)
+- [在JavaScript中进行文件处理，第二部分：文件读取](http://zhaozhiming.github.io/blog/2012/07/16/working-with-files-in-javascript-part-2/)
+- [在JavaScript中进行文件处理，第四部分：对象URLs](http://zhaozhiming.github.io/blog/2012/07/30/working-with-files-in-javascript-part-4/)
+- [在JavaScript中进行文件处理，第五部分：Blobs](http://zhaozhiming.github.io/blog/2012/08/01/working-with-files-in-javascript-part-5/)
 
 
 

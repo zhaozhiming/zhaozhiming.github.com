@@ -1,16 +1,16 @@
 ---
 layout: post
 title: "我的简历"
-date: 2015-05-28 20:04
+date: 2010-01-01 20:04
 description: 我的简历
 keywords: resume
-comments: true
+comments: false
 categories: code
 tags: resume
 ---
 
-# 联系方式
 <!--more-->  
+# 联系方式
 - 手机：15928515643
 - Email：zhaozhiming003@gmail.com
 - 微信号(扫描二维码):   

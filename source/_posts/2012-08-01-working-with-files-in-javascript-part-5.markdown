@@ -94,14 +94,15 @@ var blob = new Blob(["Hello world!"], { type: "text/plain" });
   
 ####引用  
 
-1. [Parsing Exif client-side using JavaScript][url2] by Flickr Team
-2. [The Basics of Web Workers][url3] by Eric Bidelman
-3. [File API][url4] – Blob Constructor
-[url2]: http://www.google.com/gwt/x?wsc=tb&source=wax&u=http%3A%2F%2Fcode.flickr.com/blog/2012/06/01/parsing-exif-client-side-using-javascript-2/&ei=DcsYUMuwAcSmkAXmvoHoAg  
-[url3]: http://www.google.com/gwt/x?wsc=tb&source=wax&u=http%3A%2F%2Fwww.html5rocks.com/en/tutorials/workers/basics/&ei=DcsYUMuwAcSmkAXmvoHoAg
-[url4]: http://www.google.com/gwt/x?wsc=tb&source=wax&u=http%3A%2F%2Fdev.w3.org/2006/webapi/FileAPI/&ei=DcsYUMuwAcSmkAXmvoHoAg&whp=3AconstructorBlob
+* [Parsing Exif client-side using JavaScript](http://www.google.com/gwt/x?wsc=tb&source=wax&u=http%3A%2F%2Fcode.flickr.com/blog/2012/06/01/parsing-exif-client-side-using-javascript-2/&ei=DcsYUMuwAcSmkAXmvoHoAg) by Flickr Team
+* [The Basics of Web Workers](http://www.google.com/gwt/x?wsc=tb&source=wax&u=http%3A%2F%2Fwww.html5rocks.com/en/tutorials/workers/basics/&ei=DcsYUMuwAcSmkAXmvoHoAg) by Eric Bidelman
+* [File API](http://www.google.com/gwt/x?wsc=tb&source=wax&u=http%3A%2F%2Fdev.w3.org/2006/webapi/FileAPI/&ei=DcsYUMuwAcSmkAXmvoHoAg&whp=3AconstructorBlob) – Blob Constructor
 
+---
 
-
+- [在JavaScript中进行文件处理，第一部分：基础](http://zhaozhiming.github.io/blog/2012/07/08/working-with-files-in-javascript-part-1/)
+- [在JavaScript中进行文件处理，第二部分：文件读取](http://zhaozhiming.github.io/blog/2012/07/16/working-with-files-in-javascript-part-2/)
+- [在JavaScript中进行文件处理，第三部分：处理事件和错误](http://zhaozhiming.github.io/blog/2012/07/23/working-with-files-in-javascript-part-3/)
+- [在JavaScript中进行文件处理，第四部分：对象URLs](http://zhaozhiming.github.io/blog/2012/07/30/working-with-files-in-javascript-part-4/)
 
 

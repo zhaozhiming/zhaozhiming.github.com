@@ -105,11 +105,14 @@ ArrayBuffer类型*[1]*最初是作为WebGL的一部分被引进的。一个Array
 
 ####相关链接
 
-1. [ArrayBuffer][url2]
-2. [Typed Array Specification][url3]
-3. [XMLHttpRequest Level 2][url4]
-[url2]: https://developer.mozilla.org/en/JavaScript_typed_arrays/ArrayBuffer
-[url3]: http://www.khronos.org/registry/typedarray/specs/latest/
-[url4]: http://www.w3.org/TR/XMLHttpRequest/
+* [ArrayBuffer](https://developer.mozilla.org/en/JavaScript_typed_arrays/ArrayBuffer)
+* [Typed Array Specification](http://www.khronos.org/registry/typedarray/specs/latest/)
+* [XMLHttpRequest Level 2](http://www.w3.org/TR/XMLHttpRequest/)
 
+---
+
+- [在JavaScript中进行文件处理，第一部分：基础](http://zhaozhiming.github.io/blog/2012/07/08/working-with-files-in-javascript-part-1/)
+- [在JavaScript中进行文件处理，第三部分：处理事件和错误](http://zhaozhiming.github.io/blog/2012/07/23/working-with-files-in-javascript-part-3/)
+- [在JavaScript中进行文件处理，第四部分：对象URLs](http://zhaozhiming.github.io/blog/2012/07/30/working-with-files-in-javascript-part-4/)
+- [在JavaScript中进行文件处理，第五部分：Blobs](http://zhaozhiming.github.io/blog/2012/08/01/working-with-files-in-javascript-part-5/)
 

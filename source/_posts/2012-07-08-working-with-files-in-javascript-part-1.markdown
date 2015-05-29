@@ -116,9 +116,15 @@ xhr.send(form);
 你现在知道两种在浏览器中访问文件信息的方法，一种是通过文件上传操作，一种是通过本地的拖拽操作。未来可能有其他的方法，但现在你只需要了解这两种就好了。当然，读取文件信息只是问题的一部分，下一步是如何读取文件的内容，这将在第二部分做讲解。  
   
 ####相关链接：
-1. [File API specification (editor’s draft)][url2]
-2. [HTML5 Drag and Drop][url3]
-3. [XMLHttpRequest Level 2][url4]
-[url2]: http://dev.w3.org/2006/webapi/FileAPI/
-[url3]: http://www.whatwg.org/specs/web-apps/current-work/multipage/dnd.html#dnd
-[url4]: http://www.w3.org/TR/XMLHttpRequest/
+* [File API specification (editor’s draft)](http://dev.w3.org/2006/webapi/FileAPI/)
+* [HTML5 Drag and Drop](http://www.whatwg.org/specs/web-apps/current-work/multipage/dnd.html#dnd)
+* [XMLHttpRequest Level 2](http://www.w3.org/TR/XMLHttpRequest/)
+
+---
+
+- [在JavaScript中进行文件处理，第二部分：文件读取](http://zhaozhiming.github.io/blog/2012/07/16/working-with-files-in-javascript-part-2/)
+- [在JavaScript中进行文件处理，第三部分：处理事件和错误](http://zhaozhiming.github.io/blog/2012/07/23/working-with-files-in-javascript-part-3/)
+- [在JavaScript中进行文件处理，第四部分：对象URLs](http://zhaozhiming.github.io/blog/2012/07/30/working-with-files-in-javascript-part-4/)
+- [在JavaScript中进行文件处理，第五部分：Blobs](http://zhaozhiming.github.io/blog/2012/08/01/working-with-files-in-javascript-part-5/)
+
+

@@ -76,5 +76,12 @@ jenkins插件需要用到Maven这个构建工具，大家可以去Maven的官网
   
 注意：如果用hpi:run启动的服务，jenkins地址是：localhost:8080，而使用真实Jetty启动的服务，地址是：localhost:8080/jenkins。  
 到这里你的jenkins插件开发环境已经搭建好了，我们在下一篇blog再继续介绍具体的插件开发，谢谢！  
+
+
+---
+  
+* [jenkins插件开发（二）-- HelloWorld](http://zhaozhiming.github.io/blog/2013/02/02/jenkins-plugins-develop-part-2/)
+* [jenkins插件开发（三）-- 插件编写](http://zhaozhiming.github.io/blog/2013/02/03/jenkins-plugins-develop-part-3/)
+* [jenkins插件开发（四）-- 插件发布](http://zhaozhiming.github.io/blog/2013/02/04/jenkins-plugins-develop-part-4/)
   
 

@@ -24,7 +24,7 @@ tags: resume
  - 赵芝明/男/1982 
  - Geeker，编程狂人，重度技术爱好者，愿望:改变世界
  - 本科/南昌航空工业大学-计算机科学与应用
- - 工作年限：{{ site.time.year - 5}}年
+ - 工作年限：10年
  - 技术博客：http://zhaozhiming.github.io
  - Github: https://github.com/zhaozhiming
  - Stackoverflow: http://stackoverflow.com/users/3747607/zhaozhiming
@@ -82,14 +82,13 @@ tags: resume
 - 前端框架：Bootstrap/AngularJS/Semmantic-UI/JQuery/JSP/JSTL
 - 数据库相关：MySQL/PgSQL/Oracle
 - 容器中间件: Tomcat/Jetty/Weblogic
-- 模板框架: Freemarker/Velocity
 - RPC框架: Thrift
 - 搜索引擎: Solr
 - 缓存/Nosql: Redis/Memorycache/MongoDB/Ssdb
 - 版本管理: Svn/Git
 - 构建工具: Gradle/Maven/Ant
-- 单元测试/自动化测试/压力测试：Junit/Mockito/Jbehave/Selenium/Galting
-- 云和开放平台：SAE/BAE/微博开放平台/微信应用开发
+- 单元测试/自动化测试/压力测试: Junit/Mockito/Jbehave/Selenium/Galting
+- 云和开放平台:SAE/BAE/微博开放平台/微信应用开发
 - 敏捷开发: Scrumn/看板/Jenkins/TDD/Refactor/Sonar
 - 操作系统: Ubuntu/Centos/Unix
 - IDE: IntelliJ IDEA/Eclipse

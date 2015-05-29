@@ -130,4 +130,11 @@ allBuildsColumnHeader=mean time to repair for all history
 [url4]: https://github.com/jenkinsci/jenkins
   
 可能在jenkins的源码中还是找不到扩展点的用法，那怎么办呢？这个时候可能就需要去参考其他插件是如何写的了，幸运的是，大部分插件的代码现在都放在了github上，我们可以通过了解其他插件来写出自己的插件。  
+
+---
+
+* [jenkins插件开发（一）-- 环境搭建](http://zhaozhiming.github.io/blog/2013/01/31/jenkins-plugins-develop-part-1/)
+* [jenkins插件开发（二）-- HelloWorld](http://zhaozhiming.github.io/blog/2013/02/02/jenkins-plugins-develop-part-2/)
+* [jenkins插件开发（四）-- 插件发布](http://zhaozhiming.github.io/blog/2013/02/04/jenkins-plugins-develop-part-4/)
+
   

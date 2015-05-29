@@ -90,5 +90,14 @@ mvn hpi:run
 在Job的配置页面，其中的构建子项中Add Build Step按钮，点击后下拉框中会有一个Say Hello World的选项，这个就是我们的HelloWorld 插件，选中后保存配置，进行Job构建，在构建日志中就可以看到插件的打印日志。  
   
 这里介绍的是新建一个插件，对已有插件进行扩展不在本次讨论范围内，更多信息可以参考[这里][url1]。    
+
+
+---
+  
+* [jenkins插件开发（一）-- 环境搭建](http://zhaozhiming.github.io/blog/2013/01/31/jenkins-plugins-develop-part-1/)
+* [jenkins插件开发（三）-- 插件编写](http://zhaozhiming.github.io/blog/2013/02/03/jenkins-plugins-develop-part-3/)
+* [jenkins插件开发（四）-- 插件发布](http://zhaozhiming.github.io/blog/2013/02/04/jenkins-plugins-develop-part-4/)
+
+
 [url1]: https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial
   

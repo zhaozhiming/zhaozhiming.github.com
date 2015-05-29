@@ -2,33 +2,32 @@
 layout: post
 title: "我的简历"
 date: 2015-05-28 20:04
-published: false
 description: 我的简历
-keywords: 
+keywords: resume
 comments: true
-categories: 
-tags: 
+categories: code
+tags: resume
 ---
 
 # 联系方式
-
+<!--more-->  
 - 手机：15928515643
 - Email：zhaozhiming003@gmail.com
-- 微信号(扫描二维码): 
-{% img /images/resume_qrcode.jpg %}  
+- 微信号(扫描二维码):   
 
+{% img /images/resume_qrcode.jpg 150 150%}  
 
 ---
 
 # 个人信息
 
  - 赵芝明/男/1982 
+ - Geeker，编程狂人，重度技术爱好者，愿望:改变世界
  - 本科/南昌航空工业大学-计算机科学与应用
- - 工作年限：10年
+ - 工作年限：{{ site.time.year - 5}}年
  - 技术博客：http://zhaozhiming.github.io
  - Github: https://github.com/zhaozhiming
  - Stackoverflow: http://stackoverflow.com/users/3747607/zhaozhiming
-
  - 期望职位：Java高级程序员，架构师
  - 期望薪资：税前月薪15k~20k，特别喜欢的公司可例外
  - 期望城市：成都
@@ -64,7 +63,7 @@ tags:
 
 ## 开源项目
 
- - [MTTR PLUGIN](https://github.com/zhaozhiming/mttr) : Jenkins的一个插件，显示Job的平均修复时间，已经放到了Jenkins的官网上，插件地址--[https://wiki.jenkins-ci.org/display/JENKINS/MTTR+Plugin]([mttr-plugin]: https://wiki.jenkins-ci.org/display/JENKINS/MTTR+Plugin)。
+ - [MTTR PLUGIN](https://github.com/zhaozhiming/mttr) : Jenkins的一个插件，显示Job的平均修复时间，已经放到了Jenkins的官网上，插件地址--[https://wiki.jenkins-ci.org/display/JENKINS/MTTR+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/MTTR+Plugin)。
  - [部门博客系统](https://github.com/zhaozhiming/department-blogs-analyser) : 统计部门发布在CSDN和ITEYE上的博客信息。
  - [微博应用](https://github.com/zhaozhiming/pretty-pic-storer) : 抓取好友图片并保存。
 

@@ -11,11 +11,9 @@ tags: resume
 
 <!--more-->  
 # 联系方式
-- 手机：15928515643
-- Email：zhaozhiming003@gmail.com
-- 微信号(扫描二维码):   
-
-{% img /images/resume_qrcode.jpg 150 150%}  
+- 手机: 15928515643
+- Email: zhaozhiming003@gmail.com
+- 微信号: zhimingmiao  
 
 ---
 

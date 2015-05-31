@@ -22,14 +22,29 @@ tags: resume
  - 赵芝明/男/1982 
  - Geeker，编程狂人，重度技术爱好者，愿望:改变世界
  - 本科/南昌航空工业大学-计算机科学与应用
- - 工作年限：10年
- - 技术博客：http://zhaozhiming.github.io
+ - 工作年限: 10年
+ - 技术博客: http://zhaozhiming.github.io
  - Github: https://github.com/zhaozhiming
  - Stackoverflow: http://stackoverflow.com/users/3747607/zhaozhiming
- - 期望职位：Java高级程序员，架构师
- - 期望薪资：税前月薪15k~20k，特别喜欢的公司可例外
- - 期望城市：成都
+ - 期望职位: Java高级程序员，架构师
+ - 期望薪资: 税前月薪15k~20k，特别喜欢的公司可例外
+ - 期望城市: 成都
+ - 自我简介: 
 
+感兴趣的技术：   
+编程语言，移动开发，机器学习，Devops，前端技术，敏捷开发，开源软件   
+  
+技术相关： 
+喜欢各种新技术，不想重复地做以前做过的事情，在每个新项目都会使用一些新技术新工具新框架。   
+  
+平时喜欢写技术Blog，是对日常工作和学习的积累。   
+  
+喜欢编码，很早就开始学习重构，对代码要求比较严格，经常和新同事一起结对编程，要求他们从一开始就掌握良好的编程习惯。  
+  
+喜欢敏捷开发，学习过Scrum，Kanban，Lean等敏捷方法，获得过相关的敏捷证书，有CSM，CSD，Kanban等。  
+  
+喜欢尝试各种新工具来提高工作效率，平时搜索问题通过Google，Stackoverflow或者直接在Github项目中提问题。希望寻找有Geek精神和工程师文化的公司，创造改变世界的产品。   
+  
 ---
 
 # 工作经历
@@ -75,8 +90,7 @@ tags: resume
 以下均为我熟练使用的技能
 
 - 语言：(精通)Java，(了解)Ruby/Go/Python/PHP/Javascript
-- Web框架：Spring
-- ORM框架: Hibernate/Mybatis
+- 开发框架：Spring/Hibernate/Mybatis
 - 前端框架：Bootstrap/AngularJS/Semmantic-UI/JQuery/JSP/JSTL
 - 数据库相关：MySQL/PgSQL/Oracle
 - 容器中间件: Tomcat/Jetty/Weblogic

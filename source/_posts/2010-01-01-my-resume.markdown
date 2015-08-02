@@ -31,6 +31,7 @@ tags: resume
  - 期望职位: Java高级程序员，服务端工程师，后端工程师，架构师
  - 期望薪资: 税前月薪15k~20k，特别喜欢的公司可例外
  - 期望城市: 成都
+ - 求职状态: 暂时不想找工作
 
 ---
 
@@ -46,6 +47,10 @@ tags: resume
 ---
 
 # 工作经历
+
+## 知道创宇（ 2015年6月 ~ 现在 ）
+
+### 全栈工程师，负责部门web项目的开发等工作。
 
 ## 九柚时空 （ 2015年1月 ~ 2015年5月 ）
 
@@ -91,8 +96,8 @@ tags: resume
 
 以下均为我熟练使用的技能
 
-- 语言：(精通)Java，(了解)Ruby/Go/Python/PHP/Javascript
-- 开发框架：Spring/Hibernate/Mybatis
+- 语言：(精通)Java/Python，(了解)Ruby/Go/PHP/Javascript
+- 开发框架：Spring/Hibernate/Mybatis, Django/Django rest
 - 前端框架：Bootstrap/AngularJS/Semmantic-UI/JQuery/JSP/JSTL
 - 数据库：MySQL/PgSQL/Oracle
 - 容器中间件: Tomcat/Jetty/Weblogic

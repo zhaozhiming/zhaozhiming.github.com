@@ -2,9 +2,11 @@
   <h1>最热文章</h1>
   <ul id="recent_posts">
     {% for post in site.popular_posts limit: site.popular_posts_count %}
-      <li class="post">
-        <a href="{{ root_url }}{{ post.url }}">{{ post.title }}</a>
-      </li>
+      {% if forloop.index != 1 %}
+        <li class="post">
+          <a href="{{ root_url }}{{ post.url }}">{{ post.title }}</a>
+        </li>
+      {% endif %}
     {% endfor %}
   </ul>
 </section>

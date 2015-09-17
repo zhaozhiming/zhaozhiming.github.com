@@ -11,7 +11,6 @@ tags: resume
 
 <!--more-->  
 # 联系方式
-- 手机: 15928515643
 - Email: zhaozhiming003@gmail.com
 - 微信号(请扫二维码): 
 
@@ -28,8 +27,7 @@ tags: resume
  - 技术博客: http://zhaozhiming.github.io
  - Github: https://github.com/zhaozhiming
  - Stackoverflow: http://stackoverflow.com/users/3747607/zhaozhiming
- - 期望职位: Java高级程序员，服务端工程师，后端工程师，架构师
- - 期望薪资: 税前月薪15k~20k，特别喜欢的公司可例外
+ - 期望职位: 全栈工程师，Java高级程序员，服务端工程师，后端工程师，架构师
  - 期望城市: 成都
  - 求职状态: 暂时不想找工作
 

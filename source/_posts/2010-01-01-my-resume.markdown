@@ -27,7 +27,7 @@ tags: resume
  - 技术博客: http://zhaozhiming.github.io
  - Github: https://github.com/zhaozhiming
  - Stackoverflow: http://stackoverflow.com/users/3747607/zhaozhiming
- - 期望职位: 全栈工程师，Java高级程序员，服务端工程师，后端工程师，架构师
+ - 期望职位: 全栈工程师，高级程序员，服务端工程师，后端工程师，架构师
  - 期望城市: 成都
  - 求职状态: 暂时不想找工作
 

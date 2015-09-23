@@ -94,8 +94,8 @@ tags: resume
 
 以下均为我熟练使用的技能
 
-- 语言：(精通)Java/Python，(了解)Ruby/Go/PHP/Javascript
-- 开发框架：Spring/Hibernate/Mybatis, Django/Django rest
+- 语言：(精通)Java/Python，(了解)Ruby/Go/PHP/Javascript/Nodejs
+- 开发框架：Spring/Hibernate/Mybatis, Django/Django rest, Node/Meteor
 - 前端框架：Bootstrap/AngularJS/Semmantic-UI/JQuery/JSP/JSTL
 - 数据库：MySQL/PgSQL/Oracle
 - 容器中间件: Tomcat/Jetty/Weblogic
@@ -114,4 +114,4 @@ tags: resume
 ---
 
 # 致谢
-感谢您花时间阅读我的简历，期待能有机会和您共事。
+感谢您花时间阅读，期待能有机会和您合作交流。

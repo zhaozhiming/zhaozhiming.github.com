@@ -2,7 +2,7 @@
   <h1>最热文章</h1>
   <ul id="recent_posts">
     {% for post in site.popular_posts limit: site.popular_posts_count %}
-      {% if forloop.index != 1 %}
+      {% if post.title != "我的简历" %}
         <li class="post">
           <a href="{{ root_url }}{{ post.url }}">{{ post.title }}</a>
         </li>

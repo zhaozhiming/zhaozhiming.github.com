@@ -117,7 +117,6 @@ task :new_post, :title do |t, args|
     post.puts "tags: "
     post.puts "---"
   end
-  system "vim \"#{filename}\""
 end
 
 # usage rake new_page[my-new-page] or rake new_page[my-new-page.html] or rake new_page (defaults to "new-page.markdown")

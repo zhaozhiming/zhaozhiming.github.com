@@ -312,7 +312,7 @@ function propagateToGlobal(window) {
   };
 }
 
-propagateToGlobal();
+propagateToGlobal(win);
 
 {% endcodeblock %}
   

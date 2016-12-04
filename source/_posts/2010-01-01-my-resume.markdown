@@ -94,22 +94,22 @@ tags: resume
 
 以下均为我熟练使用的技能
 
-- 语言：(精通)Java/Python，(了解)Ruby/Go/PHP/Javascript/Nodejs
-- 开发框架：Spring/Hibernate/Mybatis, Django/Django rest, Node/Meteor
-- 前端框架：Bootstrap/AngularJS/Semmantic-UI/JQuery/JSP/JSTL
-- 数据库：MySQL/PgSQL/Oracle
+- 语言：(精通)Java/JS/ES6/CSS/Nodejs/Python，(了解)Ruby/Go/PHP
+- 开发框架：React/Redux, Spring/Hibernate/Mybatis, Django/Django rest, Node/Hapi/Meteor
+- 前端框架：React/Antd/Bootstrap/AngularJS/Semmantic-UI/JQuery/JSP
+- 数据库：MySQL/Sqlite3/PgSQL/Oracle
 - 容器中间件: Tomcat/Jetty/Weblogic
 - RPC/搜索引擎/消息中间件: Thrift/Solr/ActiveMq/Openfire
 - 缓存/Nosql: Redis/Memorycache/MongoDB/Ssdb
 - 版本管理: Git/Svn/ClearCase
-- 构建工具: Gradle/Maven/Ant
+- 构建工具: Webpack, Gradle/Maven/Ant
 - web相关: Restful/Json/XML
 - DevOps: Docker/Vagrant/VMWare/VirtualBox
-- 单元测试/自动化测试/压力测试: Junit/Mockito/Jbehave/Selenium/Galting
-- 云和开放平台:SAE/BAE/微博开放平台/微信应用开发
+- 单元测试/自动化测试/压力测试: Moche/Jest/Enzyme, Junit/Mockito/Jbehave/Selenium/Galting
+- 云和开放平台:SAE/BAE/微博开放平台/微信应用开发/微信小程序
 - 敏捷开发: Scrum/看板/Jenkins/TDD/Refactor/Sonar
-- 操作系统: Ubuntu/Centos/Unix
-- IDE: IntelliJ IDEA/Eclipse
+- 操作系统: Mac/Ubuntu/Centos/Unix/Window
+- IDE和编辑器: Vim/IntelliJ IDEA/Eclipse
 
 ---
 

@@ -115,11 +115,8 @@ tapir_token: 5240386a70c7430200000002
 #linkedin
 linkedin_user: zhaozhiming
 
-#weibo
-weibo_user: 2497707964
-
-#QQ
-qq_user: 4533524
+#twitter
+twitter_user: kingzzm
 
 # Posts in the sidebar Popular Posts section
 popular_posts_count: 5      

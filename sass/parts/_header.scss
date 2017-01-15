@@ -154,6 +154,38 @@ a.weibo:hover{background:url('/images/social/WeiboH.png') center no-repeat;}
 a.qq{background:url('/images/social/Qq.png') center no-repeat;}
 a.qq:hover{background:url('/images/social/QqH.png') center no-repeat;}
 
+li.wechat {
+  position: relative !important;
+}
+
+li.wechat:hover {
+  background-color: #ddd !important;
+}
+
+li.wechat:hover i.wechat-qr {
+  display: block;
+}
+
+a.wechat {
+  background:url('/images/social/Wechat.png') center no-repeat;
+}
+
+i.wechat-qr {
+  background:url('/images/resume_qrcode.jpg') center no-repeat;
+  display: none;
+  position: absolute !important;
+  background-size: 100%;
+  width: 150px !important;
+  height: 150px !important;
+  left: 43px;
+  bottom: 20px;
+}
+
+a.stackoverflow{background:url('/images/social/Stackoverflow.png') center no-repeat;}
+a.stackoverflow:hover{
+  background:url('/images/social/StackoverflowH.png') center no-repeat;
+}
+
 /* search bar */
 #search {
 display: inline;

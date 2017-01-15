@@ -59,4 +59,18 @@
   <a href="http://www.lastfm.com/user/{{ site.lastfm_user }}" class="lastfm" title="LastFM"></a>
   </li>
   {% endif %}
+  {% if site.stackoverflow_user %}
+  <!-- Stackoverflow -->
+  <li>
+  <a href="http://stackoverflow.com/users/{{ site.stackoverflow_user }}" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  {% endif %}
+  {% if site.wechat_user %}
+  <!-- wechat -->
+  <li class="wechat">
+  <a href="#" class="wechat" title="Wechat">
+    <i class="wechat-qr"></i>
+  </a>
+  </li>
+  {% endif %}
 </ul>

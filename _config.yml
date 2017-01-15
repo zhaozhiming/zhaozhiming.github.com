@@ -118,5 +118,11 @@ linkedin_user: zhaozhiming
 #twitter
 twitter_user: kingzzm
 
+#stackoverflow
+stackoverflow_user: /3747607/zhaozhiming
+
+#wechat
+wechat_user: zhimingmiao
+
 # Posts in the sidebar Popular Posts section
 popular_posts_count: 5      

@@ -183,7 +183,7 @@ tags: [css,grid]
 
 这将创建一个 4 乘以 3 的网格，第一行由`header`区域组成，中间一行由 2 个`main`区域和一个空单元和一个`sidebar`区域组成，最后一行由`footer`区域组成。
 
-{% img https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-names.png %}
+{% img https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-template-areas.png %}
 
 在你定义的每一行都需要拥有相同的单元格。
 

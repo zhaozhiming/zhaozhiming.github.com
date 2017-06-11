@@ -9,107 +9,115 @@ categories: code
 tags: resume
 ---
 
-<!--more-->  
+<!--more-->
 # 联系方式
 - Email: zhaozhiming003@gmail.com
-- 微信号(请扫二维码): 
+- 微信号（请扫二维码）:
 
-{% img /images/resume_qrcode.jpg 150 150 %}  
+{% img /images/resume_qrcode.jpg 150 150 %}
 
 ---
 
 # 个人信息
 
- - 赵芝明/男/1982 
- - Geeker，编程狂人，重度技术爱好者，愿望:改变世界
- - 本科/南昌航空工业大学-计算机科学与应用
- - 工作年限: 10年
- - 技术博客: http://zhaozhiming.github.io
+ - 赵芝明 / 男 /1982
+ - Geeker，编程狂人，重度技术爱好者，愿望：改变世界
+ - 本科 / 南昌航空工业大学 - 计算机科学与应用
+ - 工作年限：10+ 年
+ - 技术博客：http://zhaozhiming.github.io
  - Github: https://github.com/zhaozhiming
  - Stackoverflow: http://stackoverflow.com/users/3747607/zhaozhiming
- - 期望职位: 全栈工程师，高级程序员，服务端工程师，后端工程师，架构师
- - 期望城市: 成都
- - 求职状态: 暂时不想找工作
+ - 期望职位：全栈工程师，高级程序员，服务端工程师，后端工程师，架构师
+ - 期望城市：成都
 
 ---
 
 # 自我简介
 
-- 感兴趣的技术：编程语言，移动开发，机器学习，Devops，前端技术，敏捷开发，开源软件   
-- 技术相关：喜欢各种新技术，不想重复地做以前做过的事情，在每个新项目都会使用一些新技术新工具新框架。   
-- 平时喜欢写技术Blog，是对日常工作和学习的积累。
-- 喜欢编码，很早就开始学习重构，对代码要求比较严格，经常和新同事一起结对编程，要求他们从一开始就掌握良好的编程习惯。    
-- 喜欢敏捷开发，学习过Scrum，Kanban，Lean等敏捷方法，获得过相关的敏捷证书，有CSM，CSD，Kanban等。  
-- 喜欢尝试各种新工具来提高工作效率，平时搜索问题通过Google，Stackoverflow或者直接在Github项目中提问题。希望寻找有Geek精神和工程师文化的公司，创造改变世界的产品。   
-  
+- 感兴趣的技术：编程语言，移动开发，Devops，前端技术，敏捷开发，开源软件，大数据可视化
+- 技术相关：喜欢各种新技术，不想重复地做以前做过的事情，在每个新项目都会使用一些新技术新工具新框架。
+- 平时喜欢写技术 Blog，是对日常工作和学习的积累。
+- 喜欢编码，很早就开始学习重构，对代码要求比较严格，经常和新同事一起结对编程，要求他们从一开始就掌握良好的编程习惯。
+- 喜欢敏捷开发，学习过 Scrum，Kanban，Lean 等敏捷方法，获得过相关的敏捷证书，有 CSM，CSD，Kanban 等。
+- 喜欢尝试各种新工具来提高工作效率，平时搜索问题通过 Google，Stackoverflow 或者直接在 Github 项目中提问题。希望寻找有 Geek 精神和工程师文化的公司，创造改变世界的产品。
+
 ---
 
 # 工作经历
 
-## 知道创宇（ 2015年6月 ~ 现在 ）
+## 知道创宇（ 2015 年 6 月 ~ 现在 ）
 
-### 全栈工程师，负责部门web项目的开发等工作。
+全栈工程师 && 架构师，负责团队搭建、人员面试、技术选型、培训分享和部门项目的开发等工作。  
 
-## 九柚时空 （ 2015年1月 ~ 2015年5月 ）
+### 大数据可视化项目
+使用 React + Redux 前端技术构建前端页面，Webpack 打包前端工程，后端使用 Hapi 框架提供 GraphQL API，数据库使用 ElasticSearch 做数据存储。  
+我主要负责项目框架搭建，程序设计，代码编写，性能优化等工作。
 
-### 电信光猫项目 
-与电信和华为合作的一个项目，使用OSGI开发bundle，使其在电信的光猫上运行，可以自动连接九柚时空的路由器WIFI。
-我在其中主要负责程序设计，代码编写，测试沟通等工作。  
+### 客户关系管理项目
+使用 React + Hapi 技术栈快速开发的一个 Web 项目。  
+我主要负责需求对接，程序开发，演示调试，测试部署等工作。
 
-### QQWIFI项目 
-与腾讯QQ合作的一个项目，根据QQ提供的接口开发功能，接入Android版的QQ，可以自动连接九柚时空的路由器WIFI。  
-我在其中主要负责程序设计，代码编写，测试沟通等工作。  
-  
-## 平安科技公司 （ 2008年6月 ~ 2014年12月 ）
+## 九柚时空 （ 2015 年 1 月 ~ 2015 年 5 月 ）
 
-### 云存储项目 
-基于Openstack swift和Ceph开发的云存储项目，我在其中主要负责监控服务器的设计和编码工作，和云存储环境的测试工作。  
+### 电信光猫项目
+与电信和华为合作的一个项目，使用 OSGI 开发 bundle，使其在电信的光猫上运行，可以自动连接九柚时空的路由器 WIFI。  
+我在其中主要负责程序设计，代码编写，测试沟通等工作。
 
-### 车联网项目 
-手机APP”平安好车主“的后台应用，使用了Redis，ActiveMQ，HBase，Mysql等中间件。我在其中主要负责后台计算逻辑的设计和编码工作。  
+### QQWIFI 项目
+与腾讯 QQ 合作的一个项目，根据 QQ 提供的接口开发功能，接入 Android 版的 QQ，可以自动连接九柚时空的路由器 WIFI。  
+我在其中主要负责程序设计，代码编写，测试沟通等工作。
 
-### P2P网上金融超市
-使用SpringMVC+Hibernate做的一个Web应用，我在其中主要负责自动化测试案例的编写，bug修复等工作。在这个项目里学习了敏捷开发，自动化测试，持续集成等。  
+## 平安科技公司 （ 2008 年 6 月 ~ 2014 年 12 月 ）
 
-## SIUI （ 2005年9月 ~ 2008年04月 ）
+### 云存储项目
+基于 Openstack swift 和 Ceph 开发的云存储项目，我在其中主要负责监控服务器的设计和编码工作，和云存储环境的测试工作。
+
+### 车联网项目
+手机 APP”平安好车主“的后台应用，使用了 Redis，ActiveMQ，HBase，Mysql 等中间件。我在其中主要负责后台计算逻辑的设计和编码工作。
+
+### P2P 网上金融超市
+使用 SpringMVC+Hibernate 做的一个 Web 应用，我在其中主要负责自动化测试案例的编写，bug 修复等工作。在这个项目里学习了敏捷开发，自动化测试，持续集成等。
+
+## SIUI （ 2005 年 9 月 ~ 2008 年 04 月 ）
 
 ### 医疗仪器软件开发
-   
+
 ---
 
 # 开源项目和作品
 
 ## 开源项目
 
- - [MTTR PLUGIN](https://github.com/zhaozhiming/mttr) : Jenkins的一个插件，显示Job的平均修复时间，已经放到了Jenkins的官网上，插件地址--[https://wiki.jenkins-ci.org/display/JENKINS/MTTR+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/MTTR+Plugin)。
- - [部门博客系统](https://github.com/zhaozhiming/department-blogs-analyser) : 统计部门发布在CSDN和ITEYE上的博客信息。
+ - [Modation](https://github.com/zhaozhiming/generator-modation) : 基于 React + Redux + Webpack + Hapi 的项目脚手架。
+ - [MTTR PLUGIN](https://github.com/zhaozhiming/mttr) : Jenkins 的一个插件，显示 Job 的平均修复时间，已经放到了 Jenkins 的官网上，插件地址 --[https://wiki.jenkins-ci.org/display/JENKINS/MTTR+Plugin](https://wiki.jenkins-ci.org/display/JENKINS/MTTR+Plugin)。
+ - [部门博客系统](https://github.com/zhaozhiming/department-blogs-analyser) : 统计部门发布在 CSDN 和 ITEYE 上的博客信息。
  - [微博应用](https://github.com/zhaozhiming/pretty-pic-storer) : 抓取好友图片并保存。
 
 ## 技术文章
 
-- [Jenkins插件开发系列](http://zhaozhiming.github.io/blog/2013/01/31/jenkins-plugins-develop-part-1/)
-- [在JavaScript中进行文件处理系列(翻译文章)](http://zhaozhiming.github.io/blog/2012/07/08/working-with-files-in-javascript-part-1/)
+- [Jenkins 插件开发系列](http://zhaozhiming.github.io/blog/2013/01/31/jenkins-plugins-develop-part-1/)
+- [在 JavaScript 中进行文件处理系列（翻译文章）](http://zhaozhiming.github.io/blog/2012/07/08/working-with-files-in-javascript-part-1/)
 
 # 技能清单
 
 以下均为我熟练使用的技能
 
-- 语言：(精通)Java/JS/ES6/CSS/Nodejs/Python，(了解)Ruby/Go/PHP
+- 语言：（精通）Java/JS/ES6/CSS/Nodejs/Python，（了解）Ruby/Go/PHP
 - 开发框架：React/Redux, Spring/Hibernate/Mybatis, Django/Django rest, Node/Hapi/Meteor
 - 前端框架：React/Antd/Bootstrap/AngularJS/Semmantic-UI/JQuery/JSP
-- 数据库：MySQL/Sqlite3/PgSQL/Oracle
-- 容器中间件: Tomcat/Jetty/Weblogic
-- RPC/搜索引擎/消息中间件: Thrift/Solr/ActiveMq/Openfire
-- 缓存/Nosql: Redis/Memorycache/MongoDB/Ssdb
-- 版本管理: Git/Svn/ClearCase
-- 构建工具: Webpack, Gradle/Maven/Ant
-- web相关: Restful/Json/XML
+- 关系型数据库：MySQL/Sqlite3/PgSQL/Oracle
+- 缓存/Nosql: Redis/Memorycache/MongoDB/Ssdb/ElasticSearch
+- 容器中间件：Tomcat/Jetty/Weblogic
+- RPC/搜索引擎/消息中间件：Thrift/Solr/ActiveMq/Openfire
+- 版本管理：Git/Svn/ClearCase
+- 构建工具：Webpack/Gradle/Maven/Ant
+- web相关：Restful/Json/XML
 - DevOps: Docker/Vagrant/VMWare/VirtualBox
-- 单元测试/自动化测试/压力测试: Moche/Jest/Enzyme, Junit/Mockito/Jbehave/Selenium/Galting
-- 云和开放平台:SAE/BAE/微博开放平台/微信应用开发/微信小程序
-- 敏捷开发: Scrum/看板/Jenkins/TDD/Refactor/Sonar
-- 操作系统: Mac/Ubuntu/Centos/Unix/Window
-- IDE和编辑器: Vim/IntelliJ IDEA/Eclipse
+- 测试：Moche/Jest/Enzyme/Junit/Mockito/Jbehave/Selenium/Galting
+- 云和开放平台：SAE/BAE/微博开放平台/微信应用开发/微信小程序
+- 敏捷开发：Scrum/看板/Jenkins/TDD/Refactor/Sonar
+- 操作系统：Mac/Ubuntu/Centos/Unix/Window
+- IDE和编辑器：Vim/IntelliJ IDEA/Eclipse
 
 ---
 

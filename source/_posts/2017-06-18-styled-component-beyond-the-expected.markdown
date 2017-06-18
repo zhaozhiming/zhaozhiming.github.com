@@ -11,19 +11,22 @@ tags: [cssinjs,styled-components]
 
 {% img /images/post/2017/06/styled-components.png 400 350 %}
 
-Css 在 React 中的写法一直在持续改进，从原生的 Css 到 [CSS Modules](https://github.com/css-modules/css-modules)，再到 Css In Js，目标是让开发者更高效地写组件的样式。
+Css 在 React 中的写法一直在持续改进，从原生的 Css 到 [CSS Modules](https://github.com/css-modules/css-modules)，再到 Css In Js，目标是让开发者更高效地写组件的样式。  
+  
 [`styled-components`](https://www.styled-components.com/) 是基于 Css In Js 方式实现的一个库，刚开始看到这个库时，我简单地以为它只是使用了内联方式来实现 React 组件的样式，但试用了之后，才发现不仅它的实现不是内联的方式，而且因为样式是写在 JS 里面，所以它的强大远超过我的预期。
 
 <!--more-->
 
 ## 使用 ES6 的字符串模板
 
-使用过 React 的同学可能比较清楚，如果要在一个组件通过 JS 来定义 css 样式，就必须在 React 组件里面通过`style`属性来写。
-
-{% codeblock lang:js %}
+使用过 React 的同学可能比较清楚，如果要在一个组件通过 JS 来定义 css 样式，就必须在 React 组件里面通过`style`属性来写。  
+  
+{% raw %}
+```js
 const Home = () => <div style={{ marginLeft: 10 }}>Hello World</div>;
-{% endcodeblock %}
-
+```
+{% endraw %}
+  
 这种方式有很多`缺点`：
 
 * 样式属性与原生 css 的写法不一致，样式名称必须用驼峰的命名方式来命令，而不是多个单词用`-`号分隔；单位的写法也不一致，百分比是用字符串形式，而`pixel`值是用数字型形式。

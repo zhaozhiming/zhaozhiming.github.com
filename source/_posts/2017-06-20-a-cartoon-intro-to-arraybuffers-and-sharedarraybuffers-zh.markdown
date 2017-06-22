@@ -17,7 +17,7 @@ tags: [SharedArrayBuffers,ArrayBuffers]
 * 通俗漫画介绍 ArrayBuffers 和 SharedArrayBuffers
 * [在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件](http://zhaozhiming.github.io/blog/2017/06/21/avoiding-race-conditions-in-sharedarraybuffers-with-atomics-zh/)
 
-原文链接：[https://hacks.mozilla.org/2017/06/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers/](https://hacks.mozilla.org/2017/06/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers/)
+原文链接：[A cartoon intro to ArrayBuffers and SharedArrayBuffers](https://hacks.mozilla.org/2017/06/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers/)
 
 <!--more-->
 
@@ -140,6 +140,6 @@ SharedArrayBuffers 不久将会出现在所有主流浏览器中。
 
 另外，一旦 SharedArrayBuffers 内置到平台中，WebAssembly 就可以使用它们来实现线程支持。一旦到位，你就可以使用像 Rust 那样的并发抽象技术，Rust 的主要目标之一就是让你无所畏惧地使用并发编程。  
 
-在下一篇文章中，我们将介绍这些库作者使用的工具（Atomics），他们用来构建抽象层同时避免竞态条件。  
+在[下一篇文章](http://zhaozhiming.github.io/blog/2017/06/21/avoiding-race-conditions-in-sharedarraybuffers-with-atomics-zh/)中，我们将介绍这些库作者使用的工具（Atomics），他们用来构建抽象层同时避免竞态条件。  
 
 {% img https://2r4s9p1yi1fa2jd7j43zph8r-wpengine.netdna-ssl.com/files/2017/06/02_15.png 400 350 %}

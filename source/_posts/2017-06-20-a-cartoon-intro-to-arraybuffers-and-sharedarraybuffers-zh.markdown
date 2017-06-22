@@ -15,7 +15,7 @@ tags: [SharedArrayBuffers,ArrayBuffers]
 
 * [内存管理速成教程]()
 * 通俗漫画介绍 ArrayBuffers 和 SharedArrayBuffers
-* [Avoiding race conditions in SharedArrayBuffers with Atomics]()
+* [在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件]()
 
 原文链接：[https://hacks.mozilla.org/2017/06/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers/](https://hacks.mozilla.org/2017/06/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers/)
 

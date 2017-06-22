@@ -16,8 +16,8 @@ tags: [内存管理]
 这是 3 篇文章中的第一篇：
 
 * 内存管理速成教程
-* [通俗漫画介绍 ArrayBuffers 和 SharedArrayBuffers]()
-* [在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件]()
+* [通俗漫画介绍 ArrayBuffers 和 SharedArrayBuffers](http://zhaozhiming.github.io/blog/2017/06/20/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers-zh/)
+* [在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件](http://zhaozhiming.github.io/blog/2017/06/21/avoiding-race-conditions-in-sharedarraybuffers-with-atomics-zh/)
 
 原文链接：[A crash course in memory management](https://hacks.mozilla.org/2017/06/a-crash-course-in-memory-management/)
 
@@ -105,4 +105,4 @@ C 语言没有像 JavaScript 那样有一个抽象层来管理内存，相反，
 
 对于一个开发人员来说，计算出什么时候该释放哪个区域的内存是很难的，如果你的计算时间出错了，那么将可能引发缺陷甚至会导致一个安全漏洞，如果你不释放内存，那么内存终将会耗尽。  
 
-这就是为什么很多现代语言会使用自动内存管理，为了避免人为的错误，但这也带来了性能上的开销，我会在[下一篇文章](https://hacks.mozilla.org/2017/06/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers/) 讲更多这方面的内容。
+这就是为什么很多现代语言会使用自动内存管理，为了避免人为的错误，但这也带来了性能上的开销，我会在[下一篇文章](http://zhaozhiming.github.io/blog/2017/06/20/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers-zh/) 讲更多这方面的内容。

@@ -13,9 +13,9 @@ tags: [SharedArrayBuffers,ArrayBuffers]
 
 这是 3 篇文章中的第二篇：
 
-* [内存管理速成教程]()
+* [内存管理速成教程](http://zhaozhiming.github.io/blog/2017/06/20/a-crash-course-in-memory-management-zh/)
 * 通俗漫画介绍 ArrayBuffers 和 SharedArrayBuffers
-* [在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件]()
+* [在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件](http://zhaozhiming.github.io/blog/2017/06/21/avoiding-race-conditions-in-sharedarraybuffers-with-atomics-zh/)
 
 原文链接：[https://hacks.mozilla.org/2017/06/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers/](https://hacks.mozilla.org/2017/06/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers/)
 
@@ -23,7 +23,7 @@ tags: [SharedArrayBuffers,ArrayBuffers]
 
 # 通俗漫画介绍 ArrayBuffers 和 SharedArrayBuffers
   
-在『上一篇文章中』()，我解释了像 JavaScript 这样的内存管理语言如何操作内存，我也解释了像 C 语言这样的手动内存管理语言如何工作的。  
+在[上一篇文章中](http://zhaozhiming.github.io/blog/2017/06/20/a-crash-course-in-memory-management-zh/)，我解释了像 JavaScript 这样的内存管理语言如何操作内存，我也解释了像 C 语言这样的手动内存管理语言如何工作的。  
 
 为什么当我们讨论 [ArrayBuffers](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) 和 [SharedArrayBuffers](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer) 时这部分内容很重要呢？  
 
@@ -124,7 +124,7 @@ postMessage 获取你放进去的任何数据，序列化它们，再将其发�
 
 {% img https://2r4s9p1yi1fa2jd7j43zph8r-wpengine.netdna-ssl.com/files/2017/06/02_13.png 400 350 %}
   
-我将在『下一篇文章』() 中解释。  
+我将在[下一篇文章](http://zhaozhiming.github.io/blog/2017/06/21/avoiding-race-conditions-in-sharedarraybuffers-with-atomics-zh/) 中解释。  
 
 ## SharedArrayBuffers 当前的现状是怎样的？
 

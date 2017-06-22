@@ -13,8 +13,8 @@ tags: [SharedArrayBuffers,Atomics]
 
 这是 3 篇文章中的第三篇：
 
-* [内存管理速成教程]()
-* [通俗漫画介绍 ArrayBuffers 和 SharedArrayBuffers]()
+* [内存管理速成教程](http://zhaozhiming.github.io/blog/2017/06/20/a-crash-course-in-memory-management-zh/)
+* [通俗漫画介绍 ArrayBuffers 和 SharedArrayBuffers](http://zhaozhiming.github.io/blog/2017/06/20/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers-zh/)
 * 在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件
 
 原文链接：[Avoiding race conditions in SharedArrayBuffers with Atomics](https://hacks.mozilla.org/2017/06/avoiding-race-conditions-in-sharedarraybuffers-with-atomics/)
@@ -23,7 +23,7 @@ tags: [SharedArrayBuffers,Atomics]
 
 # 在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件
 
-在[上一篇文章]() 中，我讲述了使用 SharedArrayBuffers 会导致竞态条件，这让 SharedArrayBuffers 使用困难，我们不希望应用开发人员直接使用 SharedArrayBuffers。  
+在[上一篇文章](http://zhaozhiming.github.io/blog/2017/06/20/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers-zh/) 中，我讲述了使用 SharedArrayBuffers 会导致竞态条件，这让 SharedArrayBuffers 使用困难，我们不希望应用开发人员直接使用 SharedArrayBuffers。  
 
 但在其他语言上有多线程开发经验的库开发人员可以使用新的底层 API 来创建高级别的工具，应用开发人员就可以使用这些工具而无需直接接触 SharedArrayBuffers 和 Atomics。  
 

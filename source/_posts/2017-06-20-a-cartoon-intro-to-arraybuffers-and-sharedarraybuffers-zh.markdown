@@ -23,7 +23,7 @@ tags: [SharedArrayBuffers,ArrayBuffers]
 
 # 通俗漫画介绍 ArrayBuffers 和 SharedArrayBuffers
   
-在[上一篇文章中](http://zhaozhiming.github.io/blog/2017/06/20/a-crash-course-in-memory-management-zh/)，我解释了像 JavaScript 这样的内存管理语言如何操作内存，我也解释了像 C 语言这样的手动内存管理语言如何工作的。  
+在[上一篇文章中](http://zhaozhiming.github.io/blog/2017/06/20/a-crash-course-in-memory-management-zh/)，我解释了像 JavaScript 这样的内存自动管理语言如何操作内存，我也解释了像 C 语言这样的手动内存管理语言如何工作的。  
 
 为什么当我们讨论 [ArrayBuffers](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) 和 [SharedArrayBuffers](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer) 时这部分内容很重要呢？  
 
@@ -81,7 +81,7 @@ ArrayBuffer 本身只是一个 0 和 1 存放在一行里面的一个集合，Ar
 
 为了解释 SharedArrayBuffers，我需要解释一点关于并行运行代码和 JavaScript 的知识。  
 
-你可以并行运行代码让你的代码跑的更快，或者让其更快地相应用户事件。为了做到这点，你需要分离你的工作。  
+你可以并行运行代码让你的代码跑的更快，或者让其更快地响应用户事件。为了做到这点，你需要分离你的工作。  
 
 在一个典型的 app 中，所有工作都在一个单独独立的主线程中被照看着，我以前讲过这个。主线程就像一个全栈开发，它负责 JavaScript，DOM 结构和页面布局。  
 
@@ -138,7 +138,7 @@ SharedArrayBuffers 不久将会出现在所有主流浏览器中。
 
 我们希望 JavaScript 库开发人员来创建对应的库来让你更方便和安全地使用 SharedArrayBuffers。  
 
-另外，一旦 SharedArrayBuffers 内置到平台中，WebAssembly 就可以使用它们来实现线程支持。一旦到位，你就可以使用像 Rust 那样的并发抽象技术，Rust 的主要目标之一就是让你无所畏惧地使用并发编程。  
+另外，一旦 SharedArrayBuffers 内置到平台中，WebAssembly 就可以使用它们来实现多线程支持。一旦到位，你就可以使用像 Rust 那样的并发抽象技术，Rust 的主要目标之一就是让你无所畏惧地使用并发编程。  
 
 在[下一篇文章](http://zhaozhiming.github.io/blog/2017/06/21/avoiding-race-conditions-in-sharedarraybuffers-with-atomics-zh/)中，我们将介绍这些库作者使用的工具（Atomics），他们用来构建抽象层同时避免竞态条件。  
 

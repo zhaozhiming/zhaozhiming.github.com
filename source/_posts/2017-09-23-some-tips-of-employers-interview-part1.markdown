@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "研发人员面试指南（一）"
+title: "研发面试官的面试指南（一）"
 date: 2017-09-23 19:33
-description: "研发人员面试指南（一）"
+description: "研发面试官的面试指南（一）"
 keywords: interview
 comments: true
 categories: code

@@ -25,7 +25,7 @@ tags: [css]
 </div>
 {% endcodeblock %}
 
-这里使用了内外两层 div，因为单独使用 1 个 div 来实现 4 个角边框不好实现，所以要用 2 个 div，每个 div 实现 2 个角边框的效果。
+这里使用了内外 2 层 div，因为单独使用 1 个 div 来实现 4 个角边框不好实现，所以要用 2 个 div，每个 div 实现 2 个角边框的效果。
 
 咱们再来看看 CSS 代码。
 
@@ -113,7 +113,7 @@ tags: [css]
 </div>
 {% endcodeblock %}
 
-这里的`img`是我们要用角边框包括起来的内容，所以实际上我们只用到了一层 div。
+这里的`img`是我们要用角边框包括起来的内容，所以实际上我们只用到了 1 层 div。
 
 {% codeblock lang:css %}
 .content {
@@ -203,7 +203,7 @@ tags: [css]
 
 ## 总结
   
-这就是实现元素角边框的两种方法，其实还要一种方法，就是使用 CSS 的`clip-path`来实现，但代码相对比较`hard code`，而且这个特性还是实验性的，所以具体怎么实现这里就不介绍了，感兴趣的同学可以看下这个 [code pen](https://codepen.io/bennettfeely/pen/NdVyvR)。
+这就是实现元素角边框的两种方法，其实还有一种方法，就是使用 CSS 的`clip-path`来实现，但代码相对比较`hard code`，而且这个特性还是实验性的，所以具体怎么实现这里就不介绍了，感兴趣的同学可以看下这个 [code pen](https://codepen.io/bennettfeely/pen/NdVyvR)。
   
 如果还有其他更好的实现方法欢迎留言，大家一起学习进步，谢谢！
 

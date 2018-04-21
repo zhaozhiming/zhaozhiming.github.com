@@ -6,7 +6,7 @@ article{
 		padding-bottom: 15px;
 	}
 	@media screen and (max-width: 600px){
-		padding: 15px 0;
+    padding: 15px 0;
 	}
 	h2.title{
         font-family: 'Fjalla One', sans-serif;
@@ -176,4 +176,19 @@ article{
 .share{
 	padding: 15px 0;
 	@include border-shadow();
+}
+
+#appreciates {
+  margin-top: 30px;
+  h2 {
+    color: #EA6F5A;
+  }
+  h4 {
+    margin-bottom: 10px;
+  }
+  span {
+    display: block;
+    font-size: 12px;
+    color: #B5B3B3;
+  }
 }

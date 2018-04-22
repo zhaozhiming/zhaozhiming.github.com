@@ -35,13 +35,13 @@ API 主要包含以下模块：账号、智能合约、交易、区块、事件�
 
 #### 获取单个账号金额
 
-**API 示例**
+*API 示例*
 
 {% codeblock lang:sh %}
 https://api.etherscan.io/api?module=account&action=balance&address=0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a&tag=latest&apikey=YourApiKeyToken
 {% endcodeblock %}
 
-**参数说明**
+*参数说明*
 
 * module：对应的模块名称，这里是账户模块，所以是`moudle=account`
 * action：对应的操作，这里是`balance`，即获取金额。
@@ -49,30 +49,29 @@ https://api.etherscan.io/api?module=account&action=balance&address=0xddbd2b932c7
 * tag：之前在介绍 geth 的 API 时讲过获取账号金额需要 2 个参数，一个是账号地址，另外一个就是 tag，一般写`latest`就可以了。
 * apikey：你在`Etherscan`上创建的 apikey，带上没有请求的限制，也可以不带，下面会介绍 API 的请求限制。
 
-其中`module、action、apikey`是每个 API 都需要的参数，其他的参数因不同 API 而不同。
+其中`module、action、apikey`是每个 API 都有的参数，其他的参数则因不同 API 而不同。
 
-**返回结果**
+*返回结果*
 
 {% codeblock lang:sh %}
 {"status":"1","message":"OK","result":"670456215218885498951364"}
 {% endcodeblock %}
 
-
 #### 获取多个账号金额
 
-**API 示例**
+*API 示例*
 
 {% codeblock lang:sh %}
 https://api.etherscan.io/api?module=account&action=balancemulti&address=0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a,0x63a9975ba31b0b9626b34300f7f627147df1f526,0x198ef1ec325a96cc354c7266a038be8b5c558f67&tag=latest&apikey=YourApiKeyToken
 {% endcodeblock %}
 
-**参数说明**
+*参数说明*
 
 （前面有讲过的参数就不讲了，下同）
 
 与单个账号金额 API 相比，参数`address`用`,`号分隔多个账号，最多可支持 20 个账号的金额查询。
 
-**返回结果**
+*返回结果*
 {% codeblock lang:sh %}
 {
     "message": "OK",
@@ -96,13 +95,13 @@ https://api.etherscan.io/api?module=account&action=balancemulti&address=0xddbd2b
 
 #### 获取"正常"交易记录
 
-**API 示例**
+*API 示例*
 
 {% codeblock lang:sh %}
 https://api.etherscan.io/api?module=account&action=txlist&address=0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey=YourApiKeyToken
 {% endcodeblock %}
 
-**参数说明**
+*参数说明*
 
 * action：为`txlist`，表示列出交易记录。
 * address：要查询交易记录的账号地址。
@@ -112,7 +111,7 @@ https://api.etherscan.io/api?module=account&action=txlist&address=0xddbd2b932c76
 * offset: 查询到记录数，可选，默认是查询 10000 条记录。
 * sort: 排序规则，可以正序`asc`和倒序`desc`。
 
-**返回结果**
+*返回结果*
 
 {% codeblock lang:sh %}
 {
@@ -145,13 +144,13 @@ https://api.etherscan.io/api?module=account&action=txlist&address=0xddbd2b932c76
 
 #### 获取"内部"交易记录
 
-**API 示例**
+*API 示例*
 
 {% codeblock lang:sh %}
 https://api.etherscan.io/api?module=account&action=txlistinternal&address=0x2c1ba59d6f58433fb1eaee7d20b26ed83bda51a3&startblock=0&endblock=2702578&page=1&offset=10&sort=asc&apikey=YourApiKeyToken
 {% endcodeblock %}
 
-**参数说明**
+*参数说明*
 
 参数与上一个 API 基本相同，只有`action`是`txlistinternal`这一点不同，这 2 种交易的区别是什么呢？简单的理解就是“正常”的交易是会记录到区块链上的，而“内部”交易是指不会记录到区块链上的记录，比如交易失败的记录。
 
@@ -161,7 +160,7 @@ https://api.etherscan.io/api?module=account&action=txlistinternal&address=0x2c1b
 https://api.etherscan.io/api?module=account&action=txlistinternal&txhash=0x40eb908387324f2b575b4879cd9d7188f69c8fc9d87c901b9e2daaea4b442170&apikey=YourApiKeyToken
 {% endcodeblock %}
 
-**返回结果**
+*返回结果*
 
 {% codeblock lang:sh %}
 {
@@ -190,19 +189,19 @@ https://api.etherscan.io/api?module=account&action=txlistinternal&txhash=0x40eb9
 
 #### 获取 ERC20 代币交易事件记录
 
-**API 示例**
+*API 示例*
 
 {% codeblock lang:sh %}
 https://api.etherscan.io/api?module=account&action=tokentx&contractaddress=0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2&address=0x4e83362442b8d1bec281594cea3050c8eb01311c&page=1&offset=100&sort=asc&apikey=YourApiKeyToken
 {% endcodeblock %}
 
-**参数说明**
+*参数说明*
 
 * action: 值为`token`，表示和代币相关。
 * contractaddress: 代币的智能合约地址。
 * address: 只查询和该账户地址相关的记录，可选。
 
-**返回结果**
+*返回结果*
 
 {% codeblock lang:sh %}
 {
@@ -236,18 +235,18 @@ https://api.etherscan.io/api?module=account&action=tokentx&contractaddress=0x9f8
 
 #### 获取已开采的区块列表
 
-**API 示例**
+*API 示例*
 
 {% codeblock lang:sh %}
 https://api.etherscan.io/api?module=account&action=getminedblocks&address=0x9dd134d14d1e65f84b706d6f205cd5b1cd03a46b&blocktype=blocks&page=1&offset=10&apikey=YourApiKeyToken
 {% endcodeblock %}
 
-**参数说明**
+*参数说明*
 
 * action: 值为`getminedblocks`。
-* blocktype：可以选区块`blocks`和叔块`uncles`，不了解叔块的可以查看[这里](https://www.bixuncn.com/baike/block/1141.html)。
+* blocktype：区块类型，可以选区块`blocks`和叔块`uncles`，不了解叔块的可以查看[这里](https://www.bixuncn.com/baike/block/1141.html)。
 
-**返回结果**
+*返回结果*
 
 {% codeblock lang:sh %}
 {
@@ -270,21 +269,21 @@ https://api.etherscan.io/api?module=account&action=getminedblocks&address=0x9dd1
 
 #### 获取智能合约接口
 
-**API 示例**
+*API 示例*
 
 {% codeblock lang:sh %}
 https://api.etherscan.io/api?module=contract&action=getabi&address=0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413&apikey=YourApiKeyToken
 {% endcodeblock %}
 
-**参数说明**
+*参数说明*
 
 * module: 值为`contract`。
 * action: 值为`getabi`。
 * address: 智能合约地址。
 
-其实智能合约的 abi 就是一个 json 对象，通过这个对象我们可以调用其接口方法，后面会写一篇文章介绍如何操作 abi 对象，敬请期待。
+智能合约的 abi 就是一个 json 对象，通过这个对象我们可以调用其接口方法，后面会写一篇文章介绍如何操作 abi 对象，敬请期待。
 
-**返回结果**
+*返回结果*
 
 返回结果内容比较长，这里省略，就是一个 json 对象，感兴趣的可以自行调用该 API 看结果。
 
@@ -292,10 +291,10 @@ https://api.etherscan.io/api?module=contract&action=getabi&address=0xBB9bc244D79
 
 账号和智能合约的 API 已经能满足大部分的业务需求了，其他模块的 API 感觉没什么太大的作用，这里就不介绍了，感兴趣的读者可以自行查阅。
 
-这里再说下 API 的使用限制，刚才提到每个 API 都有一个`apkkey`参数，如果 API 没加上这个参数的话，每个 API 的请求次数不能超过 5 次每秒。
+这里再说下 API 的使用限制，刚才提到每个 API 都有一个`apikey`参数，如果 API 没加上这个参数的话，每个 API 的请求次数不能超过 5 次每秒。
 
 ## 总结
 
 `Etherscan`提供的这些 API 有些是和以太坊提供的 API 有重复的，比如说获取账号金额，获取事件日志记录等，但有一些 API 给我们带来了很大的便利性，比如获取账号交易记录，有了这个 API 就不用使用几个原生 API 进行各种数据拼接了。
 
-另外`Etherscan`的这套 API 在 Rinkeby 测试网络也有一套一模一样的，区别只是前面的 url 不同，Rinkeby 的是：`api-rinkeby.etherscan.io`，感兴趣的同学也可以去试试。
+另外`Etherscan`的这套 API 在 Rinkeby 测试网络也有一套一模一样的，区别只是前面的 url 不同，Rinkeby 的是：`api-rinkeby.etherscan.io`，感兴趣的同学可以去试试。

@@ -197,7 +197,7 @@ https://api.etherscan.io/api?module=account&action=tokentx&contractaddress=0x9f8
 
 *参数说明*
 
-* action: 值为`token`，表示和代币相关。
+* action: 值为`tokentx`，表示查询代币交易记录。
 * contractaddress: 代币的智能合约地址。
 * address: 只查询和该账户地址相关的记录，可选。
 

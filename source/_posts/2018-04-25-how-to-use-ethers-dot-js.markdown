@@ -127,7 +127,7 @@ console.log('导出 keystore：' + keystore);
 
 ### Provider 类型
 
-* Etherscan Provider：连接 Etherscan API 的 provider，需要 2 个参数，一个是网络名称，一个查询 API 所需的 token（之前的文章有讲过，查询 Etherscan 的 API 时 apitoken 不是必须的，但如果没有的话会受到每秒 5 次的调用限制）。
+* Etherscan Provider：连接 Etherscan API 的 provider，需要 2 个参数，一个是网络名称，一个查询 API 所需的 token（[之前的文章](http://zhaozhiming.github.io/blog/2018/04/20/how-to-use-etherscan-api/) 有讲过，查询 Etherscan 的 API 时 apitoken 不是必须的，但如果没有的话会受到每秒 5 次的调用限制）。
 * Json Rpc Provider：连接本地以太坊网点的 Provider。
 * Infura Provider：连接 Infura 网络的 Provider，Infura 是一套以太坊的基础设施服务，同样有以太坊的主网络和测试网络。
 * Web3 Provider：连接已有 web3 对象的 provider。
@@ -174,6 +174,7 @@ wallet.provider = provider;
 {% codeblock lang:js %}
 const entropy = utils.randomBytes(16);
 const mnemonicTemp = HDNode.entropyToMnemonic(entropy);
+// 生成了 12 个随机单词，mnemonicTemp 为 "radar blur cabbage chef fix engine embark joy scheme fiction master release";
 const walelt = Wallet.fromMnemonic(mnemonicTemp);
 {% endcodeblock %}
 
@@ -185,7 +186,7 @@ Ethers.js 还提供了一些比较常用的工具方法，比如对 BigNumber �
 
 有人可能会问为什么需要操作 BigNumber？因为以太坊的计量单位是`Wei`，一个以太币是 10^18 Wei，如果用普通的 JS number 对象来存储操作的话，可能会因为数据溢出而导致结果异常。
 
-比如常见的业务场景是：获取钱包账户金额（以太币数量）并乘以货币单位汇率（美元或者人民币）得到最终结果。
+常见的业务场景是：计算出当前钱包的价值，即用钱包账户金额（以太币数量）乘以货币单位汇率（美元或者人民币）得到最终结果。
 
 {% codeblock lang:js %}
 // 汇率，截止 2018-04-29，ETH 价格为 693.01 USD
@@ -211,7 +212,7 @@ console.log(utils.formatEther(wei, {commify: true}));
 // "1,000.0"
 
 console.log(utils.formatEther(wei, {pad: true}));
-// "1000.000000000000000000" 
+// "1000.000000000000000000"
 
 console.log(utils.formatEther(wei, {commify: true, pad: true}));
 // "1,000.000000000000000000"

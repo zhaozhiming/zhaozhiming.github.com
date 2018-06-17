@@ -186,9 +186,21 @@ article{
   h4 {
     margin-bottom: 10px;
   }
-  span {
-    display: block;
-    font-size: 12px;
-    color: #B5B3B3;
+  .digital-wallet {
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    span {
+      display: block;
+      font-size: 1rem;
+      color: #B5B3B3;
+      padding: 3px;
+    }
+  }
+  .wechat_appreciates {
+    img {
+      padding: 10px;
+    }
   }
 }

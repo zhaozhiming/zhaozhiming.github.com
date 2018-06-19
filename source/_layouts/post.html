@@ -17,9 +17,6 @@ single: true
       </div>
     </center>
   </section>
-	{% unless page.sharing == false %}
-		{% include post/sharing.html %}
-	{% endunless %}
 	{% if site.disqus_short_name and page.comments == true %}
 	<section id="comment">
 	    <h2 class="title">Comments</h2>

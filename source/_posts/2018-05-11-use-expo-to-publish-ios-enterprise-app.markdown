@@ -113,7 +113,7 @@ tags: [React Native, Expo, iOS, Enterprise APP]
 
 {% img /images/post/2018/05/push1.png 600 400 %}
 
-还有需要多选择对应的 App Id：
+还有需要选择对应的 App Id：
 
 {% img /images/post/2018/05/push2.png 600 500 %}
 
@@ -145,7 +145,7 @@ tags: [React Native, Expo, iOS, Enterprise APP]
 
 最后下载该文件即完成 APP 描述文件的创建，该文件的后缀是`mobileprovision`。
 
-{% img /images/post/2018/05/mobile_profile5.png 600 400 %}
+{% img /images/post/2018/05/mobile_profile6.png 600 400 %}
 
 ## Expo 发布
 

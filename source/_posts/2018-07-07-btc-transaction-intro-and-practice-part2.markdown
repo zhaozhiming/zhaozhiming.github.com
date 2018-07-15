@@ -8,6 +8,7 @@ comments: true
 categories: blockchain
 tags: [bitcoin,blockchain,wallet]
 ---
+
 {% img /images/post/2018/07/btc_tx2.png 400 300 %}
 
 创建比特币交易有两种方式，一种是通过第三方 Api 进行交易创建并广播，另一种是通过`bitcoinjs-lib`创建交易并生成交易签名，然后调用第三方 Api 进行广播。

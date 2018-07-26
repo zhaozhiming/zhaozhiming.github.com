@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "使用 Truffle 编写代币合约并部署到到 Rinkeby 网络"
+title: "发行代币——编写代币智能合约"
 date: 2018-07-22 17:06
-description: 使用 Truffle 编写代币合约并部署到到 Rinkeby 网络
+description: 发行代币——编写代币智能合约
 keywords: ethereum,token,truffle,openzeppelin,rinkeby
 comments: true
 categories: blockchain
@@ -11,7 +11,7 @@ tags: [ethereum,token,truffle,openzeppelin,rinkeby]
 
 {% img /images/post/2018/07/token.jpeg 400 300 %}
 
-以太坊在比特币区块链的基础上进行了很多功能的完善，其中最大的一个功能就是让人们在区块链上可以开发图灵完备的程序（智能合约），而智能合约中人们使用最广泛的要数以太坊的代币了。
+以太坊在比特币区块链的基础上进行了很多功能的完善，其中最大的一个功能就是让人们在区块链上可以开发图灵完备的程序——智能合约，而智能合约中人们使用最广泛的要数以太坊的代币了。
 
 现在越来越多的公司发行了自己的以太坊代币，不管他们的目的是推进公司建设也好，还是割韭菜也好，其实跟我们开发者的关系并不大，我们应该关注的是其背后的区块链技术，今天我们就来介绍下如何发行自己的代币。
 
@@ -23,13 +23,13 @@ tags: [ethereum,token,truffle,openzeppelin,rinkeby]
 
 ### [Token Factory](http://thetokenfactory.com/#/factory)
 
-`代币工厂`是一个主动帮助你生成代币的网站，只要输入代币的几个主要参数就可以帮你自动创建代币，网络环境为主网络。
+`代币工厂`是一个主动帮助你生成代币的网站，只要输入代币的几个主要参数就可以帮你自动创建代币。
 
 {% img /images/post/2018/07/token_factory.png %}
 
 ### [一键代币](https://token.ftqq.com/)
 
-`一键代币`是国内开发的代币生成网站，同样只需要输入代币的参数即可自动创建代币，需要配合`MetaMask`钱包进行试用。
+`一键代币`是国内开发的代币生成网站，同样只需要输入代币的参数即可自动创建代币，需要配合`MetaMask`钱包一起使用。
 
 {% img /images/post/2018/07/one_token.png %}
 
@@ -41,21 +41,22 @@ tags: [ethereum,token,truffle,openzeppelin,rinkeby]
 
 ## 开发工具介绍
 
-虽然有了这些自动化生成代币的工具，但作为程序员的我们，还是觉得把代码控制在自己手里更稳妥一些。在我们介绍开发代币之前，先介绍一下我们的开发工具。
+虽然有了这些自动化生成代币的工具，但作为程序员的我们，还是觉得把代码控制在自己手里更稳妥一些。在我们介绍开发代币之前，先介绍一下需要用到的开发工具。
 
 ### [Truffle](https://truffleframework.com/)
 
-Truffle 是一个以太坊开发框架，据说是在一次区块链黑客马拉松上获奖的项目，后来慢慢演变变成了一个受欢迎的框架。它的主要特点有：
+Truffle 是一个以太坊开发框架，据说是在一次区块链黑客马拉松上获奖的项目，后来慢慢演变成了一个开发者受欢迎的框架，它的主要特点有：
 
 * 模板化工程：可以通过不同项目模板创建项目
 * 脚本化部署：通过简单的脚本命令可以方便地进行合约部署
 * 本地化测试：在本地可以运行智能合约测试，避免上链后再发现问题
+* 等等
 
 ### [Openzeppelin](https://openzeppelin.org/)
 
-随着区块链受到越来越多人的关注，不少黑客也盯上了区块链这块蛋糕，目前已在不少代币的智能合约中发现安全漏洞，一些漏洞甚至可以让代币的价值瞬间归零，所以如何编写一个安全性高的代币合约尤其重要。
+随着区块链受到越来越多人的关注，不少黑客也盯上了区块链这块蛋糕，目前已在不少代币的智能合约中发现了安全漏洞，一些漏洞甚至可以让代币的价值瞬间归零，所以如何编写一个安全性高的代币合约尤其重要。
 
-幸运的是社区已经开放了一些工具让你避免这个问题，Openzeppelin 是一个智能合约复用框架，它提供了一套经过生产环境验证的合约 m 模板，不但可以让你快速开发自己的智能合约，而且还提供了安全保障。
+幸运的是社区已经开放了一些工具让你避免这个问题，Openzeppelin 是一个智能合约复用框架，它提供了一套经过生产环境验证的合约模板，不但可以让你快速开发自己的智能合约，而且还提供了安全保障。
 
 ### [Ganache](https://truffleframework.com/ganache)
 
@@ -66,12 +67,14 @@ Ganache 也是`Truffle`团队开发的一个工具，简单来说它就是一个
 工具介绍完了，我们可以开始编写代币的智能合约了，首先我们需要创建项目工程，通过`Truffle`我们可以快速创建项目。
 
 {% codeblock lang:sh %}
+// 创建空目录
 mkdir mytoken
 cd mytoken
+// 使用模板初始化工程
 truffle unbox tutorialtoken
 {% endcodeblock %}
 
-这里我们使用了 [tutorialtoken](https://truffleframework.com/boxes/tutorialtoken) 这个项目模板，它是一个专门用来编写代币智能合约的项目模板，里面提供了部署脚本，前端页面代码等，我们使用这个模板就可以大大减少我们的开发工作量，创建出来的项目目录结构如下：
+这里我们使用了 [tutorialtoken](https://truffleframework.com/boxes/tutorialtoken) 这个项目模板，它是一个专门用来编写代币智能合约的项目模板，里面提供了部署脚本，前端页面代码等内容，我们使用这个模板可以大大减少我们的工作量，创建出来的项目目录结构如下：
 
 {% codeblock lang:sh %}
 ├── box-img-lg.png
@@ -102,17 +105,17 @@ truffle unbox tutorialtoken
 └── truffle.js
 {% endcodeblock %}
 
-其中我们主要使用到了`contracts`和`migrations`这 2 个目录中的代码，还有`truffle.js`，用来做环境配置，更多的相关内容可以查看[这里](https://truffleframework.com/docs/getting_started/project#exploring-the-project)。
+项目里面我们主要使用到了`contracts`和`migrations`这 2 个目录中的代码，还有`truffle.js`，用来做环境配置，更多的相关内容可以查看[这里](https://truffleframework.com/docs/getting_started/project#exploring-the-project)。
 
 ## 编写合约代码
 
-接着我们需要在项目中使用`Openzeppelin`来作为代币合约代码的基类，安装`Openzeppelin`：
+初始化项目后，我们需要在项目中使用`Openzeppelin`来作为合约代码的基类，先安装`Openzeppelin`：
 
 {% codeblock lang:sh %}
 yarn add openzeppelin-solidity
 {% endcodeblock %}
 
-然后在`contracts`目录中创建我们的代币合约文件`Mytoken.sol`，代码内容如下：
+然后在`contracts`目录中创建我们的合约文件`Mytoken.sol`，代码内容如下：
 
 {% codeblock lang:js %}
 pragma solidity ^0.4.24;
@@ -133,13 +136,13 @@ contract Mytoken is StandardToken {
 }
 {% endcodeblock %}
 
-可以看到，有了`Openzeppelin`之后我们的代码非常简单，只需要导入它的`StandardToken`来作为我们的代币基类，然后只需要在我们的代码里写上代币的几个主要信息就可以了。
+可以看到，有了`Openzeppelin`之后我们的代码非常简单，只需要导入它的`StandardToken`来作为我们的合约基类，然后写上代币的几个主要信息就可以了。
 
-这里我们的代理供应个数是`10000000000000`，即 10^14 个代码，代币精度是 10^18（与以太币一样）。
+这里我们的代币供应量是`10000000000000`，即 10^14 个代币，代币精度是 10^18（与以太币一样）。
 
 ## 编译合约
 
-代币合约编写完成后，我们需要将合约代码进行编译，执行命令如下：
+合约代码编写完成后，我们需要将代码进行编译，执行命令如下：
 
 {% codeblock lang:sh %}
 truffle compile
@@ -159,13 +162,15 @@ build
     └── Mytoken.json
 {% endcodeblock %}
 
-查看`Mytoken.json`文件我们可以看到合约代码已被编译成了一个 json 对象，里面有智能合约的详细信息，其中的`ABI`将在后面使用到。
+每一个`sol`文件会被编译成一个`json`文件，这里除了我们的文件被生成，还有其他文件因为引用和继承而被生成。
+
+查看`Mytoken.json`文件可以看到，里面包含了智能合约的详细信息。
 
 ## 部署合约
 
-编译完成后，我们就可以将智能合约发布到区块链上了，这里我们介绍如何发布到本地环境和 Rinkeby 测试环境。
+编译完成后，我们就可以将智能合约发布到区块链上了，这里我们介绍如何将智能合约发布到本地环境和 Rinkeby 测试环境。
 
-首先我们需要在`migrations`文件夹中新增`2_deploy_contracts.js`文件，文件内容如下：
+首先我们需要在`migrations`文件夹中新增一个`2_deploy_contracts.js`文件，文件内容如下，这样部署程序才会部署我们的合约：
 
 {% codeblock lang:js %}
 const Mytoken = artifacts.require('./Mytoken.sol');
@@ -177,7 +182,7 @@ module.exports = function(deployer) {
 
 ### 部署本地环境
 
-这里我们可以使用之前介绍的`Ganache`来创建本地环境，打开`Ganache`客户端我们可以看到本地环境已经启动，同时默认创建了 10 个测试账号。
+我们可以使用之前介绍的`Ganache`来创建本地环境，打开`Ganache`客户端我们可以看到本地环境已经启动，同时默认创建了 10 个测试账号。
 
 {% img /images/post/2018/07/Ganache.png %}
 
@@ -196,7 +201,7 @@ module.exports = {
 }
 {% endcodeblock %}
 
-最后执行发布命令，从输出信息中我们可以看到创建 2 个智能合约，第一个是项目默认的`Migrations`，第二个就是我们的代币合约。
+最后执行发布命令，从输出信息中我们可以看到，我们创建了 2 个智能合约，第一个是项目默认的`Migrations`，第二个就是我们的代币合约。
 
 {% codeblock lang:sh %}
 $ truffle migrate
@@ -218,7 +223,7 @@ Saving successful migration to network...
 Saving artifacts...
 {% endcodeblock %}
 
-发布完成后，我们再次查看`Ganache`客户端，可以看到我们的第一个账号的账户金额发生了变化，因为需要花费 ETH 来创建合约，并且产生了 4 个交易，这样就表示我们的代币已经发布成功了。
+因为部署本地环境是用第一个账号发布合约，而且账号需要花费 ETH 才能创建合约，所以发布完成后，我们再次查看`Ganache`客户端，可以看到我们的第一个账号的账户金额发生了变化，并且产生了 4 个交易，这样就表示我们的代币已经发布成功了。
 
 {% img /images/post/2018/07/local_account_balance.png %}
 
@@ -316,11 +321,11 @@ module.exports = {
 
 ## 合约源码开源
 
-代币发布完成之后，我们可以在以太坊浏览器中查看代币的详细信息，如果我们是发布到 Rinkeby 网络就可以查看`rinkeby.etherscan.io/`这个网址，然后在上面输入合约地址就可以进行代币信息的查询了。
+代币发布完成之后，我们可以在以太坊浏览器中查看代币的详细信息，如果我们是发布到 Rinkeby 网络就可以查看`rinkeby.etherscan.io`这个网址，然后在上面输入合约地址就可以进行代币信息的查询了。
 
 {% img /images/post/2018/07/zzm_token.png %}
 
-在以太坊上很多运作良好的代币都会将代币合约的源码开源，以证明代币的公正公开公平，但我们刚发布的代币并没有源码信息，所以我们需要手动上传代币的源码。
+在以太坊上很多运作良好的代币都会将代币合约源码进行开源，以证明代币的公正公开公平，但我们刚发布的代币并没有源码信息，所以我们需要手动上传代币的源码。
 
 以 Rinkeby 网络为例，进入`rinkeby.etherscan.io`后在右上角菜单可以看到一个`Verify Contract`选项。
 
@@ -334,12 +339,12 @@ module.exports = {
 
 * `Optimization`选项要选择`No`，选择`Yes`会报错，具体原因未知
 * 编译器版本可以查看编译后的 json 文件，里面有`compiler`属性
-* 因为我们的合约是继承自`Openzeppelin`的`StandardToken`类，所以要将集成的基类的所有源码一起上传才能验证通过，比如`StandardToken`又继承了`ERC20`和`BaseToken`这 2 个类，则需要再将这 2 个类的源码一起上传，这些基类的源码可以在`Openzeppelin`的 github 仓库中找到。
+* 因为我们的合约是继承自`Openzeppelin`的`StandardToken`类，所以要将继承的基类源码一起上传才能验证通过，比如我们的代码继承了`StandardToken`这个基类，就需要将它的代码一起上传，然后`StandardToken`又继承了`ERC20`和`BaseToken`这 2 个类，则需要再将这 2 个类的源码一起上传，这些基类的源码可以在`Openzeppelin`的 github 仓库中找到。
 
-最后点击`Verify And Publish`按钮就可以上传智能合约的源码了，上传成功后我们可以在地址的`Code`栏查看上传后的源码。
+最后点击`Verify And Publish`按钮就可以上传智能合约的源码了，上传成功后我们可以在`Code`栏查看上传后的源码。
 
 {% img /images/post/2018/07/contract_code.png %}
 
 ## 总结
 
-这里主要介绍了代币的智能合约编写、发布以及源码上传等过程，随着区块链技术的发展使得智能合约的编写越来越简单，希望区块链可以吸引到更多开发者来参与基础设施的建设。
+这里主要介绍了代币的智能合约编写、发布以及源码上传等过程，随着区块链技术的发展使得智能合约的编写越来越简单，希望区块链以后可以吸引到更多开发者来参与基础设施的建设。

@@ -9,7 +9,7 @@ categories: blockchain
 tags: [ethereum,token,truffle,openzeppelin,rinkeby]
 ---
 
-{% img /images/post/2018/07/deploy_token.jpg 400 300 %}
+{% img /images/post/2018/07/deploy_contract.jpg 400 300 %}
 
 现在越来越多的公司发行了自己的以太坊代币，不管他们的目的是推进公司建设也好，还是割韭菜也好，其实跟我们开发者的关系并不大，我们应该关注的是其背后的区块链技术。上一次我们讲了如何编写代币的智能合约，这次我们来看下怎么发布智能合约。
 
@@ -72,7 +72,7 @@ Saving successful migration to network...
 Saving artifacts...
 {% endcodeblock %}
 
-因为部署本地环境是用第一个账号发布合约，而且账号需要花费 ETH 才能创建合约，所以发布完成后，我们再次查看`Ganache`客户端，可以看到我们的第一个账号的账户金额发生了变化，并且产生了 4 个交易，这样就表示我们的代币已经发布成功了。
+因为部署本地环境是用第一个账号来发布合约，并且创建合约是需要花费账号金额的， 所以发布完成后，我们再次查看`Ganache`客户端，可以看到我们的第一个账号的账户金额发生了变化，并且产生了 4 个交易，这样就表示我们的代币已经发布成功了。
 
 {% img /images/post/2018/07/local_account_balance.png %}
 

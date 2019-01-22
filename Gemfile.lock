@@ -1,5 +1,5 @@
 GEM
-  remote: https://ruby.taobao.org/
+  remote: https://rubygems.org/
   specs:
     PageRankr (3.2.1)
       json (>= 1.4.6)
@@ -29,7 +29,7 @@ GEM
       liquid (~> 2.3)
       maruku (~> 0.5)
       pygments.rb (~> 0.3.2)
-    json (1.8.1)
+    json (1.8.3)
     jsonpath (0.5.6)
       multi_json
     kramdown (0.13.8)
@@ -88,3 +88,6 @@ DEPENDENCIES
   sass-globbing (~> 1.0.0)
   sinatra (~> 1.4.2)
   stringex (~> 1.4.0)
+
+BUNDLED WITH
+   1.16.6

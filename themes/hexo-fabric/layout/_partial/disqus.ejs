@@ -1,0 +1,20 @@
+<% // Load script if disquss comments are enabled and `page.comments` is either empty (index) or set to true %>
+<% if (theme.disqus_shortname){ %>
+    <% if (!index) { %>
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = '<%= post.permalink %>';
+            this.page.identifier = '<%= post.permalink %>';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//<%= theme.disqus_shortname %>.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    <% } else { %>
+        <script id="dsq-count-scr" src="//<%= theme.disqus_shortname %>.disqus.com/count.js" async></script>
+    <% } %>
+<% } %>

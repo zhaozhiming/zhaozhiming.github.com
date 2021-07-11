@@ -19,7 +19,9 @@ tags: [ava,enzyme,react]
   
 React中存在逻辑的地方有一部分是在render方法中，React通过props或state的值可以render出不同的页面，所以我们可以通过设置不同的props值来测试是否能render出我们期望的页面。比如有下面这样的一个组件：  
   
-{% codeblock lang:js %}
+
+```js
+
 class Footer extends Component {
   renderFooterButtons(completedCount, clearCompleted) {
     // 测试点1
@@ -53,7 +55,7 @@ class Footer extends Component {
     );
   }
 }
-{% endcodeblock %}
+```
   
 可以看到这个组件其实是比较简单的，在一个`footer`标签里面有个`span`和一个`ul`，`ul`里面有一些`li`，最下面是个`button`。  
   

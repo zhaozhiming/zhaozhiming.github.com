@@ -1,0 +1,12 @@
+<% if (site.posts.length){ %>
+  <section>
+    <h2>最新文章</h2>
+    <ul class="recent-posts">
+	  <% site.posts.sort('date', -1).limit(theme.recent_posts_limits).each(function(post){ %>
+	    <li class="post">
+		  <a href="<%- url_for(post.path) %>"><%= post.title || '(no title)' %></a>
+	    </li>
+	  <% }) %>
+    </ul>
+  </section>
+<% } %>

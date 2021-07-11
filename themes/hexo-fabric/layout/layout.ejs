@@ -1,0 +1,27 @@
+<%- partial('_partial/head') %>
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><%- partial('_partial/header') %></header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <%- body %>
+    </div>
+    <footer id="footer">
+    <%- partial('_partial/footer') %>
+    </footer>
+    <%- partial('_partial/after_footer') %>
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

@@ -80,7 +80,7 @@ shouldComponentUpdate (SCU) 另一方面在重新渲染组件树（包括子组�
 
 如果我们想要改变主题颜色，很简单，我们在适当的地方有一个依赖注入系统（DI），所以我们可以向下传递一个仓库来管理我们的主题并订阅它，我们绝不会传递一个新的仓库，但要确保仓库本身是有状态的，并且可以观察到组件的变化：  
   
-{% codeblock lang:js %}
+```js
 // Theme 组件存储当前的主题状态，并允许组件订阅将来变化（的数据）
 class Theme {
   constructor(color) {
@@ -136,7 +136,7 @@ class ThemedText extends React.Component {
 ThemedText.contextTypes = {
   theme: React.PropTypes.object
 }
-{% endcodeblock %}
+```
   
 完整的可运行列表：  
   

@@ -1,0 +1,28 @@
+<% if (index) { %>
+	<h2 class="title">
+		<a href="<%= post.path %>"><%= post.title %></a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <%- partial('_partial/post/date', { date_format: 'MMM D, YYYY' }) %></div>
+      <div class="tags">Tags: <%- partial('_partial/post/tags') %></div>
+    </div>
+      <% if (post.excerpt){ %>
+        <%- post.excerpt %>
+        <% if (theme.excerpt_link){ %>
+          <p class="more-link">
+            <a href="<%- post.path %>#more"><%= theme.excerpt_link %></a>
+          </p>
+        <% } %>
+      <% } else { %>
+        <%- post.content %>
+      <% } %>
+	</div>
+<% } else { %>
+	<h2 class="title"><%= post.title %></h2>
+    <div class="meta">
+        <div class="date">Published on: <%- partial('_partial/post/date', { date_format: 'MMM D, YYYY' }) %></div>
+        <div class="tags">Tags: <%- partial('_partial/post/tags') %></div>
+    </div>
+	<div class="entry-content"><%- post.content %></div>
+<% } %>

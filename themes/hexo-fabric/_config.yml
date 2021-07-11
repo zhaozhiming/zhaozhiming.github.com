@@ -1,0 +1,28 @@
+subscribe_rss: atom.xml
+google_analytics_tracking_id: UA-100485541-1
+simple_search: true
+
+excerpt_link: Read More
+disqus_shortname: zhaozhiming
+addthis_profile_id:
+
+twitter_tweet_button: true
+facebook_like:
+google_plus_one:
+google_plus_one_size: midum
+
+# recent post
+recent_posts_limits: 5
+# social
+github_user: zhaozhiming
+googleplus_user:
+facebook_user:
+twitter_user: kingzzm
+linkedin_user: zhaozhiming
+skype_user:
+youtube_user:
+lastfm_user:
+stackoverflow_user: 1954315/zhaozhiming
+
+# rss
+rss: /atom.xml

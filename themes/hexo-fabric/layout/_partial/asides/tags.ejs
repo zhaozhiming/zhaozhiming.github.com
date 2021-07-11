@@ -1,0 +1,16 @@
+<% if (site.posts.length){ %>
+  <section>
+    <h2>标签云</h2>
+      <%- tagcloud({
+        min_font: 24,
+        max_font: 42,
+        unit: 'px',
+        amount: 8,
+        orderby: 'length',
+        order: -1,
+        color: true,
+        start_color: 'gray',
+        end_color: '#7c7873',
+      }) %>
+  </section>
+<% } %>

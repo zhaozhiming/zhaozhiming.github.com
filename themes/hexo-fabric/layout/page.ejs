@@ -1,0 +1,15 @@
+<% if (page.path == 'tags/index.html') {%>
+    <div class="inner">
+    <%- tagcloud({
+        min_font: 16,
+        max_font: 25,
+        unit: 'px',
+        amount: 999,
+        color: true,
+        start_color: 'gray',
+        end_color: 'red',
+    }) %>
+    </div>
+<%} else {%>
+<%- partial('post') %>
+<%}%>

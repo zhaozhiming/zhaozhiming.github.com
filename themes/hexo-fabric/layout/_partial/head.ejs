@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    <%
+    var title = page.title;
+    
+    if (is_archive()){
+      title = 'Archives';
+    
+      if (is_month()){
+        title += ': ' + page.year + '/' + page.month;
+      } else if (is_year()){
+        title += ': ' + page.year;
+      }
+    } else if (is_category()){
+      title = 'Category: ' + page.category;
+    } else if (is_tag()){
+      title = 'Tag: ' + page.tag;
+    }
+    %>
+	<title><% if (title) {%><%= title %> - <% } %><%= config.title %></title>
+    <meta name="author" content="<%= theme.author %>">
+    <% var description = page.description; if ( !description ) { description = page.content } %>
+	<meta name="description" content="<%= description %>"> <!-- TODO: truncate -->
+	<% if (page.keywords){ %><meta name="keywords" content="<%= page.keywords %>"><% } %>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="<%= theme.subscribe_rss %>" rel="alternate" title="<%= config.title %>" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    <%- partial('_partial/custom/head') %>
+
+    <%- partial('_partial/google_analytics') %>
+</head>

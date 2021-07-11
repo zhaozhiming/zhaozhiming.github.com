@@ -103,7 +103,7 @@ theme: hexo-fabric
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://github.com/zhaozhiming/zhaozhiming.github.com
+  repo: git@github.com:zhaozhiming/zhaozhiming.github.com.git 
   branch: master
 
 # list each of the sidebar modules you want to include, in the order you want them to appear.

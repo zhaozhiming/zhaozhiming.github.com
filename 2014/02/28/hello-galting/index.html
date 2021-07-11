@@ -1,0 +1,225 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>压力测试工具——Galting - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="压力测试工具——Galting"> <!-- TODO: truncate -->
+	<meta name="keywords" content="压力测试工具Galting">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">压力测试工具——Galting</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2014-02-27T23:30:00.000Z" itemprop="datePublished">2月 28, 2014</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/galting/">galting</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2014-2/gatling.png" class="">  
+<p>为什么要写Gatling呢？网上已经有一些介绍Gatling的好文章了，比如两位TW同事的文章，可以看<a target="_blank" rel="noopener" href="http://www.infoq.com/cn/articles/new-generation-server-testing-tool-gatling">这里</a>（我知道Gatling也是因为这位作者介绍的），还有<a target="_blank" rel="noopener" href="http://www.cnblogs.com/huang0925/p/3488313.html">这里</a>。主要是因为最近在使用Gatling做压力测试，感觉这个工具非常好用，所以想结合自己的使用情况也推荐一下。Gatling是基于scala写的一个开源的压力测试工具，它的特点是简单易用，测试报告简洁漂亮，api通俗易懂。</p>
+<span id="more"></span>  
+
+<p>##JDK1.7<br>Gatling是基于jdk1.7开发的，所以还在用jdk1.6的同学需要先下载jdk1.7，才可以启动Gatling。顺便说一下，JDK1.7以后肯定是会替换JDK1.6的，但由于历史原因（主要是JDK1.6用的人实在太多了，我想也是由于JDK1.7升级的太晚了）大家都不想升级，我也这也是JAVA走下坡路的原因。  </p>
+<p>##Scala<br>前面讲过Gatling是用scala写的，像scala、groovy和clojuer都是基于jvm开发的一种语言，不仅继承了java众多成熟的api和稳定的jvm，而且提供了更佳简洁易用的语法。基于某种语言的内核来重新设计一门新语言的这种做法，现在慢慢多了起来，这种做法的最大好处就是不用自己再重新设计编程语言底层相关的一些东西，而且可以使用原有语言大量的成熟api，让新语言就只专注地实现自己的功能，从而使新的语言性能稳定，易用性更高，甚至可以吸引一些原有语言的开发人员。</p>
+<p>##DSL<br>看过Galting的api的人就会发现，它的语法很像自然语言，比如测试一个get类型的http请求，它可能会这样写：</p>
+<figure class="highlight scala"><figcaption><span>demo</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">exec(http(<span class="string">&quot;demo&quot;</span>)</span><br><span class="line">    .get(<span class="string">&quot;http://www.myweb.com/helloworld&quot;</span>)</span><br></pre></td></tr></table></figure> 
+<p>是不是很容易懂，这种就是基于DSL来写的代码，关于DSL可以看<a target="_blank" rel="noopener" href="http://book.douban.com/subject/21964984/">这本书</a>，这本书我还没怎么看，等看完了以后再做分享，DSL不单单只是把代码写得像自然语言那样简单。</p>
+<p>##API<br>要想了解Gatling的各种api，这里推荐看Gatling源码里面的HttpCompileTest这个测试类，这里包含了http几乎所有的api使用示例。下面是截取的代码片段，全部代码可以看<a target="_blank" rel="noopener" href="https://github.com/excilys/gatling/blob/f5aeee2492dedd665b0dcf0b5b60f0a2227a53b6/gatling-bundle/src/test/scala/io/gatling/bundle/test/HTTPCompileTest.scala">这里</a>。  </p>
+<figure class="highlight scala"><figcaption><span>demo</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">.group(<span class="string">&quot;C&#x27;est ici qu&#x27;on trouve des Poneys&quot;</span>) &#123;</span><br><span class="line">			exec(http(<span class="string">&quot;Catégorie Poney&quot;</span>).post(<span class="string">&quot;/&quot;</span>)</span><br><span class="line">				.param(<span class="string">&quot;baz&quot;</span>, <span class="string">&quot;$&#123;qix&#125;&quot;</span>)</span><br><span class="line">				.multivaluedParam(<span class="string">&quot;foo&quot;</span>, <span class="type">Seq</span>(<span class="string">&quot;bar&quot;</span>)))</span><br><span class="line">				.exec(http(<span class="string">&quot;Catégorie Poney&quot;</span>).post(<span class="string">&quot;/&quot;</span>).multivaluedParam(<span class="string">&quot;foo&quot;</span>, <span class="string">&quot;$&#123;bar&#125;&quot;</span>))</span><br><span class="line">				.exec(http(<span class="string">&quot;Catégorie Poney&quot;</span>).get(<span class="string">&quot;/&quot;</span>).queryParam(<span class="string">&quot;omg&quot;</span>, <span class="string">&quot;foo&quot;</span>))</span><br><span class="line">				.exec(http(<span class="string">&quot;Catégorie Poney&quot;</span>).get(<span class="string">&quot;/&quot;</span>).queryParam(<span class="string">&quot;omg&quot;</span>, <span class="string">&quot;$&#123;foo&#125;&quot;</span>))</span><br><span class="line">				.exec(http(<span class="string">&quot;Catégorie Poney&quot;</span>).get(<span class="string">&quot;/&quot;</span>).queryParam(<span class="string">&quot;omg&quot;</span>, session =&gt; <span class="string">&quot;foo&quot;</span>))</span><br><span class="line">				.exec(http(<span class="string">&quot;Catégorie Poney&quot;</span>).get(<span class="string">&quot;/&quot;</span>).multivaluedQueryParam(<span class="string">&quot;omg&quot;</span>, <span class="type">List</span>(<span class="string">&quot;foo&quot;</span>)))</span><br><span class="line">				.exec(http(<span class="string">&quot;Catégorie Poney&quot;</span>).get(<span class="string">&quot;/&quot;</span>).multivaluedQueryParam(<span class="string">&quot;omg&quot;</span>, <span class="string">&quot;$&#123;foo&#125;&quot;</span>))</span><br><span class="line">				.exec(http(<span class="string">&quot;Catégorie Poney&quot;</span>).get(<span class="string">&quot;/&quot;</span>).multivaluedQueryParam(<span class="string">&quot;omg&quot;</span>, <span class="type">List</span>(<span class="string">&quot;foo&quot;</span>)))</span><br><span class="line">		&#125;</span><br><span class="line">		.uniformRandomSwitch(exec(http(<span class="string">&quot;Catégorie Poney&quot;</span>).get(<span class="string">&quot;/&quot;</span>)), exec(http(<span class="string">&quot;Catégorie Licorne&quot;</span>).get(<span class="string">&quot;/&quot;</span>)))</span><br><span class="line">		.randomSwitch(</span><br><span class="line">			<span class="number">40</span>d -&gt; exec(http(<span class="string">&quot;Catégorie Poney&quot;</span>).get(<span class="string">&quot;/&quot;</span>)),</span><br><span class="line">			<span class="number">50</span>d -&gt; exec(http(<span class="string">&quot;Catégorie Licorne&quot;</span>).get(<span class="string">&quot;/&quot;</span>)))</span><br><span class="line">		.randomSwitch(<span class="number">40</span>d -&gt; exec(http(<span class="string">&quot;Catégorie Poney&quot;</span>).get(<span class="string">&quot;/&quot;</span>)))</span><br><span class="line">		.pause(pause2)</span><br></pre></td></tr></table></figure> 
+<p>这里说下randomSwitch这个方法，这个方法可以模拟负载均衡，比如上面40d和50d的两行代码，会有40%的几率执行上面一行代码，50%的几率执行下面一行代码。  </p>
+<p>##Question<br>如果看过上面的示例代码代码，还不知道具体的api怎么用，可以到<a target="_blank" rel="noopener" href="https://groups.google.com/d/forum/gatling">google group</a>上面的分组提问题，很快就有人回答你的问题。github上面的问题区是让开发提bug或者feature用的，所以尽量不要在上面提问题。  </p>
+<p>##Report<br>下面是Gatling的报告截图，界面很漂亮，而且参数很齐全，包括全部的请求数，成功/失败的请求数，请求的最大/最小/平均响应时间等。  </p>
+<img src="/images/post/2014-2/gatling_report.png" class="">
+
+<p>##Http &amp; JMS<br>目前Gatling支持的协议不多，毕竟是一个轻量级的测试工具，目前只支持Http和JMS(以前用的时候还只是支持HTTP)，随着Gatling的发展，以后肯定会支持更多的协议。现在大部分的系统和应用都是提供http协议的api，所以基于http协议的测试也能满足大部分的测试场景了。  </p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+	<h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+    <div class="digital-wallet">
+	  <h6>BTC 地址: 3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+	  <h6>ETH 地址: 0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+    </div>
+    <div class="wechat_appreciates">
+	  <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://example.com/2014/02/28/hello-galting/';
+            this.page.identifier = 'https://example.com/2014/02/28/hello-galting/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2021
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

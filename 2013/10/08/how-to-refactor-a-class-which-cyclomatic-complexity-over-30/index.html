@@ -1,0 +1,265 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>如何重构一个圈复杂度超30的类 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="如何重构一个圈复杂度超30的类"> <!-- TODO: truncate -->
+	<meta name="keywords" content="refactor">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">如何重构一个圈复杂度超30的类</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2013-10-08T12:43:00.000Z" itemprop="datePublished">10月 8, 2013</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/java/">java</a> <a href="/tags/refactor/">refactor</a>
+</div>
+    </div>
+	<div class="entry-content"><p>下面的类是一个老系统的代码，现在放到sonar上面进行扫描，扫出来的结果发现复杂度超过了30。  </p>
+<p>代码复杂度是指代码中的分支数量，比如有一个if分支，代码复杂度就加1，如果if中有“||”或者“&amp;&amp;”那么代码复杂度就加2，for和while同理。一般复杂度超过10的类就算是比较复杂的了，而这个类的复杂度竟然达到了30，代码的糟糕程度可见一斑，现在我们就来重构一下这个类的代码。  </p>
+<span id="more"></span>
+<p>原始文件在**[这里][url1]。**<br>[url1]: <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming/zhaozhiming.github.com/blob/source/source/file/SomeClient(old).java">https://github.com/zhaozhiming/zhaozhiming.github.com/blob/source/source/file/SomeClient(old).java</a>  </p>
+<p>重构开始吧！  </p>
+<p>##多处String类型非空判断</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (StringUtil.isEmpty(username))</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(<span class="string">&quot;username can not be null&quot;</span>);</span><br><span class="line"><span class="keyword">if</span> (StringUtil.isEmpty(password))</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(<span class="string">&quot;password can not be null&quot;</span>);</span><br><span class="line"><span class="keyword">if</span> (udto == <span class="keyword">null</span>)</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(<span class="string">&quot;ICRUploadDTO can not be null&quot;</span>);</span><br></pre></td></tr></table></figure>   
+
+<p>重构之后：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将原来的地方替换为</span></span><br><span class="line">checkStringParamEmpty(username, <span class="string">&quot;username&quot;</span>);</span><br><span class="line">checkStringParamEmpty(password, <span class="string">&quot;password&quot;</span>);</span><br><span class="line">checkStringParamEmpty(udto.getUrlPath(), <span class="string">&quot;urlPath&quot;</span>);</span><br><span class="line">...</span><br><span class="line"><span class="comment">//新增一个方法</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">checkStringParamEmpty</span><span class="params">(String value, String name)</span> <span class="keyword">throws</span> ICRClientException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (StringUtil.isEmpty(value)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(name + <span class="string">&quot; can not be null&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>   
+
+<p>原代码中不止这3个参数的校验，还有很多，越多参数的校验，我们重构后的复杂度就会越低。  </p>
+<p><strong>代码复杂度变化：原来是3，修改后为1。</strong>  </p>
+<p>##多String值判断  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!udto.getPriority().equals(<span class="string">&quot;0&quot;</span>) &amp;&amp; !udto.getPriority().equals(<span class="string">&quot;1&quot;</span>)</span><br><span class="line">    &amp;&amp; !udto.getPriority().equals(<span class="string">&quot;2&quot;</span>) &amp;&amp; !udto.getPriority().equals(<span class="string">&quot;3&quot;</span>))</span><br><span class="line"><span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(<span class="string">&quot;priority must be 0/1/2/3&quot;</span>);</span><br></pre></td></tr></table></figure>   
+
+<p>重构之后：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将原来代码替换为</span></span><br><span class="line">checkValueWithinList(udto.getPriority());</span><br><span class="line">...</span><br><span class="line"><span class="comment">//新增一个方法：</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">checkValueWithinList</span><span class="params">(String priority)</span> <span class="keyword">throws</span> ICRClientException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!Arrays.asList(<span class="string">&quot;0&quot;</span>, <span class="string">&quot;1&quot;</span>, <span class="string">&quot;2&quot;</span>, <span class="string">&quot;3&quot;</span>).contains(priority)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(<span class="string">&quot;priority must be 0/1/2/3&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>   
+
+<p><strong>代码复杂度变化：原来是4，修改后为1。</strong>  </p>
+<p>##对list的非空判断  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (list == <span class="keyword">null</span> || list.size() == <span class="number">0</span>)</span><br><span class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(<span class="string">&quot;list can not be null&quot;</span>);</span><br></pre></td></tr></table></figure>   
+
+<p>重构之后：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将原来的代码替换为</span></span><br><span class="line">checkValueWithinList(udto.getPriority());</span><br><span class="line">...</span><br><span class="line"><span class="comment">//新增一个方法</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">checkListNoNull</span><span class="params">(List list)</span> <span class="keyword">throws</span> ICRClientException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (list.isEmpty()) <span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(<span class="string">&quot;list can not be null&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>   
+
+<p><strong>代码复杂度变化：原来是2，修改后为1。</strong>  </p>
+<p>##多个catch的内容相同  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> code = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    code = httpClient.executeMethod(post);</span><br><span class="line">&#125; <span class="keyword">catch</span> (HttpException e) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(e.getMessage(), e);</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(e.getMessage(), e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>   
+
+<p>重构之后：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将原来的地方替换为</span></span><br><span class="line"><span class="keyword">int</span> code = executeHttpClient(httpClient, post);</span><br><span class="line">...</span><br><span class="line"><span class="comment">//新增一个方法</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">executeHttpClient</span><span class="params">(HttpClient httpClient, PostMethod post)</span> <span class="keyword">throws</span> ICRClientException </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> code;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        code = httpClient.executeMethod(post);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(e.getMessage(), e);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> code;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>   
+
+<p><strong>代码复杂度变化：原来是2，修改后为1。</strong>  </p>
+<p>##if判断结果复杂化  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">if</span> (code == <span class="number">200</span>) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (post.getResponseBodyAsString().equals(<span class="string">&quot;ok&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(e.getMessage(), e);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (code == <span class="number">500</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(post.getResponseBodyAsString());</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(code + <span class="string">&quot;:&quot;</span> + post.getStatusText());</span><br><span class="line">&#125;           </span><br></pre></td></tr></table></figure>   
+
+<p>重构之后:  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将原来代码替换为</span></span><br><span class="line"><span class="keyword">return</span> returnFinialResult(post, code);</span><br><span class="line">...</span><br><span class="line"><span class="comment">//新增一个方法</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">returnFinialResult</span><span class="params">(PostMethod post, <span class="keyword">int</span> code)</span> <span class="keyword">throws</span> ICRClientException, IOException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (code == <span class="number">500</span>) <span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(post.getResponseBodyAsString());</span><br><span class="line">    <span class="keyword">if</span> (code != <span class="number">200</span>) <span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(code + <span class="string">&quot;:&quot;</span> + post.getStatusText());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> post.getResponseBodyAsString().equals(<span class="string">&quot;ok&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ICRClientException(e.getMessage(), e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>   
+
+<p><strong>代码复杂度变化：原来是4，修改后为3。</strong>  </p>
+<p>##本地变量始终不为null  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">uploadToICR</span><span class="params">(String username, String password, ICRUploadDTO udto)</span> <span class="keyword">throws</span> ICRClientException </span>&#123;</span><br><span class="line">    HttpClient httpClient = <span class="keyword">null</span>;</span><br><span class="line">    PostMethod post = <span class="keyword">null</span>;</span><br><span class="line">    httpClient = <span class="keyword">new</span> HttpClient();</span><br><span class="line">	<span class="comment">//some code here</span></span><br><span class="line">	…</span><br><span class="line">	&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">	    <span class="keyword">if</span> (post != <span class="keyword">null</span>) &#123;</span><br><span class="line">	        post.releaseConnection();</span><br><span class="line">	    &#125;</span><br><span class="line">	    <span class="keyword">if</span> (httpClient != <span class="keyword">null</span>) &#123;</span><br><span class="line">	        httpClient.getHttpConnectionManager().closeIdleConnections(<span class="number">0</span>);</span><br><span class="line">	    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>   
+
+<p>重构之后：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">uploadToICR</span><span class="params">(String username, String password, ICRUploadDTO udto)</span> <span class="keyword">throws</span> ICRClientException </span>&#123;</span><br><span class="line">    HttpClient httpClient = <span class="keyword">new</span> HttpClient();</span><br><span class="line">    PostMethod post = <span class="keyword">null</span>;</span><br><span class="line">	<span class="comment">//some code here</span></span><br><span class="line">	…</span><br><span class="line">	&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">	    <span class="keyword">if</span> (post != <span class="keyword">null</span>) &#123;</span><br><span class="line">	        post.releaseConnection();</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>   
+
+<p><strong>代码复杂度变化：原来是1，修改后为0。</strong>  </p>
+<p>##读取IO流的方法，为什么要自己实现？  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">byte</span>[] readData(InputStream ins) <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2048</span>];</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> len = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">byte</span> data[] = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2048</span>];</span><br><span class="line">    <span class="keyword">byte</span>[] result = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> ((len = ins.read(data, <span class="number">0</span>, <span class="number">2048</span>)) != -<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">int</span> newcount = count + len;</span><br><span class="line">            <span class="keyword">if</span> (newcount &gt; buf.length) &#123;</span><br><span class="line">                <span class="keyword">byte</span> newbuf[] = <span class="keyword">new</span> <span class="keyword">byte</span>[Math</span><br><span class="line">                        .max(buf.length &lt;&lt; <span class="number">1</span>, newcount)];</span><br><span class="line">                System.arraycopy(buf, <span class="number">0</span>, newbuf, <span class="number">0</span>, count);</span><br><span class="line">                buf = newbuf;</span><br><span class="line">            &#125;</span><br><span class="line">            System.arraycopy(data, <span class="number">0</span>, buf, count, len);</span><br><span class="line">            count = newcount;</span><br><span class="line">        &#125;</span><br><span class="line">        result = <span class="keyword">new</span> <span class="keyword">byte</span>[count];</span><br><span class="line">        System.arraycopy(buf, <span class="number">0</span>, result, <span class="number">0</span>, count);</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        ins.close();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>   
+
+<p>在原代码里面自己实现了一个对读取IO流字节的方法，这个可以使用apache-io或者guava的API代替：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用apache io API的实现：</span></span><br><span class="line"><span class="keyword">byte</span>[] bytes = IOUtils.toByteArray(inputStream);</span><br><span class="line"><span class="comment">//使用guava API的实现：</span></span><br><span class="line"><span class="keyword">byte</span>[] bytes1 = ByteStreams.toByteArray(inputStream);</span><br></pre></td></tr></table></figure>   
+
+<p><strong>代码复杂度变化：原来是很多，修改后为0。</strong>  </p>
+<p>最终重构后的版本见**[这里][url2]**，最后的代码复杂度从原来的30降到了3。<br>[url2]: <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming/zhaozhiming.github.com/blob/source/source/file/SomeClient(new).java">https://github.com/zhaozhiming/zhaozhiming.github.com/blob/source/source/file/SomeClient(new).java</a>  </p>
+<p>代码写的比较仓促，没有写单元测试，其实最好的做法是在重构之前先写好单元测试，然后再慢慢修改原来的代码，每修改一处地方跑一遍单元测试，这样可以保证你的重构没有破坏原来的代码逻辑。  </p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+	<h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+    <div class="digital-wallet">
+	  <h6>BTC 地址: 3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+	  <h6>ETH 地址: 0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+    </div>
+    <div class="wechat_appreciates">
+	  <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://example.com/2013/10/08/how-to-refactor-a-class-which-cyclomatic-complexity-over-30/';
+            this.page.identifier = 'https://example.com/2013/10/08/how-to-refactor-a-class-which-cyclomatic-complexity-over-30/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2021
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

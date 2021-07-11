@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>《Agile Web Development with Rails》读后感--rails基于web设计的best practices - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="&lt;p&gt;最近看完《Agile Web Development with Rails》一书，受益匪浅。书中先是用一个简单的web应用带你进入Rails的世界，然后在你大致熟悉之后，再带你了解Rails的一些细节，比如ActiveRecord，ActiveController等。最让我觉得Rails美的是其中的一些best practices，这些都可以很好地借鉴到平时的开发中去。下面我简单举几个在Rails中我认为比较好的一些best practies。  &lt;/p&gt;
+&lt;span id=&#34;more&#34;&gt;&lt;/span&gt;  
+&lt;p&gt;###数据库迁移  &lt;/p&gt;
+&lt;p&gt;在Rails中，SQL脚本可以通过命令来生成，生成的脚本以时间戳加意图命名，比如创建表的SQL脚本文件可能是“20120529151027_create_products.rb”，加时间戳可以让人一眼就知道脚本的执行顺序，实际上Rails在也是根据时间戳来执行脚本的。创建完脚本后只要简单的执行”rake db:migrate”命令即可完成脚本的执行，在Rails中会有脚本执行的记录，已经执行过的脚本不会重复执行。另外，在每个SQL脚本中，不仅有执行的操作，还有回滚的操作。比如：  &lt;/p&gt;
+&lt;figure class=&#34;highlight ruby&#34;&gt;&lt;figcaption&gt;&lt;span&gt;demo.rb&lt;/span&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;15&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;class&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;title&#34;&gt;AddPriceToLineItem&lt;/span&gt; &amp;lt; ActiveRecord::Migration&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    def &lt;span class=&#34;keyword&#34;&gt;self&lt;/span&gt;.up&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    　　add_column &lt;span class=&#34;symbol&#34;&gt;:line_items&lt;/span&gt;, &lt;span class=&#34;symbol&#34;&gt;:price&lt;/span&gt;, &lt;span class=&#34;symbol&#34;&gt;:decimal&lt;/span&gt;, &lt;span class=&#34;symbol&#34;&gt;:precision&lt;/span&gt; =&amp;gt; &lt;span class=&#34;number&#34;&gt;8&lt;/span&gt;, &lt;span class=&#34;symbol&#34;&gt;:scale&lt;/span&gt; =&amp;gt; &lt;span class=&#34;number&#34;&gt;2&lt;/span&gt;, &lt;span class=&#34;symbol&#34;&gt;:default&lt;/span&gt; =&amp;gt; &lt;span class=&#34;number&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    　　say_with_time &lt;span class=&#34;string&#34;&gt;&amp;quot;Updating prices...&amp;quot;&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;do&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;      　　LineItem.find(&lt;span class=&#34;symbol&#34;&gt;:all&lt;/span&gt;).each &lt;span class=&#34;keyword&#34;&gt;do&lt;/span&gt; &lt;span class=&#34;params&#34;&gt;|lineitem|&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        　　lineitem.update_attribute &lt;span class=&#34;symbol&#34;&gt;:price&lt;/span&gt;, lineitem.product.price&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;         &lt;span class=&#34;keyword&#34;&gt;end&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    　　&lt;span class=&#34;keyword&#34;&gt;end&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;  　&lt;span class=&#34;keyword&#34;&gt;end&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    def &lt;span class=&#34;keyword&#34;&gt;self&lt;/span&gt;.down&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    　　remove_column &lt;span class=&#34;symbol&#34;&gt;:line_items&lt;/span&gt;, &lt;span class=&#34;symbol&#34;&gt;:price&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;keyword&#34;&gt;end&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;end&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;  
+&lt;p&gt;这里的up方法是正常执行时的操作，down方法则是回滚时所做的操作。如果发现执行的脚本有问题，简单地执行“rake db:rollback”即可回退到脚本执行前的状态。  &lt;/p&gt;
+&lt;p&gt;###Convention over Configuration  &lt;/p&gt;
+&lt;p&gt;在上面创建的脚本中可以看到，Rails的表名都是复数形式，因为Rails认为每张表都会存放很多个同一类型的数据，因此是复数，这种清晰的命名规范不仅体现在数据库，还有其他很多地方。比如，model的文件名都是单数形式存在，controller都是以复数形式存在。Rails将MVC各模块连接起来就是通过COC约定，举个简单例子，product的model文件是product.rb，controller文件是products_controller.rb，而view文件则是放在对应的product文件夹里面，每个view文件名以action方法名开头，这样在写代码的时候就可以不用具体指定要发送给哪个controller，给哪个model存储数据，让哪个页面显示数据，只要你遵守了COC约定，Rails会帮你跳转到最合适的地方。  &lt;/p&gt;
+&lt;p&gt;###分层的页面布局  &lt;/p&gt;
+&lt;p&gt;在书中的例子，作者会建议你将页面分成一个个小的局部文件。实际上Rails也是推荐你这么做的，局部文件只需以下划线开头，Rails就会帮你识别出来。小的页面文件结构简单，容易维护，比如有显示列标题的页面，其中嵌套显示具体行内容的页面，其中再嵌套分页页面文件。对比平时在工作里遇到的一个个硕大无比的jsp文件，rails的页面文件让人有了进入世外桃源的感觉。  &lt;/p&gt;
+&lt;p&gt;Rails还有其他很多的best practices，这里只是简单的介绍。Rails框架集中了很多开发中遇到的常见问题的解决方案，而且是一些最佳的解决方案，像集中了很多经验丰富的大师智慧一样，使用Rails并学习其中的best practices，能让你在web开发上少走很多弯路。   &lt;/p&gt;
+"> <!-- TODO: truncate -->
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">《Agile Web Development with Rails》读后感--rails基于web设计的best practices</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2012-08-05T10:18:00.000Z" itemprop="datePublished">8月 5, 2012</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/ruby/">ruby</a> <a href="/tags/rails/">rails</a>
+</div>
+    </div>
+	<div class="entry-content"><p>最近看完《Agile Web Development with Rails》一书，受益匪浅。书中先是用一个简单的web应用带你进入Rails的世界，然后在你大致熟悉之后，再带你了解Rails的一些细节，比如ActiveRecord，ActiveController等。最让我觉得Rails美的是其中的一些best practices，这些都可以很好地借鉴到平时的开发中去。下面我简单举几个在Rails中我认为比较好的一些best practies。  </p>
+<span id="more"></span>  
+<p>###数据库迁移  </p>
+<p>在Rails中，SQL脚本可以通过命令来生成，生成的脚本以时间戳加意图命名，比如创建表的SQL脚本文件可能是“20120529151027_create_products.rb”，加时间戳可以让人一眼就知道脚本的执行顺序，实际上Rails在也是根据时间戳来执行脚本的。创建完脚本后只要简单的执行”rake db:migrate”命令即可完成脚本的执行，在Rails中会有脚本执行的记录，已经执行过的脚本不会重复执行。另外，在每个SQL脚本中，不仅有执行的操作，还有回滚的操作。比如：  </p>
+<figure class="highlight ruby"><figcaption><span>demo.rb</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AddPriceToLineItem</span> &lt; ActiveRecord::Migration</span></span><br><span class="line">    def <span class="keyword">self</span>.up</span><br><span class="line">    　　add_column <span class="symbol">:line_items</span>, <span class="symbol">:price</span>, <span class="symbol">:decimal</span>, <span class="symbol">:precision</span> =&gt; <span class="number">8</span>, <span class="symbol">:scale</span> =&gt; <span class="number">2</span>, <span class="symbol">:default</span> =&gt; <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    　　say_with_time <span class="string">&quot;Updating prices...&quot;</span> <span class="keyword">do</span></span><br><span class="line">      　　LineItem.find(<span class="symbol">:all</span>).each <span class="keyword">do</span> <span class="params">|lineitem|</span></span><br><span class="line">        　　lineitem.update_attribute <span class="symbol">:price</span>, lineitem.product.price</span><br><span class="line">         <span class="keyword">end</span></span><br><span class="line">    　　<span class="keyword">end</span></span><br><span class="line">  　<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    def <span class="keyword">self</span>.down</span><br><span class="line">    　　remove_column <span class="symbol">:line_items</span>, <span class="symbol">:price</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>  
+<p>这里的up方法是正常执行时的操作，down方法则是回滚时所做的操作。如果发现执行的脚本有问题，简单地执行“rake db:rollback”即可回退到脚本执行前的状态。  </p>
+<p>###Convention over Configuration  </p>
+<p>在上面创建的脚本中可以看到，Rails的表名都是复数形式，因为Rails认为每张表都会存放很多个同一类型的数据，因此是复数，这种清晰的命名规范不仅体现在数据库，还有其他很多地方。比如，model的文件名都是单数形式存在，controller都是以复数形式存在。Rails将MVC各模块连接起来就是通过COC约定，举个简单例子，product的model文件是product.rb，controller文件是products_controller.rb，而view文件则是放在对应的product文件夹里面，每个view文件名以action方法名开头，这样在写代码的时候就可以不用具体指定要发送给哪个controller，给哪个model存储数据，让哪个页面显示数据，只要你遵守了COC约定，Rails会帮你跳转到最合适的地方。  </p>
+<p>###分层的页面布局  </p>
+<p>在书中的例子，作者会建议你将页面分成一个个小的局部文件。实际上Rails也是推荐你这么做的，局部文件只需以下划线开头，Rails就会帮你识别出来。小的页面文件结构简单，容易维护，比如有显示列标题的页面，其中嵌套显示具体行内容的页面，其中再嵌套分页页面文件。对比平时在工作里遇到的一个个硕大无比的jsp文件，rails的页面文件让人有了进入世外桃源的感觉。  </p>
+<p>Rails还有其他很多的best practices，这里只是简单的介绍。Rails框架集中了很多开发中遇到的常见问题的解决方案，而且是一些最佳的解决方案，像集中了很多经验丰富的大师智慧一样，使用Rails并学习其中的best practices，能让你在web开发上少走很多弯路。   </p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+	<h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+    <div class="digital-wallet">
+	  <h6>BTC 地址: 3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+	  <h6>ETH 地址: 0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+    </div>
+    <div class="wechat_appreciates">
+	  <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://example.com/2012/08/05/best-practices-in-rails-with-web-app-design/';
+            this.page.identifier = 'https://example.com/2012/08/05/best-practices-in-rails-with-web-app-design/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2021
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>使用 Expo 打包 iOS 企业版 APP - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="使用 Expo 打包 iOS 企业版 APP"> <!-- TODO: truncate -->
+	<meta name="keywords" content="React Native, Expo, iOS, Enterprise APP">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">使用 Expo 打包 iOS 企业版 APP</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2018-05-11T00:38:00.000Z" itemprop="datePublished">5月 11, 2018</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/React-Native/">React Native</a> <a href="/tags/Expo/">Expo</a> <a href="/tags/iOS/">iOS</a> <a href="/tags/Enterprise-APP/">Enterprise APP</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2018/05/apps.jpg" class="" width="400" height="300">
+
+<p><a target="_blank" rel="noopener" href="https://expo.io/">Expo</a> 为 React Native 开发提供了不少便利性，其中有个最方便的功能就是 APP 打包，Expo 让开发者无需使用 Xcode 和 Android Studio 就可以完成 APP 的打包工作。</p>
+<p>下面就来介绍一下如何使用 Expo 打包 iOS 企业版的 APP。</p>
+<span id="more"></span>
+
+<h2 id="Apple-开发者账号说明"><a href="#Apple-开发者账号说明" class="headerlink" title="Apple 开发者账号说明"></a>Apple 开发者账号说明</h2><p>在打包 iOS APP 之前，你首先需要一个 Apple 开发者账号，需要一个什么样的开发者账号呢？请看下面：</p>
+<table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="center">用途</th>
+<th align="center">限制</th>
+<th align="center">费用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">个人开发者账号</td>
+<td align="center">用于个人开发者上传和发布应用，在 App Store 上显示个人开发者信息</td>
+<td align="center">只能有一个开发者，100 个 iOS 设备 UDID 测试</td>
+<td align="center">$99</td>
+</tr>
+<tr>
+<td align="center">团体账号</td>
+<td align="center">用户团队、公司开发者上传和发布应用，在 App Store 上显示团体名称</td>
+<td align="center">允许多个账号管理，100 个 iOS 设备 UDID 测试</td>
+<td align="center">$99</td>
+</tr>
+<tr>
+<td align="center">企业账号</td>
+<td align="center">用于企业发布应用，使用该证书的应用不需要审核，但是也不能发布到 App Store</td>
+<td align="center">不能上传到 App Store, 无测试设备数量限制</td>
+<td align="center">$299</td>
+</tr>
+</tbody></table>
+<p>企业账号相对其他类型的账号来说，可以免去 App Store 审核的流程，对于快速开发迭代的项目有比较大的帮助。那么要怎么知道自己的开发者账号是哪种类型呢？</p>
+<h3 id="查看开发者账号类型"><a href="#查看开发者账号类型" class="headerlink" title="查看开发者账号类型"></a>查看开发者账号类型</h3><p>假设现在你已经申请好了一个企业账号，那么就可以登陆 <a target="_blank" rel="noopener" href="https://developer.apple.com/">Apple 开发者网站</a>，然后点击<code>Account</code>一栏。</p>
+<img src="/images/post/2018/05/apple_dev.png" class="" width="600" height="200">
+
+<p>再点击侧边栏的<code>Membership</code>，如果看到<code>Program Type</code>是<code>Apple Developer Enterprise Program</code>和<code>Entity Type</code>是<code>In-House / Enterprise</code>，那么证明你的开发者账号类型就是企业账号。</p>
+<img src="/images/post/2018/05/apple_dev_type.png" class="" width="600" height="400">
+
+<h2 id="创建-App-ID"><a href="#创建-App-ID" class="headerlink" title="创建 App ID"></a>创建 App ID</h2><p>确认完自己的账号是企业账号后，就可以开始做一些打包 APP 的准备工作了。</p>
+<p>首先我们需要创建我们 APP 的 ID，这个过程是在 Apple 的开发者网站上面进行的，同样先登录 <a target="_blank" rel="noopener" href="https://developer.apple.com/">Apple 开发者网站</a> 并进去<code>Account</code>页面，然后点击侧边栏的<code>Certificates, IDs &amp; Profiles</code>。</p>
+<img src="/images/post/2018/05/appid1.png" class="" width="300" height="200">
+
+<p>进入<code>Certificates, IDs &amp; Profiles</code>页面后，点击侧边栏的<code>App IDs</code>，然后再点击<code>+</code>（添加）按钮。</p>
+<img src="/images/post/2018/05/appid2.png" class="" width="600" height="400">
+
+<p>在弹出的新建页面中先填写<code>App ID Description</code>，这里可以随便写，只要不和已有的 App ID 重复就行。</p>
+<img src="/images/post/2018/05/appid3.png" class="" width="600" height="400">
+
+<p>然后再填写<code>Bundle ID</code>，注意这里需要和你的 Expo 工程中的配置项 <a target="_blank" rel="noopener" href="https://docs.expo.io/versions/v26.0.0/guides/configuration.html#bundleidentifierthe-bundle-identifier-for-your-ios-standalone"><code>bundleIdentifier</code></a> 保持一致，推荐是域名的形式，比如<code>com.your.app</code>。</p>
+<img src="/images/post/2018/05/appid4.png" class="" width="600" height="500">
+
+<p>下一步是选择 App 所需的服务，比如你的 APP 需要消息推送的功能，那么就要勾选里面的<code>Push Notifications</code>，最后点击<code>Continue</code>按钮。</p>
+<img src="/images/post/2018/05/appid5.png" class="" width="600" height="500">
+
+<p>最后再确认页面上确认信息无误后，点击<code>Register</code>按钮即创建 App ID 成功了。</p>
+<img src="/images/post/2018/05/appid6.png" class="" width="300" height="600">
+
+<h2 id="生成-Certificate-Signing-Reuest（CSR）文件"><a href="#生成-Certificate-Signing-Reuest（CSR）文件" class="headerlink" title="生成 Certificate Signing Reuest（CSR）文件"></a>生成 Certificate Signing Reuest（CSR）文件</h2><p>接下来是生成 CSR 文件，这个文件是后面生成发布证书所需要的，这一步骤在本地 Mac 电脑上就可以完成，无需上 Apple 开发者网站。</p>
+<p>首先在 Mac 电脑上打开<code>Keychain Access</code>，然后在左上角菜单上选择<code>Request a Certification From a Certificate Authority...</code>，如下图所示：</p>
+<img src="/images/post/2018/05/private1.png" class="" width="600" height="300">
+
+<p>在创建页面上添加你的 Apple 用户邮箱，并在<code>Request is</code> 中选择<code>Saved to disk</code>，最后点击<code>Continue</code>按钮。</p>
+<img src="/images/post/2018/05/private2.png" class="" width="600" height="300">
+
+<p>选择文件的保存地址然后点击<code>Save</code>按钮即完成 CSR 文件的创建了，文件的后缀为<code>certSigningRequest</code>。</p>
+<img src="/images/post/2018/05/private3.png" class="" width="400" height="200">
+
+<h2 id="发布证书"><a href="#发布证书" class="headerlink" title="发布证书"></a>发布证书</h2><p>接着咱们来生成发布 APP 必不可少的一个文件——发布证书，而且需要将其导出为<code>p12</code>文件，因为这种类型的文件才是 Expo 所需要的，这一步骤需要在 Apple 开发者网站和本地电脑进行。</p>
+<p>和生成<code>App ID</code>一样，首先咱们进去到<code>Certificates, IDs &amp; Profiles</code>页面，点击侧边栏的<code>Certificates</code>下面的<code>Production</code>，表示生产环境上的证书。然后点击右上角的<code>+</code>（添加）按钮。</p>
+<img src="/images/post/2018/05/production1.png" class="" width="600" height="400">
+
+<p>选择证书类型，因为我们是制作企业版 APP，所以这里选择<code>In-House and Ad Hoc</code>。</p>
+<img src="/images/post/2018/05/production2.png" class="" width="600" height="600">
+
+<p>然后选择之前的 CSR 文件并上传，完了点击<code>Generate</code>按钮，这样一个后缀为<code>cer</code>的文件会下载到你的电脑。</p>
+<img src="/images/post/2018/05/production3.png" class="" width="600" height="300">
+
+<p>双击<code>cer 文件</code>会将发布证书导入到你的<code>Keychain</code>，我们在<code>Keychain</code>选择<code>Certificates</code>，在里面找到刚导入的证书，然后<strong>同时选中证书和私钥</strong>，注意这里要同时选择这 2 个文件，不然导出的文件会有问题，然后点击右键选择<code>Export 2 items</code></p>
+<img src="/images/post/2018/05/production4.png" class="" width="600" height="500">
+
+<p>在弹出的对话框中我们选择好文件保存路径并点击保存按钮，这样发布证书的<code>p12</code>文件就创建完成了。</p>
+<img src="/images/post/2018/05/production5.png" class="" width="400" height="200">
+
+<h2 id="消息推送证书"><a href="#消息推送证书" class="headerlink" title="消息推送证书"></a>消息推送证书</h2><p>消息推送证书的<code>p12</code>文件和发布证书的创建过程基本一致，所不同的是在选择证书类型时要选择<code>Apple Push Notification Service SSL (Sandbox &amp; Production)</code>。</p>
+<img src="/images/post/2018/05/push1.png" class="" width="600" height="400">
+
+<p>还有需要选择对应的 App Id：</p>
+<img src="/images/post/2018/05/push2.png" class="" width="600" height="500">
+
+<p>其他步骤就和发布证书完全一样。</p>
+<h2 id="APP-描述文件"><a href="#APP-描述文件" class="headerlink" title="APP 描述文件"></a>APP 描述文件</h2><p>最后一个准备文件是 APP 的描述文件，同样是在 Apple 开发者网站上生成的。</p>
+<p>进入<code>Certificates, IDs &amp; Profiles</code>页面后，点击侧边栏的<code>Provisioning Profiles</code>的<code>Distribution</code>，然后再点击<code>+</code>（添加）按钮。</p>
+<img src="/images/post/2018/05/mobile_profile1.png" class="" width="600" height="700">
+
+<p>然后是选择描述文件的类型，这里我们需要和发布证书一样选择<code>In House</code>。</p>
+<img src="/images/post/2018/05/mobile_profile2.png" class="" width="600" height="700">
+
+<p>接着选择 App Id。</p>
+<img src="/images/post/2018/05/mobile_profile3.png" class="" width="600" height="400">
+
+<p>再选择发布证书。</p>
+<img src="/images/post/2018/05/mobile_profile4.png" class="" width="600" height="400">
+
+<p>填写描述文件名称。</p>
+<img src="/images/post/2018/05/mobile_profile5.png" class="" width="600" height="400">
+
+<p>最后下载该文件即完成 APP 描述文件的创建，该文件的后缀是<code>mobileprovision</code>。</p>
+<img src="/images/post/2018/05/mobile_profile6.png" class="" width="600" height="400">
+
+<h2 id="Expo-发布"><a href="#Expo-发布" class="headerlink" title="Expo 发布"></a>Expo 发布</h2><p>所有东西都准备好之后，我们就可以开始召唤神龙了。。。哦不，就可以开始用 Expo 来打包 APP 了。</p>
+<p>Expo 的打包 iOS APP 命令是<code>exp build:ios</code>，参数<code>-e</code>是指打包企业版 APP，<code>-c</code>为清除之前上传的文件，然后重新上传，没有<code>-c</code>参数的话会延用上次上传的文件。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ exp build:ios -e -c</span><br></pre></td></tr></table></figure>
+
+<p>接着 Expo 会提示你选择：</p>
+<ul>
+<li>让 Expo 来帮忙生成证书文件</li>
+<li>还是自己上传证书文件</li>
+</ul>
+<p>如果 APP 是要发布到 App Store 的话，可以选择第一种方式来打包，但我们是企业版 APP，所以这里要选择自己上传证书文件。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">16:31:44 [exp] Checking <span class="keyword">if</span> current build exists...</span><br><span class="line"></span><br><span class="line">16:31:45 [exp] No currently active or previous builds <span class="keyword">for</span> this project.</span><br><span class="line">16:31:46 [exp] Removed existing credentials from expo servers</span><br><span class="line">? How would you like to upload your credentials?</span><br><span class="line"> I will provide all the credentials and files needed, Expo does limited</span><br><span class="line"> validation</span><br></pre></td></tr></table></figure>
+
+<p>接着 Expo 会要求你输入你的 Apple 开发者账号密码进行登陆认证。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">We need your Apple ID/password to ensure the correct teamID and appID</span><br><span class="line"></span><br><span class="line">Note: Expo does not keep your Apple ID or your Apple password.</span><br><span class="line"></span><br><span class="line">? What<span class="string">&#x27;s your Apple ID? xxxxxxxxx</span></span><br><span class="line"><span class="string">? Password? [hidden]</span></span><br></pre></td></tr></table></figure>
+
+<p>如果你的账号有多个开发者账号，需要选择正确的那一个，即企业账号。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">16:32:05 [exp] Validating Credentials...</span><br><span class="line">16:32:13 [exp] You have 2 teams</span><br><span class="line">1) xxx (In-House)</span><br><span class="line">2) yyy (Company/Organization)</span><br><span class="line">? Which Team ID to use? 1) <span class="string">&quot;xxx&quot;</span> (In-House)</span><br></pre></td></tr></table></figure>
+
+<p>然后我们就可以来上传之前准备好的文件了，依次上传的文件是：发布证书的 p12 文件，消息推送证书的 p12 文件和 APP 的描述文件。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">16:32:58 [exp]</span><br><span class="line">WARNING! In this mode, we won<span class="string">&#x27;t be able to make sure your certificates,</span></span><br><span class="line"><span class="string">or provisioning profile are valid. Please double check that you&#x27;</span>re</span><br><span class="line">uploading valid files <span class="keyword">for</span> your app otherwise you may encounter strange errors!</span><br><span class="line"></span><br><span class="line">Make sure you<span class="string">&#x27;ve created your app ID on the developer portal, that your app ID</span></span><br><span class="line"><span class="string">is in app.json as `bundleIdentifier`, and that the provisioning profile you</span></span><br><span class="line"><span class="string">upload matches that team ID and app ID.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">16:32:58 [exp] Please provide your distribution certificate P12:</span></span><br><span class="line"><span class="string">? Path to P12 file: /xxxx/Certificates.p12</span></span><br><span class="line"><span class="string">? P12 password: [hidden]</span></span><br><span class="line"><span class="string">16:33:34 [exp] Please provide the path to your push notification cert P12</span></span><br><span class="line"><span class="string">? Path to P12 file: /xxxx/push_Certificates.p12</span></span><br><span class="line"><span class="string">? P12 password: [hidden]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">16:33:52 [exp] Please provide the path to your .mobile provisioning profile</span></span><br><span class="line"><span class="string">? Path to your .mobile provisioning Profile /xxxx/app.mobileprovision</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">16:34:10 [exp] Encrypted certP12,certPassword,pushP12,pushPassword,provisioningProfile,teamId and saved to expo servers</span></span><br></pre></td></tr></table></figure>
+
+<p>Expo 将文件上传到他们的服务器进行打包，同时会给出打包程序的链接，你可以通过链接了解打包的进度，一旦完成打包，最后会给出打包好的文件的下载链接，你也可以直接上 Expo 的网站上面点击下载按钮进行下载。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">16:34:10 [exp] Publishing to channel <span class="string">&#x27;default&#x27;</span>...</span><br><span class="line">16:34:24 [exp] Warning: <span class="string">&#x27;react&#x27;</span> peer dependency missing. Run `npm ls` <span class="keyword">in</span> /xxxx/xxx to see full warning.</span><br><span class="line">16:34:24 [exp]</span><br><span class="line">16:34:24 [exp] If there is an issue running your project, please run `npm install` <span class="keyword">in</span> /xxxx/xxx and restart.</span><br><span class="line">16:34:24 [exp] Building iOS bundle</span><br><span class="line">16:35:28 [exp] Building Android bundle</span><br><span class="line">16:36:30 [exp] Analyzing assets</span><br><span class="line">16:36:30 [exp] Uploading assets</span><br><span class="line">16:36:34 [exp] No assets changed, skipped.</span><br><span class="line">16:36:34 [exp] Uploading JavaScript bundles</span><br><span class="line">16:36:42 [exp] Published</span><br><span class="line">16:36:42 [exp] Your URL is</span><br><span class="line"></span><br><span class="line">https://exp.host/@xxxx/xxxx</span><br><span class="line"></span><br><span class="line">16:36:42 [exp] Building...</span><br><span class="line">16:36:44 [exp] Build started, it may take a few minutes to complete.</span><br><span class="line">16:36:44 [exp] You can monitor the build at</span><br><span class="line"></span><br><span class="line"> https://expo.io/builds/xxxxxx</span><br><span class="line"></span><br><span class="line">|16:36:44 [exp] Waiting <span class="keyword">for</span> build to complete. You can press Ctrl+C to <span class="built_in">exit</span>.</span><br><span class="line">16:54:02 [exp] Successfully built standalone app: https://xxx/.../archive.ipa</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>从上面的过程可以看到，之前的准备工作都是 iOS APP 打包所需要的（如果你的 APP 是上传到 App Store，Expo 还可以帮你完成这一部分的工作），后面就直接交给 Expo 处理了，你唯一要做的只是敲一下命令，比原来的打包方式效率提高了很多。</p>
+<p>如果你对这种方式感兴趣的话，也不妨下载 Expo 来试一下吧。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+	<h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+    <div class="digital-wallet">
+	  <h6>BTC 地址: 3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+	  <h6>ETH 地址: 0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+    </div>
+    <div class="wechat_appreciates">
+	  <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://example.com/2018/05/11/use-expo-to-publish-ios-enterprise-app/';
+            this.page.identifier = 'https://example.com/2018/05/11/use-expo-to-publish-ios-enterprise-app/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2021
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

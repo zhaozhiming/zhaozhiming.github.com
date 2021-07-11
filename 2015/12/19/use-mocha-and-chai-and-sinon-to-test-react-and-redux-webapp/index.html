@@ -1,0 +1,257 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>使用Mocha + chai + sinon 测试React + Redux的web应用 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="使用Mocha + chai + sinon 测试React + Redux的web应用"> <!-- TODO: truncate -->
+	<meta name="keywords" content="react, mocha, chai, sinon, redux, test">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">使用Mocha + chai + sinon 测试React + Redux的web应用</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2015-12-19T11:29:00.000Z" itemprop="datePublished">12月 19, 2015</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/react/">react</a> <a href="/tags/mocha/">mocha</a> <a href="/tags/chai/">chai</a> <a href="/tags/sinon/">sinon</a> <a href="/tags/redux/">redux</a> <a href="/tags/test/">test</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2015-12/front_end_test.png" class="">  
+<p>今天来介绍一下如何使用Mocha + Chai + Sinon测试基于Redux + React的web应用，以及介绍一些在使用过程中遇到的问题和解决方法。  </p>
+<span id="more"></span>  
+<h2 id="Mocha"><a href="#Mocha" class="headerlink" title="Mocha"></a>Mocha</h2><p><a target="_blank" rel="noopener" href="https://mochajs.org/">Mocha</a>是一个JS的测试框架，类似于Java中的Junit、Python中的nose。Mocha的使用非常简单，使用<code>describe</code>和<code>it</code>就可以写单元测试，下面是代码示例。  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;expect&#125; <span class="keyword">from</span> <span class="string">&#x27;chai&#x27;</span>;</span><br><span class="line"></span><br><span class="line">describe(<span class="string">&#x27;Array&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  describe(<span class="string">&#x27;#indexOf()&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    it(<span class="string">&#x27;should return -1 when the value is not present&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      expect([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>].indexOf(<span class="number">5</span>)).to.be.equal(-<span class="number">1</span>);</span><br><span class="line">      expect([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>].indexOf(<span class="number">0</span>)).to.be.equal(-<span class="number">1</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="Chai"><a href="#Chai" class="headerlink" title="Chai"></a>Chai</h2><p><a target="_blank" rel="noopener" href="http://chaijs.com/">Chai</a>是一个单元测试的验证框架，它有3种不同形式的校验：expect、should和assert。expect和should的方式让写出来的测试代码更像自然语言，让业务人员也可以看懂，而assert方式是传统单元测试断言的方式，如果以前习惯写Java的单元测试会对这种方式比较熟悉。  </p>
+<img src="/images/post/2015-12/chai.png" class="">  
+<h2 id="Sinon"><a href="#Sinon" class="headerlink" title="Sinon"></a>Sinon</h2><p><a target="_blank" rel="noopener" href="http://sinonjs.org/">Sinon</a>是一个mock框架，类似Java的mockito。它可以对任何对象进行mock，更重要的是它提供了一些对mock对象的校验方法。  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建mock对象</span></span><br><span class="line"><span class="keyword">const</span> callback = sinon.spy();</span><br><span class="line"><span class="comment">// 调用测试方法</span></span><br><span class="line"><span class="keyword">const</span> proxy = once(callback);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 校验mock对象是否被调用;</span></span><br><span class="line">assert(callback.called);</span><br><span class="line"><span class="comment">// 校验被调用了多少次</span></span><br><span class="line">assert(callback.calledOnce);</span><br><span class="line">assert.equals(callback.callCount, <span class="number">1</span>);</span><br><span class="line"><span class="comment">// 校验被哪个对象调用</span></span><br><span class="line"> assert(callback.calledOn(obj));</span><br><span class="line"><span class="comment">// 校验被调用时传入了哪些参数</span></span><br><span class="line">assert(callback.calledWith(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>));</span><br></pre></td></tr></table></figure>
+<h2 id="Redux-React"><a href="#Redux-React" class="headerlink" title="Redux + React"></a>Redux + React</h2><p>React不用介绍了，今年最火的一个前端框架，而<a target="_blank" rel="noopener" href="https://github.com/rackt/redux">Redux</a>是一个传递、处理state数据的JS框架，配合React可以很方便的处理staet数据，从而达到通过state控制渲染页面的目的。作者<code>Dan Abramov</code>自己拍了一个Redux的教学视频，里面通过一个个demo演示了如何写react和redux，视频可以见<a target="_blank" rel="noopener" href="https://egghead.io/series/getting-started-with-redux">这里</a>。  </p>
+<p>对于Redux和React的应用，最主要的代码有3个部分，分别是actions，reducers，components。actions是发送一个状态到reducers，reducers根据状态返回修改后的state，components接收到state后刷新页面，所以我们的测试主要针对这3个部分。 </p>
+<h3 id="actons测试"><a href="#actons测试" class="headerlink" title="actons测试"></a>actons测试</h3><p>action的代码可能是这样的，接收从component传过来的一个参数，返回一个带有type属性的一个对象。  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">addTodo</span>(<span class="params">text</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;<span class="attr">type</span>: ADD_TODO, text&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>actions的测试比较简单，就是返回一个对象，测试代码可以这样写：  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;expect&#125; <span class="keyword">from</span> <span class="string">&#x27;chai&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> actions <span class="keyword">from</span> <span class="string">&#x27;actions/todos&#x27;</span>;</span><br><span class="line"></span><br><span class="line">describe(<span class="string">&#x27;todo actions&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  it(<span class="string">&#x27;add todo should create ADD_TODO action&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    expect(actions.addTodo(<span class="string">&#x27;Use Redux&#x27;</span>)).to.deep.equal(&#123;</span><br><span class="line">      <span class="attr">type</span>: <span class="string">&#x27;add_todo&#x27;</span>,</span><br><span class="line">      <span class="attr">text</span>: <span class="string">&#x27;Use Redux&#x27;</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这里使用了chai的expect校验方式，传入一个字符串，验证是否返回正确的对象，这里使用了<code>to.deep.equal</code>这个校验方法，可以校验对象的属性是否相等，而对于number、bool等基本类型的校验可以使用<code>to.be.equal</code>这个校验方法。  </p>
+<h3 id="reducers测试"><a href="#reducers测试" class="headerlink" title="reducers测试"></a>reducers测试</h3><p>reducers代码如下，在原来的state基础上加上一个新的todo对象。  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">todos</span>(<span class="params">state = initState, action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.type) &#123;</span><br><span class="line">  <span class="keyword">case</span> ADD_TODO:</span><br><span class="line">    <span class="keyword">return</span> [</span><br><span class="line">      ...state,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">text</span>: action.text,</span><br><span class="line">        <span class="attr">completed</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">id</span>: <span class="keyword">new</span> <span class="built_in">Date</span>().getTime(),</span><br><span class="line">      &#125;,</span><br><span class="line">    ];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试代码可以这样写：  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">describe(<span class="string">&#x27;reducers&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  describe(<span class="string">&#x27;todos&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    it(<span class="string">&#x27;should add todo correctly&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> state = todos(&#123;&#125;, &#123;<span class="attr">type</span>: ADD_TODO, <span class="attr">text</span>: <span class="string">&#x27;foo&#x27;</span>&#125;);</span><br><span class="line">      expect(state.length).to.be.equal(<span class="number">1</span>);</span><br><span class="line">      expect(state[<span class="number">0</span>].text).to.be.equal(<span class="string">&#x27;foo&#x27;</span>);</span><br><span class="line">      expect(state[<span class="number">0</span>].completed).to.be.equal(<span class="literal">false</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>测试时传入一个空的state对象和一个action对象，验证返回的state是否增加了一个todo对象。  </p>
+<h3 id="components测试"><a href="#components测试" class="headerlink" title="components测试"></a>components测试</h3><p>components的测试比较复杂，除了测试render后的页面，还需要测试一些component的DOM方法，比如click，change，doubleclick等。下面是一个Header组件，它有<code>h1</code>和另外一个自定义组件<code>TodoInput</code>，其中还有一个<code>handleSave</code>的自定义方法，所以我们要测试的就主要是render和这个方法。  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; PropTypes, Component &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> TodoInput <span class="keyword">from</span> <span class="string">&#x27;./TodoInput&#x27;</span>;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Header</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">handleSave</span>(<span class="params">text</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (text &amp;&amp; text.length !== <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="built_in">this</span>.props.actions.addTodo(text);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="xml"><span class="tag">&lt;<span class="name">header</span> <span class="attr">className</span>=<span class="string">&quot;header&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Todo List<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">TodoInput</span> <span class="attr">newTodo</span> <span class="attr">placeholder</span>=<span class="string">&quot;请录入...&quot;</span> <span class="attr">onSave</span>=<span class="string">&#123;(text)</span> =&gt;</span> this.handleSave(text)&#125;/&gt;</span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">header</span>&gt;</span></span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">Header.propTypes = &#123;</span><br><span class="line">  <span class="attr">actions</span>: PropTypes.object.isRequired,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> Header;</span><br></pre></td></tr></table></figure>
+<p>测试React的component，需要用到react的一个测试组件<a target="_blank" rel="noopener" href="https://facebook.github.io/react/docs/test-utils.html">Test Utils</a>，在写测试代码之前，需要先构造组件render的页面，渲染页面的props参数和render页面的对象，这些在后面的测试中非常有用。  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sinon <span class="keyword">from</span> <span class="string">&#x27;sinon&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123;expect&#125; <span class="keyword">from</span> <span class="string">&#x27;chai&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> TestUtils <span class="keyword">from</span> <span class="string">&#x27;react-addons-test-utils&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> Header <span class="keyword">from</span> <span class="string">&#x27;components/Header&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> TodoInput <span class="keyword">from</span> <span class="string">&#x27;components/TodoInput&#x27;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">setup</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> actions = &#123;<span class="attr">addTodo</span>: sinon.spy()&#125;;</span><br><span class="line">  <span class="keyword">const</span> props = &#123;<span class="attr">actions</span>: actions&#125;;</span><br><span class="line">  <span class="keyword">const</span> renderer = TestUtils.createRenderer();</span><br><span class="line">  renderer.render(<span class="xml"><span class="tag">&lt;<span class="name">Header</span> &#123;<span class="attr">...props</span>&#125; /&gt;</span></span>);</span><br><span class="line">  <span class="keyword">const</span> output = renderer.getRenderOutput();</span><br><span class="line">  <span class="keyword">return</span> &#123;props, output, renderer&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>构造完这些对象后，我们先对render方法进行测试。  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">describe(<span class="string">&#x27;Header&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">   it(<span class="string">&#x27;should render correctly&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">     <span class="keyword">const</span> &#123; output &#125; = setup();</span><br><span class="line"></span><br><span class="line">     expect(output.type).to.be.equal(<span class="string">&#x27;header&#x27;</span>);</span><br><span class="line">     expect(output.props.className).to.be.equal(<span class="string">&#x27;header&#x27;</span>);</span><br><span class="line"></span><br><span class="line">     <span class="keyword">const</span> [ h1, input ] = output.props.children;</span><br><span class="line"></span><br><span class="line">     expect(h1.type).to.be.equal(<span class="string">&#x27;h1&#x27;</span>);</span><br><span class="line">     expect(h1.props.children).to.be.equal(<span class="string">&#x27;Todo List&#x27;</span>);</span><br><span class="line"></span><br><span class="line">     expect(input.type).to.be.equal(TodoInput);</span><br><span class="line">     expect(input.props.newTodo).to.be.equal(<span class="literal">true</span>);</span><br><span class="line">     expect(input.props.placeholder).to.be.equal(<span class="string">&#x27;请录入...&#x27;</span>);</span><br><span class="line">   &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>首先测试component的第一层——header，验证其type和className，然后通过children获取其下层组件<code>h1</code>和<code>TodoInput</code>，再对这2个组件进行校验。  </p>
+<p>接着测试TodoInput的onSave方法，它实际调用的是<code>handleSave</code>方法，方法会判断参数text的长度是否为0来决定是否调用actions的addTodo方法。  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">it(<span class="string">&#x27;should call addTodo if length of text is greater than 0&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; output, props &#125; = setup();</span><br><span class="line">  <span class="keyword">const</span> input = output.props.children[<span class="number">1</span>];</span><br><span class="line">  input.props.onSave(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">  expect(props.actions.addTodo.callCount).to.be.equal(<span class="number">0</span>);</span><br><span class="line">  input.props.onSave(<span class="string">&#x27;Use Redux&#x27;</span>);</span><br><span class="line">  expect(props.actions.addTodo.callCount).to.be.equal(<span class="number">1</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这里使用sinon把action的addTodo方法mock掉了，然后再验证该方法是否有调用。  </p>
+<h2 id="React组件使用了CSS文件"><a href="#React组件使用了CSS文件" class="headerlink" title="React组件使用了CSS文件"></a>React组件使用了CSS文件</h2><p>在写React的components时可能会加上自己定义的一些css文件（或者是less和sass等），这在mocha运行测试时会报错，报无法解析css语法的错误。我们可以通过编写自定义的mocha css编译器来解决这个问题。  </p>
+<figure class="highlight js"><figcaption><span>css-null-compiler.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">noop</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">require</span>.extensions[<span class="string">&#x27;.styl&#x27;</span>] = noop;</span><br><span class="line"><span class="comment">// you can add whatever you wanna handle</span></span><br><span class="line"><span class="built_in">require</span>.extensions[<span class="string">&#x27;.scss&#x27;</span>] = noop;</span><br><span class="line"><span class="built_in">require</span>.extensions[<span class="string">&#x27;.css&#x27;</span>] = noop;</span><br><span class="line"><span class="comment">// ..etc</span></span><br></pre></td></tr></table></figure>
+<p>然后在运行mocha时加上刚写的编译器：<code>mocha /your/test.spec.js --compilers css:css-null-compiler.js</code>。  </p>
+<h2 id="webpack使用了alias"><a href="#webpack使用了alias" class="headerlink" title="webpack使用了alias"></a>webpack使用了alias</h2><p>在使用webpack时我们会通过别名（alias）的方法来简化我们import其他文件时的路径，比如原来import时需要这样写：  </p>
+<figure class="highlight js"><figcaption><span>css-null-compiler.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Header <span class="keyword">from</span> <span class="string">&#x27;../../src/components/Header&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>使用了alias之后可以这样：  </p>
+<figure class="highlight js"><figcaption><span>css-null-compiler.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Header <span class="keyword">from</span> <span class="string">&#x27;src/components/Header&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>但是这种路径在测试的时候就会报找不到文件路径的错误，因为直接使用Mocha运行测试时并没有设置路径别名。  </p>
+<p>因此我们需要使用几个工具来解决这个问题，分别是<a target="_blank" rel="noopener" href="https://www.npmjs.com/package/mock-require">mock-require</a>和<a target="_blank" rel="noopener" href="https://www.npmjs.com/package/proxyquire">proxyquire</a>。  </p>
+<p>首先在mocha的before方法中通过mock-require来替换别名路径，然后在mocha的beforeEach中用proxyquire来调用被测试的module，具体代码如下：  </p>
+<figure class="highlight js"><figcaption><span>css-null-compiler.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> proxyquire <span class="keyword">from</span> <span class="string">&#x27;proxyquire&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> mockrequire <span class="keyword">from</span> <span class="string">&#x27;mock-require&#x27;</span>;</span><br><span class="line"></span><br><span class="line">before(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// mock the alias path, point to the actual path</span></span><br><span class="line">  mockrequire(<span class="string">&#x27;actions/youractions&#x27;</span>, <span class="string">&#x27;your/actual/action/path/from/your/test/file&#x27;</span>);</span><br><span class="line">  <span class="comment">// or mock with a function</span></span><br><span class="line">  mockrequire(<span class="string">&#x27;actions/youractions&#x27;</span>, &#123;<span class="attr">actionMethod</span>: <span class="function">() =&gt;</span> &#123;...&#125;));</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> app;</span><br><span class="line">beforeEach(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  app = proxyquire(<span class="string">&#x27;./app&#x27;</span>, &#123;&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//test code</span></span><br><span class="line">describe(<span class="string">&#x27;xxx&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  it(<span class="string">&#x27;xxxx&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="React的组件中使用了DOM变量"><a href="#React的组件中使用了DOM变量" class="headerlink" title="React的组件中使用了DOM变量"></a>React的组件中使用了DOM变量</h2><p>在做components测试时还会遇到一个问题，比如在某些组件中使用了DOM的一些全局变量，比如<code>window</code>，<code>document</code>等，这些只有在浏览器中才会有，而mocha测试我们是在命令行中执行的，并没有浏览器的这些变量。  </p>
+<p>要解决这个问题有2种方法，一种是使用<a target="_blank" rel="noopener" href="http://karma-runner.github.io/0.13/index.html">Karma</a>来做单元测试。Karma是一个测试运行器，它会启动一个浏览器来运行测试，比较适合端到端的页面测试。但单元测试要使用浏览器来运行就显得有点浪费了，而且会影响测试的速度。  </p>
+<p>所以我们使用第二种方法，使用<a target="_blank" rel="noopener" href="https://github.com/tmpvar/jsdom">jsdom</a>来模拟DOM结构，首先我们要创建一个js文件来模拟DOM。  </p>
+<figure class="highlight js"><figcaption><span>dom.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jsdom <span class="keyword">from</span> <span class="string">&#x27;jsdom&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> mockrequire <span class="keyword">from</span> <span class="string">&#x27;mock-require&#x27;</span>;</span><br><span class="line"><span class="comment">// setup the simplest document possible</span></span><br><span class="line"><span class="keyword">const</span> doc = jsdom.jsdom(<span class="string">&#x27;&lt;!doctype html&gt;&lt;html&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;&#x27;</span>);</span><br><span class="line"><span class="comment">// get the window object out of the document</span></span><br><span class="line"><span class="keyword">const</span> win = doc.defaultView;</span><br><span class="line"><span class="comment">// set globals for mocha that make access to document and window feel</span></span><br><span class="line"><span class="comment">// natural in the test environment</span></span><br><span class="line"><span class="built_in">global</span>.document = doc;</span><br><span class="line"><span class="built_in">global</span>.window = win;</span><br><span class="line"><span class="comment">// from mocha-jsdom https://github.com/rstacruz/mocha-jsdom/blob/master/index.js#L80</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">propagateToGlobal</span>(<span class="params"><span class="built_in">window</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> <span class="built_in">window</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">window</span>.hasOwnProperty(key)) <span class="keyword">continue</span>;</span><br><span class="line">    <span class="keyword">if</span> (key <span class="keyword">in</span> <span class="built_in">global</span>) <span class="keyword">continue</span>;</span><br><span class="line">    <span class="built_in">global</span>[key] = <span class="built_in">window</span>[key];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">window</span>.matchMedia = <span class="built_in">window</span>.matchMedia || <span class="function"><span class="keyword">function</span> <span class="title">matchMedia</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">matches</span>: <span class="literal">false</span>,</span><br><span class="line">      <span class="attr">addListener</span>: <span class="function">() =&gt;</span> &#123;&#125;,</span><br><span class="line">      <span class="attr">removeListener</span>: <span class="function">() =&gt;</span> &#123;&#125;,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">propagateToGlobal(win);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>然后在<code>mocha.opts</code>文件中加入对这个文件的引用，<code>mocha.opts</code>文件是mocha的配置文件，一般放在test目录下面，通过配置该文件可以在调用mocha命令时少写一些参数。  </p>
+<figure class="highlight js"><figcaption><span>dom.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">--<span class="built_in">require</span> test/dom.js </span><br><span class="line">--reporter dot</span><br><span class="line">--ui bdd</span><br></pre></td></tr></table></figure>
+<p>这样以后在运行mocha时就会自动加载<code>dom.js</code>文件了。  </p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+	<h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+    <div class="digital-wallet">
+	  <h6>BTC 地址: 3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+	  <h6>ETH 地址: 0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+    </div>
+    <div class="wechat_appreciates">
+	  <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://example.com/2015/12/19/use-mocha-and-chai-and-sinon-to-test-react-and-redux-webapp/';
+            this.page.identifier = 'https://example.com/2015/12/19/use-mocha-and-chai-and-sinon-to-test-react-and-redux-webapp/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2021
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

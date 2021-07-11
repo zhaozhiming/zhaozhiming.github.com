@@ -1,0 +1,231 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>为什么我要使用Vim - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="为什么我要使用"> <!-- TODO: truncate -->
+	<meta name="keywords" content="vim">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">为什么我要使用Vim</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2015-08-09T00:47:00.000Z" itemprop="datePublished">8月 9, 2015</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/vi/">vi</a> <a href="/tags/vim/">vim</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2015-8/vi.png" class="" width="250" height="250">  
+<p>之前做Java开发的时候一直使用IDE，因为Java的IDE工具开发的太好了，以致没有机会深入接触像<code>vi</code>和<code>emacs</code>之类的神编辑器，但最近转python让我有机会深入了解了<code>vi</code>，使用过后不仅觉得方便，而且被其强大深深所吸引。</p>
+<span id="more"></span>  
+<h2 id="为什么使用vi"><a href="#为什么使用vi" class="headerlink" title="为什么使用vi"></a>为什么使用vi</h2><p>最早是使用Eclipse，然后转IntelliJ IDEA，可以看看我之前的这篇文章——<a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2014/10/09/why-intellij-idea-better-than-eclipse">《为什么Intellij-IDEA比Eclipse好》</a>，之前觉得使用IDEA效率已经很高了，熟悉快捷键的话可以完全不用鼠标进行编码。  </p>
+<p>其实Jetbarins(开发IDEA的公司)也有python的IDE——PyCharm，功能、操作和IDEA差不多，熟悉IDEA的人可以很快上手PyCharm。  </p>
+<p>但是作为一个程序员，我觉得如果没有深入使用过一款”神之编辑器”（vi或emacs）是有遗憾的，而且通过使用vi发现，IDE有的功能vi都可以有，通过vi的配置，可以将vi打造成任一种语言的IDE，也就是说，使用IDE功能是有限的，但是使用vi，你的编辑器功能是没有边界的，任何你想要的功能都可以通过安装插件或者自己开发插件来实现。  </p>
+<p>使用IDE你可能不用鼠标进行编码，但是使用vi你可以不用鼠标来操作整个操作系统，这就是vi的魅力，可以让你像弹钢琴一样优雅的编写代码，行云流水，酣畅淋漓。  </p>
+<p>最后为什么选vi不选emacs呢？因为公司都是vi党，用emacs怕被人打，还是用vi好了-_-#</p>
+<h2 id="简明Vim练级攻略"><a href="#简明Vim练级攻略" class="headerlink" title="简明Vim练级攻略"></a>简明Vim练级攻略</h2><p>说实话，vi的学习曲线非常陡峭，但是经过前人的积累，已经有不少好用的vi插件和工具帮助我们尽快的熟悉vi，省去自己配置vi的烦恼，剩下的就只有不断地使用vi，以增强vi的熟练程度，做到得心应手。  </p>
+<p>这里要推荐陈皓老师翻译整理的这篇文章——<a target="_blank" rel="noopener" href="http://coolshell.cn/articles/5426.html">简明Vim练级攻略</a>，里面详细介绍了从入门到高级的vi使用命令，分阶段让学习者掌握vi的编辑命令，让你从一大堆繁杂的vi命令中了解到真正实用的vi指令。  </p>
+<p>还是之前说的，文章只是给你指明方向，实际的练习才是最重要的，要熟悉vi就要每天都使用vi写写东西，如果忘记了命令再重温一下文章的内容，这样不断地强化精神和肌肉的记忆才能掌握好vi。  </p>
+<h2 id="k-vim"><a href="#k-vim" class="headerlink" title="k-vim"></a><a target="_blank" rel="noopener" href="https://github.com/wklken/k-vim">k-vim</a></h2><p>这里要推荐k-vim这个国人打造的vim配置，里面集成了各种强大的vi插件，功能堪比甚至远超各种IDE，其主要用于python开发，也支持一些基础的前端开发，这里主要讲一下里面配置的一些强大的插件。  </p>
+<h4 id="YouCompleteMe"><a href="#YouCompleteMe" class="headerlink" title="YouCompleteMe"></a>YouCompleteMe</h4><p>很多IDE都有代码自动补全的功能，通过这个插件，vi也可以做到这一点，这个插件还可以配置各种语言的自动补全提示。  </p>
+<h4 id="gmarik-vundle"><a href="#gmarik-vundle" class="headerlink" title="gmarik/vundle"></a>gmarik/vundle</h4><p>像pip，npm一样，vundle可以管理vi的插件，通过简单的install/uninstall命令可以帮你安装你想要的vi插件。  </p>
+<h4 id="scrooloose-syntastic"><a href="#scrooloose-syntastic" class="headerlink" title="scrooloose/syntastic"></a>scrooloose/syntastic</h4><p>IDE有语法错误之类的检查，这个vi插件实现了类似的功能，并且可以配置各种语言的语法检查。  </p>
+<p>还有其他很多强大的插件，比如工程目录结构菜单，代码模板，源码跳转等。总之，使用k-vim可以省却你大部分配置vim的时间，让你得以马上体验vi的强大。  </p>
+<h2 id="tmux"><a href="#tmux" class="headerlink" title="tmux"></a><a target="_blank" rel="noopener" href="https://tmux.github.io/">tmux</a></h2><p>tmux是一个terminal管理软件，通过tmux配合vi可以使开发工作更加简单快捷，网上有很多介绍tmux的文章，我就不多介绍了，附一下是我的tmux配置，也是从网上查的一份配置，使用之后觉得还不错，推荐给大家，这里使用<code>ctl+A</code>作为tmux前缀，相对默认的<code>ctl+B</code>来说按键相对要近一些。  </p>
+<figure class="highlight sh"><figcaption><span>tmux.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -- base -- #</span></span><br><span class="line">unbind C-b</span><br><span class="line"><span class="built_in">set</span> -g prefix C-a</span><br><span class="line"><span class="built_in">set</span> -g status-keys vi</span><br><span class="line">setw -g mode-keys vi</span><br><span class="line"><span class="built_in">bind</span> : command-prompt</span><br><span class="line"><span class="built_in">bind</span> r source-file ~/.tmux.conf \; display-message <span class="string">&quot;Reloading..&quot;</span>.</span><br><span class="line"><span class="built_in">set</span> -g default-terminal <span class="string">&quot;screen-256color&quot;</span></span><br><span class="line">bind-key a send-prefix</span><br><span class="line"></span><br><span class="line"><span class="comment"># -- windown -- #</span></span><br><span class="line"><span class="built_in">bind</span> s split-window -h -c <span class="string">&quot;#&#123;pane_current_path&#125;&quot;</span></span><br><span class="line"><span class="built_in">bind</span> v split-window -v -c <span class="string">&quot;#&#123;pane_current_path&#125;&quot;</span></span><br><span class="line">bind-key c  new-window -c <span class="string">&quot;#&#123;pane_current_path&#125;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">bind</span> h select-pane -L</span><br><span class="line"><span class="built_in">bind</span> j select-pane -D</span><br><span class="line"><span class="built_in">bind</span> k select-pane -U</span><br><span class="line"><span class="built_in">bind</span> l select-pane -R</span><br><span class="line"></span><br><span class="line"><span class="built_in">bind</span> ^k resizep -U 10</span><br><span class="line"><span class="built_in">bind</span> ^j resizep -D 10</span><br><span class="line"><span class="built_in">bind</span> ^h resizep -L 10</span><br><span class="line"><span class="built_in">bind</span> ^l resizep -R 10</span><br><span class="line"><span class="built_in">bind</span> ^u swapp -U</span><br><span class="line"><span class="built_in">bind</span> ^d swapp -D</span><br><span class="line"></span><br><span class="line"><span class="built_in">bind</span> u choose-session</span><br><span class="line"><span class="built_in">bind</span> o choose-window</span><br><span class="line"><span class="built_in">bind</span> \ last</span><br><span class="line"><span class="built_in">bind</span> q killp</span><br><span class="line"></span><br><span class="line">bind-key -n C-S-Left swap-window -t -1</span><br><span class="line">bind-key -n C-S-Right swap-window -t +1</span><br><span class="line"><span class="built_in">set</span> -g base-index 1</span><br><span class="line">setw -g pane-base-index 1</span><br><span class="line"><span class="built_in">set</span> -g history-limit 5000</span><br><span class="line"></span><br><span class="line"><span class="comment"># pane border</span></span><br><span class="line"><span class="built_in">set</span> -g pane-border-fg black</span><br><span class="line"><span class="built_in">set</span> -g pane-border-bg white</span><br><span class="line"><span class="built_in">set</span> -g pane-active-border-fg black</span><br><span class="line"><span class="built_in">set</span> -g pane-active-border-bg <span class="string">&#x27;#afd787&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -- command -- #</span></span><br><span class="line"><span class="built_in">bind</span> m command-prompt <span class="string">&quot;splitw &#x27;exec man %%&#x27;&quot;</span></span><br><span class="line"><span class="built_in">bind</span> space copy-mode</span><br><span class="line"><span class="built_in">bind</span> -t vi-copy v begin-selection</span><br><span class="line"><span class="built_in">bind</span> -t vi-copy y copy-selection</span><br><span class="line"><span class="built_in">bind</span> -t vi-copy C-v rectangle-toggle</span><br><span class="line"><span class="built_in">bind</span> ] paste-buffer</span><br><span class="line"></span><br><span class="line"><span class="comment"># -- statusbar --#</span></span><br><span class="line"><span class="built_in">set</span> -g status-justify centre</span><br><span class="line"><span class="built_in">set</span> -g status-right-attr bright</span><br><span class="line"><span class="built_in">set</span> -g status-right <span class="string">&quot;%H:%M %a %m-%d&quot;</span></span><br><span class="line"><span class="built_in">set</span> -g status-bg default</span><br><span class="line"><span class="built_in">set</span> -g status-fg <span class="string">&#x27;#afd787&#x27;</span></span><br><span class="line">setw -g window-status-current-attr bright</span><br><span class="line">setw -g window-status-current-fg black</span><br><span class="line">setw -g window-status-current-bg <span class="string">&#x27;#afd787&#x27;</span></span><br><span class="line"><span class="built_in">set</span> -g status-utf8 on</span><br><span class="line"><span class="built_in">set</span> -g status-interval 1</span><br></pre></td></tr></table></figure>
+<h2 id="vi学习"><a href="#vi学习" class="headerlink" title="vi学习"></a>vi学习</h2><ul>
+<li>简明Vim练级攻略只是介绍了一些比较实用和常用的命令，如果在实际使用过程中发现一些不清楚的vi操作，最好的办法就是通过googl搜索找到答案，并将答案记录下来以免下次忘记。  </li>
+<li>在从IDE过渡到vi的期间，可以用IDE完成一些比较紧急的工作，其他的就使用vi来完成。  </li>
+<li>在使用vi的过程中，可以模拟IDE的操作来了解更多vi的命令，比如IDE可以用<code>ctl+w</code>选中整个单词，在vi里面要如何操作？这样慢慢一步一步地将vi的命令掌握，并替换掉你的IDE。  </li>
+</ul>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+	<h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+    <div class="digital-wallet">
+	  <h6>BTC 地址: 3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+	  <h6>ETH 地址: 0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+    </div>
+    <div class="wechat_appreciates">
+	  <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://example.com/2015/08/09/why-i-use-vi/';
+            this.page.identifier = 'https://example.com/2015/08/09/why-i-use-vi/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2021
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

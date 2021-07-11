@@ -1,0 +1,258 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>Redhat企业版无网环境下安装Dokuwiki - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="Redhat企业版无网环境下安装Dokuwiki"> <!-- TODO: truncate -->
+	<meta name="keywords" content="dokuwiki,redhat,offline">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">Redhat企业版无网环境下安装Dokuwiki</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2014-09-17T04:23:00.000Z" itemprop="datePublished">9月 17, 2014</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/dokuwiki/">dokuwiki</a> <a href="/tags/redhat/">redhat</a> <a href="/tags/offline/">offline</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2014-9/dokuwiki.png" class="">  
+<h2 id="Dokuwiki介绍"><a href="#Dokuwiki介绍" class="headerlink" title="Dokuwiki介绍"></a><a target="_blank" rel="noopener" href="https://www.dokuwiki.org/">Dokuwiki</a>介绍</h2><p>Dokuwiki是一个轻量级，高可用，免费开源的wiki软件，它不需要DB数据库，wiki内容直接以文本文件形式存储在文件系统上。Dokuwiki语法简洁易懂，管理维护简单，支持扩展多种模板展示wiki网站，还可以使用很多开源的插件来增加wiki的功能，比一般的传统wiki更加强大，更容易使用。  </p>
+<span id="more"></span>
+<h2 id="环境与版本"><a href="#环境与版本" class="headerlink" title="环境与版本"></a>环境与版本</h2><ul>
+<li>操作系统: Redhat Enterprise Linux Server release 6.4 (Santiago)</li>
+<li>网络环境: 无法连接网络</li>
+<li>Dokuwiki版本: 最新版</li>
+<li>Apache Http Server版本: 2.4.10</li>
+<li>PHP版本: 5.6.0</li>
+</ul>
+<p>下面是Dokuwiki的系统要求:  </p>
+<blockquote><p>DokuWiki System Requirements</p>
+<ol>
+<li>Webserver supporting PHP</li>
+<li>PHP version 5.2 or later</li>
+</ol>
+</blockquote>
+<h2 id="安装Apache-Http-Server-httpd"><a href="#安装Apache-Http-Server-httpd" class="headerlink" title="安装Apache Http Server(httpd)"></a>安装Apache Http Server(httpd)</h2><p>没有网络安装Linux软件是比较苦逼的，需要先安装该软件依赖的软件，如果依赖层次较深，就需要先安装完很多依赖软件后才能安装该软件。如果有网络的情况下，直接使用<code>yum install</code>或<code>apt-get install</code>就可以把相关依赖的软件都一起安装了。  </p>
+<p>先看一下httpd的安装要求:  </p>
+<ul>
+<li>APR和APR-Util</li>
+</ul>
+<p>先确定系统已经安装了这2个软件，如果没有的话先到<a target="_blank" rel="noopener" href="http://apr.apache.org/">Apache APR</a>下载源码包，下载完成后分别解压到httpd的<code>scrlib/apr</code>和<code>srclib/apr-util</code>(<code>srclib</code>在httpd的压缩文件解压后的目录里面)，解压后的目录结构如下。后面在安装httpd的时候使用<code>./configure</code>命令时加上<code>--with-included-apr</code>就可以了。  </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">httpd-2.4.10</span><br><span class="line">--|scrlib</span><br><span class="line">----|apr</span><br><span class="line">------|apr.exp</span><br><span class="line">------|...other apr files</span><br><span class="line">----|apr-util</span><br><span class="line">------|aprutil.dep</span><br><span class="line">------|...other apr-util files</span><br></pre></td></tr></table></figure>   
+<ul>
+<li>Perl-Compatible Regular Expressions Library (<a target="_blank" rel="noopener" href="http://www.pcre.org/">PCRE</a>)<br>PCRE安装比较简单，去pcre的网站下载源码包后解压，cd到解压目录执行下面的命令。  </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>   
+<p>安装完依赖的软件后，就可以开始安装httpd了，到Apache的网站下载最新版的<a target="_blank" rel="noopener" href="http://httpd.apache.org/download.cgi">Apache Http Server软件</a>，执行以下命令，最后一步是启动httpd服务，如果安装成功的话在浏览器输入<code>http://127.0.0.1</code>可以看到<code>It Works!</code>的字样。  </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/<span class="built_in">local</span>/apache2 --with-included-apr</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line">/usr/<span class="built_in">local</span>/apache2/bin/apachectl -k start</span><br></pre></td></tr></table></figure>   
+<h2 id="安装PHP"><a href="#安装PHP" class="headerlink" title="安装PHP"></a>安装<a target="_blank" rel="noopener" href="http://php.net/">PHP</a></h2><p>安装PHP也需要安装其他软件，需要先安装<a target="_blank" rel="noopener" href="http://xmlsoft.org/">libxml2</a>，先到网站下载源码包，然后执行下面的命令安装。  </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/<span class="built_in">local</span>/libxml2</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>   
+<p>安装完libxml2后，到PHP网站下载最新版的源码，然后执行下面的命令安装，注意configure要带–with-apx2参数，指向apache2的apx2命令。  </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/<span class="built_in">local</span>/php --with-apxs2=/usr/<span class="built_in">local</span>/apache2/bin/apxs --with-libxml-dir=/usr/<span class="built_in">local</span>/libxml2</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>   
+<p>编辑httpd的配置文件即/usr/local/apache2/conf/httpd.conf，并添加以下内容:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AddType application/x-httpd-php .php</span><br><span class="line">AddType application/x-httpd-php-source .phps</span><br></pre></td></tr></table></figure>   
+<p>复制php.ini文件到PHP的安装目录，源码包里有2个php.ini文件，随便哪一个都可以。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp ~/tools/php-5.6.0/php.ini-production /usr/<span class="built_in">local</span>/php/php.ini</span><br></pre></td></tr></table></figure>   
+<p>重启httpd。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/apache2/bin/apachectl -k restart</span><br></pre></td></tr></table></figure>   
+<p>建立test.php文件放在httpd目录(/usr/local/apache2/)下的htdocs下，内容如下，通过浏览器查看<code>http://127.0.0.1/test.php</code>，如果显示了内容就表示PHP安装成功了。  </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">phpinfo();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>   
+<h2 id="安装dokuwiki"><a href="#安装dokuwiki" class="headerlink" title="安装dokuwiki"></a>安装dokuwiki</h2><p>到dokuwiki网站下载源码包，执行下面的命令进行安装。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mv 下载目录/dokuwiki-xxxx.tgz /usr/<span class="built_in">local</span>/apache2/htdocs</span><br><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/apache2/htdocs</span><br><span class="line">tar -xvf dokuwiki-xxxx.tgz</span><br><span class="line">mv dokuwiki-xxxx dokuwiki</span><br></pre></td></tr></table></figure>   
+<p>查询httpd的用户是什么，这样才可以将dokuwiki的文件夹授权给这个用户，执行下面命令可以看到httpd进程的用户，我查到的是daemon。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lsof -i | grep :http</span><br><span class="line">chown -R daemon:daemon dokuwiki</span><br></pre></td></tr></table></figure>   
+<p>在浏览器中输入<code>http://127.0.0.1/dokuwiki/install.php</code>可以看到安装向导页面，根据向导安装dokuwiki即可。</p>
+<h2 id="ubuntu有网络情况下安装dokuwiki"><a href="#ubuntu有网络情况下安装dokuwiki" class="headerlink" title="ubuntu有网络情况下安装dokuwiki"></a>ubuntu有网络情况下安装dokuwiki</h2><p>看完一大篇没有网络的安装后，再来看有网络的情况下安装是多么的简单。  </p>
+<p>安装系统是Ubuntu 14.04 LTS，执行完下面的命令，dokuwiki就安装完成了。 </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install apache2</span><br><span class="line">sudo apt-get install php5</span><br><span class="line"><span class="built_in">cd</span> /var/www</span><br><span class="line">sudo cp ~/Download/dokuwiki-xxx.tgz .</span><br><span class="line">sudo tar -zxvf dokuwiki-xxxx.tgz</span><br><span class="line">sudo mv dokuwiki-xxxx dokuwiki</span><br><span class="line">sudo chown -R www-data:www-data dokuwiki</span><br></pre></td></tr></table></figure>   
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+	<h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+    <div class="digital-wallet">
+	  <h6>BTC 地址: 3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+	  <h6>ETH 地址: 0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+    </div>
+    <div class="wechat_appreciates">
+	  <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://example.com/2014/09/17/red-hat-enterprise-offline-env-install-dokuwiki/';
+            this.page.identifier = 'https://example.com/2014/09/17/red-hat-enterprise-offline-env-install-dokuwiki/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2021
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

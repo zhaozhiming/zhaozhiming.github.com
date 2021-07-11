@@ -1,0 +1,234 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>利用Sonar定制自定义JS扫描规则（三）——SSLR JavaScript Toolkit 使用说明 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="&lt;p&gt;在上一篇blog中讲了在sonar中如何新增自定义的JS规则，这里面比较难的地方是XPath语句的编写，而要编写正确的XPath语句，首先要拿到语法的AST，下面我们就来介绍如何使用SSLR JavaScript Toolkit 工具来得到源代码的语法树。  &lt;/p&gt;
+&lt;span id=&#34;more&#34;&gt;&lt;/span&gt;
+&lt;p&gt;首先通过在[这里][url1]下载SSLR JavaScript Toolkit 工具，下载下来是一个jar包，在cmd窗口使用java -jar sslr-javascript-toolkit-1.3.jar打开这个工具，操作界面如下：&lt;br&gt;[url1]: &lt;a href=&#34;http://repository.codehaus.org/org/codehaus/sonar-plugins/javascript/sslr-javascript-toolkit/1.3/sslr-javascript-toolkit-1.3.jar&#34;&gt;http://repository.codehaus.org/org/codehaus/sonar-plugins/javascript/sslr-javascript-toolkit/1.3/sslr-javascript-toolkit-1.3.jar&lt;/a&gt;  &lt;/p&gt;
+&lt;img src=&#34;/images/post/02073536-58b547f5394041cdb795a717087eca35.png&#34; class=&#34;&#34;&gt;  
+&lt;p&gt;左上方的窗口是用来输入你的源代码，右上方的窗口是来显示你的AST，最下面的窗口是来输入你的XPath规则。  &lt;/p&gt;
+&lt;p&gt;我们现在左上方输入一些简单的javascript代码，然后点击 Parse Source Code按钮，可以得到源代码的语法树：  &lt;/p&gt;
+&lt;img src=&#34;/images/post/02074124-ca30984af1704101962348b52d4a5f34.png&#34; class=&#34;&#34;&gt;  
+&lt;p&gt;得到语法树后，我们也可以点击右边窗口的XML页面，得到的是语法树的XML文档。有了XML文档，就可以通过XPath轻松得到你想要的语句了。  &lt;/p&gt;
+&lt;p&gt;举个例子：比如我想得到本地变量名，即var关键字后面的变量名，可以通过XPath的语法来查询。  &lt;/p&gt;
+&lt;p&gt;在最下方的窗口输入XPath语法规则，点击Evaluate XPath按钮，如果语法正确，就会出现返回结果，并高亮选中你想要查询的代码，如下：  &lt;/p&gt;
+&lt;img src=&#34;/images/post/02074943-45053229678b4effbec60cf2c363b076.png&#34; class=&#34;&#34;&gt;  
+&lt;p&gt;如果语法错误，右边的窗口会给出提示，如果查询语句不正确，任何源代码都不会被选中。更多的XPath语法可以参考[&lt;a href=&#34;http://www.w3schools.com/xpath/][url2]%E3%80%82&#34;&gt;http://www.w3schools.com/xpath/][url2]。&lt;/a&gt;&lt;br&gt;[url2]: &lt;a href=&#34;http://www.w3schools.com/xpath/&#34;&gt;http://www.w3schools.com/xpath/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;总结：sonar其实很早就支持了对JS的代码校验，但是你如果想自己定制校验规则，最简单的方式就是通过sonar的web接口增加XPath规则，这个需要在XPath语法上多花点力气，如果写出来的查询语法不正确，可以多试几遍，用SSLR JavaScript Toolkit 可以很方便的调试。最后祝大家都可以在sonar上配置自己的自定义规则。  &lt;/p&gt;
+"> <!-- TODO: truncate -->
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">利用Sonar定制自定义JS扫描规则（三）——SSLR JavaScript Toolkit 使用说明</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2013-05-20T03:20:00.000Z" itemprop="datePublished">5月 20, 2013</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/sonar/">sonar</a> <a href="/tags/js/">js</a>
+</div>
+    </div>
+	<div class="entry-content"><p>在上一篇blog中讲了在sonar中如何新增自定义的JS规则，这里面比较难的地方是XPath语句的编写，而要编写正确的XPath语句，首先要拿到语法的AST，下面我们就来介绍如何使用SSLR JavaScript Toolkit 工具来得到源代码的语法树。  </p>
+<span id="more"></span>
+<p>首先通过在[这里][url1]下载SSLR JavaScript Toolkit 工具，下载下来是一个jar包，在cmd窗口使用java -jar sslr-javascript-toolkit-1.3.jar打开这个工具，操作界面如下：<br>[url1]: <a target="_blank" rel="noopener" href="http://repository.codehaus.org/org/codehaus/sonar-plugins/javascript/sslr-javascript-toolkit/1.3/sslr-javascript-toolkit-1.3.jar">http://repository.codehaus.org/org/codehaus/sonar-plugins/javascript/sslr-javascript-toolkit/1.3/sslr-javascript-toolkit-1.3.jar</a>  </p>
+<img src="/images/post/02073536-58b547f5394041cdb795a717087eca35.png" class="">  
+<p>左上方的窗口是用来输入你的源代码，右上方的窗口是来显示你的AST，最下面的窗口是来输入你的XPath规则。  </p>
+<p>我们现在左上方输入一些简单的javascript代码，然后点击 Parse Source Code按钮，可以得到源代码的语法树：  </p>
+<img src="/images/post/02074124-ca30984af1704101962348b52d4a5f34.png" class="">  
+<p>得到语法树后，我们也可以点击右边窗口的XML页面，得到的是语法树的XML文档。有了XML文档，就可以通过XPath轻松得到你想要的语句了。  </p>
+<p>举个例子：比如我想得到本地变量名，即var关键字后面的变量名，可以通过XPath的语法来查询。  </p>
+<p>在最下方的窗口输入XPath语法规则，点击Evaluate XPath按钮，如果语法正确，就会出现返回结果，并高亮选中你想要查询的代码，如下：  </p>
+<img src="/images/post/02074943-45053229678b4effbec60cf2c363b076.png" class="">  
+<p>如果语法错误，右边的窗口会给出提示，如果查询语句不正确，任何源代码都不会被选中。更多的XPath语法可以参考[<a target="_blank" rel="noopener" href="http://www.w3schools.com/xpath/][url2]%E3%80%82">http://www.w3schools.com/xpath/][url2]。</a><br>[url2]: <a target="_blank" rel="noopener" href="http://www.w3schools.com/xpath/">http://www.w3schools.com/xpath/</a></p>
+<p>总结：sonar其实很早就支持了对JS的代码校验，但是你如果想自己定制校验规则，最简单的方式就是通过sonar的web接口增加XPath规则，这个需要在XPath语法上多花点力气，如果写出来的查询语法不正确，可以多试几遍，用SSLR JavaScript Toolkit 可以很方便的调试。最后祝大家都可以在sonar上配置自己的自定义规则。  </p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+	<h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+    <div class="digital-wallet">
+	  <h6>BTC 地址: 3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+	  <h6>ETH 地址: 0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+    </div>
+    <div class="wechat_appreciates">
+	  <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://example.com/2013/05/20/use-sonar-create-customer-js-verify-rule-part-3/';
+            this.page.identifier = 'https://example.com/2013/05/20/use-sonar-create-customer-js-verify-rule-part-3/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2021
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

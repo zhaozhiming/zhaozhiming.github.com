@@ -1,0 +1,241 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>使用Spring Security进行LDAP认证 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="使用Spring Security进行LDAP认证"> <!-- TODO: truncate -->
+	<meta name="keywords" content="spring,spring-security,ldap">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">使用Spring Security进行LDAP认证</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2014-12-18T00:56:00.000Z" itemprop="datePublished">12月 18, 2014</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/spring/">spring</a> <a href="/tags/spring-security/">spring-security</a> <a href="/tags/ldap/">ldap</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2014-12/spring-security.jpeg" class="">
+<p>这里介绍一下如何是用Spring Security来做LDAP的认证，LDAP服务器只存放了用户的用户名和密码，没有角色等其他权限，所以这里介绍的是最简单的用户名密码认证。  </p>
+<span id="more"></span>
+<h2 id="下载spring-security相关JAR包"><a href="#下载spring-security相关JAR包" class="headerlink" title="下载spring-security相关JAR包"></a>下载spring-security相关JAR包</h2><p>下面是gradle的脚本配置，需要下载spring-security和ldap相关的JAR包。    </p>
+<figure class="highlight groovy"><figcaption><span>build.gradle</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">String springSecurityVersion = <span class="string">&quot;3.2.5.RELEASE&quot;</span></span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">	...<span class="comment">//other spring jars</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//security</span></span><br><span class="line">	compile <span class="string">&quot;org.springframework.security:spring-security-core:&quot;</span> + springSecurityVersion</span><br><span class="line">	compile <span class="string">&quot;org.springframework.security:spring-security-web:&quot;</span> + springSecurityVersion</span><br><span class="line">	compile <span class="string">&quot;org.springframework.security:spring-security-config:&quot;</span> + springSecurityVersion</span><br><span class="line">	compile <span class="string">&quot;org.springframework.security:spring-security-ldap:&quot;</span> + springSecurityVersion</span><br><span class="line">	compile <span class="string">&quot;org.springframework.ldap:spring-ldap-core:2.0.2.RELEASE&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置web-xml"><a href="#配置web-xml" class="headerlink" title="配置web.xml"></a>配置web.xml</h2><p>在web.xml配置<code>filter</code>，修改内容如下。  </p>
+<figure class="highlight xml"><figcaption><span>web.xml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">filter</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>springSecurityFilterChain<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">filter-class</span>&gt;</span>org.springframework.web.filter.DelegatingFilterProxy<span class="tag">&lt;/<span class="name">filter-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">filter-mapping</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>springSecurityFilterChain<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">filter-mapping</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">listener</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">listener-class</span>&gt;</span>org.springframework.web.context.ContextLoaderListener<span class="tag">&lt;/<span class="name">listener-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">listener</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">context-param</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>contextConfigLocation<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>classpath:spring-security.xml<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">context-param</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="创建spring-security-xml"><a href="#创建spring-security-xml" class="headerlink" title="创建spring-security.xml"></a>创建spring-security.xml</h2><p>在web.xml里面指定了Application启动时需要加载spring-security.xml文件，我们的LDAP认证主要就配置在这个文件里面。  </p>
+<figure class="highlight xml"><figcaption><span>spring-security.xml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">   <span class="attr">xmlns:s</span>=<span class="string">&quot;http://www.springframework.org/schema/security&quot;</span> <span class="attr">xmlns:context</span>=<span class="string">&quot;http://www.springframework.org/schema/context&quot;</span></span></span><br><span class="line"><span class="tag">   <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">   <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">   <span class="tag">&lt;<span class="name">context:property-placeholder</span> <span class="attr">location</span>=<span class="string">&quot;classpath:app.properties&quot;</span> /&gt;</span>  //1</span><br><span class="line"></span><br><span class="line">   <span class="tag">&lt;<span class="name">s:http</span> <span class="attr">pattern</span>=<span class="string">&quot;/resources/**&quot;</span> <span class="attr">security</span>=<span class="string">&quot;none&quot;</span> /&gt;</span>  //2</span><br><span class="line">   <span class="tag">&lt;<span class="name">s:http</span> <span class="attr">pattern</span>=<span class="string">&quot;/login.html&quot;</span> <span class="attr">security</span>=<span class="string">&quot;none&quot;</span> /&gt;</span>    //2</span><br><span class="line"></span><br><span class="line">   <span class="tag">&lt;<span class="name">s:http</span> <span class="attr">use-expressions</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">s:intercept-url</span> <span class="attr">pattern</span>=<span class="string">&quot;/**&quot;</span> <span class="attr">access</span>=<span class="string">&quot;isAuthenticated()&quot;</span> /&gt;</span>  //3</span><br><span class="line">      <span class="tag">&lt;<span class="name">s:form-login</span> <span class="attr">login-page</span>=<span class="string">&quot;/login.html&quot;</span>                        //<span class="attr">4</span></span></span><br><span class="line"><span class="tag">         <span class="attr">authentication-failure-url</span>=<span class="string">&quot;/login.html?error=true&quot;</span>        //<span class="attr">5</span>   </span></span><br><span class="line"><span class="tag">         <span class="attr">username-parameter</span>=<span class="string">&quot;j_username&quot;</span> <span class="attr">password-parameter</span>=<span class="string">&quot;j_password&quot;</span>/&gt;</span> //6</span><br><span class="line">      <span class="tag">&lt;<span class="name">s:anonymous</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">s:logout</span> <span class="attr">logout-success-url</span>=<span class="string">&quot;/login.html?logout=true&quot;</span> /&gt;</span>  //7</span><br><span class="line">   <span class="tag">&lt;/<span class="name">s:http</span>&gt;</span></span><br><span class="line"></span><br><span class="line">   <span class="tag">&lt;<span class="name">s:ldap-server</span> <span class="attr">url</span>=<span class="string">&quot;$&#123;ldap_server&#125;&quot;</span> <span class="attr">manager-dn</span>=<span class="string">&quot;$&#123;ldap_user&#125;&quot;</span>//<span class="attr">8</span></span></span><br><span class="line"><span class="tag">      <span class="attr">manager-password</span>=<span class="string">&quot;$&#123;ldap_password&#125;&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">   <span class="tag">&lt;<span class="name">s:authentication-manager</span>&gt;</span> </span><br><span class="line">      <span class="tag">&lt;<span class="name">s:ldap-authentication-provider</span></span></span><br><span class="line"><span class="tag">         <span class="attr">user-dn-pattern</span>=<span class="string">&quot;$&#123;ldap_user_dn_pattern&#125;&quot;</span> /&gt;</span>  //9</span><br><span class="line">   <span class="tag">&lt;/<span class="name">s:authentication-manager</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>指定properties文件，下面的ldap信息都是从properties文件里面取得。</li>
+<li>配置哪些资源和url不需要做认证，比如一些图片，js和css文件等，还有我们的login页面，如果把login页面也拦截的话，就做不了认证了。</li>
+<li>指定其他url(<code>/**</code>)都需要做认证，isAuthenticated方法表示认证通过了才能访问该url。</li>
+<li>指定登陆页面的地址，这里是相对路径，如果不指定login-page，认证时会自动调用spring-security的一个默认登陆页面。</li>
+<li>指定认证失败后的url，这里我们使用同一个login页面，只是在url后面加上查询参数作为认证失败的标示。</li>
+<li>指定login页面2个作用域，用户名和密码，需要和页面录入框的name相同。</li>
+<li>指定登出/注销成功后的页面，这里我们还是使用login页面，在url后面加上logout参数作为标示。</li>
+<li>ldap服务器的配置信息，包括url, manager-dn和manager-password。</li>
+<li>配置ldap的user-dn-pattern。</li>
+</ol>
+<p>下面是app.properties的内容。  </p>
+<figure class="highlight properties"><figcaption><span>app.properties</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Ldap</span></span><br><span class="line"><span class="attr">ldap_server</span>=<span class="string">ldap://your.ldap.server.com.:12356</span></span><br><span class="line"><span class="attr">ldap_user</span>=<span class="string">cn=yourname,cn=Users,dc=ldap,dc=server,dc=com</span></span><br><span class="line"><span class="attr">ldap_password</span>=<span class="string">123456</span></span><br><span class="line"><span class="attr">ldap_user_dn_pattern</span>=<span class="string">uid=&#123;0&#125;,ou=staff,ou=people,o=ldap.server.com</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="创建登陆页面"><a href="#创建登陆页面" class="headerlink" title="创建登陆页面"></a>创建登陆页面</h2><p>创建用户登陆的Form，method为<code>post</code>，action为<code>j_spring_security_check</code>，用户录入框的name为<code>j_username</code>，密码录入框的name为<code>j_password</code>，这2个值与之前spring-security.xml里面配置的要保持一致。  </p>
+<figure class="highlight html"><figcaption><span>login.html</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">name</span>=<span class="string">&quot;LoginForm&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">action</span>=<span class="string">&quot;j_spring_security_check&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;display: block;&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h1</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;ui-icon add&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span>用户登录</span><br><span class="line">            <span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;error&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: none; color: #c9302c&quot;</span> <span class="attr">align</span>=<span class="string">&quot;center&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">h3</span>&gt;</span>认证失败，请重新登录<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;logout&quot;</span> <span class="attr">style</span>=<span class="string">&quot;display: none; color: #02547f&quot;</span> <span class="attr">align</span>=<span class="string">&quot;center&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">h3</span>&gt;</span>已成功登出<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">label</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">span</span>&gt;</span>用户名<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;j_username&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">label</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">span</span>&gt;</span>密码<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> <span class="attr">name</span>=<span class="string">&quot;j_password&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">name</span>=<span class="string">&quot;logon&quot;</span> <span class="attr">value</span>=<span class="string">&quot;Logon&quot;</span>&gt;</span>登录<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>相关的js代码如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getParameterByName</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    name = name.replace(<span class="regexp">/[\[]/</span>, <span class="string">&quot;\\[&quot;</span>).replace(<span class="regexp">/[\]]/</span>, <span class="string">&quot;\\]&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> regex = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">&quot;[\\?&amp;]&quot;</span> + name + <span class="string">&quot;=([^&amp;#]*)&quot;</span>),</span><br><span class="line">        results = regex.exec(location.search);</span><br><span class="line">    <span class="keyword">return</span> results === <span class="literal">null</span> ? <span class="string">&quot;&quot;</span> : <span class="built_in">decodeURIComponent</span>(results[<span class="number">1</span>].replace(<span class="regexp">/\+/g</span>, <span class="string">&quot; &quot;</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(getParameterByName(<span class="string">&quot;error&quot;</span>)) &#123;</span><br><span class="line">	$(<span class="string">&quot;#error&quot;</span>).show();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(getParameterByName(<span class="string">&quot;logout&quot;</span>)) &#123;</span><br><span class="line">	$(<span class="string">&quot;#logout&quot;</span>).show();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果需要的话，可以配置自己的logout页面，只需要一个Form就可以了，方法为<code>post</code>，action为<code>j_spring_security_logout</code>，只要提交了这个Form就可以成功登出了。</p>
+<figure class="highlight html"><figcaption><span>logout.html</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;j_spring_security_logout&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">id</span>=<span class="string">&quot;logoutForm&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>更多Spring Security的信息请查阅: <a target="_blank" rel="noopener" href="http://docs.spring.io/spring-security/site/docs/3.2.x/reference/htmlsingle/">Spring Security Reference</a>。  </p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+	<h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+    <div class="digital-wallet">
+	  <h6>BTC 地址: 3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+	  <h6>ETH 地址: 0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+    </div>
+    <div class="wechat_appreciates">
+	  <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://example.com/2014/12/18/use-spring-security-to-ldap-authentication/';
+            this.page.identifier = 'https://example.com/2014/12/18/use-spring-security-to-ldap-authentication/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2021
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

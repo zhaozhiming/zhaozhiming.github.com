@@ -1,0 +1,247 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>jenkins插件开发（四）-- 插件发布 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="jenkins插件开发（四）-- 插件发布"> <!-- TODO: truncate -->
+	<meta name="keywords" content="jenkins插件,开发">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">jenkins插件开发（四）-- 插件发布</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2013-02-04T12:47:00.000Z" itemprop="datePublished">2月 4, 2013</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/jenkins-plugins/">jenkins plugins</a>
+</div>
+    </div>
+	<div class="entry-content"><p>上一篇blog介绍了插件开发中要注意的一些问题， 我们再来介绍插件开发完成后，如何上传到jenkins的插件中心（这里假设你的代码是放在github上的，使用svn或其他版本管理工具的请参考其他文章）。  </p>
+<span id="more"></span>
+<p>###组织授权  </p>
+<p>首先去到google group（被伟大的GFW和谐了，只能翻墙访问，如何翻墙不在这里讨论）的jenkins开发列表（<a href="mailto:&#x6a;&#101;&#110;&#107;&#105;&#x6e;&#x73;&#99;&#105;&#45;&#x64;&#101;&#x76;&#64;&#103;&#x6f;&#x6f;&#103;&#x6c;&#101;&#x67;&#x72;&#x6f;&#117;&#x70;&#115;&#x2e;&#99;&#x6f;&#109;">&#x6a;&#101;&#110;&#107;&#105;&#x6e;&#x73;&#99;&#105;&#45;&#x64;&#101;&#x76;&#64;&#103;&#x6f;&#x6f;&#103;&#x6c;&#101;&#x67;&#x72;&#x6f;&#117;&#x70;&#115;&#x2e;&#99;&#x6f;&#109;</a>）里发帖告诉组织者，你开发的插件id是什么，插件功能是做什么的，还有你的github用户名是什么。组织者如果觉得没问题，就会在jenkins 的github上给你创建一个以你插件名称命名的代码库，然后在github上将你拉入jenkins的组织，这样就可以在这个代码库上添加你的插件代码了。如果你在github上已经有了自己插件的代码库，也可以将地址告诉组织者，这样他会fork你的代码库，如果是这样的话你需要在更新了你原仓库的代码后，再将jenkins仓库上的代码同步。  </p>
+<p>###修改POM文件  </p>
+<p>再来是修改项目的pom文件，需要增加一些信息，这样发布的时候才可以正确显示你的插件内容。首先是你的源码控制管理配置，增加配置如下：  </p>
+<figure class="highlight xml"><figcaption><span>pom.xml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">scm</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">connection</span>&gt;</span>scm:git:ssh://github.com/jenkinsci/MYPLLUGINNAME.git<span class="tag">&lt;/<span class="name">connection</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">developerConnection</span>&gt;</span>scm:git:ssh://git@github.com/jenkinsci/MYPLUGINNAME.git<span class="tag">&lt;/<span class="name">developerConnection</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://github.com/jenkinsci/MYPLUGINNAME<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">scm</span>&gt;</span></span><br></pre></td></tr></table></figure>   
+<p>插件的WIKI页面（后面会说明如何添加WIKI）：</p>
+<figure class="highlight xml"><figcaption><span>pom.xml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line">  <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://wiki.jenkins-ci.org/display/JENKINS/My+Plugin<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>  
+<p>还有维护人员信息：  </p>
+<figure class="highlight xml"><figcaption><span>pom.xml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line">  <span class="tag">&lt;<span class="name">developers</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">developer</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">id</span>&gt;</span>devguy<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">name</span>&gt;</span>Developer Guy<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">email</span>&gt;</span>devguy@developerguy.blah<span class="tag">&lt;/<span class="name">email</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">developer</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">developers</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>  
+
+<p>###发布插件  </p>
+<p>最简单的方式就是执行以下命令：  </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn release:prepare release:perform</span><br></pre></td></tr></table></figure>  
+<p>如果发布成功（窗口提示BUILD SUCCESS 字样）就表示你的插件已经发布到jenkins的更新中心了，不过一般要等个一到半天更新中心才会更新。  </p>
+<p>一般第一次发布都会有一些问题，没有那么容易成功，这里再介绍一下发布过程中容易出现的问题。  </p>
+<p><strong>插件版本没有以-SNAPSHOT 结尾。</strong>可能有些同学会将-SNAPSHOT结尾的版本号给改成一个正式的版本号，比如1.0，如果是这样的话，发布的时候就会报错。因为jenkins 插件发布的过程中会将你的预设版本号（比如 1.0-SNAPSHOT）改成一个正式的版本号 1.0，然后提交到代码仓库，在检查插件版本号的时候，如果发现不是预设版本号（以-SNAPSHOT结尾）就会报错，所以大家不用担心自己的插件版本号命名问题，在插件发布的时候，会自动帮你修正为正式版本号的。  </p>
+<p><strong>发布出错回滚。</strong>如果在插件发布的过程中出错，重新再执行上面的命令是不行的，会报版本已存在的错误，需要先执行一下下面的命令来清除出错的发布信息。  </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn release:clean</span><br></pre></td></tr></table></figure>  
+<p><strong>Github 无法push。</strong>发布的过程中会使用git将你的代码push到github上，有时候会报权限不允许的问题（Permission denied），那可能是你的github配置有问题，可以参考[这里][url1]来设置你的SSH或者[这里][url2]看看是否其他问题。<br>[url1]: <a target="_blank" rel="noopener" href="https://help.github.com/articles/generating-ssh-keys">https://help.github.com/articles/generating-ssh-keys</a><br>[url2]: <a target="_blank" rel="noopener" href="https://help.github.com/articles/error-permission-denied-publickey">https://help.github.com/articles/error-permission-denied-publickey</a>    </p>
+<p>###WIKI页面  </p>
+<p>发布好了你的插件之后呢，我们需要在jenkins的官网上添加关于你插件的WIKI，以便让使用你插件的用户知道插件的信息。  </p>
+<p>首先要在jenkins官网上申请一个帐号，申请成功之后你就可以在插件主页上添加你的插件页面了。去到插件主页面（[<a target="_blank" rel="noopener" href="https://wiki.jenkins-ci.org/display/JENKINS/Plugins][url3]%EF%BC%89%EF%BC%8C%E7%82%B9%E5%87%BB%E5%8F%B3%E4%B8%8A%E8%A7%92%E7%9A%84Add%E9%93%BE%E6%8E%A5%EF%BC%8C%E9%80%89%E6%8B%A9page%E9%80%89%E9%A1%B9%EF%BC%8C%E5%B0%B1%E5%8F%AF%E4%BB%A5%E8%BF%9B%E5%85%A5%E9%A1%B5%E9%9D%A2%E7%BC%96%E5%86%99%E4%BA%86%E3%80%82">https://wiki.jenkins-ci.org/display/JENKINS/Plugins][url3]），点击右上角的Add链接，选择page选项，就可以进入页面编写了。</a><br>[url3]: <a target="_blank" rel="noopener" href="https://wiki.jenkins-ci.org/display/JENKINS/Plugins">https://wiki.jenkins-ci.org/display/JENKINS/Plugins</a>  </p>
+<p>在WIKI页面中写上你的插件名称，内容要加上下面的语句：  </p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> &#123;jenkins-plugin-info:pluginId=your-artifact&#125; </span><br><span class="line">&#123;excerpt&#125;  your plugin description  &#123;excerpt&#125; </span><br></pre></td></tr></table></figure>  
+<p>your-artifact要写你的插件id，这样页面就会自动去加载插件的相关信息。excerpt里面的是你插件描述，会显示在插件主页上。  </p>
+<p>最后是在WIKI label上加上插件的分类，比如是UI相关的插件就写plugin-UI，报告类相关的就写plugin-report，这样在插件主页上会将你的插件归到某类插件下。  </p>
+<p>这里介绍编写WIKI的一个小窍门，可以先进入其他插件页面，然后点击右上角的Edit链接，这样就进入了页面的编辑页面，在这里就可以看到其他插件是如何编写的，参考一下再来编写自己的WIKI页面吧。  </p>
+<p>###持续集成  </p>
+<p>在上传你插件代码的时候，可能你会想使用持续集成来跑你的测试案例，看看上传的代码是否有破坏原有的功能。没有问题，可以使用BuildHive@CloudBees来为你Github上的代码做持续集成。  </p>
+<p>使用很简单，先进入这个网址[<a target="_blank" rel="noopener" href="https://buildhive.cloudbees.com/job/jenkinsci/][url4]%EF%BC%8C%E7%84%B6%E5%90%8E%E4%BD%BF%E7%94%A8%E4%BD%A0%E7%9A%84github%E5%B8%90%E5%8F%B7%E7%99%BB%E5%BD%95%EF%BC%8C%E6%8E%A5%E7%9D%80%E5%8B%BE%E9%80%89%E4%BD%A0%E6%83%B3%E8%A6%81%E5%81%9A%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E7%9A%84github%E9%A1%B9%E7%9B%AE%E3%80%82%E8%BF%99%E6%A0%B7%E8%AF%A5%E9%A1%B9%E7%9B%AE%E6%AF%8F%E6%AC%A1%E6%8F%90%E4%BA%A4%E4%BB%A3%E7%A0%81%E4%B9%8B%E5%90%8E%EF%BC%8CBuildHive@CloudBees%E5%B0%B1%E4%BC%9A%E4%B8%BA%E4%BD%A0%E5%81%9A%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%EF%BC%8C%E5%A6%82%E6%9E%9C%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E8%AF%9D%E4%BC%9A%E5%8F%91%E9%82%AE%E4%BB%B6%E9%80%9A%E7%9F%A5%E4%BD%A0%E3%80%82">https://buildhive.cloudbees.com/job/jenkinsci/][url4]，然后使用你的github帐号登录，接着勾选你想要做持续集成的github项目。这样该项目每次提交代码之后，BuildHive@CloudBees就会为你做持续集成，如果有问题的话会发邮件通知你。</a><br>[url4]: <a target="_blank" rel="noopener" href="https://buildhive.cloudbees.com/job/jenkinsci/">https://buildhive.cloudbees.com/job/jenkinsci/</a>    </p>
+<p>到这里，jenkins插件开发的所有介绍已经全部结束了，之前做插件开发的时候查到一些中文资料，都是一些比较入门的内容，所以自己就想写一个比较全面的介绍，希望这一系列的文章可以帮到你，谢谢。</p>
+<hr>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2013/01/31/jenkins-plugins-develop-part-1/">jenkins插件开发（一）– 环境搭建</a></li>
+<li><a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2013/02/02/jenkins-plugins-develop-part-2/">jenkins插件开发（二）– HelloWorld</a></li>
+<li><a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2013/02/03/jenkins-plugins-develop-part-3/">jenkins插件开发（三）– 插件编写</a></li>
+</ul>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+	<h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+    <div class="digital-wallet">
+	  <h6>BTC 地址: 3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+	  <h6>ETH 地址: 0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+    </div>
+    <div class="wechat_appreciates">
+	  <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://example.com/2013/02/04/jenkins-plugins-develop-part-4/';
+            this.page.identifier = 'https://example.com/2013/02/04/jenkins-plugins-develop-part-4/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2021
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>使用 TestCafe 进行 Web 自动化测试 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="使用 TestCafe 进行 Web 自动化测试"> <!-- TODO: truncate -->
+	<meta name="keywords" content="testcafe,auto-test,ui-test">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">使用 TestCafe 进行 Web 自动化测试</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2019-01-28T09:27:00.000Z" itemprop="datePublished">1月 28, 2019</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/testcafe/">testcafe</a> <a href="/tags/auto-test/">auto-test</a> <a href="/tags/ui-test/">ui-test</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2019/01/testcafe.png" class="" width="400" height="300">
+
+<p>Web 自动化测试，又叫 UI 自动化测试，国外叫 End-to-End Test（e2e, 端到端测试），可以让重复繁琐的手工测试（ 俗称点点点）通过程序自动执行，可以极大地提升测试人员的效率（想象一下以前如果回归测试要测试一天的话，使用自动化测试可能只需要不到 1 小时的时间）。</p>
+<p>今天介绍一个自动化测试工具新贵——<a target="_blank" rel="noopener" href="https://github.com/DevExpress/testcafe">TestCafe</a>，它的功能和开发团队都很棒，但一直比较低调所以没有其他同类工具出名，如果你对自动化测试感兴趣，不妨和我一起来了解它。</p>
+<span id="more"></span>
+
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装方式可以根据使用场景来选择：</p>
+<ul>
+<li>全局安装：<code>npm i -g testcafe</code>，然后执行命令<code>testcafe chrome e2e.test.js</code></li>
+<li>项目安装：<code>npm i --dev testcafe</code>，并在<code>package.json</code>中配置如下命令，这里的命令意思是用 TestCafe 通过 Chrome 浏览器来执行<code>e2e</code>目录下的测试案例。</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">  <span class="attr">&quot;test:e2e&quot;</span>: <span class="string">&quot;testcafe chrome e2e/*&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="简单示例"><a href="#简单示例" class="headerlink" title="简单示例"></a>简单示例</h2><p>这是官方文档上的示例文件，添加了一些代码说明：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 引用 TestCafe 的选择器，用来获取页面元素</span></span><br><span class="line"><span class="keyword">import</span> &#123; Selector &#125; <span class="keyword">from</span> <span class="string">&#x27;testcafe&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// fixture 可以理解为测试集，类似其他测试框架里面的`describe`，fixture 可以包含多个 test 测试案例</span></span><br><span class="line">fixture <span class="string">`Getting Started`</span></span><br><span class="line">  <span class="comment">// 指定初始页面</span></span><br><span class="line">  .page <span class="string">`https://devexpress.github.io/testcafe/example`</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试案例代码</span></span><br><span class="line">test(<span class="string">&#x27;My first test&#x27;</span>, <span class="keyword">async</span> t =&gt; &#123;</span><br><span class="line">  <span class="keyword">await</span> t</span><br><span class="line">    <span class="comment">// 选择测试页面元素，这里是在 input 框中输入文字</span></span><br><span class="line">    .typeText(<span class="string">&#x27;#developer-name&#x27;</span>, <span class="string">&#x27;John Smith&#x27;</span>)</span><br><span class="line">    <span class="comment">// 点击某个按钮</span></span><br><span class="line">    .click(<span class="string">&#x27;#submit-button&#x27;</span>)</span><br><span class="line">    <span class="comment">// 验证运行结果是否与预期相符</span></span><br><span class="line">    .expect(Selector(<span class="string">&#x27;#article-header&#x27;</span>).innerText).eql(<span class="string">&#x27;Thank you, John Smith!&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>运行结果如下：</p>
+<img src="/images/post/2019/01/testcafe_result.png" class="">
+
+<h2 id="使用介绍"><a href="#使用介绍" class="headerlink" title="使用介绍"></a>使用介绍</h2><p>Web 自动化测试是将手工测试行为通过程序或者脚本自动运行起来，回忆一下我们平时的测试工作，无非是下面几个步骤：</p>
+<ul>
+<li>输入网址打开网页</li>
+<li>操作页面元素</li>
+<li>验证结果是否正确</li>
+</ul>
+<p>其中最重要的一步就是找到需要操作的页面元素，TestCafe 提供了强大的 Selector（选择器）来供我们查找。</p>
+<h3 id="选择器-Selector"><a href="#选择器-Selector" class="headerlink" title="选择器 Selector"></a>选择器 Selector</h3><p>创建一个 Selector 非常简单，下面是示例代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Selector &#125; <span class="keyword">from</span> <span class="string">&#x27;testcafe&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> usernameInput = Selector(<span class="string">&#x27;#username&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>Selector 这个 API 类似<code>document.querySelector()</code>一样可以通过多种查询方式来查询页面元素：</p>
+<ul>
+<li>Selector(‘#id’): 根据<code>id</code>查找元素</li>
+<li>Selector(‘.class’)：根据样式名称查找元素</li>
+<li>Selector(‘div’)：根据 html 标签查找元素</li>
+<li>Selector(‘#id .class span’)：根据多种组合查找元素</li>
+</ul>
+<h4 id="函数式选择器"><a href="#函数式选择器" class="headerlink" title="函数式选择器"></a>函数式选择器</h4><p>Selector 不仅可以实现常规的选择，还可以通过内置的 API 来进行其他类型的查询：</p>
+<ul>
+<li>Selector(‘li’).nth(1)：查找第一个 li 元素</li>
+<li>Selector(‘label’).withText(‘foo’)：查找 label 中包含<code>foo</code>文字的元素</li>
+<li>Selector(‘div’).withAttribute(‘attrName’, ‘attrValue’)：查找 div 中包含<code>attrName</code>属性且值为<code>attrValue</code>的元素</li>
+<li>更多 API 可以参考<a target="_blank" rel="noopener" href="https://devexpress.github.io/testcafe/documentation/test-api/selecting-page-elements/selectors/functional-style-selectors.html#withattribute">官方文档</a></li>
+</ul>
+<p>PS：<code>withAttribute</code>非常有用，在很多测试框架中都会建议开发人员在页面元素中添加一个<code>testId</code>（<a target="_blank" rel="noopener" href="https://github.com/callstack/react-native-testing-library">react-native-testing-library</a>）或<code>data-testid</code>（<a target="_blank" rel="noopener" href="https://github.com/kentcdodds/react-testing-library">react-testing-library</a>）来查找页面元素。</p>
+<p>使用<code>testid</code>有以下好处：</p>
+<ul>
+<li>避免在页面元素上添加<code>id</code>这种污染页面的属性</li>
+<li>提高查找页面元素的效率，因为<code>testid</code>和<code>id</code>一样可以直接获取唯一的元素</li>
+</ul>
+<p>所以如果想通过<code>testid</code>来查找元素就可以这样做：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Selector(<span class="string">&#x27;div&#x27;</span>).withAttribute(<span class="string">&#x27;testId&#x27;</span>, <span class="string">&#x27;foo&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="React-Selector"><a href="#React-Selector" class="headerlink" title="React Selector"></a>React Selector</h4><p>如果你的网页是用 React 开发的，还可以使用 React 的扩展 Selector——<a target="_blank" rel="noopener" href="https://github.com/DevExpress/testcafe-react-selectors">React Selector</a> 来查找页面元素。</p>
+<p>使用<code>React Selector</code>可以通过组件名进行查找元素：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; ReactSelector &#125; <span class="keyword">from</span> <span class="string">&#x27;testcafe-react-selectors&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> todoInput = ReactSelector(<span class="string">&#x27;TodoInput&#x27;</span>); <span class="comment">// 组件名查找</span></span><br><span class="line"><span class="keyword">const</span> todoItem = ReactSelector(<span class="string">&#x27;TodoInput TodoItem&#x27;</span>); <span class="comment">// 查找嵌套子组件</span></span><br></pre></td></tr></table></figure>
+
+<p>需要注意一点，使用<code>React Selector</code>不能同时使用<code>组件名</code>+<code>html 选择器</code>的方式，比如<code>ReactSelector(&#39;TodoInput div&#39;)</code>这个查询条件，它并不会去查询<code>TodoInput</code>组件下的<code>div</code>元素，而是会转换成这样的查询：<code>Selector(&#39;.todoInput &gt; div&#39;)</code>，就是将组件名自动转换成<code>class</code>然后再查询。</p>
+<p>另外<code>React Selector</code>还可以校验组件的<code>props</code>和<code>state</code>等参数，更多详细信息可以查阅<a target="_blank" rel="noopener" href="https://github.com/DevExpress/testcafe-react-selectors">官方文档</a>。</p>
+<h3 id="事件与断言"><a href="#事件与断言" class="headerlink" title="事件与断言"></a>事件与断言</h3><p>找到页面元素之后，就可以对其做相应的操作和校验，事件和断言的部分比较简单，大家可以看看官方文档，这里就不多介绍了，下面是一些简单示例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 事件</span></span><br><span class="line">test(<span class="string">&#x27;My Test&#x27;</span>, <span class="keyword">async</span> t =&gt; &#123;</span><br><span class="line">  <span class="comment">// 点击按钮</span></span><br><span class="line">  <span class="keyword">await</span> t.click(<span class="string">&#x27;#submit-button&#x27;</span>);</span><br><span class="line">  <span class="comment">// 文本输入</span></span><br><span class="line">  <span class="keyword">await</span> t.typeText(<span class="string">&#x27;#foo-input&#x27;</span>, <span class="string">&#x27;Peter&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>更多的事件详细内容可以参考<a target="_blank" rel="noopener" href="https://devexpress.github.io/testcafe/documentation/test-api/actions/">官方文档</a>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 断言</span></span><br><span class="line">test(<span class="string">&#x27;My Test&#x27;</span>, <span class="keyword">async</span> t =&gt; &#123;</span><br><span class="line">  <span class="keyword">await</span> t</span><br><span class="line">	.expect(&#123; <span class="attr">a</span>: <span class="string">&#x27;bar&#x27;</span> &#125;).eql(&#123; <span class="attr">a</span>: <span class="string">&#x27;bar&#x27;</span> &#125;) <span class="comment">// 校验 2 个对象是否相等</span></span><br><span class="line">	.expect(a === b).ok(); <span class="comment">// 校验结果是否为 true</span></span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>更多的断言详细内容可以参考<a target="_blank" rel="noopener" href="https://devexpress.github.io/testcafe/documentation/test-api/assertions/assertion-api.html">官方文档</a>。</p>
+<p>TestCafe 还提供了访问页面节点属性的 API，常用的 API 有下面这些：</p>
+<ul>
+<li>childElementCount：获取子元素个数</li>
+<li>hasChildElements: 是否有子元素</li>
+<li>textContent: 获取页面元素的文本内容</li>
+<li>hasClass(className)：是否有某个 class 样式</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">test(<span class="string">&#x27;My Test&#x27;</span>, <span class="keyword">async</span> t =&gt; &#123;</span><br><span class="line">  <span class="comment">// 校验元素是否拥有某个 class 样式</span></span><br><span class="line">  t.expect(Selector(<span class="string">&#x27;#article-header&#x27;</span>).hasClass(<span class="string">&#x27;foo&#x27;</span>)).ok();</span><br></pre></td></tr></table></figure>
+
+<p>更多信息可以查阅<a target="_blank" rel="noopener" href="https://devexpress.github.io/testcafe/documentation/test-api/selecting-page-elements/dom-node-state.html">官方文档</a>。</p>
+<h3 id="mock-请求"><a href="#mock-请求" class="headerlink" title="mock 请求"></a>mock 请求</h3><p>Web 自动化测试如果是在集成测试环境运行的话，测试行为可能会影响到这个环境的数据，如果你不想“污染”环境上的数据的话，可以通过 mock 的方式来模拟服务端的请求，从而达到隔离服务端环境的目的。</p>
+<p>TestCafe 提供了 mock 服务端的 API，我们可以使用这些 API 来实现 mock 服务端 API 的功能，下面我们通过代码示例来了解一下 mock API 如何使用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 mock 请求的 API</span></span><br><span class="line"><span class="keyword">import</span> &#123; RequestMock &#125; <span class="keyword">from</span> <span class="string">&#x27;testcafe&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// mock 请求返回的数据</span></span><br><span class="line"><span class="keyword">const</span> mockData = [</span><br><span class="line">  &#123;</span><br><span class="line">	<span class="attr">name</span>: <span class="string">&#x27;Foo&#x27;</span>,</span><br><span class="line">	<span class="attr">age</span>: <span class="number">18</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">];</span><br><span class="line"><span class="comment">// mock 请求</span></span><br><span class="line"><span class="keyword">const</span> mock = RequestMock()</span><br><span class="line">  .onRequestTo(&#123;</span><br><span class="line">	<span class="comment">// 假设服务端接口是 http://server.com/api/user</span></span><br><span class="line">    <span class="attr">url</span>: <span class="string">&#x27;http://server.com/api/user&#x27;</span>,</span><br><span class="line">    <span class="attr">method</span>: <span class="string">&#x27;GET&#x27;</span>,</span><br><span class="line">    <span class="attr">isAjax</span>: <span class="literal">true</span>,</span><br><span class="line">  &#125;)</span><br><span class="line">  .respond(&#123; <span class="attr">data</span>: mockData &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过 hooks 方法在测试集中集成 mock 服务</span></span><br><span class="line">fixture<span class="string">`Getting Started`</span>.page<span class="string">`http://localhost:3000/`</span>.requestHooks(mock);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>当测试运行起来后，这个测试集执行的测试就不会去真正的服务端请求数据，而是会走 mock API 然后用 mock 数据来渲染页面，测试执行完成后对服务端的数据不会产生任何影响。</p>
+<h2 id="竞品对比"><a href="#竞品对比" class="headerlink" title="竞品对比"></a>竞品对比</h2><p>Web 自动化测试工具有很多，像老牌的<code>selenium</code>和<code>Rebot</code>，还有后来者<code>Nightwatch</code>和<code>Cypress</code>等。其中 <a target="_blank" rel="noopener" href="https://www.cypress.io/">Cypress</a> 和 TestCafe 功能比较类似，它们是直面竞争者，但 TestCafe 的优势是支持的浏览器种类比较多，支持除了 Chrome 之外的其他浏览器甚至包括 IE。</p>
+<p>TestCafe 支持的浏览器有下面这些，更多资料可以查阅<a target="_blank" rel="noopener" href="https://devexpress.github.io/testcafe/documentation/using-testcafe/common-concepts/browsers/browser-support.html">这里</a>：</p>
+<table>
+<thead>
+<tr>
+<th align="center">浏览器</th>
+<th align="center">别名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Chromium</td>
+<td align="center">chromium</td>
+</tr>
+<tr>
+<td align="center">Google Chrome</td>
+<td align="center">chrome</td>
+</tr>
+<tr>
+<td align="center">Google Chrome Canary</td>
+<td align="center">chrome-canary</td>
+</tr>
+<tr>
+<td align="center">Internet Explorer</td>
+<td align="center">ie</td>
+</tr>
+<tr>
+<td align="center">Microsoft Edge</td>
+<td align="center">edge</td>
+</tr>
+<tr>
+<td align="center">Mozilla Firefox</td>
+<td align="center">firefox</td>
+</tr>
+<tr>
+<td align="center">Opera</td>
+<td align="center">opera</td>
+</tr>
+<tr>
+<td align="center">Safari</td>
+<td align="center">safari</td>
+</tr>
+</tbody></table>
+<p>也可以查看以下文章来了解 TestCafe 和其他自动化测试框架的对比：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://medium.com/welldone-software/an-overview-of-javascript-testing-in-2018-f68950900bc3">An Overview of JavaScript Testing in 2018</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/yld-engineering-blog/evaluating-cypress-and-testcafe-for-end-to-end-testing-fcd0303d2103">Evaluating Cypress and TestCafe for end to end testing</a></li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Web 自动化测试位于测试金字塔的顶端，是开发和维护成本较高的一种测试，所以自动化测试贵精不贵多，可以用它来测试项目的核心流程，但没必要涵盖所有细节，这样可以让自动化测试的性价比最高。希望对自动化测试感兴趣的同学留言交流讨论，谢谢。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+	<h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+    <div class="digital-wallet">
+	  <h6>BTC 地址: 3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+	  <h6>ETH 地址: 0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+    </div>
+    <div class="wechat_appreciates">
+	  <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://example.com/2019/01/28/hello-testcafe/';
+            this.page.identifier = 'https://example.com/2019/01/28/hello-testcafe/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2021
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

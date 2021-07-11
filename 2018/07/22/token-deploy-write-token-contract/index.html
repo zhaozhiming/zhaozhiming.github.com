@@ -1,0 +1,259 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>发行代币——编写代币智能合约 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="发行代币——编写代币智能合约"> <!-- TODO: truncate -->
+	<meta name="keywords" content="ethereum,token,truffle,openzeppelin,rinkeby">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">发行代币——编写代币智能合约</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2018-07-22T09:06:00.000Z" itemprop="datePublished">7月 22, 2018</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/ethereum/">ethereum</a> <a href="/tags/rinkeby/">rinkeby</a> <a href="/tags/token/">token</a> <a href="/tags/truffle/">truffle</a> <a href="/tags/openzeppelin/">openzeppelin</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2018/07/token.jpeg" class="" width="400" height="300">
+
+<p>以太坊在比特币区块链的基础上进行了很多功能的完善，其中最大的一个功能就是让人们在区块链上可以开发图灵完备的程序——智能合约，而在智能合约中使用最广泛的要数以太坊代币了，今天我们就来介绍如何编写代币的智能合约。</p>
+<span id="more"></span>
+
+<h2 id="简易发行代币方法"><a href="#简易发行代币方法" class="headerlink" title="简易发行代币方法"></a>简易发行代币方法</h2><p>可能有的人会以为发行代币特别困难，特别是对没有编程经验的人来说，其实现在已经有一些自动生成代币的工具出现了，即使不会编程也可以发行自己的代币。</p>
+<h3 id="Token-Factory"><a href="#Token-Factory" class="headerlink" title="Token Factory"></a><a target="_blank" rel="noopener" href="http://thetokenfactory.com/#/factory">Token Factory</a></h3><p><code>代币工厂</code>是一个主动帮助你生成代币的网站，只要输入代币的几个主要参数就可以帮你自动创建代币。</p>
+<img src="/images/post/2018/07/token_factory.png" class="">
+
+<h3 id="一键代币"><a href="#一键代币" class="headerlink" title="一键代币"></a><a target="_blank" rel="noopener" href="https://token.ftqq.com/">一键代币</a></h3><p><code>一键代币</code>是国内开发的代币生成网站，同样只需要输入代币的参数即可自动创建代币，需要配合<code>MetaMask</code>钱包一起使用。</p>
+<img src="/images/post/2018/07/one_token.png" class="">
+
+<h3 id="My-Token-Deployer"><a href="#My-Token-Deployer" class="headerlink" title="My Token Deployer"></a><a target="_blank" rel="noopener" href="https://one-click-token.herokuapp.com/">My Token Deployer</a></h3><p>这是一个专门给 Rinkeby 测试网络提供代币生成的网站，这里只能输入代币名称和符号。</p>
+<img src="/images/post/2018/07/rinkeby_token.png" class="">
+
+<h2 id="开发工具介绍"><a href="#开发工具介绍" class="headerlink" title="开发工具介绍"></a>开发工具介绍</h2><p>虽然有了这些自动化生成代币的工具，但作为程序员的我们，还是觉得把代码控制在自己手里更稳妥一些。在我们介绍如何开发代币之前，先介绍一下需要用到的开发工具。</p>
+<h3 id="Truffle"><a href="#Truffle" class="headerlink" title="Truffle"></a><a target="_blank" rel="noopener" href="https://truffleframework.com/">Truffle</a></h3><p>Truffle 是一个以太坊开发框架，据说是在一次区块链黑客马拉松上获奖的项目，后来慢慢演变成了一个开发者受欢迎的框架，它的主要特点有：</p>
+<ul>
+<li>模板化工程：可以通过不同项目模板创建项目</li>
+<li>脚本化部署：通过简单的脚本命令可以方便地进行合约部署</li>
+<li>本地化测试：在本地可以运行智能合约测试，避免上链后再发现问题</li>
+<li>等等</li>
+</ul>
+<h3 id="Openzeppelin"><a href="#Openzeppelin" class="headerlink" title="Openzeppelin"></a><a target="_blank" rel="noopener" href="https://openzeppelin.org/">Openzeppelin</a></h3><p>随着区块链受到越来越多人的关注，不少黑客也盯上了区块链这块蛋糕，目前已在不少代币的智能合约中发现了安全漏洞，一些漏洞甚至可以让代币的价值瞬间归零，所以如何编写一个安全性高的代币合约尤其重要。</p>
+<p>幸运的是社区已经开放了一些工具让你避免这个问题，Openzeppelin 是一个智能合约复用框架，它提供了一套经过生产环境验证的合约模板，不但可以让你快速开发自己的智能合约，而且还提供了安全保障。</p>
+<h3 id="Ganache"><a href="#Ganache" class="headerlink" title="Ganache"></a><a target="_blank" rel="noopener" href="https://truffleframework.com/ganache">Ganache</a></h3><p>Ganache 也是<code>Truffle</code>团队开发的一个工具，简单来说它就是一个<code>testrpc</code>（现在已改名为 <a target="_blank" rel="noopener" href="https://github.com/trufflesuite/ganache-cli">ganache-cli</a>）的 GUI 工具，让你可以通过界面方式来创建本地的区块链环境，主要用于开发和测试。</p>
+<h2 id="项目初始化"><a href="#项目初始化" class="headerlink" title="项目初始化"></a>项目初始化</h2><p>工具介绍完了，我们可以开始编写代币的智能合约了，首先我们需要创建项目工程，通过<code>Truffle</code>我们可以快速创建项目。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 创建空目录</span><br><span class="line">mkdir mytoken</span><br><span class="line"><span class="built_in">cd</span> mytoken</span><br><span class="line">// 使用模板初始化工程</span><br><span class="line">truffle unbox tutorialtoken</span><br></pre></td></tr></table></figure>
+
+<p>这里我们使用了 <a target="_blank" rel="noopener" href="https://truffleframework.com/boxes/tutorialtoken">tutorialtoken</a> 这个项目模板，它是一个专门用来编写代币智能合约的项目模板，里面提供了部署脚本，前端页面代码等内容，我们使用这个模板可以大大减少我们的工作量，创建出来的项目目录结构如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">├── box-img-lg.png</span><br><span class="line">├── box-img-sm.png</span><br><span class="line">├── bs-config.json</span><br><span class="line">├── contracts</span><br><span class="line">│   ├── Migrations.sol</span><br><span class="line">├── migrations</span><br><span class="line">│   ├── 1_initial_migration.js</span><br><span class="line">├── package.json</span><br><span class="line">├── src</span><br><span class="line">│   ├── css</span><br><span class="line">│   │   ├── bootstrap.min.css</span><br><span class="line">│   │   └── bootstrap.min.css.map</span><br><span class="line">│   ├── fonts</span><br><span class="line">│   │   ├── glyphicons-halflings-regular.eot</span><br><span class="line">│   │   ├── glyphicons-halflings-regular.svg</span><br><span class="line">│   │   ├── glyphicons-halflings-regular.ttf</span><br><span class="line">│   │   ├── glyphicons-halflings-regular.woff</span><br><span class="line">│   │   └── glyphicons-halflings-regular.woff2</span><br><span class="line">│   ├── index.html</span><br><span class="line">│   └── js</span><br><span class="line">│       ├── app.js</span><br><span class="line">│       ├── bootstrap.min.js</span><br><span class="line">│       ├── truffle-contract.js</span><br><span class="line">│       └── web3.min.js</span><br><span class="line">├── <span class="built_in">test</span></span><br><span class="line">└── truffle.js</span><br></pre></td></tr></table></figure>
+
+<p>项目里面我们主要使用到了<code>contracts</code>和<code>migrations</code>这 2 个目录中的代码，还有<code>truffle.js</code>，用来做环境配置，更多的相关内容可以查看<a target="_blank" rel="noopener" href="https://truffleframework.com/docs/getting_started/project#exploring-the-project">这里</a>。</p>
+<h2 id="编写合约代码"><a href="#编写合约代码" class="headerlink" title="编写合约代码"></a>编写合约代码</h2><p>初始化项目后，我们需要在项目中使用<code>Openzeppelin</code>来作为合约代码的基类，先安装<code>Openzeppelin</code>：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add openzeppelin-solidity</span><br></pre></td></tr></table></figure>
+
+<p>然后在<code>contracts</code>目录中创建我们的合约文件<code>Mytoken.sol</code>，代码内容如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.24</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol&#x27;</span>;</span><br><span class="line"></span><br><span class="line">contract Mytoken is StandardToken &#123;</span><br><span class="line">  string public constant name = <span class="string">&quot;My token&quot;</span>; <span class="comment">// 代币名称</span></span><br><span class="line">  string public constant symbol = <span class="string">&quot;MT&quot;</span>; <span class="comment">// 代币符号</span></span><br><span class="line">  uint8 public constant decimals = <span class="number">18</span>; <span class="comment">// 代币精度</span></span><br><span class="line"></span><br><span class="line">  uint256 public constant INITIAL_SUPPLY = <span class="number">10000000000000</span> * (<span class="number">10</span> ** uint256(decimals)); <span class="comment">// 代币的总供应量</span></span><br><span class="line"></span><br><span class="line">  <span class="title">constructor</span>(<span class="params"></span>) <span class="title">public</span> &#123;</span><br><span class="line">    totalSupply_ = INITIAL_SUPPLY;</span><br><span class="line">    balances[msg.sender] = INITIAL_SUPPLY;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，有了<code>Openzeppelin</code>之后我们的代码非常简单，只需要导入它的<code>StandardToken</code>来作为我们的合约基类，然后写上代币的几个主要信息就可以了。</p>
+<p>这里我们的代币供应量是<code>10000000000000</code>，即 10^14 个代币，代币精度是 10^18（与以太币一样）。</p>
+<h2 id="编译合约"><a href="#编译合约" class="headerlink" title="编译合约"></a>编译合约</h2><p>合约代码编写完成后，我们需要将代码进行编译，执行命令如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">truffle compile</span><br></pre></td></tr></table></figure>
+
+<p>编译完成后可以看到在工程目录下生成了一个<code>build</code>目录，里面是编译后的结果，内容如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">build</span><br><span class="line">└── contracts</span><br><span class="line">    ├── BasicToken.json</span><br><span class="line">    ├── ERC20.json</span><br><span class="line">    ├── ERC20Basic.json</span><br><span class="line">    ├── Migrations.json</span><br><span class="line">    ├── SafeMath.json</span><br><span class="line">    ├── StandardToken.json</span><br><span class="line">    └── Mytoken.json</span><br></pre></td></tr></table></figure>
+
+<p>每一个<code>sol</code>文件会被编译成一个<code>json</code>文件，这里除了我们的文件被生成之外，还有其他文件因为引用和继承而被生成。</p>
+<p>查看<code>Mytoken.json</code>文件可以看到，里面包含了智能合约的详细信息。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这里主要介绍了代币的智能合约编写过程，其实可以看到有了一些框架和工具库的帮助，我们要写的代码非常之少，但是功能又十分齐全，而且安全性也有保障。</p>
+<p>在下一篇文章中，我们再来介绍如何部署我们的合约，敬请期待。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+	<h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+    <div class="digital-wallet">
+	  <h6>BTC 地址: 3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+	  <h6>ETH 地址: 0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+    </div>
+    <div class="wechat_appreciates">
+	  <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://example.com/2018/07/22/token-deploy-write-token-contract/';
+            this.page.identifier = 'https://example.com/2018/07/22/token-deploy-write-token-contract/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2021
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>如何运行 react16 之后测试 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="如何运行 react 16 之后测试"> <!-- TODO: truncate -->
+	<meta name="keywords" content="react,enzyme,test">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">如何运行 react16 之后测试</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2017-11-08T12:36:00.000Z" itemprop="datePublished">11月 8, 2017</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/react/">react</a> <a href="/tags/test/">test</a> <a href="/tags/enzyme/">enzyme</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2017/11/react-test.png" class="" width="400" height="300">
+
+<p>React 升级到版本 16 之后，各方面都有不少改进，最重要的是完全向后兼容，功能代码几乎不用怎么修改就可以使用新版本。但是测试代码就不一定了，如果你是使用 <code>enzyme</code> 跑测试的话，以前的测试可能会跑不起来，那么需要如何修改呢？下面我们就来看一下吧。</p>
+<span id="more"></span>
+
+<h2 id="一个简单的测试用例"><a href="#一个简单的测试用例" class="headerlink" title="一个简单的测试用例"></a>一个简单的测试用例</h2><p>让我们来看一个简单的测试，这里面用到了测试 React 组件时常用的 <code>enzyme</code> 包和一个将 <code>enzyme</code> 对象转成 json 的工具<code>enzyme-to-json</code>。</p>
+<p>可以暂时不管该测试对应的功能代码是怎么样的，因为校验的结果是组件快照。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Demo.js</span></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> () =&gt; <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>Hello World<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Demo.test.js</span></span><br><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; shallow &#125; <span class="keyword">from</span> <span class="string">&#x27;enzyme&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> toJson <span class="keyword">from</span> <span class="string">&#x27;enzyme-to-json&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> Demo <span class="keyword">from</span> <span class="string">&#x27;./Demo&#x27;</span>;</span><br><span class="line"></span><br><span class="line">describe(<span class="string">&#x27;Demo Component&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  it(<span class="string">&#x27;should render correctly&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> wrapper = shallow(<span class="xml"><span class="tag">&lt;<span class="name">Demo</span> /&gt;</span></span>);</span><br><span class="line">    expect(toJson(wrapper)).toMatchSnapshot();</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="React16-之前"><a href="#React16-之前" class="headerlink" title="React16 之前"></a>React16 之前</h2><p>在升级 React16 之前，我们依赖的第三方库版本如下，跑这个测试是完全没有问题的。</p>
+<ul>
+<li>react: 15.4.2</li>
+<li>react-dom: 15.4.2</li>
+<li>enzyme: 2.8.2</li>
+<li>enzyme-to-json: 1.5.1</li>
+<li>react-addons-test-utils: 15.4.2</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PASS  src/Demo.test.js</span><br><span class="line">  Demo Component</span><br><span class="line">    ✓ should render correctly (12ms)</span><br><span class="line"></span><br><span class="line">Test Suites: 1 passed, 1 total</span><br><span class="line">Tests:       1 passed, 1 total</span><br><span class="line">Snapshots:   1 passed, 1 total</span><br></pre></td></tr></table></figure>
+
+<h2 id="React16-之后"><a href="#React16-之后" class="headerlink" title="React16 之后"></a>React16 之后</h2><p>但是升级 React16 之后，这个测试就跑不过了，报以下的错误：</p>
+<ul>
+<li>react: 15.4.2 =&gt; 16.0.0</li>
+<li>react-dom: 15.4.2 =&gt; 16.0.0</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">FAIL  src/Demo.test.js</span><br><span class="line">  ● Test suite failed to run</span><br><span class="line"></span><br><span class="line">    Cannot find module <span class="string">&#x27;react-dom/lib/ReactTestUtils&#x27;</span> from <span class="string">&#x27;index.js&#x27;</span></span><br><span class="line"></span><br><span class="line">      at Resolver.resolveModule (node_modules/jest-resolve/build/index.js:179:17)</span><br><span class="line">      at Object.&lt;anonymous&gt; (node_modules/react-addons-test-utils/index.js:1:107)</span><br><span class="line"></span><br><span class="line">Test Suites: 1 failed, 1 total</span><br><span class="line">Tests:       0 total</span><br><span class="line">Snapshots:   0 total</span><br></pre></td></tr></table></figure>
+
+<h2 id="enzyme-的版本升级"><a href="#enzyme-的版本升级" class="headerlink" title="enzyme 的版本升级"></a>enzyme 的版本升级</h2><p>通过报错信息可以发现 React 的一些测试 API 发生了变化，那要如何修正呢？其实在 React 升级到版本 16 以后，<code>enzyme</code> 也对自身做了一次大的重构，我们来看看要怎么使用重构后的<code>enzyme</code>。</p>
+<ul>
+<li>首先升级 <code>enzyme</code> 的版本到最新版本</li>
+<li>然后再安装 <code>enzyme-adapter-react-16</code> 这个包（待会讲这个包是做什么的），原来的 <code>react-addons-test-utils</code> 包可以删掉，新版的 <code>enzyme</code> 已经不需要了</li>
+<li>最后在测试的全局配置中增加以下代码（如果是用 <code>create-react-app</code> 创建项目的话，可以在 <code>src/setupTests.js</code>里面修改）</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Enzyme <span class="keyword">from</span> <span class="string">&#x27;enzyme&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> Adapter <span class="keyword">from</span> <span class="string">&#x27;enzyme-adapter-react-16&#x27;</span>;</span><br><span class="line"></span><br><span class="line">Enzyme.configure(&#123; <span class="attr">adapter</span>: <span class="keyword">new</span> Adapter() &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>OK！原来的测试通过了！</p>
+<p>新版的<code>enzyme</code> 拆分出来了多个 adapter 包，用来支持多种 React 版本，下面是版本对照表：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Enzyme Adapter Package</th>
+<th align="center">React semver compatibility</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>enzyme-adapter-react-16</code></td>
+<td align="center"><code>^16.0.0</code></td>
+</tr>
+<tr>
+<td align="center"><code>enzyme-adapter-react-15</code></td>
+<td align="center"><code>^15.5.0</code></td>
+</tr>
+<tr>
+<td align="center"><code>enzyme-adapter-react-15.4</code></td>
+<td align="center"><code>15.0.0-0 - 15.4.x</code></td>
+</tr>
+<tr>
+<td align="center"><code>enzyme-adapter-react-14</code></td>
+<td align="center"><code>^0.14.0</code></td>
+</tr>
+<tr>
+<td align="center"><code>enzyme-adapter-react-13</code></td>
+<td align="center"><code>^0.13.0</code></td>
+</tr>
+</tbody></table>
+<h2 id="疑难问题"><a href="#疑难问题" class="headerlink" title="疑难问题"></a>疑难问题</h2><p>虽然测试现在已经跑通了，但是你可能会遇到下面这个警告：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">console.error node_modules/fbjs/lib/warning.js:33</span><br><span class="line">    Warning: React depends on requestAnimationFrame. Make sure that you load a polyfill <span class="keyword">in</span> older browsers. http://fb.me/react-polyfills</span><br><span class="line"></span><br><span class="line"> PASS  src/Demo.test.js</span><br><span class="line">  Demo Component</span><br><span class="line">    ✓ should render correctly (8ms)</span><br><span class="line"></span><br><span class="line">Test Suites: 1 passed, 1 total</span><br><span class="line">Tests:       1 passed, 1 total</span><br><span class="line">Snapshots:   1 passed, 1 total</span><br></pre></td></tr></table></figure>
+
+<p>原因是测试用到的<code>jsdom</code> 包还没有提供<code>requestAnimationFrame</code>，所以会报这个警告。</p>
+<p>具体内容可以看<a target="_blank" rel="noopener" href="https://github.com/facebookincubator/create-react-app/issues/3199">这个 ISSUE</a>，<code>create-react-app</code>已经做了相应的修复，修改内容可以看看<a target="_blank" rel="noopener" href="https://github.com/facebookincubator/create-react-app/pull/3340">这个 PR</a>。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+	<h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+    <div class="digital-wallet">
+	  <h6>BTC 地址: 3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+	  <h6>ETH 地址: 0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+    </div>
+    <div class="wechat_appreciates">
+	  <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://example.com/2017/11/08/run-react-test-with-react-version-16/';
+            this.page.identifier = 'https://example.com/2017/11/08/run-react-test-with-react-version-16/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2021
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

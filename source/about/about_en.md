@@ -44,6 +44,30 @@ date: 2010-01-01 20:04:21
 ## Knownsec (June 2015 ~ Now)
 Full-stack engineer && architect, responsible for team building, staff interview, technology selection, training sharing and development of departmental projects.
 
+### Dev Efficiency Platform
+
+Technology stack: React(Hooks), Node.js, Typescript, Ant Design, microservice, Docker, K8s.
+
+It is a management platform to improve the efficiency of R&D staff, with back-end access to Jira-related data, a more simplified project management interface for users, and a web IDE for developers to develop in real-time instead of local development tools.
+
+I am mainly responsible for system architecture design, core function development, functional design review, code review, etc.
+
+### Standard Box
+
+Technology stack: React(Hooks), Node.js, Python, Typescript, Ant Design, micro-frontend, microservice, grpc, Linux, Docker, Docker-compose
+
+It is a development platform designed for hardware products, which encapsulates some common functions, including login and registration, user management, permission management, security audit, etc. Other products can use it to focus on developing their own business functions without the need to repeat the development of common functions.
+
+I am mainly responsible for project architecture design, product design, project management, and main function development.
+
+### Wind Hunter
+
+Technology stack: React(Hooks), Node.js, Typescript, Python, Linux KVM
+
+This is a product developed for enterprise security, which can generate multiple realistic operating system or web service environments to prevent hackers from attacking to real servers, so as to protect the internal network security of enterprises.
+
+I am mainly responsible for system architecture design, core function development, project management code review, etc.
+
 ### Ethereum Wallet
 
 Technology stack: React Natvie, Etheresum, smart contracts, web3, geth

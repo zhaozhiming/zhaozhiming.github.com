@@ -44,6 +44,30 @@ date: 2010-01-01 20:04:21
 ## 知道创宇（ 2015 年 6 月 ~  现在）
 全栈工程师 && 架构师，负责团队搭建、人员面试、技术选型、培训分享和部门项目的开发等工作。
 
+### 效能平台
+
+技术栈: Technology stack: React(Hooks), Node.js, Typescript, Ant Design, microservice, Docker, K8s
+
+这是一个为提高研发人员效率的管理平台，后台可以接入Jira相关数据，为用户提供更简化的项目管理操作界面，并为开发人员提供可实时开发的 web IDE 来代替本地开发工具。
+
+我主要负责系统架构设计、核心功能开发、功能设计评审、代码评审等工作
+
+### 标准盒子
+
+技术栈: React(Hooks), Node.js, Python, Typescript, Ant Design, micro-frontend, microservice, grpc, Linux, Docker, Docker-compose
+
+这是一个为硬件产品设计的开发平台，它封装了一些通用的功能，包括登陆注册、用户管理、权限管理，安全审计等，其他产品使用它可以专心开发自己的业务功能而无需重复开发通用功能。
+
+我主要负责项目的架构设计、产品设计、项目管理，主要功能开发等工作
+
+### 猎风
+
+技术栈： React(Hooks), Node.js, Typescript, Python, Linux KVM
+
+这是一个为企业安全开发的产品，可以产生多个拟真的操作系统或者web服务环境，防止黑客攻击到真实的服务器，以此来保护企业内部的网络安全
+
+我主要负责系统架构设计、核心功能开发、项目管理代码评审等工作。
+
 ### 以太坊电子钱包
 
 技术栈：React Natvie，Etheresum，智能合约，web3，geth

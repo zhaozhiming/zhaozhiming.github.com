@@ -16,7 +16,7 @@ date: 2010-01-01 20:04:21
 
 # 个人信息
 
- - Zhao Zhiming / Male / 1982
+ - Zhao Zhiming / Male
  - Geeker，Programming fanatic, heavy technology enthusiast, desire: change the world
  - Bachelor / Nanchang University of Aeronautics and Technology - Computer Science and Applications 
  - Years of work: 15+

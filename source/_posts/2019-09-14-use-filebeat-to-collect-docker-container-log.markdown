@@ -31,7 +31,7 @@ ElasticSearch 和 Kibana 的安装比较简单，可以直接用 Docker 安装�
 
 Filebeat 的安装方式有多种，可以直接下载安装程序安装，也可以通过 Docker 方式安装，命令如下：
 
-{% codeblock lang:sh %}
+```sh
 docker run -d \
   --name=filebeat \
   --user=root \
@@ -40,13 +40,13 @@ docker run -d \
   --volume="/var/run/docker.sock:/var/run/docker.sock:ro" \
   docker.elastic.co/beats/filebeat:7.3.1 filebeat -e -strict.perms=false \
   -E output.elasticsearch.hosts=["localhost:9200"]
-{% endcodeblock %}
+```
 
 注意这里映射了 Filebeat 配置文件的路径，同时映射了 Docker 容器的文件路径。
 
 也可以使用 Docker-compose 来启动 Filebeat：
 
-{% codeblock lang:sh %}
+```sh
 filebeat:
     image: docker.elastic.co/beats/filebeat:7.3.1
     user: root
@@ -58,20 +58,20 @@ filebeat:
     restart: always
     links:
       - elasticsearch
-{% endcodeblock %}
+```
 
 ## 基于 Docker 的 Filebeat 配置
 
 使用官方推荐的这个配置模板就够了，我们对 Filebeat 的配置主要体现在具体的容器上，而不是 Filebeat 本身。
 
-{% codeblock lang:sh %}
+```sh
 # 使用这个命令下载 filebeat 配置文件
 curl -L -O https://raw.githubusercontent.com/elastic/beats/7.3/deploy/docker/filebeat.docker.yml
-{% endcodeblock %}
+```
 
 配置文件内容是这样：
 
-{% codeblock lang:yaml %}
+```yaml
 filebeat.config:
   modules:
     path: ${path.config}/modules.d/*.yml
@@ -89,7 +89,7 @@ output.elasticsearch:
   hosts: '${ELASTICSEARCH_HOSTS:elasticsearch:9200}'
   username: '${ELASTICSEARCH_USERNAME:}'
   password: '${ELASTICSEARCH_PASSWORD:}'
-{% endcodeblock %}
+```
 
 ## 过滤不需要收集日志的 Docker 容器
 
@@ -101,19 +101,19 @@ Filebeat 提供了一些 Docker 标签（Label），可以让 Docker 容器在 F
 
 可以在`docker run`的时候加上这个参数：
 
-{% codeblock lang:sh %}
+```sh
 docker run --label co.elastic.logs/enabled=false ...
-{% endcodeblock %}
+```
 
 如果你是用 Docker-compose 启动的话，可以这样写：
 
-{% codeblock lang:yaml %}
+```yaml
 filebeat:
     image: docker.elastic.co/beats/filebeat:7.3.1
     labels:
       co.elastic.logs/enable: false
     ...
-{% endcodeblock %}
+```
 
 当然更好的方法是在 Filebeat 的配置文件里面配置需要收集日志的容器，但试了几次没找到可以让配置生效的写法，如果有人知道如何配置，也请留言告知，谢谢。
 
@@ -123,12 +123,12 @@ Filebeat 默认收集的是 Docker 容器启动后输出到`docker logs`的日�
 
 解决方法是把额外日志的路径映射到 Docker 的输出控制台，我们可以在 Dockerfile 里面这样设置：
 
-{% codeblock lang:sh Dockerfile %}
+```sh
 # 将普通日志输出到 stdout
 RUN ln -sf /dev/stdout /root/logs/web-server/web-server-web.log
 # 将错误日志输出到 stderr
 RUN ln -sf /dev/stderr /root/logs/web-server/common-error.log
-{% endcodeblock %}
+```
 
 这样容器启动后就会将容器里日志传输到控制台上，而 Filebeat 也就可以收集该日志了。
 
@@ -138,13 +138,13 @@ Filebeat 收集日志后将其存入到 Elasticsearch，默认的存储规则是
 
 Filebeat 考虑到了这种情况，让我们可以通过添加容器便签的方式来设置多行日志的整合规则，比如我们的每条日志都是以时间格式开始的：`2019-01-01 11:11:11,1111 xxxx`，那么我们的多行设置规则就可以这样写：
 
-{% codeblock lang:yaml %}
+```yaml
 web-server-dev:
     labels:
       co.elastic.logs/multiline.pattern: '^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2},\d{3}\s'
       co.elastic.logs/multiline.negate: true
       co.elastic.logs/multiline.match: after
-{% endcodeblock %}
+```
 
 其中 pattern 表示日志内容如果不匹配这个正则表达式则不能作为新的一行日志，这样日志就会按照时间进行分组了。
 

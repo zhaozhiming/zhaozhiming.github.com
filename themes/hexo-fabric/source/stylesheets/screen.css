@@ -4144,10 +4144,17 @@ body {
 
 #appreciates h2 {
   color: #EA6F5A;
+  margin-bottom: 24px;
 }
 
 #appreciates h4 {
   margin-bottom: 10px;
+}
+
+#appreciates .post-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;;
 }
 
 #appreciates .digital-wallet {

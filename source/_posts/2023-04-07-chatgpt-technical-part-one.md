@@ -25,7 +25,8 @@ SSE 是一种基于 HTTP 的实时通信技术，允许服务器向客户端（�
 * 单向通信：与 Websockets 等双向通信技术相比，SSE 主要用于服务器向客户端的单向通信，减少了通信的复杂性。
 * 重连机制：在连接中断时，SSE 客户端会自动尝试重新连接服务器，从而确保实时数据的传输不会中断。
 * 事件标识：SSE 支持为不同类型的事件设置标识，使客户端能够根据事件类型进行相应的处理。
-* 与 Websockets 的比较：
+
+### 与 Websockets 的比较
 
 尽管 SSE 和 Websockets 都是实时通信技术，但它们在某些方面有所不同：
 
@@ -66,7 +67,7 @@ eventSource.onmessage = ({ data }) => {
 
 ### 只能使用 GET 请求
 
-SSE 是基于 HTTP GET 请求的，因此无法直接使用 POST、PUT 等其他请求，也就是说无法在请求中传递 data 类的参数。这是因为 SSE 的设计初衷是用于服务器向客户端发送实时事件和数据，而不是用于客户端向服务器发送数据。
+SSE 是基于 HTTP GET 请求的，因此无法直接使用 POST、PUT 等其他请求，也就是说无法在请求中传递 body 类的参数。这是因为 SSE 的设计初衷是用于服务器向客户端发送实时事件和数据，而不是用于客户端向服务器发送数据。
 
 ### 无法在请求中传递 header
 
@@ -77,8 +78,15 @@ SSE 是基于 HTTP GET 请求的，因此无法直接使用 POST、PUT 等其他
 * 使用 URL 参数来传递数据，将所需的数据作为 URL 参数附加到 SSE 请求，适合传递一些简单的参数
 
 ```js
+// 客户端
 // 这里的 uid 就是要传递参数
 const eventSource = new EventSource('/sse/uid');
+
+// 服务端
+@Sse('sse/:uid')
+sse(Param() params): Observable<MessageEvent> {
+  const { uuid } = params;
+}
 ```
 * npm 上有个`EventSource`的 [polyfill](https://www.npmjs.com/package/event-source-polyfill)， 使用它替换掉`EventSource`后就可以在请求中携带 header 了，像身份令牌这种重要信息，还是建议放到 header 中。
 

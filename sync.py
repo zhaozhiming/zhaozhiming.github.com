@@ -288,7 +288,7 @@ def upload_media_news(post_path):
     AUTHOR = 'jzzmq'
     RESULT = render_markdown(content)
     digest = fetch_attr(content, 'subtitle').strip().strip('"').strip('\'')
-    link = os.path.basename(post_path).replace('.markdown', '')
+    link = os.path.basename(post_path).replace('.md', '')
     link_data = link[0:11].replace('-', '/')
     link = link_data + link[11:]
     CONTENT_SOURCE_URL = 'https://zhaozhiming.github.io/{}'.format(link)
@@ -329,7 +329,7 @@ def upload_media_news(post_path):
 def run(string_date):
     # string_date = "2019-09-14"
     print(string_date)
-    pathlist = Path("./source/_posts").glob('**/*.markdown')
+    pathlist = Path("./source/_posts").glob('**/*.md')
     for path in pathlist:
         path_str = str(path)
         content = open (path_str , 'r').read()

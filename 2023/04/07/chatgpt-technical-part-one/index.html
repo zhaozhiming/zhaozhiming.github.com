@@ -139,9 +139,8 @@
 <li>单向通信：与 Websockets 等双向通信技术相比，SSE 主要用于服务器向客户端的单向通信，减少了通信的复杂性。</li>
 <li>重连机制：在连接中断时，SSE 客户端会自动尝试重新连接服务器，从而确保实时数据的传输不会中断。</li>
 <li>事件标识：SSE 支持为不同类型的事件设置标识，使客户端能够根据事件类型进行相应的处理。</li>
-<li>与 Websockets 的比较：</li>
 </ul>
-<p>尽管 SSE 和 Websockets 都是实时通信技术，但它们在某些方面有所不同：</p>
+<h3 id="与-Websockets-的比较"><a href="#与-Websockets-的比较" class="headerlink" title="与 Websockets 的比较"></a>与 Websockets 的比较</h3><p>尽管 SSE 和 Websockets 都是实时通信技术，但它们在某些方面有所不同：</p>
 <ul>
 <li>通信方向：Websockets 支持双向实时通信，而 SSE 主要用于服务器向客户端的单向通信。</li>
 <li>协议：Websockets 使用独立的协议进行通信，而 SSE 则基于 HTTP 协议。</li>
@@ -155,13 +154,13 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> eventSource = <span class="keyword">new</span> <span class="title class_">EventSource</span>(<span class="string">&#x27;/sse&#x27;</span>);</span><br><span class="line">eventSource.<span class="property">onmessage</span> = <span class="function">(<span class="params">&#123; data &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;New message&#x27;</span>, <span class="title class_">JSON</span>.<span class="title function_">parse</span>(data));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>通过创建一个<code>EventSource</code>对象来建立后端的 SSE 接口连接，并通过监听 message 事件来获取后端数据。</p>
 <p>更多详细代码请参考<a target="_blank" rel="noopener" href="https://docs.nestjs.com/techniques/server-sent-events">这里</a>。</p>
-<h2 id="SSE-的局限性"><a href="#SSE-的局限性" class="headerlink" title="SSE 的局限性"></a>SSE 的局限性</h2><h3 id="只能使用-GET-请求"><a href="#只能使用-GET-请求" class="headerlink" title="只能使用 GET 请求"></a>只能使用 GET 请求</h3><p>SSE 是基于 HTTP GET 请求的，因此无法直接使用 POST、PUT 等其他请求，也就是说无法在请求中传递 data 类的参数。这是因为 SSE 的设计初衷是用于服务器向客户端发送实时事件和数据，而不是用于客户端向服务器发送数据。</p>
+<h2 id="SSE-的局限性"><a href="#SSE-的局限性" class="headerlink" title="SSE 的局限性"></a>SSE 的局限性</h2><h3 id="只能使用-GET-请求"><a href="#只能使用-GET-请求" class="headerlink" title="只能使用 GET 请求"></a>只能使用 GET 请求</h3><p>SSE 是基于 HTTP GET 请求的，因此无法直接使用 POST、PUT 等其他请求，也就是说无法在请求中传递 body 类的参数。这是因为 SSE 的设计初衷是用于服务器向客户端发送实时事件和数据，而不是用于客户端向服务器发送数据。</p>
 <h3 id="无法在请求中传递-header"><a href="#无法在请求中传递-header" class="headerlink" title="无法在请求中传递 header"></a>无法在请求中传递 header</h3><p>由于浏览器的安全策略，SSE 请求无法直接携带自定义 HTTP 头部。这可能在某些情况下带来限制，例如在需要身份验证时传递令牌。</p>
 <p>虽然有以上局限性，但我们还是可以通过一些方法来解决这些问题。</p>
 <ul>
 <li>使用 URL 参数来传递数据，将所需的数据作为 URL 参数附加到 SSE 请求，适合传递一些简单的参数</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这里的 uid 就是要传递参数</span></span><br><span class="line"><span class="keyword">const</span> eventSource = <span class="keyword">new</span> <span class="title class_">EventSource</span>(<span class="string">&#x27;/sse/uid&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 客户端</span></span><br><span class="line"><span class="comment">// 这里的 uid 就是要传递参数</span></span><br><span class="line"><span class="keyword">const</span> eventSource = <span class="keyword">new</span> <span class="title class_">EventSource</span>(<span class="string">&#x27;/sse/uid&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 服务端</span></span><br><span class="line">@<span class="title class_">Sse</span>(<span class="string">&#x27;sse/:uid&#x27;</span>)</span><br><span class="line"><span class="title function_">sse</span>(<span class="title class_">Param</span>() params): <span class="title class_">Observable</span>&lt;<span class="title class_">MessageEvent</span>&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; uuid &#125; = params;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>npm 上有个<code>EventSource</code>的 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/event-source-polyfill">polyfill</a>， 使用它替换掉<code>EventSource</code>后就可以在请求中携带 header 了，像身份令牌这种重要信息，还是建议放到 header 中。</li>
 </ul>

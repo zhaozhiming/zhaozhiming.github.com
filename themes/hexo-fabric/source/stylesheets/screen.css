@@ -4154,7 +4154,7 @@ body {
 #appreciates .post-footer {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;;
+  justify-content: space-between;
 }
 
 #appreciates .digital-wallet {
@@ -4172,4 +4172,11 @@ body {
 
 #appreciates .wechat_appreciates img {
   padding: 10px;
+}
+
+@media (max-width: 768px) {
+  #appreciates .post-footer {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
 }

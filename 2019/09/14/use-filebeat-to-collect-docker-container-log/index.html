@@ -153,7 +153,7 @@
 <h2 id="过滤不需要收集日志的-Docker-容器"><a href="#过滤不需要收集日志的-Docker-容器" class="headerlink" title="过滤不需要收集日志的 Docker 容器"></a>过滤不需要收集日志的 Docker 容器</h2><p>按照我们上面的方式启动 Filebeat 后，Filebeat 会自动收集机器上所有 Docker 容器的日志，包括 Elasticsearch，Kibana，Filebeat 这些工具容器的日志，但这些日志可能不是我们所关心的，我们不想让 Filebeat 收集这些容器的日志。</p>
 <p>Filebeat 提供了一些 Docker 标签（Label），可以让 Docker 容器在 Filebeat 的<code>autodiscover</code>阶段对日志进行过滤和加工，其中有个标签就是可以让某个容器的日志不进入 Filebeat：</p>
 <ul>
-<li>co.elastic.logs/enabled: 日志收集功能是否启动标志，默认值为<code>true</code>，设为<code>false</code>即为不收集日志。</li>
+<li>co.elastic.logs&#x2F;enabled: 日志收集功能是否启动标志，默认值为<code>true</code>，设为<code>false</code>即为不收集日志。</li>
 </ul>
 <p>可以在<code>docker run</code>的时候加上这个参数：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --label co.elastic.logs/enabled=<span class="literal">false</span> ...</span><br></pre></td></tr></table></figure>
@@ -164,7 +164,7 @@
 <p>当然更好的方法是在 Filebeat 的配置文件里面配置需要收集日志的容器，但试了几次没找到可以让配置生效的写法，如果有人知道如何配置，也请留言告知，谢谢。</p>
 <h2 id="统一收集容器中其他路径的日志"><a href="#统一收集容器中其他路径的日志" class="headerlink" title="统一收集容器中其他路径的日志"></a>统一收集容器中其他路径的日志</h2><p>Filebeat 默认收集的是 Docker 容器启动后输出到<code>docker logs</code>的日志，但有些服务除了这些日志外，还会把其他日志存放到容器的里面。比如<code>egg.js</code>框架会把错误日志和一些 web 日志放到<code>/root/logs/yourserver/</code>下面。那么要如何收集这些额外的日志呢？</p>
 <p>解决方法是把额外日志的路径映射到 Docker 的输出控制台，我们可以在 Dockerfile 里面这样设置：</p>
-<figure class="highlight sh"><figcaption><span>Dockerfile</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将普通日志输出到 stdout</span></span><br><span class="line">RUN ln -sf /dev/stdout /root/logs/web-server/web-server-web.log</span><br><span class="line"><span class="comment"># 将错误日志输出到 stderr</span></span><br><span class="line">RUN ln -sf /dev/stderr /root/logs/web-server/common-error.log</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将普通日志输出到 stdout</span></span><br><span class="line">RUN <span class="built_in">ln</span> -sf /dev/stdout /root/logs/web-server/web-server-web.log</span><br><span class="line"><span class="comment"># 将错误日志输出到 stderr</span></span><br><span class="line">RUN <span class="built_in">ln</span> -sf /dev/stderr /root/logs/web-server/common-error.log</span><br></pre></td></tr></table></figure>
 
 <p>这样容器启动后就会将容器里日志传输到控制台上，而 Filebeat 也就可以收集该日志了。</p>
 <h2 id="解决多行日志问题"><a href="#解决多行日志问题" class="headerlink" title="解决多行日志问题"></a>解决多行日志问题</h2><p>Filebeat 收集日志后将其存入到 Elasticsearch，默认的存储规则是一行日志作为 Elasticsearch 的一条记录，但像错误信息这种日志会出现多行的情况，如果同一个日志分成多行的话查看起来就不太方便，因为中间可能被其他日志打断，而且搜索的时候也不能把同一个错误的日志一并查询出来，所以最好的方式是能将同一个错误的多行日志存入 Elasticsearch 的同一条记录。</p>

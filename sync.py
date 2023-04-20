@@ -55,6 +55,7 @@ class NewClient:
                    "client_credential&appid=%s&secret=%s" % (os.getenv('WECHAT_APP_ID'), os.getenv('WECHAT_APP_SECRET')))
         urlResp = urllib.request.urlopen(postUrl)
         urlResp = json.loads(urlResp.read())
+        print(urlResp)
         self.__accessToken = urlResp['access_token']
         self.__leftTime = urlResp['expires_in']
 
@@ -158,7 +159,7 @@ def render_markdown(content):
             codehilite.makeExtension(
                 guess_lang=False,
                 noclasses=True,
-                pygments_style='monokai'
+                pygments_style='github-dark'
             ),]
     post =  "".join(content.split("---\n")[2:])
     html = markdown.markdown(post, extensions=exts)
@@ -245,7 +246,7 @@ def format_fix(content):
     content = content.replace("</li>\n</ul>", "</li></ul>")
     content = content.replace("<ol>\n<li>", "<ol><li>")
     content = content.replace("</li>\n</ol>", "</li></ol>")
-    content = content.replace("background: #272822", gen_css("code"))
+    content = content.replace("line-height: 125%;", gen_css("code"))
     content = content.replace("""<pre style="line-height: 125%">""", """<pre style="line-height: 125%; color: white; font-size: 11px;">""")
     return content
 

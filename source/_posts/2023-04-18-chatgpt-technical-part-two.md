@@ -102,29 +102,6 @@ renderer.table = (header, body) => {
 
 表格渲染方法的返回结果一般是一个`<table>`标签，里面包含一个`<thead>`标签和一个`<tbody>`标签，`header`参数是表格的表头，`body`参数是表格的表体。在`table`标签中加上你的自定义 class，然后在样式文件中实现自己想要的效果即可。
 
-```css
-.your-table-style {
-  thead {
-    // style
-    tr {
-      // style
-      th {
-        // style
-      }
-    }
-  }
-  tbody{
-    // style
-    tr {
-      // style
-      td {
-        // style
-      }
-    }
-  }
-}
-```
-
 ## 渲染数学公式
 
 除了代码和表格，ChatGPT 还可以渲染数学公式。在 ChatGPT 的前端页面中，使用 marked 结合 KaTeX 的方式来渲染回答里的数学公式。

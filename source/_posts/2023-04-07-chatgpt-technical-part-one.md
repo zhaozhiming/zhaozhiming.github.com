@@ -61,7 +61,7 @@ eventSource.onmessage = ({ data }) => {
 ```
 通过创建一个`EventSource`对象来建立后端的 SSE 接口连接，并通过监听 message 事件来获取后端数据。
 
-更多详细代码请参考[这里](https://docs.nestjs.com/techniques/server-sent-events)。
+更多详细代码请参考 [这里](https://docs.nestjs.com/techniques/server-sent-events)。
 
 ## SSE 的局限性
 
@@ -98,8 +98,46 @@ const es = new EventSourcePolyfill('/sse', {
 });
 ```
 
+## 用 SSE 实现 ChatGPT 
+
+既然 SSE 有这些限制，那么 ChatGPT 是怎么做到将`prompt`传到后端，然后后端再通过 SSE 返回答案的呢？
+可能有人会说通过 GET 请求的 `query`参数来传递`prompt`参数，比如`sse?question=xxx`，但是这样的话，如果`prompt`很大，比如一个几百上千字的`prompt`就会有问题了，一个是不安全，另一个是可能超过 URL 的长度限制。同样地，将`prompt`放到 `header`里也不太合适，毕竟是业务字段，不应该放到 header 里。 
+
+如果是局限在一个请求里面是去思考的话，可能确实无法做到，但如果是多个请求呢？我们可以通过多个请求来实现，比如先通过一个请求将`prompt`传到后端，后端返回一些参数给前端后，前端再通过 SSE 去后端请求答案，这样就可以避免上面的问题了。
+
+### 见证奇迹的时刻
+
+我们可以先发送一个 POST 请求，将`prompt`放到请求的`body`里，后端接收到 POST 请求后，将`prompt`存到数据库里，并返回一个`id`给前端。
+
+```js
+@Post('new')
+async chat(@Body() data: { prompt }) {
+  const { prompt } = data;
+  const id = await this.chatService.createChat(prompt);
+  return { id };
+}
+```
+
+前端接收到这个 id 参数后，将 id 放到 SSE 的请求里，再向后端发送请求。
+  
+```js
+const es = new EventSourcePolyfill(`/sse/${id}`, {
+  // ...
+});
+```
+
+可以看到这里将 id 参数作为 url 的`param`，这样后端就可以通过 sse 请求获取到这个 id 了，然后再通过`id`去数据库里取出`prompt`，然后再去调用 ChatGPT 的 API，最后将答案返回给前端。
+
+```js
+@Sse('sse/:id')
+sse(Param() params): Observable<MessageEvent> {
+  const { id } = params;
+  const prompt = await this.chatService.getChat(id);
+  const answer = await this.chatService.getAnswer(prompt);
+  // 这里的 answer 就是 ChatGPT 返回的答案，然后通过 sse 返回给前端
+}
+```
+
 ## 总结
 
 SSE 作为一种基于 HTTP 的实时通信技术，使得服务器能够主动将事件发送到客户端，而无需客户端重复发送请求。尽管 SSE 存在一定的局限性，在特定场景下，其简单、易用的特点使其成为实现单向实时数据传输的理想选择。
-
-

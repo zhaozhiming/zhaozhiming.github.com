@@ -3,7 +3,7 @@ title: "About Me"
 date: 2010-01-01 20:04:21
 ---
 
-## [中文版](/about/index.html)
+## [Chinese Version](/about/index.html)
 
 # Contact
 
@@ -14,7 +14,7 @@ date: 2010-01-01 20:04:21
 
 ---
 
-# 个人信息
+# Personal information
 
  - Zhao Zhiming / Male
  - Geeker，Programming fanatic, heavy technology enthusiast, desire: change the world

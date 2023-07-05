@@ -120,22 +120,23 @@ date: 2010-01-01 20:04:21
 # 技能清单
 
 - 语言：JS/TS/ES6/CSS/Nodejs/Python/Bash/Java，Rust/Ruby/Go/PHP
-- 开发框架：React/Redux, React Native，Django/Django rest, Node/Hapi/Meteor, Spring/Hibernate/Mybatis, 
-- 前端框架：React/Ant Design/Expo/Electron/Bootstrap/AngularJS/Semmantic-UI/JQuery/JSP
+- 开发框架：React/Redux, React Native，Django/Django rest, Node/Nest/Egg/Hapi/Meteor, Spring/Hibernate/Mybatis 
+- 前端框架：React/Next.js/Umi.js/Ant Design/Expo/Electron/Bootstrap/AngularJS/Semmantic-UI/JQuery/JSP
 - 区块链：以太坊技术 / ERC20 代币 / 智能合约 / Geth/ web3
 - 关系型数据库：MySQL/Sqlite3/PgSQL/Oracle
-- 缓存 /Nosql: Redis/Memorycache/MongoDB/Ssdb/ElasticSearch
+- 缓存 /Nosql: MongoDB/Redis/Ssdb/Memorycache
 - 容器中间件：Tomcat/Jetty/Weblogic
-- RPC/ 搜索引擎 / 消息中间件：Thrift/Solr/ActiveMq/Openfire
+- RPC/ 搜索引擎 / 消息中间件：Kafka/ElasticSearch/ActiveMq/Thrift/Solr/Openfire
 - 版本管理：Git/Svn/ClearCase
 - 构建工具：Webpack/Gradle/Maven/Ant
 - web 相关: Restful/GraphQL/Grpc/Json/XML
-- DevOps: Docker/Vagrant/VMWare/VirtualBox
+- DevOps: K8s/Docker/Vagrant/VMWare/VirtualBox
 - 测试：Moche/Jest/Enzyme/Junit/Mockito/Jbehave/Selenium/Galting
-- 云和开放平台：SAE/BAE/ 微博开放平台 / 微信应用开发 / 微信小程序
-- 敏捷开发：Scrum/ 看板 /Jenkins/TDD/Refactor/Sonar
+- 云和开放平台：阿里云/腾讯云/AWS/Azure/ 微信应用开发 / 微信小程序
+- 敏捷开发：Scrum/看板/CICD/Jenkins/TDD/Refactor/Sonar/PMP
 - 操作系统：Mac/Ubuntu/Centos/Unix/Window
-- IDE 和编辑器：Vim/IntelliJ IDEA/Eclipse
+- IDE 和编辑器：Vscode/Vim/IntelliJ IDEA/Eclipse
+- 人工智能: ChatGPT/Prompt Engineering/LangChain/LLM 训练/Vector DB/SD
 
 ---
 

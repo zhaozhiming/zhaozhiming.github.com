@@ -3,7 +3,7 @@ title: "About Me"
 date: 2010-01-01 20:04:21
 ---
 
-## [中文版](/about/index.html)
+## [Chinese Version](/about/index.html)
 
 # Contact
 
@@ -14,7 +14,7 @@ date: 2010-01-01 20:04:21
 
 ---
 
-# 个人信息
+# Personal information
 
  - Zhao Zhiming / Male
  - Geeker，Programming fanatic, heavy technology enthusiast, desire: change the world
@@ -119,23 +119,24 @@ A web application using SpringMVC+Hibernate, in which I was mainly responsible f
 
 # List of skills
 
-- Languages: JS/TS/ES6/CSS/Nodejs/Python/Bash/Java, Rust/Ruby/Go/PHP
-- Development frameworks: React/Redux, React Native, Django/Django rest, Node/Hapi/Meteor, Spring/Hibernate/Mybatis 
-- Front-end frameworks: React/Ant Design/Expo/Electron/Bootstrap/AngularJS/Semmantic-UI/JQuery/JSP
+- Languages：JS/TS/ES6/CSS/Nodejs/Python/Bash/Java，Rust/Ruby/Go/PHP
+- Development frameworks: React/Redux, React Native，Django/Django rest, Node/Nest/Egg/Hapi/Meteor, Spring/Hibernate/Mybatis 
+- Front-end frameworks: React/Next.js/Umi.js/Ant Design/Expo/Electron/Bootstrap/AngularJS/Semmantic-UI/JQuery/JSP
 - Blockchain: Ether technology / ERC20 tokens / smart contracts / Geth / web3
 - Relational Databases: MySQL/Sqlite3/PgSQL/Oracle
-- Cache /Nosql: Redis/Memorycache/MongoDB/Ssdb/ElasticSearch
+- Cache/Nosql: MongoDB/Redis/Ssdb/Memorycache
 - Container middleware: Tomcat/Jetty/Weblogic
-- RPC/ Search Engine / Messaging Middleware: Thrift/Solr/ActiveMq/Openfire
+- RPC/ Search Engine / Messaging Middleware: Kafka/ElasticSearch/ActiveMq/Thrift/Solr/Openfire
 - Versioning: Git/Svn/ClearCase
 - Build tools: Webpack/Gradle/Maven/Ant
 - web-related: Restful/GraphQL/Grpc/Json/XML
-- DevOps: Docker/Vagrant/VMWare/VirtualBox
+- DevOps: K8s/Docker/Vagrant/VMWare/VirtualBox
 - Testing: Moche/Jest/Enzyme/Junit/Mockito/Jbehave/Selenium/Galting
-- Cloud and Open Platform: SAE/BAE/ Microblog Open Platform / WeChat App Development / WeChat Applet
-- Agile development: Scrum/ Kanban /Jenkins/TDD/Refactor/Sonar
+- Cloud and Open Platform: Alibaba Cloud/Tencent Cloud/AWS/Azure/WeChat App Development/WeChat Applet
+- Agile development: Scrum/Kanban/CICD/Jenkins/TDD/Refactor/Sonar/PMP
 - OS: Mac/Ubuntu/Centos/Unix/Window
-- IDE and editor: Vim/ IntelliJ IDEA/ Eclipse
+- IDE and Editor: Vscode/Vim/IntelliJ IDEA/Eclipse
+- AI: ChatGPT/Prompt Engineering/LangChain/LLM 训练/Vector DB/SD
 
 ---
 

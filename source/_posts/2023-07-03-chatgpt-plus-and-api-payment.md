@@ -65,7 +65,7 @@ ChatGPT 只要开通了 Plus，就可以享受到更好的服务，Plus 是每�
 
 ## 虚拟信用卡
 
-在国内开通 ChatGPT Plus 最简单的方式就是使用虚拟信用卡，最早的常用虚拟卡厂商有 Depay、Nobepay 等，但这些都因为 OpenAI 升级了风控机制导致它们无法使用，之前使用了这些虚拟信用卡的用户甚至被 OpenAI 直接封号（可惜了我的 GPT-4 API😭）。
+在国内开通 ChatGPT Plus 最简单的方式就是使用虚拟信用卡，最早的常用虚拟卡厂商有 Depay、Nobepay 等，但这些都因为 OpenAI 升级了风控机制导致它们无法使用，之前使用了这些虚拟信用卡的用户甚至被 OpenAI 直接封号（可惜了我的 GPT-4 API T_T）。
 
 但笔者最近又找了一个新的虚拟信用卡厂商，目前看来还是可以用的，这个厂商叫做[OneKey](https://card.onekey.so/?i=HJIBK3)，它是一个国外的虚拟信用卡厂商，可以通过它的网站注册账号，然后充值，最后生成虚拟信用卡。OneKey 的虚拟信用卡可以绑定在 ChatGPT 上，可以用来开通 ChatGPT Plus。
 

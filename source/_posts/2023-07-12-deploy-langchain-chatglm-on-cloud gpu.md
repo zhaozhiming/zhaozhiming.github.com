@@ -127,7 +127,7 @@ Langchain-ChatGLM 开始是基于 ChatGLM 第一代来开发的，后面慢慢�
 
 ```bash
 git clone https://github.com/imClumsyPanda/langchain-ChatGLM.git 
-cd ChatGLM2-6B
+cd langchain-ChatGLM 
 pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple # 用百度的源
 ```
 

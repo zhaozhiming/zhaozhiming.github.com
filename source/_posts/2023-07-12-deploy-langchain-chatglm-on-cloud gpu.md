@@ -11,7 +11,7 @@ tags: [langchain, chatglm2]
 
 {% img /images/post/2023/07/embedding-docs-with-llm.png 400 300 %}
 
-随着人工智能技术的迅猛发展，问答机器人在多个领域中展示了广泛的应用潜力。在这个信息爆炸的时代，许多领域都面临着海量的知识和信息，人们往往需要耗费大量的时间和精力来搜索和获取他们所需的信息。在这种情况下，垂直领域的 AI 问答机器人应运而生。OpenAI 的 GPT3.5 和 GPT4 无疑是目前最好的 LLM（大语言模型），借助 OpenAI 的 GPT 确实可以快速地打造出一个高质量的 AI 问答机器人，但是 GPT 在实际应用上存在着不少限制。比如 ChatGPT 的知识库是通用领域的，对于垂直领域的知识理解有限，而且对于不熟悉的知识还会存在`幻觉`的问题。另外 GPT 的训练预料大部分是英文的，对于中文的理解也存在一定的问题，这对于国内公司来说是一个很大的问题。本文将介绍如何使用中文 LLM—— ChatGLM 结合 LangChain 来打造一个垂直领域的知识库问答系统，并在云 GPU 服务上部署运行。
+随着人工智能技术的迅猛发展，问答机器人在多个领域中展示了广泛的应用潜力。在这个信息爆炸的时代，许多领域都面临着海量的知识和信息，人们往往需要耗费大量的时间和精力来搜索和获取他们所需的信息。在这种情况下，垂直领域的 AI 问答机器人应运而生。OpenAI 的 GPT3.5 和 GPT4 无疑是目前最好的 LLM（大语言模型），借助 OpenAI 的 GPT 确实可以快速地打造出一个高质量的 AI 问答机器人，但是 GPT 在实际应用上存在着不少限制。比如 ChatGPT 的知识库是通用领域的，对于垂直领域的知识理解有限，而且对于不熟悉的知识还会存在`幻觉`的问题。另外 GPT 的训练语料大部分是英文的，对于中文的理解也存在一定的问题，这对于国内公司来说是一个很大的问题。本文将介绍如何使用中文 LLM—— ChatGLM 结合 LangChain 来打造一个垂直领域的知识库问答系统，并在云 GPU 服务上部署运行。
 
 <!--more-->
 
@@ -19,7 +19,7 @@ tags: [langchain, chatglm2]
 
 如果想要在机器上跑自己部署的 LLM，那么你至少需要一台配置不错的 GPU 服务器，否则推理的速度会很慢。想要拥有 GPU 服务器，你可以选择购买或者租用。如果你有足够的资金，那么可以选择购买一台 GPU 服务器，如果你的资金有限，那么可以选择租用云 GPU 服务器。本文主要以租用云 GPU 服务器为例来讲解内容。
 
-随着 AI 的火热，国内出现各种云 GPU 服务厂商，老牌的国内各大云厂商也都纷纷支持 GPU 服务器，经过笔者的试用，发现 AutoDL 和阿里云的 GPU 服务器性价比最高，而且系统也比较稳定无需绑定额外的开发框架，所以笔者比较推荐这两个云服务器厂商。
+随着 AI 的火热，国内出现各种云 GPU 服务厂商，老牌的国内各大云厂商也都纷纷支持 GPU 服务器，经过笔者的试用，发现 AutoDL 和阿里云的 GPU 服务器性价比最高，而且系统也比较稳定且无需绑定额外的开发框架，所以笔者比较推荐这两个云服务器厂商。
 
 ### 阿里云
 
@@ -61,7 +61,7 @@ pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple # 用百
 
 ### 模型下载
 
-接着是下载模型，这里我使用的是 ChatGLM2-6B 的模型，模型文件是存放在 HuggingFace 上面，最近国内连接 HuggingFace 经常会不通，不清楚是不是被墙了，所以如果下载过程中遇到问题，可以尝试**使用科技上网**进行代理。下面介绍两种下载方法。
+接着是下载模型，这里我使用的是 ChatGLM2-6B 的模型，模型文件是存放在 HuggingFace 上面，最近国内连接 HuggingFace 经常会不通，不清楚是不是被墙了，所以如果下载过程中遇到问题，可以尝试**使用科学上网**进行代理。下面介绍两种下载方法。
 
 #### 自动下载
 
@@ -115,11 +115,21 @@ This share link expires in 72 hours. For free permanent hosting and GPU upgrades
 
 接下来我们再部署 LangChain-ChatGLM，首先介绍一下 LangChain 和 LangChain-ChatGLM 这 2 个项目。
 
-[LangChain](https://docs.langchain.com/docs/)是一个强大的框架，旨在帮助开发人员使用语言模型构建端到端的应用程序。它提供了一套工具、组件和接口，可简化创建由大型语言模型 (LLM) 和聊天模型提供支持的应用程序的过程。LangChain 可以轻松管理与语言模型的交互，将多个组件链接在一起，并集成额外的资源，例如 API 和数据库。
+[LangChain](https://docs.langchain.com/docs/)是一个强大的框架，旨在帮助开发人员使用语言模型构建端到端的应用程序。它提供了一套工具、组件和接口，可简化创建由 LLM 提供支持的应用程序的过程。LangChain 可以轻松管理与语言模型的交互，将多个组件链接在一起，并集成额外的资源，例如 API 和数据库。
 
 [Langchain-ChatGLM](https://github.com/imClumsyPanda/langchain-ChatGLM) 是一种利用 Langchain 思想实现的基于本地知识库的问答应用，目标期望建立一套对中文场景与开源模型支持友好、可离线运行的知识库问答解决方案。它对中文文档分隔，问题加上下文拼接上都做了相应的优化。
 
 Langchain-ChatGLM 开始是基于 ChatGLM 第一代来开发的，后面慢慢支持更多的模型，ChatGLM2 推出后，项目也很快集成了 ChatGLM2。
+
+### 克隆仓库
+
+和ChatGLM2一样，我们首先要下载项目代码并安装依赖。
+
+```bash
+git clone https://github.com/imClumsyPanda/langchain-ChatGLM.git 
+cd ChatGLM2-6B
+pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple # 用百度的源
+```
 
 ### 下载 Embedding 模型
 
@@ -196,7 +206,7 @@ flagging username: e717a58b4ce9444e82491cefeb80bf56
 Loading /mnt/workspace/chatglm2-6b...
 Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████| 7/7 [01:29<00:00, 12.80s/it]
 Loaded the model in 91.42 seconds.
-{'answer': '你好👋！我是人工智能助手 ChatGLM2-6B，很高兴见到你，欢迎问我任何问题。'}
+{'answer': '你好！我是人工智能助手 ChatGLM2-6B，很高兴见到你，欢迎问我任何问题。'}
 Running on local URL:  http://0.0.0.0:7860
 Running on public URL: https://b0f2e23a9ea5b74b4a.gradio.live
 

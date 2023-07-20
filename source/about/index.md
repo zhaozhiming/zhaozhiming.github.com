@@ -136,7 +136,7 @@ date: 2010-01-01 20:04:21
 - 敏捷开发：Scrum/看板/CICD/Jenkins/TDD/Refactor/Sonar/PMP
 - 操作系统：Mac/Ubuntu/Centos/Unix/Window
 - IDE 和编辑器：Vscode/Vim/IntelliJ IDEA/Eclipse
-- 人工智能: ChatGPT/Prompt Engineering/LangChain/LLM 训练/Vector DB/SD
+- 人工智能: ChatGPT/Prompt Engineering/LangChain/LLM 训练/Vector DB/Stable Diffustion
 
 ---
 

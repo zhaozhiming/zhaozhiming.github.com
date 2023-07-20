@@ -136,7 +136,7 @@ A web application using SpringMVC+Hibernate, in which I was mainly responsible f
 - Agile development: Scrum/Kanban/CICD/Jenkins/TDD/Refactor/Sonar/PMP
 - OS: Mac/Ubuntu/Centos/Unix/Window
 - IDE and Editor: Vscode/Vim/IntelliJ IDEA/Eclipse
-- AI: ChatGPT/Prompt Engineering/LangChain/LLM 训练/Vector DB/SD
+- AI: ChatGPT/Prompt Engineering/LangChain/LLM/Vector DB/Stable Diffustion
 
 ---
 

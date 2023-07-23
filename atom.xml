@@ -6,7 +6,7 @@
   <link href="https://example.com/atom.xml" rel="self"/>
   
   <link href="https://example.com/"/>
-  <updated>2023-07-19T10:30:32.347Z</updated>
+  <updated>2023-07-23T10:32:04.020Z</updated>
   <id>https://example.com/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Llama2 部署及试用</title>
+    <link href="https://example.com/2023/07/23/llama2-deploy-and-free-use/"/>
+    <id>https://example.com/2023/07/23/llama2-deploy-and-free-use/</id>
+    <published>2023-07-23T06:59:45.000Z</published>
+    <updated>2023-07-23T10:32:04.020Z</updated>
+    
+    <content type="html"><![CDATA[<img src="/images/post/2023/07/llama2.jpg" class="" width="400" height="300"><p>Llama 一直被视为 AI 界的开源大模型中的巨擘。然而，由于其开源协议的限制性条款，商业用途的免费使用一直未能实现。但这种情况在最近发生了根本性的转变，Meta 发布了备受瞩目的 Llama2，这是一个免费可供商业使用的版本。这个大型预训练语言模型 Llama2，出自 Meta AI 之手，它能接收任何形式的自然语言文本输入，并产生文本形式的输出。笔者也第一时间尝试了一下，这里记录一下 Llama2 的部署及免费试用方法。</p><span id="more"></span><h2 id="Llama2-下载"><a href="#Llama2-下载" class="headerlink" title="Llama2 下载"></a>Llama2 下载</h2><p>要使用 Llama2 需要先下载它的模型，这里介绍几种下载模型的方式。</p><h3 id="官方申请"><a href="#官方申请" class="headerlink" title="官方申请"></a>官方申请</h3><p>官方渠道比较正规，但是需要申请，申请的过程其实并不复杂，只是需要花点时间等待审核通过，以笔者为例，申请后大概等了半个小时就收到了申请通过的邮件。</p><p>首先在<a href="https://ai.meta.com/llama/">Meta 这个网站</a>上进行申请，点击<code>Download the Model</code>按钮。</p><img src="/images/post/2023/07/llama2-apply.png" class="" width="1000" height="600"><p>然后在申请表格上填写申请信息，填完滑到最下面勾选同意协议，点击提交按钮就可以了。</p><img src="/images/post/2023/07/llama2-form.png" class="" width="1000" height="600"><p>申请通过后收到的申请邮件如下，里面有一个下载链接，按照邮件中的说明使用下载链接下载模型，注意下载链接在 24 小时后会失效，且每个模型只能下载 5 次，失效后需要重新提交申请。</p><img src="/images/post/2023/07/llama2-email.png" class="" width="1000" height="600"><h3 id="HuggingFace-下载"><a href="#HuggingFace-下载" class="headerlink" title="HuggingFace 下载"></a>HuggingFace 下载</h3><p>在 HuggngFace 上也可以下载 Llama2，但同样需要在官网先进行申请，注意官网申请的邮箱要和 HuggingFace 的邮箱保持一致。</p><p>进到 HuggingFace 的<a href="https://huggingface.co/meta-llama">Meta Llama 网站</a>，可以看到有很多个 Llama2 的仓库，分不同量级、huggingface 版本，chat 版本等，我们随便选择一个仓库进入。</p><img src="/images/post/2023/07/hf-llama2.png" class="" width="1000" height="600"><p>进入仓库后在 Readme 文档前面有一个访问限制说明，点击<code>Submit</code>按钮进行申请，只要申请其中一个仓库，Llama2 的其他仓库都会一并申请。</p><img src="/images/post/2023/07/hf-llama2-apply.png" class="" width="1000" height="600"><p>点击<code>Submit</code>按钮后是下面的页面提示，接下来就等待申请通过了。</p><img src="/images/post/2023/07/hf-llama2-wait.png" class="" width="1000" height="600"><h3 id="非官方渠道下载"><a href="#非官方渠道下载" class="headerlink" title="非官方渠道下载"></a>非官方渠道下载</h3><p>如果嫌官方申请比较慢，也可以通过非官方渠道下载，这里有好心人已经在 HuggingFace 上上传了 Llama2 的模型，可以直接下载使用，无需申请。</p><ul><li>非官方地址：<a href="https://huggingface.co/TheBloke">TheBloke</a></li></ul><img src="/images/post/2023/07/unofficial-llama2.png" class="" width="1000" height="600"><h2 id="Llama2-部署"><a href="#Llama2-部署" class="headerlink" title="Llama2 部署"></a>Llama2 部署</h2><p>下载了模型后我们开始进行 Llama2 的部署，部署机器的话如果本地有 GPU 服务器的话最好，如果没有的话可以参照笔者之前的文章申请云 GPU 服务器使用。</p><h3 id="Text-Web-Ui"><a href="#Text-Web-Ui" class="headerlink" title="Text-Web-Ui"></a><a href="https://github.com/oobabooga/text-generation-webui">Text-Web-Ui</a></h3><p>Llama2 的官方仓库没有提供 Web 运行的程序，只有两个命令行示例脚本，运行起来不太直观，我们希望能够通过浏览器进行访问，这里介绍通过 Text-Web-Ui 这个工具进行 Llama2 Web 方式的部署。</p><p>Text-Web-Ui 是一个用来运行 LLM（大语言模型）的 Web UI 框架，目标是在一套 Web UI 框架上运行所有 LLM，对标的是图像 AI 生成工具 <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui">AUTOMATIC1111&#x2F;stable-diffusion-webui</a>。</p><p>Text_Web-Ui 安装方式有两种，一种的是一键安装，另外一种手动安装，这里主要介绍一键安装的方式，手动安装的方式有兴趣的同学可以自行去官方仓库查看。</p><p>在这里下载安装包，各个平台的安装包都有，这里以 Linux 为例。</p><img src="/images/post/2023/07/text-web-ui-installer.png" class="" width="1000" height="600"><p>下载后解压，运行里面的<code>start_linux.sh</code>脚本，脚本会自动检测系统的 Python 环境并安装工具所需的所有依赖，安装后启动 Web 服务。</p><img src="/images/post/2023/07/text-web-ui-start.png" class="" width="1000" height="600"><p>然后回到 HuggingFace 的 Llama2 仓库点击 copy 按钮复制模型名称。</p><img src="/images/post/2023/07/text-web-ui-copy.png" class="" width="1000" height="600"><p>在 Text-Web-Ui 的 Model 界面处粘贴刚复制的模型名称，点击<code>Download</code>按钮进行模型下载。</p><img src="/images/post/2023/07/text-web-ui-download.png" class="" width="1000" height="600"><p>下载完成后，选择加载下载完成的 Llama2 模型，然后就可以和 LLM 进行对话了。</p><h3 id="colab-一键部署"><a href="#colab-一键部署" class="headerlink" title="colab 一键部署"></a>colab 一键部署</h3><p>如果觉得以上部署方式麻烦的话，也可以通过别人的 colab 链接一键部署 Text-Web-Ui 和 Llama2，这里有一个一键部署 colab 的代码仓库，选择其中的 Llama2 colab 链接运行，但这种方式只能部署在 colab 服务器上。</p><p><a href="https://github.com/camenduru/text-generation-webui-colab">text-generation-webui-colab</a></p><img src="/images/post/2023/07/colab-llama2.png" class="" width="1000" height="600"><h2 id="Llama2-免安装试用"><a href="#Llama2-免安装试用" class="headerlink" title="Llama2 免安装试用"></a>Llama2 免安装试用</h2><p>如果觉得自己部署麻烦的话，HuggingFace 已经提供了在线试用 Llama2 的方式，可以直接在浏览器上进行试用。下面是 Llama2 几个量级的试用地址。</p><ul><li><a href="https://huggingface.co/spaces/huggingface-projects/llama-2-7b-chat">Llama2 7B</a></li><li><a href="https://huggingface.co/spaces/huggingface-projects/llama-2-13b-chat">Llama2 13B</a></li><li><a href="https://huggingface.co/chat">Llama2 70B</a></li></ul><img src="/images/post/2023/07/hf-chat.png" class="" width="1000" height="600"><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Llama2 的发布是一个里程碑式的事件，它是一个免费可商用的大型预训练语言模型，可以接收任何形式的自然语言文本输入，并产生文本形式的输出。Llama2 的发布将会对 AI 产生深远的影响，它将会成为 AI 产业的一个重要组成部分，也将会成为 AI 产业的一个重要基础设施。希望今天的文章能够帮助到大家部署自己的 Llama2，如果在部署的过程中遇到问题，欢迎在评论区留言。</p><p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>]]></content>
+    
+    
+    <summary type="html">最新免费商用大模型 Llama2 的部署及免费试用</summary>
+    
+    
+    
+    <category term="ai" scheme="https://example.com/categories/ai/"/>
+    
+    
+    <category term="llama" scheme="https://example.com/tags/llama/"/>
+    
+  </entry>
   
   <entry>
     <title>LangChain 知识库检索问题及解决方案</title>
@@ -455,31 +476,6 @@
     
     
     <summary type="html">比特币交易开发实战（二）</summary>
-    
-    
-    
-    <category term="blockchain" scheme="https://example.com/categories/blockchain/"/>
-    
-    
-    <category term="bitcoin" scheme="https://example.com/tags/bitcoin/"/>
-    
-    <category term="blockchain" scheme="https://example.com/tags/blockchain/"/>
-    
-    <category term="wallet" scheme="https://example.com/tags/wallet/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>比特币交易开发实战（一）</title>
-    <link href="https://example.com/2018/07/07/btc-transaction-intro-and-practice-part2/"/>
-    <id>https://example.com/2018/07/07/btc-transaction-intro-and-practice-part2/</id>
-    <published>2018-07-07T14:35:00.000Z</published>
-    <updated>2021-07-04T12:37:12.388Z</updated>
-    
-    <content type="html"><![CDATA[<img src="/images/post/2018/07/btc_tx2.png" class="" width="400" height="300"><p>创建比特币交易有两种方式，一种是通过第三方 Api 进行交易创建并广播，另一种是通过<code>bitcoinjs-lib</code>创建交易并生成交易签名，然后调用第三方 Api 进行广播。</p><span id="more"></span><h2 id="使用第三方-Api-交易"><a href="#使用第三方-Api-交易" class="headerlink" title="使用第三方 Api 交易"></a>使用第三方 Api 交易</h2><p>这里我们推荐一下 <a href="https://www.blockcypher.com/dev/bitcoin/">BlockCypher</a> 的 Api，他们提供了一种简易方式来创建交易，用户只需要提供转账地址、收款地址和转账金额即可。</p><h3 id="Api-资源"><a href="#Api-资源" class="headerlink" title="Api 资源"></a>Api 资源</h3><p><code>BlockCypher</code>提供的都是 Restful Api，通过不同的 Api 资源我们可以使用不同的链环境，详细信息如下：</p><table><thead><tr><th align="left">币</th><th align="center">链</th><th align="center">资源</th></tr></thead><tbody><tr><td align="left">Bitcoin</td><td align="center">Main</td><td align="center">api.blockcypher.com/v1/btc/main</td></tr><tr><td align="left">Bitcoin</td><td align="center">Testnet3</td><td align="center">api.blockcypher.com/v1/btc/test3</td></tr><tr><td align="left">BlockCypher</td><td align="center">Test</td><td align="center">api.blockcypher.com/v1/bcy/test</td></tr></tbody></table><p><code>BlockCypher</code>除了可以使用比特币区块链的测试环境外，还可以使用其自身提供的一个测试环境，只需要将 Api 的 url 前缀写成<code>api.blockcypher.com/v1/bcy/test</code>就可以了。</p><h3 id="创建交易"><a href="#创建交易" class="headerlink" title="创建交易"></a>创建交易</h3><p>我们需要调用<code>BlockCypher</code>的<code>txs/new</code>Api 来创建交易，这是一个 POST 请求，请求的参数有：转账地址、收款地址和转账金额。下面是使用<code>curl</code>来调用 Api 的代码示例：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -d <span class="string">&#x27;&#123;&quot;inputs&quot;:[&#123;&quot;addresses&quot;: [&quot;mmeVvNVHn2oJ7GZv4rQHhcDR8NLociAtXM&quot;]&#125;],&quot;outputs&quot;:[&#123;&quot;addresses&quot;: [&quot;mkd1rrTvmbPtGd4KLWWh2tN6ZWCywFNwhD&quot;], &quot;value&quot;: 1000000&#125;]&#125;&#x27;</span> https://api.blockcypher.com/v1/btc/test3/txs/new</span><br><span class="line"></span><br><span class="line">// 返回结果</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;tx&quot;</span>: &#123;...&#125;,</span><br><span class="line">  <span class="string">&quot;tosign&quot;</span>: [<span class="string">&quot;xxx&quot;</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>我们使用的是比特币的测试环境<code>btc/test3</code>，可以看到返回的结果中带有两个参数： <code>tx</code>和<code>tosign</code>。</p><p><code>tx</code>参数列出这个交易的一些基本信息，但真正的交易并没有生成，所以这个交易信息和实际交易信息可能会不同，但我们可以通过里面的字段来计算矿工费用信息。</p><p><code>tosign</code>参数在后面的交易签名中需要用到。</p><h3 id="交易签名"><a href="#交易签名" class="headerlink" title="交易签名"></a>交易签名</h3><p>比特币交易需要私钥来进行签名，但<code>BlockCypher</code>不会让你提供私钥来调用 Api，如果让用户提供私钥的话会让用户心有疑虑，毕竟私钥是相当重要的东西。</p><p>所以我们得到<code>tosign</code>这个参数后，还需要使用其他方式来进行本地签名，这里我们使用<code>bitcoinjs-lib</code>这个库来进行交易签名，示例代码如下：</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> bitcoin = <span class="built_in">require</span>(<span class="string">&quot;bitcoinjs-lib&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> buffer = <span class="built_in">require</span>(<span class="string">&#x27;buffer&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> testnet = bitcoin.networks.testnet;</span><br><span class="line"><span class="keyword">const</span> keys = bitcoin.ECPair.fromWIF(</span><br><span class="line">  <span class="string">&#x27;your-address-private-key&#x27;</span>,</span><br><span class="line">  testnet</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 假设创建交易后返回的对象为 tmptx，即上面那个包含了`tx`和`tosign`属性的对象</span></span><br><span class="line">tmptx.pubkeys = [];</span><br><span class="line">tmptx.signatures = tmptx.tosign.map(<span class="function"><span class="keyword">function</span>(<span class="params">tosign, n</span>) </span>&#123;</span><br><span class="line">  tmptx.pubkeys.push(keys.getPublicKeyBuffer().toString(<span class="string">&quot;hex&quot;</span>));</span><br><span class="line">  <span class="keyword">return</span> keys.sign(<span class="keyword">new</span> buffer.Buffer(tosign, <span class="string">&quot;hex&quot;</span>)).toDER().toString(<span class="string">&quot;hex&quot;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><p>从代码中可以看出，在创建交易的对象上我们又增加了 2 个属性：<code>pubkeys</code>和<code>signatures</code>，这是最后一步发送交易需要用到的。</p><h3 id="发送交易"><a href="#发送交易" class="headerlink" title="发送交易"></a>发送交易</h3><p>得到新的对象后，我们需要再调用<code>BlockCypher</code>的另外一个 Api 来发送交易。这也是一个 POST 请求，请求参数就是我们刚才得到的新对象，示例代码如下：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -d <span class="string">&#x27;&#123;&quot;tx&quot;: &#123;...&#125;, &quot;tosign&quot;: [ &quot;...&quot; ], &quot;signatures&quot;: [ &quot;...&quot; ], &quot;pubkeys&quot;: [ &quot;...&quot; ] &#125;&#x27;</span> https://api.blockcypher.com/v1/btc/test3/txs/send</span><br><span class="line"></span><br><span class="line">// 返回结果</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;tx&quot;</span>: &#123;...&#125;,</span><br><span class="line">  <span class="string">&quot;tosign&quot;</span>: [<span class="string">&quot;&quot;</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>Api 调用成功后我们会得到类似创建请求返回的结果，只是<code>tosign</code>参数变成空的集合。</p><h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>使用<code>BlockCypher</code>的 Api 来进行比特币交易虽然比较方便，但是有一个缺点，就是转账地址只能是普通地址，如果转账地址是隔离见证地址则无法使用这种方法。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这里介绍了使用第三方 Api 来进行比特币交易，程序写好后，用户只需要输入转账地址、收款地址和转账金额即可，无需关心交易中的具体原理，但这种方法有个缺点就是无法使用隔离见证地址作为转账地址，所以我们需要另外想办法来实现隔离见证地址的交易，这个方法会在下一篇文章中进行介绍，敬请期待。</p>]]></content>
-    
-    
-    <summary type="html">比特币交易开发实战（一）</summary>
     
     
     

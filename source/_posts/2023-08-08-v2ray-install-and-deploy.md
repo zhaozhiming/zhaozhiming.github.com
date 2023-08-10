@@ -5,7 +5,7 @@ date: 2023-08-08 14:30:19
 description: 新版V2Ray安装及部署
 keywords: V2Ray,gfw
 comments: true
-categories: ai
+categories: fq
 tags: [V2Ray, gfw]
 ---
 

@@ -145,8 +145,8 @@
 <li>公司类型，有 ISV（独立服务提供商）、SI（系统集成商）、MSP（微软解决方案提供商）等</li>
 <li>确认是否是你的公司要使用该服务，选中就可以了</li>
 <li>选择要申请的 Azure OpenAI 服务具体功能，有文本和代码模型，和图像模型，我们选择文本和代码模型即可。</li>
-<li>选择了文本和代码模型功能后，还要选择其细分的功能，除了<code>Most Valuable Professional (MVP) or Regional Director (RD) Demo Use: </code>这个选项，其他的都可以选，按实际需求选择</li>
-<li>最后 2 个必填选是同意 Azure 的协议，都选同意就好了。</li>
+<li>选择了文本和代码模型功能后，还要选择其细分的功能，除了<code>Most Valuable Professional (MVP) or Regional Director (RD) Demo Use </code>这个选项，其他的都可以选，按实际需求选择</li>
+<li>最后 2 个必填项是同意 Azure 的协议，都选同意就好了。</li>
 </ul>
 <p>填完点击<code>Submit</code>按钮提交，然后就等 Azure 审核了，只要你填写的信息比较真实，审核还是比较快的，我是上午申请下午就通过了，时间大概是 6 小时左右。</p>
 <h2 id="创建-Azure-OpenAI-服务"><a href="#创建-Azure-OpenAI-服务" class="headerlink" title="创建 Azure OpenAI 服务"></a>创建 Azure OpenAI 服务</h2><p>收到审核通过的邮件后，进入<a target="_blank" rel="noopener" href="https://portal.azure.com/#home">Azure 首页</a>，搜索<code>Azure OpenAI</code>，选择该类型的服务并进入页面，点击创建按钮进入创建页面。</p>
@@ -160,7 +160,7 @@
 <li>第三部是选择标签，可以不填。</li>
 <li>最后确认信息并提交。</li>
 </ul>
-<h2 id="模型部署"><a href="#模型部署" class="headerlink" title="模型部署"></a>模型部署</h2><p>创建好 OpenAI 服务后，点击该服务进入 OpenAI 的服务页面，选择模型部署，然后点击<code>模型管理</code>按钮，进入<code>Azure AI Studio</code>页面。</p>
+<h2 id="模型部署"><a href="#模型部署" class="headerlink" title="模型部署"></a>模型部署</h2><p>创建好 OpenAI 服务后，点击该服务进入 OpenAI 的服务页面，选择模型部署，然后点击<code>部署管理</code>按钮，进入<code>Azure AI Studio</code>页面。</p>
 <img src="/images/post/2023/08/azure-model-deploy.png" class="" width="1000" height="600">
 
 <p>进去后选择侧边栏的<code>部署</code>菜单，点击<code>创建新部署</code>按钮，然后选择模型，这里我们选择<code>gpt35-turbo</code>即可，再选择模型版本，有<code>0301</code>和<code>0613</code>两个，我们当然选择最新的<code>0613</code>版本，然后输入部署名称，注意名称只能包含<code>-</code>和<code>_</code>特殊字符，其他的特殊字符不能写到名称中，最后点击<code>创建</code>按钮完成部署的创建。</p>

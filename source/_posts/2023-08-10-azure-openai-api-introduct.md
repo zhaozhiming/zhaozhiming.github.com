@@ -33,8 +33,8 @@ ChatGPT 面世以来持续引领 AI 技术的火爆，具有专业技能的开�
 - 公司类型，有 ISV（独立服务提供商）、SI（系统集成商）、MSP（微软解决方案提供商）等
 - 确认是否是你的公司要使用该服务，选中就可以了
 - 选择要申请的 Azure OpenAI 服务具体功能，有文本和代码模型，和图像模型，我们选择文本和代码模型即可。
-- 选择了文本和代码模型功能后，还要选择其细分的功能，除了`Most Valuable Professional (MVP) or Regional Director (RD) Demo Use: `这个选项，其他的都可以选，按实际需求选择
-- 最后 2 个必填选是同意 Azure 的协议，都选同意就好了。
+- 选择了文本和代码模型功能后，还要选择其细分的功能，除了`Most Valuable Professional (MVP) or Regional Director (RD) Demo Use `这个选项，其他的都可以选，按实际需求选择
+- 最后 2 个必填项是同意 Azure 的协议，都选同意就好了。
 
 填完点击`Submit`按钮提交，然后就等 Azure 审核了，只要你填写的信息比较真实，审核还是比较快的，我是上午申请下午就通过了，时间大概是 6 小时左右。
 
@@ -52,7 +52,7 @@ ChatGPT 面世以来持续引领 AI 技术的火爆，具有专业技能的开�
 
 ## 模型部署
 
-创建好 OpenAI 服务后，点击该服务进入 OpenAI 的服务页面，选择模型部署，然后点击`模型管理`按钮，进入`Azure AI Studio`页面。
+创建好 OpenAI 服务后，点击该服务进入 OpenAI 的服务页面，选择模型部署，然后点击`部署管理`按钮，进入`Azure AI Studio`页面。
 
 {% img /images/post/2023/08/azure-model-deploy.png 1000 600 %}
 

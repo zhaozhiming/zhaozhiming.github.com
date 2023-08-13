@@ -1,8 +1,8 @@
 ---
 layout: post
-title: 如何在 Ubuntu 22 上安装 CUDA、Nvidia 显卡驱动以及 PyTorch
+title: 如何在 Ubuntu 22 上安装 CUDA、NVIDIA 显卡驱动以及 PyTorch
 date: 2023-08-12 11:07:05
-description: 如何在 Ubuntu 22 上安装 CUDA、Nvidia 显卡驱动以及 PyTorch
+description: 如何在 Ubuntu 22 上安装 CUDA、NVIDIA 显卡驱动以及 PyTorch
 keywords: cuda, nvidia driver, pytorch
 comments: true
 categories: ai
@@ -11,7 +11,7 @@ tags: [cuda, nvidia driver, pytorch]
 
 {% img /images/post/2023/08/ubuntu-cuda.png 400 300 %}
 
-虽然现在有很多云厂商都提供了 GPU 服务器，但由于 GPU 的资源稀缺，云 GPU 服务器要么就是价格居高不下，要么就是数量不足无法购买。因此能拥有一块属于自己的 Nvidia 显卡来跑 AI 程序是最好不过了，虽然现在高端的 Nvidia 显卡又贵又不好买，但是稍微低端的显卡还是好入手的，随着大模型的配置要求越来越低，在低端显卡上跑一些大模型也不是什么问题。不过即使你拥有了一块自己的 Nvidia 显卡，但环境配置也是一个麻烦的问题，今天就来分享一下如何在 Ubuntu 22 上安装 CUDA、Nvidia 显卡驱动以及 PyTorch。
+虽然现在有很多云厂商都提供了 GPU 服务器，但由于 GPU 的资源稀缺，云 GPU 服务器要么就是价格居高不下，要么就是数量不足无法购买。因此能拥有一块属于自己的 NVIDIA 显卡来跑 AI 程序是最好不过了，虽然现在高端的 NVIDIA 显卡又贵又不好买，但是稍微低端的显卡还是好入手的，随着大模型的配置要求越来越低，在低端显卡上跑一些大模型也不是什么问题。不过即使你拥有了一块自己的 NVIDIA 显卡，但环境配置也是一个麻烦的问题，今天就来分享一下如何在 Ubuntu 22 上安装 CUDA、NVIDIA 显卡驱动以及 PyTorch。
 
 <!--more-->
 
@@ -20,7 +20,7 @@ tags: [cuda, nvidia driver, pytorch]
 我们的目标是在系统中执行以下命令并返回正确的执行结果（如下图所示）：
 
 - `nvcc --version`: 显示 CUDA 版本
-- `nvidia-smi`: 显示 Nvidia 显卡信息
+- `nvidia-smi`: 显示 NVIDIA 显卡信息
 - python -c "import torch; print(torch.cuda.is_available())": 显示 PyTorch 是否可用
 
 {% img /images/post/2023/08/nvidia-target.png 1000 600 %}
@@ -29,17 +29,17 @@ tags: [cuda, nvidia driver, pytorch]
 
 ## 预安装工作
 
-如果你之前有安装过 Nvidia 驱动或者 CUDA 程序的话，那么在安装之前需要先卸载之前的驱动和 CUDA 程序，否则可能会导致安装失败。卸载命令如下：
+如果你之前有安装过 NVIDIA 驱动或者 CUDA 程序的话，那么在安装之前需要先卸载之前的驱动和 CUDA 程序，否则可能会导致安装失败。卸载命令如下：
 
 ```sh
 sudo apt autoremove nvidia* --purge
 ```
 
-如果你之前是使用 Nvidia 官方提供的`run`文件安装的驱动和 CUDA 程序的话，还需要使用以下命令进行完整卸载：
+如果你之前是使用 NVIDIA 官方提供的`run`文件安装的驱动和 CUDA 程序的话，还需要使用以下命令进行完整卸载：
 
 ```sh
 sudo /usr/bin/nvidia-uninstall
-# 注意将下面的X和Y替换出你的 CUDA 版本
+# 注意将下面的X和Y替换成你的 CUDA 版本
 sudo /usr/local/cuda-X.Y/bin/cuda-uninstall
 ```
 
@@ -49,7 +49,7 @@ sudo /usr/local/cuda-X.Y/bin/cuda-uninstall
 
 CUDA（Compute Unified Device Architecture）是 NVIDIA 推出的并行计算平台和编程模型。它允许开发者利用 NVIDIA 的 GPU 来进行高效的并行计算。CUDA 为各种应用程序提供了简化的 API 和工具，从而在 GPU 上加速计算密集型任务，如机器学习、科学模拟和图形处理。
 
-首先进入[Nvidia CUDA 版本列表页面](https://developer.nvidia.com/cuda-toolkit-archive)，找到你需要的 CUDA 版本，我们的系统是 Ubuntu22.04，CUDA 最早支持 Ubuntu22 的版本是 11.7，因此我们选择 CUDA Toolkit 11.7.1 版本，个人不建议选择太新的版本（比如 12.x 的版本），因为新版本的 CUDA 可能会有兼容性问题。
+首先进入[NVIDIA CUDA 版本列表页面](https://developer.nvidia.com/cuda-toolkit-archive)，找到你需要的 CUDA 版本，我们的系统是 Ubuntu22.04，CUDA 最早支持 Ubuntu22 的版本是 11.7，因此我们选择 CUDA Toolkit 11.7.1 版本，个人不建议选择太新的版本（比如 12.x 的版本），因为新版本的 CUDA 可能会有兼容性问题。
 
 进入该版本的下载页面，选择对应的操作系统、架构、操作系统、版本，安装方式，就可以看到相应的安装命令。
 
@@ -78,7 +78,7 @@ Build cuda_11.7.r11.7/compiler.31442593_0
 
 ## 安装驱动
 
-安装完 CUDA 后，我们继续安装 Nvidia 显卡驱动程序。
+安装完 CUDA 后，我们继续安装 NVIDIA 显卡驱动程序。
 
 NVIDIA 显卡驱动是一套软件程序，用于使操作系统和计算机硬件与 NVIDIA 图形卡进行通信。它能优化显卡的性能，支持新游戏的图形要求，同时修复已知的错误和兼容性问题。定期更新驱动可以确保显卡的最佳性能和稳定性。
 
@@ -188,7 +188,7 @@ pip uninstall torch torchvision torchaudio
 
 ## 总结
 
-刚接触 AI 环境部署时，可能很多人对这些概念不是很清楚，比如 CUDA、Nvidia 驱动、PyTorch 等，在部署过程中可能也会遇到诸多问题，但只要慢慢了解这些概念，同时多部署几次，就会熟悉其中的操作，希望这篇文章可以帮助你快速的熟悉 AI 环境的部署，如果你有什么问题，欢迎在评论区留言讨论。
+刚接触 AI 环境部署时，可能很多人对这些概念不是很清楚，比如 CUDA、NVIDIA 驱动、PyTorch 等，在部署过程中可能也会遇到诸多问题，但只要慢慢了解这些概念，同时多部署几次，就会熟悉其中的操作，希望这篇文章可以帮助你快速的熟悉 AI 环境的部署，如果你有什么问题，欢迎在评论区留言讨论。
 
 关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。
 

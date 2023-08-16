@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>使用 Docker 部署 AI 环境 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="使用 Docker 部署 AI 环境"> <!-- TODO: truncate -->
+	<meta name="keywords" content="ubuntu, docker, cuda, nvidia, pytorch">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">使用 Docker 部署 AI 环境</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-08-15T06:18:27.000Z" itemprop="datePublished">8月 15, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/ubuntu/">ubuntu</a> <a href="/tags/docker/">docker</a> <a href="/tags/cuda/">cuda</a> <a href="/tags/pytorch/">pytorch</a> <a href="/tags/nvidia/">nvidia</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/08/nvidia-docker.png" class="" width="400" height="300">
+
+<p>之前给大家介绍了主机安装方式——<a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/2023/08/12/ubuntu22-install-cuda-and-nvidia-driver-and-pytorch/">如何在 Ubuntu 操作系统下安装部署 AI 环境</a>，但随着容器化技术的普及，越来越多的程序以容器的形式进行部署，通过容器的方式不仅可以简化部署流程，还可以随时切换不同的环境。实际上很多云服务厂商也是这么干的，用一台带有 NVIDIA 显卡的机器来部署多个容器，然后通过容器的方式来提供给用户使用，这样就可以充分利用显卡资源了。今天给大家介绍一下如何使用 Docker 的方式来部署我们之前部署过的 AI 环境。</p>
+<span id="more"></span>
+
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>我们可以跟之前一样制定一个小目标：</p>
+<ul>
+<li>在 Docker 容器中可以正常执行<code>nvidia-smi</code>命令</li>
+<li>在 Docker 容器中可以正常执行<code>python -c &quot;import torch; print(torch.cuda.is_available())&quot;</code>命令</li>
+</ul>
+<p>好奇的同学可能会问，为什么不在 Docker 容器中执行<code>nvcc --version</code>命令呢？这个问题留到后面再解释。</p>
+<h2 id="预安装工作"><a href="#预安装工作" class="headerlink" title="预安装工作"></a>预安装工作</h2><p>我们还是以 Ubuntu22.04 操作系统为例，首先我们要安装 Docker，这里就不再赘述了，可以参考<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/ubuntu/">官方文档</a>进行安装。</p>
+<p>Docker 安装完成后，如果你想以非 root 用户执行<code>docker</code>命令的话，还需要将当前用户添加到<code>docker</code>用户组中，命令如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先确保 docker 用户组已存在</span></span><br><span class="line">sudo usermod -aG docker &lt;user-name&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装-NVIDIA-驱动"><a href="#安装-NVIDIA-驱动" class="headerlink" title="安装 NVIDIA 驱动"></a>安装 NVIDIA 驱动</h2><p>安装 NVIDIA 驱动的步骤可以参考<a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/2023/08/12/ubuntu22-install-cuda-and-nvidia-driver-and-pytorch/">之前的文章</a>，这里就不再赘述了。</p>
+<h2 id="安装-NVIDIA-Container-Toolkit"><a href="#安装-NVIDIA-Container-Toolkit" class="headerlink" title="安装 NVIDIA Container Toolkit"></a>安装 NVIDIA Container Toolkit</h2><p>NVIDIA Container Toolkit 允许开发者和用户将 NVIDIA GPU 的能力无缝地加入到 Docker 容器中。通过简单地安装一个插件，用户就可以运行为 GPU 优化的容器，无需进行任何修改。该工具集包括 NVIDIA 驱动、CUDA 等必要组件，确保 GPU 在容器环境中的高性能执行，对 AI、数据分析和高性能计算场景特别有用。</p>
+<p>我们可以通过以下命令来安装 NVIDIA Container Toolkit：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先切换到 root 用户</span></span><br><span class="line">curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -</span><br><span class="line"><span class="comment"># 添加源</span></span><br><span class="line">curl -s -L https://nvidia.github.io/nvidia-docker/ubuntu22.04/nvidia-docker.list &gt; /etc/apt/sources.list.d/nvidia-docker.list</span><br><span class="line"><span class="comment"># 更新源</span></span><br><span class="line">apt update</span><br><span class="line"><span class="comment"># 安装 NVIDIA Container Toolkit</span></span><br><span class="line">apt -y install nvidia-container-toolkit</span><br><span class="line"><span class="comment"># 重启 Docker 服务</span></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+<p>安装完成后，系统会一并安装 NVIDIA Container Toolkit 的 CLI 命令（nvidia-ctk），我们可以运行该命令确认安装是否成功：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ nvidia-ctk --version</span><br><span class="line">NVIDIA Container Toolkit CLI version 1.13.5</span><br><span class="line">commit: 6b8589dcb4dead72ab64f14a5912886e6165c079</span><br></pre></td></tr></table></figure>
+
+<p>然后我们就可以在 Docker 容器中运行<code>nvidia-smi</code>命令，验证是否可以在 Docker 容器中正常使用 NVIDIA 显卡了，我们下载一个简单的镜像来进行验证：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --<span class="built_in">rm</span> --gpus all nvidia/cuda:11.7.1-base-ubuntu22.04 nvidia-smi</span><br><span class="line"></span><br><span class="line">Wed Aug 16 03:04:19 2023</span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| NVIDIA-SMI 470.199.02   Driver Version: 470.199.02   CUDA Version: 11.7     |</span><br><span class="line">|-------------------------------+----------------------+----------------------+</span><br><span class="line">| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |</span><br><span class="line">| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |</span><br><span class="line">|                               |                      |               MIG M. |</span><br><span class="line">|===============================+======================+======================|</span><br><span class="line">|   0  Quadro M6000        Off  | 00000000:03:00.0 Off |                  Off |</span><br><span class="line">| 28%   38C    P8    13W / 250W |     15MiB / 12210MiB |      0%      Default |</span><br><span class="line">|                               |                      |                  N/A |</span><br><span class="line">+-------------------------------+----------------------+----------------------+</span><br><span class="line"></span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| Processes:                                                                  |</span><br><span class="line">|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |</span><br><span class="line">|        ID   ID                                                   Usage      |</span><br><span class="line">|=============================================================================|</span><br><span class="line">+-----------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，我们在 Docker 容器中可以正常使用 NVIDIA 显卡了。</p>
+<h2 id="下载-Docker-镜像"><a href="#下载-Docker-镜像" class="headerlink" title="下载 Docker 镜像"></a>下载 Docker 镜像</h2><p>要运行 AI 环境，一般需要安装 CUDA 和 PyTorch，之前我们是在主机上安装这 2 个程序，但使用 Docker 的方式，我们可以直接下载已经安装好 CUDA 和 PyTorch 的镜像，这里推荐使用这个镜像：<a target="_blank" rel="noopener" href="https://hub.docker.com/r/anibali/pytorch"><code>anibali/pytorch</code></a>，这个镜像中包含了 CUDA 和 PyTorch，我们可以通过以下命令来运行镜像：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --<span class="built_in">rm</span> --gpus all anibali/pytorch:1.13.0-cuda11.8-ubuntu22.04 nvidia-smi</span><br><span class="line"></span><br><span class="line">Wed Aug 16 03:09:33 2023</span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| NVIDIA-SMI 470.199.02   Driver Version: 470.199.02   CUDA Version: 11.8     |</span><br><span class="line">|-------------------------------+----------------------+----------------------+</span><br><span class="line">| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |</span><br><span class="line">| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |</span><br><span class="line">|                               |                      |               MIG M. |</span><br><span class="line">|===============================+======================+======================|</span><br><span class="line">|   0  Quadro M6000        Off  | 00000000:03:00.0 Off |                  Off |</span><br><span class="line">| 28%   38C    P8    13W / 250W |     15MiB / 12210MiB |      0%      Default |</span><br><span class="line">|                               |                      |                  N/A |</span><br><span class="line">+-------------------------------+----------------------+----------------------+</span><br><span class="line"></span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| Processes:                                                                  |</span><br><span class="line">|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |</span><br><span class="line">|        ID   ID                                                   Usage      |</span><br><span class="line">|=============================================================================|</span><br><span class="line">+-----------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+
+<p>可以看到 CUDA 版本显示的是 11.8，跟 Docker 镜像中的 CUDA 版本是一致的。</p>
+<p>我们再来看在 Docker 容器中是否可以正常执行<code>python -c &quot;import torch; print(torch.cuda.is_available())&quot;</code>命令：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入 Docker 容器</span></span><br><span class="line">$ docker run -it --<span class="built_in">rm</span> --gpus all anibali/pytorch:1.13.0-cuda11.8-ubuntu22.04 bash</span><br><span class="line">$ user@32e8c83f88c3:/app$ python -c <span class="string">&quot;import torch; print(torch.cuda.is_available())&quot;</span></span><br><span class="line">True</span><br></pre></td></tr></table></figure>
+
+<p>通过结果可以证明，容器中的 CUDA 和 PyTorch 程序可以正常使用。</p>
+<h3 id="为什么不在-Docker-容器中执行nvcc-version命令？"><a href="#为什么不在-Docker-容器中执行nvcc-version命令？" class="headerlink" title="为什么不在 Docker 容器中执行nvcc --version命令？"></a>为什么不在 Docker 容器中执行<code>nvcc --version</code>命令？</h3><p>回到原先那个问题，为什么不在 Docker 容器中执行<code>nvcc --version</code>命令呢？我们可以在 Docker 容器中执行<code>nvcc --version</code>命令，看看会发生什么：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">user@32e8c83f88c3:/app$ nvcc --version</span><br><span class="line">bash: nvcc: <span class="built_in">command</span> not found</span><br></pre></td></tr></table></figure>
+
+<p>发现容器中找不到<code>nvcc</code>命令，但是 CUDA 又是可以正常访问，再看 CUDA 的安装目录：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">user@32e8c83f88c3:/app$ <span class="built_in">ls</span> /usr/local/cuda*</span><br><span class="line">/usr/local/cuda:</span><br><span class="line">compat  lib64  targets</span><br><span class="line"></span><br><span class="line">/usr/local/cuda-11:</span><br><span class="line">compat  lib64  targets</span><br><span class="line"></span><br><span class="line">/usr/local/cuda-11.8:</span><br><span class="line">compat  lib64  targets</span><br></pre></td></tr></table></figure>
+
+<p>可以看到在 CUDA 安装目录中并没有<code>bin</code>文件夹（一般<code>nvcc</code>命令会放到这个文件夹里面），这是因为有些 Docker 镜像为了节省资源，会将一些不需要的文件去掉，只保留最核心的文件，已达到减小 Docker 镜像大小的目的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Docker 安装与主机安装的方式相比，我们少安装了 CUDA 和 PyTorch 程序，多安装了<code>NVIDIA Container Toolkit</code>和下载 Docker 镜像，但整体花费的时间其实是减少了的（因为 CUDA 和 PyToch 安装时间比较长）。Docker 安装最大的好处就是可以随时切换不同的环境，而且不会影响到主机的环境。比如我们今天安装了 CUDA 11.x 的版本，后面程序升级了可能需要安装 CUDA 12.x 的版本，如果是主机安装的话，就要卸载老的 CUDA 再重新安装新的 CUDA，这样就比较麻烦了，但是如果是 Docker 安装的话，我们只需要下载新的 Docker 镜像就可以了，非常方便。希望今天的分享可以帮助大家更好的使用 Docker 来部署 AI 环境，如果有任何疑问，欢迎在评论区沟通讨论。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://linuxhint.com/use-nvidia-gpu-docker-containers-ubuntu-22-04-lts/">How to Use the NVIDIA GPU in Docker Containers on Ubuntu 22.04 LTS</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html">NVIDIA Container Toolkit Installation Guide</a></li>
+</ul>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://example.com/2023/08/15/use-docker-image-within-nvidia-host/';
+            this.page.identifier = 'https://example.com/2023/08/15/use-docker-image-within-nvidia-host/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2023
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

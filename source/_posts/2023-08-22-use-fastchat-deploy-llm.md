@@ -97,7 +97,7 @@ python -m fastchat.serve.model_worker --model-path /你的下载路径/chatglm2-
 python -m fastchat.serve.openai_api_server --host 0.0.0.0
 ```
 
-服务启动后，默认端口是 8000，可以通过`--port`参数来修改端口，在浏览器中访问服务的这个路径`http://127.0.0.1/docs`可以查看接口信息，这个服务就是我们最终要用的 LLM API 服务，它的接口跟 OpenAI 的接口是兼容的，不仅可以推理，还可以进行 Embedding 操作，接口信息如下所示：
+服务启动后，默认端口是 8000，可以通过`--port`参数来修改端口，在浏览器中访问服务的这个路径`http://127.0.0.1:8000/docs`可以查看接口信息，这个服务就是我们最终要用的 LLM API 服务，它的接口跟 OpenAI 的接口是兼容的，不仅可以推理，还可以进行 Embedding 操作，接口信息如下所示：
 
 {% img /images/post/2023/08/fastchat-api.png 1000 600 %}
 

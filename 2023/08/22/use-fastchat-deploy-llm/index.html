@@ -166,7 +166,7 @@
 <p>第三步是启动 RESTFul API 服务，启动命令如下所示：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m fastchat.serve.openai_api_server --host 0.0.0.0</span><br></pre></td></tr></table></figure>
 
-<p>服务启动后，默认端口是 8000，可以通过<code>--port</code>参数来修改端口，在浏览器中访问服务的这个路径<code>http://127.0.0.1/docs</code>可以查看接口信息，这个服务就是我们最终要用的 LLM API 服务，它的接口跟 OpenAI 的接口是兼容的，不仅可以推理，还可以进行 Embedding 操作，接口信息如下所示：</p>
+<p>服务启动后，默认端口是 8000，可以通过<code>--port</code>参数来修改端口，在浏览器中访问服务的这个路径<code>http://127.0.0.1:8000/docs</code>可以查看接口信息，这个服务就是我们最终要用的 LLM API 服务，它的接口跟 OpenAI 的接口是兼容的，不仅可以推理，还可以进行 Embedding 操作，接口信息如下所示：</p>
 <img src="/images/post/2023/08/fastchat-api.png" class="" width="1000" height="600">
 
 <h2 id="FastChat-WebUI-部署"><a href="#FastChat-WebUI-部署" class="headerlink" title="FastChat WebUI 部署"></a>FastChat WebUI 部署</h2><p>FastChat 还提供了 WebUI 界面，我们可以通过浏览器来访问 WebUI 服务来进行问答交互，在启动 WebUI 服务之前，请确保已经启动好了上面的<code>控制器服务</code>和 <code>Model Work 服务</code>，启动 WebUI 服务的命令如下所示：</p>

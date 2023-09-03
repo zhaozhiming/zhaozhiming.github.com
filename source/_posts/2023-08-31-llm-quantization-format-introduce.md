@@ -88,3 +88,9 @@ groupsize 的值有：1024、128、32，GPTQ 默认的 groupsize 值是 1024。�
 本文总结了 HuggingFace 上模型的常见量化格式，量化技术是 AI 模型部署的重要技术，它可以大大减小模型的大小和推理所需的显存。想要让大语言模型真正地走进普通人的生活，在每个人的手机上能运行起来，做到真正意义上的“普及”，那么量化技术以后肯定是必不可少的，因此掌握一些量化技术是非常有必要的。
 
 关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。
+
+## 参考资料
+
+* [GGUF is going to make llama.cpp much better and it's almost ready](https://www.reddit.com/r/LocalLLaMA/comments/15triq2/gguf_is_going_to_make_llamacpp_much_better_and/)
+* [What is group size 128 and why do 30b models give the option to leave it out?](https://www.reddit.com/r/LocalLLaMA/comments/12rtg82/what_is_group_size_128_and_why_do_30b_models_give/)
+* [Understanding: AI Model Quantization, GGML vs GPTQ!](https://www.youtube.com/watch?v=ZKdMbQq5T30)

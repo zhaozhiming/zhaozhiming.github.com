@@ -167,6 +167,11 @@
 <p>groupsize 的值有：1024、128、32，GPTQ 默认的 groupsize 值是 1024。如果 groupsize 没有值，那么 groupsize 就为<code>-1</code>（ 注意不是 <code>0</code>）。groupsize 会影响模型的准确性和推理显存大小，groupsize 根据同等精度模型准确性和推理显存从高到底的排列顺序是：<code>32</code> &gt; <code>128</code> &gt; <code>1024</code> &gt; <code>None(-1)</code>，也就是说 <code>None(-1)</code> 是准确性和显存占用最低的，而 <code>32</code> 是最高的。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文总结了 HuggingFace 上模型的常见量化格式，量化技术是 AI 模型部署的重要技术，它可以大大减小模型的大小和推理所需的显存。想要让大语言模型真正地走进普通人的生活，在每个人的手机上能运行起来，做到真正意义上的“普及”，那么量化技术以后肯定是必不可少的，因此掌握一些量化技术是非常有必要的。</p>
 <p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.reddit.com/r/LocalLLaMA/comments/15triq2/gguf_is_going_to_make_llamacpp_much_better_and/">GGUF is going to make llama.cpp much better and it’s almost ready</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.reddit.com/r/LocalLLaMA/comments/12rtg82/what_is_group_size_128_and_why_do_30b_models_give/">What is group size 128 and why do 30b models give the option to leave it out?</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ZKdMbQq5T30">Understanding: AI Model Quantization, GGML vs GPTQ!</a></li>
+</ul>
 </div>
 
 </article>

@@ -173,3 +173,8 @@ WARNING: API is accessible on http://0.0.0.0:2375 without encryption.
 ## 总结
 
 在这篇文章中，我们介绍了 Docker 远程 API 的安全问题，以及如何发现和利用 Docker 远程 API 进行攻击。Docker 远程 API 是一个强大的工具，但如果没有安全配置，那么它就会成为一个安全隐患。因此，我们应该尽可能地避免开启 Docker 远程 API，如果确实需要开启，那么就要对 Docker 远程 API 进行安全配置。
+
+## 参考资料
+
+* [Attacking Docker exposed API](https://medium.com/@riccardo.ancarani94/attacking-docker-exposed-api-3e01ffc3c124)
+* [Why is Exposing the Docker Socket a Really Bad Idea?](https://blog.quarkslab.com/why-is-exposing-the-docker-socket-a-really-bad-idea.html)

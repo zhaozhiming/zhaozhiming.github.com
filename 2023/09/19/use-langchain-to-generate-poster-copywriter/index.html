@@ -1,0 +1,310 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>使用 LangChain 生成海报文案 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="使用 LangChain 生成海报文案"> <!-- TODO: truncate -->
+	<meta name="keywords" content="langchain, prompt-engineering">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">使用 LangChain 生成海报文案</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-09-19T09:26:02.000Z" itemprop="datePublished">9月 19, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/langchain/">langchain</a> <a href="/tags/prompt-engineering/">prompt-engineering</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/09/langchain-flower.png" class="" width="400" height="300">
+
+<p>最近看到某平台在推 LangChain 的课程，其中有个示例是让 LangChain 来生成图片的营销文案，我觉得这个示例挺有意思的，于是就想自己实现一下，顺便加深一下 LangChain 的学习。今天就介绍一下如何使用 LangChain 来实现这个功能，并且介绍其中的实现细节，看完保证你也可以自己实现一个类似的功能（源码在文章最后放出）。</p>
+<span id="more"></span>
+
+<h2 id="学习目标"><a href="#学习目标" class="headerlink" title="学习目标"></a>学习目标</h2><p>根据原示例的描述，是使用 LangChain 做一个可以将图片转换成文案的 Demo 程序，但这样功能可能比较简单，我们可以增加一些挑战，比如在输入参数中除了图片外，再增加一个<strong>主题</strong>的参数，生成的文案可以根据主题而变化，这样可以满足更多的需求。同时我们还可以做一个 WebUI，让用户可以通过浏览器来使用这个功能。目标如下：</p>
+<ul>
+<li>使用 LangChain 实现图片转文案的功能</li>
+<li>图片生成的文案可以根据主题而变化</li>
+<li>可以通过一个 WebUI 页面来使用该功能</li>
+</ul>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>海报文案生成的过程主要分两步：</p>
+<ul>
+<li>先将图片转换成一段文字描述，这段文字可以精准描述图片中的内容</li>
+<li>再将这段文字描述进行加工，生成简短、优雅且有吸引力的文案</li>
+</ul>
+<p>这些操作都需要用到模型，将图片转成文字需要用到一些图生文模型，但一般的图生文模型都是基于英文的，所以生成出来的文字描述也是英文的，但没有关系，在后面的步骤中，我们可以用 LLM（大语言模型）将英文转换成中文，我们可以通过提示词工程技术来让 LLM 根据图片文字描述和主题来生成更有意境的中文文案。</p>
+<h2 id="图生文模型"><a href="#图生文模型" class="headerlink" title="图生文模型"></a>图生文模型</h2><p>首先我们需要让程序知道图片的内容是什么，我们可以用图生文的模型来获取图片描述。这里我们使用 Salesforce 的<code>blip-image-captioning-base</code>模型，该模型可以将图片转成一段简短的英文描述，它在 HuggingFace 上提供了免费的 API 供人们使用，我们可以调用它的免费 API 来进行图片转文字，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">image_to_text_by_file_path</span>(<span class="params">image_path: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    API_URL = <span class="string">&quot;https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-base&quot;</span></span><br><span class="line">    headers = &#123;<span class="string">&quot;Authorization&quot;</span>: <span class="string">f&quot;Bearer <span class="subst">&#123;os.getenv(<span class="string">&#x27;HUGGING_FACE_API&#x27;</span>)&#125;</span>&quot;</span>&#125; <span class="comment"># 需要先设置 HuggingFace 上的 token</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(image_path, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        data = f.read()</span><br><span class="line">    response = requests.post(API_URL, headers=headers, data=data)</span><br><span class="line">    img_desc = response.json()</span><br><span class="line">    <span class="keyword">return</span> img_desc[<span class="number">0</span>][<span class="string">&quot;generated_text&quot;</span>]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>代码中通过发送 post 请求来调用 API，请求参数是图片文件路径，调用 API 需要用到 HuggingFace 上的账号 token，请自行申请。这个 API 虽然是免费的，但有速率限制，你也可以在 HuggingFace 上基于这个模型部署自己的 API，关于 HuggingFace 更多的推理部署可以参考我的另一篇文章：<a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/2023/08/28/huggingface-inference-and-deploy/">HugggingFace 推理 API、推理端点和推理空间使用介绍</a>。</p>
+<h2 id="提示词工程"><a href="#提示词工程" class="headerlink" title="提示词工程"></a>提示词工程</h2><p>得到图片的文字描述之后，我们就可以用 LLM 来生成中文文案了，这一步的重点是提示词的构建，下面的代码示例中提供了一个可以满足需求的提示词模板，代码中调用 OpenAI 的 GPT3.5 模型来生成结果，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain.schema <span class="keyword">import</span> HumanMessage</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_chinese_desc</span>(<span class="params">img_desc: <span class="built_in">str</span>, theme: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    chat = ChatOpenAI(temperature=<span class="number">1</span>, model=<span class="string">&quot;gpt-3.5-turbo-0613&quot;</span>)</span><br><span class="line">    prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        You are a poster copywriting expert proficient in ancient Chinese classical literature.</span></span><br><span class="line"><span class="string">        You can redesign a textual description of an image into the style of classical Chinese,</span></span><br><span class="line"><span class="string">        producing 1 short yet profound classical Chinese copies, each not exceeding 10 words.</span></span><br><span class="line"><span class="string">        These copies should align with a theme described within the $$$ symbols.</span></span><br><span class="line"><span class="string">        The image&#x27;s textual description is wrapped in ### symbols.</span></span><br><span class="line"><span class="string">        The final result should only contain the Chinese copy, without any additional information or the $ and # symbols.</span></span><br><span class="line"><span class="string">        Take a deep breath and think step by step.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        image theme: $$$<span class="subst">&#123;theme&#125;</span>$$$</span></span><br><span class="line"><span class="string">        image description: ###<span class="subst">&#123;img_desc&#125;</span>###</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    messages = [HumanMessage(content=prompt)]</span><br><span class="line">    result = chat(messages)</span><br><span class="line">    <span class="keyword">return</span> result.content</span><br></pre></td></tr></table></figure>
+
+<p>我们来了解下这段提示词：</p>
+<ul>
+<li>我们的提示词是英文的，因为英文提示词在 GPT 中效果更好。</li>
+<li>我们让 LLM 扮演一个精通中国古代文言文的海报文案专家，可以将一段图片的文字描述重新用文言文形式进行设计，因为我觉得古文的意境来做文案效果会更好。</li>
+<li>图片和主题分别用不同的符号包裹以示区分。</li>
+<li>提醒 LLM 输出结果不要包含额外的信息，特别是一些偶尔会在结果中出现的符号。</li>
+<li>最后使用特殊的提示词关键字<strong>深呼吸</strong>和<strong>一步一步思考</strong>，来让 LLM 推理的效果更佳。</li>
+</ul>
+<p>在示例代码中我们将 LLM 的 temperature 参数设为 1，这样可以让 LLM 生成的结果更具创造性。当然你也可以在这个提示词上再自行修改，看能否得到更好的效果，提示词构建本身就是一个不断优化迭代的过程。</p>
+<h2 id="LangChain-Agent"><a href="#LangChain-Agent" class="headerlink" title="LangChain Agent"></a>LangChain Agent</h2><p>有了图生文模型和提示词工程后，我们就可以实现图片转文案的功能了，首先我们使用 LangChain 的 Agent 模块来实现这个功能，在创建 Agent 之前我们需要先创建一个工具方法，这个工具方法会被 Agent 调用，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> tool</span><br><span class="line"></span><br><span class="line"><span class="meta">@tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_poster_text</span>(<span class="params">image_path: <span class="built_in">str</span>, theme: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;giva a image path and a theme to generate the copywriter in Chinese&quot;&quot;&quot;</span></span><br><span class="line">    img_desc = image_to_text_by_file_path(image_path)</span><br><span class="line">    result = generate_chinese_desc(img_desc, theme)</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+
+<p>我们用 LangChain 的<code>@tool</code>标签来创建一个工具方法，这个工具方法分别调用了之前示例代码中的 2 个方法，将图片转成文字描述和将图片描述转成中文文案。注意 LangChain 中的工具方法需要定义方法描述，就是方法名下面一行，Agent 会根据这个方法的描述来决定是否调用这个工具。</p>
+<p>然后创建一个 Agent，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> initialize_agent, AgentType</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">agent_output</span>(<span class="params">promt: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    llm = ChatOpenAI(temperature=<span class="number">0</span>, model=<span class="string">&quot;gpt-3.5-turbo-0613&quot;</span>)</span><br><span class="line">    tools = [multi_input_tool()]</span><br><span class="line"></span><br><span class="line">    agent = initialize_agent(</span><br><span class="line">        tools,</span><br><span class="line">        llm,</span><br><span class="line">        agent=AgentType.OPENAI_FUNCTIONS,</span><br><span class="line">        verbose=<span class="literal">True</span>,)</span><br><span class="line"></span><br><span class="line">    result = agent.run(promt)</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+
+<p>我们使用 <code>initialize_agent</code>方法来创建一个 Agent，这个方法接收一个工具列表和一个 LLM 模型，以及设置 Agent 的类型，这里我们使用的是<code>AgentType.OPENAI_FUNCTIONS</code>，更多的 Agent 类型可以查看 LangChain 的<a target="_blank" rel="noopener" href="https://python.langchain.com/docs/modules/agents/agent_types/">这个文档</a>。我们还将 Agent 中的<code>verbose</code>参数设置为 True，这样可以看到 Agent 内部的运行过程，方便调试。</p>
+<p>最后运行一下这个 Agent，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(</span><br><span class="line">        agent_output(</span><br><span class="line">            <span class="string">&quot;Use the generate_poster_text tool to generate the text content of the file &#x27;img/flower.jpeg&#x27; and the theme is &#x27;Love&#x27;&quot;</span></span><br><span class="line">        )</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<p>在 Agent 的提示词中，我们要求 Agent 使用哪个工具，并且告诉它图片的路径和主题，运行结果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt; Entering new AgentExecutor chain...</span><br><span class="line"></span><br><span class="line">Invoking: `generate_poster_text` with `&#123;<span class="string">&#x27;tool_input&#x27;</span>: &#123;<span class="string">&#x27;image_path&#x27;</span>: <span class="string">&#x27;img/flower.jpeg&#x27;</span>, <span class="string">&#x27;theme&#x27;</span>: <span class="string">&#x27;Love&#x27;</span>&#125;&#125;`</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">花束若相伴，万物皆独醉。The generated text content <span class="keyword">for</span> the image <span class="string">&#x27;img/flower.jpeg&#x27;</span> with the theme <span class="string">&#x27;Love&#x27;</span> is: <span class="string">&quot;花束若相伴，万物皆独醉。&quot;</span></span><br><span class="line"></span><br><span class="line">&gt; Finished chain.</span><br><span class="line">The generated text content <span class="keyword">for</span> the image <span class="string">&#x27;img/flower.jpeg&#x27;</span> with the theme <span class="string">&#x27;Love&#x27;</span> is: <span class="string">&quot;花束若相伴，万物皆独醉。&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到最终 Agent 生成的文案是：<code>花束若相伴，万物皆独醉</code>，看起来效果还不错。</p>
+<h2 id="LangChain-多参数工具"><a href="#LangChain-多参数工具" class="headerlink" title="LangChain 多参数工具"></a>LangChain 多参数工具</h2><p>刚才我们定义了工具方法后，其实还需要将这个工具方法形成一个工具，创建工具的示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> Tool</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_tool</span>():</span><br><span class="line">    <span class="keyword">return</span> Tool(</span><br><span class="line">        name=<span class="string">&quot;generate_poster_text&quot;</span>,</span><br><span class="line">        func=generate_poster_text.run,</span><br><span class="line">        description=<span class="string">&quot;giva a image path and a theme to generate the copywriter in Chinese.&quot;</span>,</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<p>但通过这个方式创建的工具只能接收一个参数，多参数的话运行方法会报错，在我们的示例中我们需要传递图片路径和主题 2 个参数。好在 LangChain 提供了 2 种方法来解决这个问题。</p>
+<h3 id="格式化参数方法"><a href="#格式化参数方法" class="headerlink" title="格式化参数方法"></a>格式化参数方法</h3><p>这种方法的核心思想就是将多个参数合并成一个参数，然后用分隔符来分隔，比如我们示例中的图片路径和主题参数，可以用<code>img/flower.jpeg,Love</code>这样的格式来表示，然后在工具方法中再将这个参数拆分成多个参数，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_poster_text_string_format</span>(<span class="params"><span class="built_in">input</span>: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;giva a image path and a theme to generate the copywriter in Chinese&quot;&quot;&quot;</span></span><br><span class="line">    [image_path, theme] = <span class="built_in">input</span>.split(<span class="string">&quot;,&quot;</span>)</span><br><span class="line">    img_desc = image_to_text_by_file_path(image_path)</span><br><span class="line">    result = generate_chinese_desc(img_desc, theme)</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+
+<p>我们重新定义了一个工具方法，这个方法只接受一个参数，然后在方法内部我们将方法参数拆分成多个参数，再调用之前的方法来实现图片转文案的功能。这种方式需要我们在工具的描述中写明参数的组成方式，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">string_format_tool</span>():</span><br><span class="line">    <span class="keyword">return</span> Tool(</span><br><span class="line">        name=<span class="string">&quot;generate_poster_text&quot;</span>,</span><br><span class="line">        func=generate_poster_text_string_format.run,</span><br><span class="line">        description=<span class="string">&quot;giva a image and a theme to generate the copywriter in Chinese. The input to this tool should be a comma separated list of &quot;</span></span><br><span class="line">        <span class="string">&quot;strings of length two. The first one is the value of image_path and the second one is the value of theme. &quot;</span></span><br><span class="line">        <span class="string">&quot;For example, `cats.png,Love` would be the input if you want to get value of image_path to cats.png and value of theme to Love&quot;</span>,</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<p>在工具的描述字段中，我们写明了参数的有几个，参数名称是什么，以及用什么分隔符来连接，最后还给了一个示例，这样 LLM 在解析工具的时候就可以根据这个描述将多个参数整合成一个参数，然后再调用工具方法。</p>
+<p>另外使用格式化参数方法，我们还需要将 Agent 的类型换成<code>ZERO_SHOT_REACT_DESCRIPTION</code>，示例代码如下：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="deletion">-agent=AgentType.OPENAI_FUNCTIONS,</span></span><br><span class="line"><span class="addition">+agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,</span></span><br></pre></td></tr></table></figure>
+
+<p>最终 Agent 的运行结果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt; Entering new AgentExecutor chain...</span><br><span class="line">I should use the generate_poster_text tool to generate the text content <span class="keyword">for</span> the given image and theme.</span><br><span class="line">Action: generate_poster_text</span><br><span class="line">Action Input: flower.jpeg,Love</span><br><span class="line">Observation: 花开如水，爱在静谧。</span><br><span class="line">Thought:The generated text content <span class="keyword">for</span> the image <span class="string">&#x27;flower.jpeg&#x27;</span> and the theme <span class="string">&#x27;Love&#x27;</span> is <span class="string">&quot;花开如水，爱在静谧。&quot;</span></span><br><span class="line">Final Answer: 花开如水，爱在静谧。</span><br><span class="line"></span><br><span class="line">&gt; Finished chain.</span><br><span class="line">花开如水，爱在静谧。</span><br></pre></td></tr></table></figure>
+
+<h3 id="多输入参数方法"><a href="#多输入参数方法" class="headerlink" title="多输入参数方法"></a>多输入参数方法</h3><p>另外一种方法是使用<code>StructuredTool</code>来创建工具，这样创建出来的工具就可以支持多参数了，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.tools <span class="keyword">import</span> StructuredTool</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">multi_input_tool</span>():</span><br><span class="line">    <span class="keyword">return</span> StructuredTool.from_function(</span><br><span class="line">        name=<span class="string">&quot;generate_poster_text&quot;</span>,</span><br><span class="line">        func=generate_poster_text.run,</span><br><span class="line">        args_schema=GeneratePosterTextInput,</span><br><span class="line">        description=<span class="string">&quot;giva a image path and a theme to generate the copywriter in Chinese.&quot;</span>,</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<p>这里我们不用添加过多的工具描述，但需要我们定义好工具方法中的参数结构，上面的代码中我们定义了一个<code>GeneratePosterTextInput</code>类，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.pydantic_v1 <span class="keyword">import</span> BaseModel, Field</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GeneratePosterTextToolInput</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    image_path: <span class="built_in">str</span> = Field(..., description=<span class="string">&quot;the image path&quot;</span>)</span><br><span class="line">    theme: <span class="built_in">str</span> = Field(..., description=<span class="string">&quot;the theme name&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GeneratePosterTextInput</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    tool_input: GeneratePosterTextToolInput</span><br></pre></td></tr></table></figure>
+
+<p>我们定义了一个<code>GeneratePosterTextToolInput</code>类，这个类中定义了 2 个参数，分别是图片路径和主题，然后我们再定义一个<code>GeneratePosterTextInput</code>类，这个类中定义了一个<code>tool_input</code>参数，这个参数的类型就是<code>GeneratePosterTextToolInput</code>，这样就定义好了工具方法的参数结构。所有的多参数都必须包含在<code>tool_input</code>这个属性中，这样 Agent 才能正确的调用工具方法，否则 Agent 会报参数不匹配的错误。</p>
+<p>如果没有定义参数的数据结构，Agent 就会自行给参数取名，一旦参数名称和方法参数名称不一致，也会导致报错。</p>
+<p>使用多输入参数方法，需要使用 <code>OPENAI_FUNCTIONS</code>或<code>STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION</code>的 Agent 类型，运行效果之前已经演示过了，这里就不再重复演示。</p>
+<p>关于 LangChain 工具的多参数方法信息，可以参考<a target="_blank" rel="noopener" href="https://python.langchain.com/docs/modules/agents/tools/multi_input_tool">这里</a>。</p>
+<h2 id="WebUI"><a href="#WebUI" class="headerlink" title="WebUI"></a>WebUI</h2><p>这个功能虽然可以使用 Agent 来实现，但实际上有点多余，其实核心方法就是<code>generate_poster_text</code>，我们可以直接调用这个方法来实现图片转文案的功能，我们可以用 Gradio 来写一个 WebUI 页面，在页面中调用这个方法，实现后的效果如下图所示：</p>
+<img src="/images/post/2023/09/poster-demo.jpg" class="" width="1000" height="600">
+
+<p>WebUI 在实现中与 Agent 不同的地方是，Agent 是通过图片路径来找到对应的图片，而在 WebUI 中是通过浏览器来上传图片，在 WebUI 中我们需要将上传的图片转成二进制数据，然后再调用图生文模型的方法，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> io</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">image_to_bytes</span>(<span class="params">img: Image.Image, <span class="built_in">format</span>: <span class="built_in">str</span> = <span class="string">&quot;JPEG&quot;</span></span>):</span><br><span class="line">    <span class="comment"># 创建一个BytesIO对象</span></span><br><span class="line">    buffered = io.BytesIO()</span><br><span class="line">    <span class="comment"># 使用save方法将图片保存到BytesIO对象</span></span><br><span class="line">    img.save(buffered, <span class="built_in">format</span>=<span class="built_in">format</span>)</span><br><span class="line">    <span class="comment"># 获取BytesIO对象的二进制内容</span></span><br><span class="line">    img_byte = buffered.getvalue()</span><br><span class="line">    <span class="keyword">return</span> img_byte</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">image_to_text_by_file</span>(<span class="params">img: Image.Image</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    API_URL = <span class="string">&quot;https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-base&quot;</span></span><br><span class="line">    headers = &#123;<span class="string">&quot;Authorization&quot;</span>: <span class="string">f&quot;Bearer <span class="subst">&#123;os.getenv(<span class="string">&#x27;HUGGING_FACE_API&#x27;</span>)&#125;</span>&quot;</span>&#125;</span><br><span class="line">    data = image_to_bytes(img)</span><br><span class="line">    response = requests.post(API_URL, headers=headers, data=data)</span><br><span class="line">    img_desc = response.json()</span><br><span class="line">    <span class="keyword">return</span> img_desc[<span class="number">0</span>][<span class="string">&quot;generated_text&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>图片在 WebUI 上传上来后是一个<code>PIL.Image.Image</code>对象，我们使用<code>image_to_bytes</code>方法将其转成二进制数据，然后再调用图生文模型的 API，得到图片的文字描述。</p>
+<h3 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a>小技巧</h3><p>我们这个程序需要用到 OpenAI 的 API，但国内是无法直接访问的，所以需要在终端开启代理，但 Gradio 在代理模式下启动服务就会报错，错误信息如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ValueError: When localhost is not accessible, a shareable <span class="built_in">link</span> must be created. Please <span class="built_in">set</span> share=True or check your proxy settings to allow access to localhost.</span><br></pre></td></tr></table></figure>
+
+<p>这个问题要怎么解决呢？一种方法是调用 Azure 的 OpenAI API，这个 API 可以在国内访问，并且返回结果和 OpenAI 的 API 是一样的，具体如何开通 Azure API 可以参考我的另外一篇文章：<a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/2023/08/10/azure-openai-api-introduct/">Azure OpenAI 服务开通及使用</a>。</p>
+<p>另外有一种更简单的方法，就是设置一个<code>no_proxy</code>的环境变量，这样代理在访问这个环境变量下的地址时就不会启用代理，示例代码如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> no_proxy=<span class="string">&quot;localhost, 127.0.0.1, ::1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>这样在终端下，既可以开启代理，又能启动 Gradio 服务，我们的 WebUI 就可以正常启动了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文介绍了如何使用 LangChain 来实现海报文案生成的功能，同时还介绍了其中的一些技术细节，文中的所有源码放在了<a target="_blank" rel="noopener" href="https://github.com/zhaozhiming/poster-copywriter-generator">这个仓库</a>，感兴趣的同学可以去看看（顺便点个start），希望本文对你学习 LangChain 有所帮助。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://example.com/2023/09/19/use-langchain-to-generate-poster-copywriter/';
+            this.page.identifier = 'https://example.com/2023/09/19/use-langchain-to-generate-poster-copywriter/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2023
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

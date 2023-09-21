@@ -51,7 +51,7 @@ def image_to_text_by_file_path(image_path: str) -> str:
 
 ```
 
-代码中通过发送 post 请求来调用 API，请求参数是图片文件路径，调用 API 需要用到 HuggingFace 上的账号 token，请自行申请。这个 API 虽然是免费的，但有速率限制，你也可以在 HuggingFace 上基于这个模型部署自己的 API，关于 HuggingFace 更多的推理部署可以参考我的另一篇文章：[HugggingFace 推理 API、推理端点和推理空间使用介绍](https://zhaozhiming.github.io/2023/08/28/huggingface-inference-and-deploy/)。
+代码中通过发送 post 请求来调用 API，请求参数是图片文件，调用 API 需要用到 HuggingFace 上的账号 token，请自行申请。这个 API 虽然是免费的，但有速率限制，你也可以在 HuggingFace 上基于这个模型部署自己的 API，关于 HuggingFace 更多的推理部署可以参考我的另一篇文章：[HugggingFace 推理 API、推理端点和推理空间使用介绍](https://zhaozhiming.github.io/2023/08/28/huggingface-inference-and-deploy/)。
 
 ## 提示词工程
 
@@ -317,6 +317,6 @@ export no_proxy="localhost, 127.0.0.1, ::1"
 
 ## 总结
 
-本文介绍了如何使用 LangChain 来实现海报文案生成的功能，同时还介绍了其中的一些技术细节，文中的所有源码放在了[这个仓库](https://github.com/zhaozhiming/poster-copywriter-generator)，感兴趣的同学可以去看看（顺便点个start），希望本文对你学习 LangChain 有所帮助。
+本文介绍了如何使用 LangChain 来实现海报文案生成的功能，同时还介绍了其中的一些技术细节，文中的所有源码放在了[这个仓库](https://github.com/zhaozhiming/poster-copywriter-generator)，感兴趣的同学可以去看看（顺便点个star），希望本文对你学习 LangChain 有所帮助。
 
 关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。

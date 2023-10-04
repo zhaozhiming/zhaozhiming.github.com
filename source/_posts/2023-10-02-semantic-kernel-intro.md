@@ -46,7 +46,7 @@ deployment, api_key, endpoint = sk.azure_openai_settings_from_dot_env()
 kernel.add_chat_service("Azure_curie", AzureChatCompletion(deployment, endpoint, api_key))
 ```
 
-上面的代码中，我们分别接入和 OpenAI 和 Azure OpenAI 的模型来作为 Semantic Kernel 的 2 个聊天服务，模型所需的参数是从环境变量中获取，可以在项目根目录下创建一个`.env`文件来存放环境变量，示例代码如下：
+上面的代码中，我们分别接入 OpenAI 和 Azure OpenAI 的模型来作为 Semantic Kernel 的 2 个聊天服务，模型所需的参数是从环境变量中获取，可以在项目根目录下创建一个`.env`文件来存放环境变量，示例代码如下：
 
 ```yaml
 OPENAI_API_KEY=""
@@ -256,7 +256,7 @@ async def stepwise_planner(ask: str):
 asyncio.run(stepwise_planner("根据2023年亚运会金牌最多的国家查询结果，讲一个从这个国家穿越到恐龙时代的笑话"))
 ```
 
-`StepwisePlanner`的使用和`ActionPlanner`有些类似，不同的地方是`StepwisePlanner`可以设置了最大迭代次数和最小迭代时间，最大迭代次数表示最多思考多少轮，到了最大的次数后即使没有最终答案也会退出程序。在上面的执行方法中，我们还打印了每一轮的思考过程，包括其调用的函数和输出的结果。
+`StepwisePlanner`的使用和`ActionPlanner`有些类似，不同的地方是`StepwisePlanner`可以设置最大迭代次数和最小迭代时间，最大迭代次数表示最多思考多少轮，到了最大的次数后即使没有最终答案也会退出程序。在上面的执行方法中，我们还打印了每一轮的思考过程，包括其调用的函数和输出的结果。
 
 LangChain 与之对应的功能是[ReAct Agent](https://python.langchain.com/docs/modules/agents/agent_types/react)，也是 LangChain 比较常用的一种 Agent，Stepwise Planner 与 ReAct Agent 两者区别不大。
 

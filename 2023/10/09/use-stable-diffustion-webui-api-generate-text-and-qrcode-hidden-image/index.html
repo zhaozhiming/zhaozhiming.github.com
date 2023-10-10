@@ -3,10 +3,10 @@
 <head>
 	<meta charset="utf-8">
     
-	<title>使用 API 生成 Stable Diffustion 文字和二维码背景图片 - Hacker and Geeker&#39;s Way</title>
+	<title>使用 API 生成 Stable Diffustion 文字和二维码隐藏图片 - Hacker and Geeker&#39;s Way</title>
     <meta name="author" content="">
     
-	<meta name="description" content="使用 API 生成 Stable Diffustion 文字和二维码背景图片"> <!-- TODO: truncate -->
+	<meta name="description" content="使用 API 生成 Stable Diffustion 文字和二维码隐藏图片"> <!-- TODO: truncate -->
 	<meta name="keywords" content="stable-diffustion, webui, qrcode, controlnet, hidden-image">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -118,7 +118,7 @@
     <div id="content">
         <div class="inner">
 <article class="post">
-	<h2 class="title">使用 API 生成 Stable Diffustion 文字和二维码背景图片</h2>
+	<h2 class="title">使用 API 生成 Stable Diffustion 文字和二维码隐藏图片</h2>
     <div class="meta">
         <div class="date">Published on: <time datetime="2023-10-09T01:58:06.000Z" itemprop="datePublished">10月 9, 2023</time>
 </div>
@@ -161,7 +161,7 @@
 <p>在 ControlNet 插件中，我们需要用到 2 个 ControlNet Unit，在第一个 Unit 中我们先上传一张文字图片，这个文字就是要在图片中<strong>隐藏</strong>的文字，可以用 Word 或者 WPS 写一个字然后截图保存下来，保存下来后记得看下图片的尺寸，然后修改上面提到的图片宽度和高度。其他属性的修改可以参考下图，模型要选择<code>control_v1p_sd15_qrcode_monster</code>：</p>
 <img src="/images/post/2023/10/controlnet-unit1-txt-hidden.png" class="" width="600" height="400">
 
-<p>因为文字图片是黑底白字的，需要在预处理中选择<code>invert</code>，如果文字图片是白底黑字的话就需要选择<code>无</code>。</p>
+<p>因为文字图片是白底黑字的，需要在预处理中选择<code>invert</code>，如果文字图片是黑底白字的话就需要选择<code>无</code>。</p>
 <p>ControlNet 第二个 Unit 的配置大致相同，上传同样的图片，但模型要选择<code>control_v1p_sd15_brightness</code>，还有控制权重、启动控制的步数和结束控制的步数也需做相应调整，详细配置信息如下：</p>
 <img src="/images/post/2023/10/controlnet-unit2-txt-hidden.png" class="" width="600" height="400">
 

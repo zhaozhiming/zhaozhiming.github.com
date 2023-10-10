@@ -1,8 +1,8 @@
 ---
 layout: post
-title: 使用 API 生成 Stable Diffustion 文字和二维码背景图片
+title: 使用 API 生成 Stable Diffustion 文字和二维码隐藏图片
 date: 2023-10-09 09:58:06
-description: 使用 API 生成 Stable Diffustion 文字和二维码背景图片
+description: 使用 API 生成 Stable Diffustion 文字和二维码隐藏图片
 keywords: stable-diffustion, webui, qrcode, controlnet, hidden-image
 comments: true
 categories: ai
@@ -73,7 +73,7 @@ Stable Diffusion 前段时间有几个比较火的效果，一个是将文字**�
 
 {% img /images/post/2023/10/controlnet-unit1-txt-hidden.png 600 400 %}
 
-因为文字图片是黑底白字的，需要在预处理中选择`invert`，如果文字图片是白底黑字的话就需要选择`无`。
+因为文字图片是白底黑字的，需要在预处理中选择`invert`，如果文字图片是黑底白字的话就需要选择`无`。
 
 ControlNet 第二个 Unit 的配置大致相同，上传同样的图片，但模型要选择`control_v1p_sd15_brightness`，还有控制权重、启动控制的步数和结束控制的步数也需做相应调整，详细配置信息如下：
 

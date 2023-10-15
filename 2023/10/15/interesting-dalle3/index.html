@@ -1,0 +1,379 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>好玩到停不下来的 DALL-E 3 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="好玩到停不下来的 DALL-E 3"> <!-- TODO: truncate -->
+	<meta name="keywords" content="dall-e3, openai, chatgpt">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">好玩到停不下来的 DALL-E 3</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-10-15T07:34:19.000Z" itemprop="datePublished">10月 15, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/chatgpt/">chatgpt</a> <a href="/tags/openai/">openai</a> <a href="/tags/dall-e3/">dall-e3</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/10/dalle3.png" class="" width="400" height="300">
+
+<p>最近 ChatGPT 对 Plus 用户逐步开放一些多模态的功能，包括 DALL-E 3（图像生成）、 GPT-4V（图像识别），等，很多网友乐此不疲地对这些新功能进行试用，目前已经解锁了不少有趣的玩法，笔者将这些好玩的功能进行了整理并介绍给大家，希望能给大家带来一些灵感。</p>
+<span id="more"></span>
+
+<h2 id="功能介绍"><a href="#功能介绍" class="headerlink" title="功能介绍"></a>功能介绍</h2><p>ChatGPT 新推出了图像识别、图像生成以及语音对话等多模态的功能，目前该功能只开放给 Plus 用户，而且只能在 ChatGPT 的 Web 页面和 APP（iOS 和安卓） 上使用。OpenAI 还没有提供这些功能的 API 接口，但据说未来会开放。</p>
+<h3 id="DALL-E-3"><a href="#DALL-E-3" class="headerlink" title="DALL-E 3"></a>DALL-E 3</h3><p>DALL-E 3 是 ChatGPT 最新推出的文本到图像生成系统，其通过集成了 ChatGPT 来为用户提供更为优化的图像生成体验。DALL-E 3 不仅能够根据文本描述创建非常详细和准确的图像，而且还具备了显著的安全性提升，例如能够拒绝对公众人物的生成请求，以及对可能产生的有害内容（如暴力、成人或仇恨内容）进行了一定程度的控制。此外，它也通过与 ChatGPT 的集成，使得用户能够更为精准地调整生成的图像，而无需具备丰富的提示知识。通过这些优化和新的集成功能，DALL-E 3 在图像再现、结果的准确性和内容过滤等方面相比前一版本有了显著的提高。</p>
+<p>相比 Stable Diffusion，DALL-E 3 在使用上非常简单，只需要一句简单的文字描述即可生成期望的图片，不必像前者一样还要提供复杂的<strong>咒语</strong>。</p>
+<p>DALL-E 3 功能不仅可以在 ChatGPT 中使用，还可以在 Bing 中免费使用它，但是在 Bing 中使用有每天使用限额，这是它的<a target="_blank" rel="noopener" href="https://www.bing.com/images/create">使用地址</a>。在 ChatGPT 中使用的话需要申请开通，可以通过这个<a target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSdiJK7uFzjfIqbH9wGeXnmR3rwjnLUMwih_W5Cet0FVdv8-aQ/viewform">申请地址</a>进行申请，申请后大概 2 个小时左右就可以在 ChatGPT 的 Web 页面和 APP 上使用了。</p>
+<h2 id="DALL-E-3-玩法"><a href="#DALL-E-3-玩法" class="headerlink" title="DALL-E 3 玩法"></a>DALL-E 3 玩法</h2><p>目前已经有不少网友在尝试 DALL-E 3 各种有趣的玩法，下面我们就来看看这些有意思的功能。</p>
+<h3 id="漫画创作"><a href="#漫画创作" class="headerlink" title="漫画创作"></a>漫画创作</h3><p>ChatGPT 刚推出 DALL-E 3 功能不久，就有网友用它在 15 分钟内画了一副漫画。</p>
+<img src="/images/post/2023/10/dalle3-comics.jpeg" class="" width="600" height="400">
+
+<p>生成图片的提示词是：</p>
+<blockquote>
+<p>“A comic strip in which a boy discovers a mysterious egg that hatches into a baby dinosaur.”<br>(这是一部连环画，一个男孩发现了一个神秘的蛋，蛋孵化成一只小恐龙。)</p>
+</blockquote>
+<p>图片生成后，有些图片的顺序可能是不对的，可以使用 PS 等工具进行手动调整，另外 DALL-E 3 生成图片中文字的效果一般都不太理想，可能也需要自己手工调整，但对比以前的漫画创作，这已经提升了不少效率。</p>
+<h3 id="生命周期图像"><a href="#生命周期图像" class="headerlink" title="生命周期图像"></a>生命周期图像</h3><p>使用 DALL-E 3 生成生命周期的图片，展示一种事物从开始到最终形态的过程，以下是效果图（后面的图片都会加上中英文提示词）：</p>
+<img src="/images/post/2023/10/dalle3-life1.jpeg" class="" width="600" height="400">
+
+<blockquote>
+<p>Four images side by side illustrating the life cycle of a cartoon dragon: A tiny orange reptilian. It grows larger and stronger. A fierce dragon-like creature with wings and roaring flames. An old and majestic dragon.<br>(四张并排的图像展示了卡通龙的生命周期：一种微小的橙色爬行动物。它变得更大更强。一种凶猛的龙一样的生物，长着翅膀和咆哮的火焰。一条古老而威严的龙。)</p>
+</blockquote>
+<img src="/images/post/2023/10/dalle3-life2.jpeg" class="" width="600" height="400">
+
+<blockquote>
+<p>Four images side by side illustrating the life cycle of a snowman: Pristine empty snow-covered field. Three stacked snowballs, undecorated. Snowman with carrot nose, coal eyes, and hat. Melting figure; fallen hat, soaked scarf.<br>(四幅并排的图片展示了雪人的生命周期：原始的、空荡荡的被雪覆盖的领域。三个堆叠的未装饰的雪球。雪人带着胡萝卜鼻子、煤炭眼睛和帽子。融化的身影；掉落的帽子，湿透的围巾。)</p>
+</blockquote>
+<img src="/images/post/2023/10/dalle3-life3.jpeg" class="" width="600" height="400">
+
+<blockquote>
+<p>Four images side by side illustrating the life cycle of a rose: A small, tight green bud with tiny leaves. The bud starts to unfurl, revealing delicate petals and a richer hue. A full bloom, radiant in its prime, petals spread out in all their glory. Fading elegance as petals wilt, turn brown, and fall.<br>(四幅并排的图片展示了玫瑰的生命周期：一个小而紧密的绿色花蕾，带有细小的叶子。花蕾开始展开，呈现出精致的花瓣和丰富的色彩。完全绽放时，花朵处于它的巅峰，花瓣绽放出全部的光彩。花瓣逐渐凋谢，变为棕褐色，并最终飘落，渐渐失去优雅的姿态。)</p>
+</blockquote>
+<h3 id="分解图"><a href="#分解图" class="headerlink" title="分解图"></a>分解图</h3><p>使用 DALL-E 3 生成<strong>Knolling</strong>风格的图片，Knolling 是一种独特的摄影风格，它涉及将不同的物品整齐地排列，使它们相互成 90 度角，然后从上方拍摄它们。这种风格创建了一种非常对称、令眼睛愉悦的外观，同时也让人们能够在一张照片中一次看到许多物品 ​，被拍摄的物品通常是基于某种原因而组合在一起 ​。</p>
+<p>提示词模板为：</p>
+<blockquote>
+<p>Knolling product photo of a [main object] surrounded by [secondary objects], arranged on a clean background.<br>(Knolling 产品照片，[主要物品]被[次要物品]包围，排列在干净的背景上。)</p>
+</blockquote>
+<p>需要将其中的<code>主要物品</code>和<code>次要物品</code>替换成自己想要的物品，主要物品是你要关注的东西，次要物品通常较小，并且与主要物品相关，可以让 ChatGPT 帮你生成一些次要物品。为了让效果更好，可以告诉 ChatGPT 你的主要物品是什么，然后让 ChatGPT 生成 4 到 5 个在视觉上比较吸引人的次要物品，按重要顺序排列，以下是效果图：</p>
+<img src="/images/post/2023/10/dalle3-knol1.jpeg" class="" width="600" height="400">
+
+<blockquote>
+<p>Knolling product photo of a perfume bottle surrounded by fragrant flower petals, essential oils, cinnamon sticks, and a clear dropper, arranged on a clean background.<br>(香水瓶被芳香的花瓣、精油、肉桂棒和一个透明的滴管包围，排列在干净的背景上。)</p>
+</blockquote>
+<img src="/images/post/2023/10/dalle3-knol2.jpeg" class="" width="600" height="400">
+
+<blockquote>
+<p>Knolling product photo of a delicious roast chicken surrounded by rosemary sprigs, lemon halves, garlic bulbs, kitchen twine, and a carving knife arranged on a clean background.<br>(一只美味的烤鸡被迷迭香枝、柠檬半、大蒜球、厨房绳和一把雕刻刀包围，排列在干净的背景上。)</p>
+</blockquote>
+<img src="/images/post/2023/10/dalle3-knol3.jpeg" class="" width="600" height="400">
+
+<h3 id="PPT-矢量图"><a href="#PPT-矢量图" class="headerlink" title="PPT 矢量图"></a>PPT 矢量图</h3><p>使用 DALL-E 3 生成 PPT 矢量图，这个功能可以让你在 PPT 中快速生成一些矢量配图，可以节省不少时间。</p>
+<p>提示词模板为：</p>
+<blockquote>
+<p>[Image Description], flat simple vector illustrations style, vibrant colors, white background.<br>([图片内容]，扁平简洁的矢量插图风格，色彩鲜艳，背景为白色。)</p>
+</blockquote>
+<p>如果要创建多个连贯的图像，则可以添加颜色主题，只需在<strong>背景为白色</strong>之前添加<strong>蓝色主题</strong>，以下是效果图：</p>
+<img src="/images/post/2023/10/dalle3-ppt1.jpeg" class="" width="600" height="400">
+
+<blockquote>
+<p>smiling woman listening to music sitting at the desk with her laptop, flat simple vector illustrations style, vibrant colors, white background.<br>(一个微笑的女人坐在桌子旁，听着音乐，手持笔记本电脑，同样采用扁平简洁的矢量插图风格，色彩鲜艳，背景为白色。)</p>
+</blockquote>
+<img src="/images/post/2023/10/dalle3-ppt2.jpeg" class="" width="600" height="400">
+
+<blockquote>
+<p>a professional man and woman chatting at a table with a presentation board behind them, flat simple vector illustrations style, vibrant colors, white background.<br>(一个专业的男人和女人坐在桌旁交谈，背后有一个演示板，同样采用扁平简洁的矢量插图风格，色彩鲜艳，背景为白色。)</p>
+</blockquote>
+<img src="/images/post/2023/10/dalle3-ppt3.jpeg" class="" width="600" height="400">
+
+<blockquote>
+<p>a happy man jogging with a blue t-shirt, flat simple vector illustrations style, vibrant colors, white background.<br>(一个快乐的男人穿着蓝色 T 恤在慢跑，采用扁平简洁的矢量插图风格，色彩鲜艳，背景为白色。)</p>
+</blockquote>
+<h3 id="贴纸设计"><a href="#贴纸设计" class="headerlink" title="贴纸设计"></a>贴纸设计</h3><p>使用 DALL-E 3 进行贴纸设计，可以快速生成同系列的多种不同贴纸，也可以生成一张特定主体的贴纸。</p>
+<p>下面是生成多个小贴纸的提示词模板：</p>
+<blockquote>
+<p>9 different stickers featuring [objects] with vibrant colors and white borders on a minimal background.<br>(共有 9 个不同的贴纸，以[物体]为主题，色彩鲜艳，边框为白色，背景简约。)</p>
+</blockquote>
+<p>有时生成的贴纸有边框，如果你不希望有边框，请在提示词中添加<strong>Die Cut</strong>一词。你可以在提示中写多个物体，比如：疯狂的忍者猫与鸡打架，圣诞树、驯鹿、圣诞球和雪花。另外你还可以将这些贴纸做成表情包，只要将你喜欢的贴纸截图保存成图片，然后再导成表情包就可以了，以下是效果图：</p>
+<img src="/images/post/2023/10/dalle3-sticker1.jpeg" class="" width="600" height="400">
+
+<blockquote>
+<p>9 different stickers featuring cacti and succulents with vibrant colors and white borders on a minimal background<br>(共有 9 个不同的贴纸，以多肉植物和仙人掌为主题，色彩鲜艳，边框为白色，背景简约。)<br>9 different stickers featuring crazy ninja cats fighting chickens with vibrant colors and white borders on a minimal background<br>(共有 9 个不同的贴纸，以疯狂的忍者猫与鸡打架为主题，色彩鲜艳，边框为白色，背景简约。)<br>9 different stickers featuring desserts, fruits and cakes with vibrant colors and white borders on a minimal background<br>(共有 9 个不同的贴纸，以甜点、水果和蛋糕为主题，色彩鲜艳，边框为白色，背景简约。)<br>9 different stickers featuring Christmas trees, reindeer, baubles and snowflakes with vibrant colors and white borders on a minimal background<br>(共有 9 个不同的贴纸，以圣诞树、驯鹿、圣诞球和雪花为主题，色彩鲜艳，边框为白色，背景简约。)</p>
+</blockquote>
+<p>下面是特定主体贴纸的提示词模板：</p>
+<blockquote>
+<p>Custom sticker design on an isolated white background with the words [“Rachel”] written in an [elegant] font decorated by [watercolor butterflies, daisies and soft pastel hues].<br>(在一个孤立的白色背景上，定制贴纸设计，使用[字体]的字体书写[主题]，并装饰着[装饰物]。)</p>
+</blockquote>
+<p>只需用最喜欢的任何内容替换上面的提示词内的对象即可，以下是效果图：</p>
+<img src="/images/post/2023/10/dalle3-sticker2.jpeg" class="" width="600" height="400">
+
+<blockquote>
+<p>Custom sticker design on an isolated white background with the words “Rachel” written in an elegant font decorated by watercolor butterflies, daisies and soft pastel hues.<br>(在一个孤立的白色背景上，定制贴纸设计，使用优雅的字体书写“Rachel”，并装饰着水彩蝴蝶、雏菊和柔和的粉彩色调。)<br>Custom sticker design on an isolated white background with the bold words “Oliver” with a backdrop of a mountain range, and silhouettes of pine trees at sunset.<br>(在一个孤立的白色背景上，定制贴纸设计，使用粗体字书写“Oliver”，背景是一片山脉，夕阳下的松树剪影。)<br>Custom sticker design on an isolated black background with the words “TheLegend27” in bold font decorated by mythical dragons and a flaming sword.<br>(在一个孤立的黑色背景上，定制贴纸设计，使用粗体字书写“TheLegend27”，并装饰着神话般的龙和一把燃烧的剑。)<br>Custom sticker design on an isolated white background with the cursive words “Victoria” written in an elegant font decorated by roses and gold leaf.<br>(在一个孤立的白色背景上，定制贴纸设计，使用草书字体书写“Victoria”，并装饰着玫瑰和金箔。)</p>
+</blockquote>
+<h3 id="游戏人物全方位图"><a href="#游戏人物全方位图" class="headerlink" title="游戏人物全方位图"></a>游戏人物全方位图</h3><p>使用 DALL-E 3 生成游戏人物全方位图，可以同时生成游戏人物的正面，侧面和背面的视图。</p>
+<p>提示词模板为：</p>
+<blockquote>
+<p>I’d like to generate character designs in a wide resolution set within a Chibi Pixel Art RPG context. For each character, please adhere to the following guidelines:<br>Three Views: Every character should be depicted with three distinct views:<br>Side View (Essential): Start with this view - it is of paramount importance. The side view should capture the character’s full profile from the tip of their nose to the back of their head. This view should not be ignored or skipped.<br>Front View: The character should be standing straight, looking forward.<br>Back View: This view should portray the character from the rear.<br>Magical Fantasy RPG Themes: Provide characters based on unique themes fitting within a magical fantasy RPG world. Do not include or describe specific objects, accessories, or intricate details; only provide the theme and let the design be interpreted based on that theme.<br>(我想在一个 Chibi 像素艺术风格的 RPG 背景中生成角色设计，分辨率要宽。对于每个角色，请遵循以下准则：<br>三个视角：每个角色应该用三个不同的视角来描绘：<br>侧面视图（必要）：从这个视角开始 - 这是至关重要的。侧面视图应该捕捉到角色从鼻尖到头后部的完整轮廓。这个视角不应被忽视或跳过。<br>正面视图：角色应该直立站立，向前看。<br>背面视图：这个视角应该描绘角色的背面。<br>魔幻奇幻 RPG 主题：根据适合魔幻奇幻 RPG 世界的独特主题提供角色。不要包括或描述具体的物体、配饰或复杂的细节；只提供主题，让设计根据主题进行解释。)</p>
+</blockquote>
+<p><strong>Chibi</strong> 是一个来自日语的术语，通常用于描述可爱、小型或略带夸张的卡通角色设计。在日本动画和漫画中，Chibi 风格的角色通常具有大头、大眼和小身体的特点，这种风格被设计成可爱和幽默，以吸引观众的注意。</p>
+<p>这个提示词并不能保证 100% 正确的效果，要生成这种图片难度比较大，其中最难部分是侧面视图的生成，有时候会生成 30° 或者 60° 的侧面，如果你希望侧面的人物与其他方向的视图人物保持一致，建议提示词中不要写太多细节，如果发现生成的图片效果不太好就要重新开始一个对话，如果发现效果还可以，那可以对 GPT 说：<code>很好，同样风格的图片再给我来 4 张</code>，这样就可以生成更多效果好的游戏人物图，以下是效果图：</p>
+<img src="/images/post/2023/10/dalle3-player1.jpeg" class="" width="600" height="400">
+
+<img src="/images/post/2023/10/dalle3-player2.png" class="" width="600" height="400">
+
+<h3 id="儿童读物"><a href="#儿童读物" class="headerlink" title="儿童读物"></a>儿童读物</h3><p>使用 DALL-E 3 生成一些儿童读物图片，如果觉得效果不好，可以使用 PS 等其他工具辅助修改图片，以下是效果图：</p>
+<img src="/images/post/2023/10/dalle3-child1.jpeg" class="" width="600" height="400">
+
+<blockquote>
+<p>Illustration: A droplet’s universe comes alive under the microscope. Protozoa with their delicate structures, vibrant algae, dynamic bacteria, and enigmatic viruses are all on display. Dominating the scene, a vibrant label proclaims: ‘Protozoa, Algae, Bacteria, Virus’.<br>(插图：在显微镜下，一滴液滴的宇宙变得生动起来。原生动物以其精细的结构、充满活力的藻类、充满活力的细菌和神秘的病毒都展示出来。在场景中占主导地位的是一个充满活力的标签，上面写着：“原生动物、藻类、细菌、病毒”。)<br>Illustration: An artful depiction of a butterfly’s progression. Beginning with an egg amidst nature’s embrace, a caterpillar in its growing phase, a chrysalis awaiting transformation, to a butterfly unveiling its beauty. Text: ‘Egg, Caterpillar, Chrysalis, Butterfly’.<br>(插图：一只蝴蝶进化的艺术描绘。从自然的怀抱中孵化的蛋开始，到生长阶段的毛虫，等待变形的蛹，再到展示美丽的蝴蝶。文字：“蛋、毛虫、蛹、蝴蝶”。)<br>Illustration: A serene orchard scene where an apple has just fallen into a basket below. Character 1, surprised by the sudden drop, wonders, ‘Random?’. Character 2, looking at the tree, states,’ Gravity at work.<br>(插图：一个宁静的果园场景，一个苹果刚刚掉落到下面的篮子里。角色 1 对突然的掉落感到惊讶，想着：“随机的吗？”角色 2 看着树，说：“这是重力在起作用。”)</p>
+</blockquote>
+<h3 id="T-恤图"><a href="#T-恤图" class="headerlink" title="T 恤图"></a>T 恤图</h3><p>使用 DALL-E 3 很好地进行 T 恤图设计，左边是 T 恤图案的图片，右边是模特穿上 T 恤的图片，提示词模板为：</p>
+<blockquote>
+<p>Wide image of a [Halloween]-themed design on the left side, showcasing [a playful black cat with a witch hat atop carved pumpkins]. On the right side, a model wearing a t-shirt with the same [playful cat] design.<br>(在左侧是一个以 [万圣节] 为主题的宽幅图像，展示了 [一个戴着女巫帽的顽皮黑猫坐在雕刻的南瓜上]。在右侧，一个模特穿着印有相同 [顽皮猫] 设计的 T 恤。)</p>
+</blockquote>
+<p>可以将提示词中括号的内容换成你喜欢的内容，以下是效果图：</p>
+<img src="/images/post/2023/10/dalle3-tshirt.jpeg" class="" width="600" height="400">
+
+<h3 id="游戏封面"><a href="#游戏封面" class="headerlink" title="游戏封面"></a>游戏封面</h3><p>使用 DALL-E 3 生成游戏封面，DALL-E 3 很适合做游戏宣传材料，提示词模板为：</p>
+<blockquote>
+<p>Create a promotional image or title screen for a popular mobile game. It’s called [insert name of app and details]. Wide resolution.<br>(为一款热门的手机游戏创建一个推广图片或标题屏幕。游戏名为 [插入应用名称和详细信息]。宽屏分辨率。)</p>
+</blockquote>
+<p>以下是效果图：</p>
+<img src="/images/post/2023/10/dalle3-game1.jpeg" class="" width="600" height="400">
+
+<img src="/images/post/2023/10/dalle3-game2.jpeg" class="" width="600" height="400">
+
+<img src="/images/post/2023/10/dalle3-game3.jpeg" class="" width="600" height="400">
+
+<h3 id="像素游戏场景"><a href="#像素游戏场景" class="headerlink" title="像素游戏场景"></a>像素游戏场景</h3><p>有网友发现 DALL-E 3 很适合用来生成像素艺术图片，以下是同一个提示词，分别用 Adobe 的 Firefly 2、Midjourney 和 DALL-E 3 生成的像素图片，可以看到 DALL-E 3 效果是最好的，Midjourney 甚至都没有像素的效果：</p>
+<img src="/images/post/2023/10/dalle3-pixel1.jpeg" class="" width="600" height="400">
+
+<blockquote>
+<p>Chibi pixel art game asset for an rpg game, on a white background, featuring the armor of a dragon sorcerer, wielding the power of fire surrounded by a matching item set<br>(在白色背景上，为 RPG 游戏创建一个 Chibi 像素艺术游戏素材，展示一位龙巫师的盔甲，手持火焰之力，并被相配的物品套装所环绕。)</p>
+</blockquote>
+<p>因此有网友用 DALL-E 3 来制作像素游戏场景，效果相当不错，提示词模板为：</p>
+<blockquote>
+<p>SUBJECT: a [subject] | STYLE: 90’s RPG screenshot | ANGLE: isometric | PLACE: [place] | TONES: [X]-bit [palette]<br>(主题：一个 [主题] | 风格：90 年代 RPG 游戏截图 | 角度：等轴测 | 地点：[地点] | 色调：[X]-位 [调色板])</p>
+</blockquote>
+<img src="/images/post/2023/10/dalle3-pixel2.jpeg" class="" width="600" height="400">
+
+<blockquote>
+<p>SUBJECT: a viking | STYLE: 90’s RPG screenshot | ANGLE: isometric | PLACE: village | TONES: 32-bit synthwave<br>(主题：一个维京人 | 风格：90 年代 RPG 游戏截图 | 角度：等轴测 | 地点：村庄 | 色调：32 位合成波)</p>
+</blockquote>
+<img src="/images/post/2023/10/dalle3-pixel3.jpeg" class="" width="600" height="400">
+
+<blockquote>
+<p>SUBJECT: a witch | STYLE: 90’s RPG screenshot | ANGLE: isometric | PLACE: forest | TONES: 8-bit acid green<br>(主题：一个女巫 | 风格：90 年代 RPG 游戏截图 | 角度：等轴测 | 地点：森林 | 色调：8 位酸绿色)</p>
+</blockquote>
+<img src="/images/post/2023/10/dalle3-pixel4.jpeg" class="" width="600" height="400">
+
+<blockquote>
+<p>SUBJECT: a woman rogue | STYLE: 90’s RPG screenshot | ANGLE: isometric | PLACE: federal building | TONES: 16-bit shadows<br>(主题：一个女盗贼 | 风格：90 年代 RPG 游戏截图 | 角度：等轴测 | 地点：联邦大楼 | 色调：16 位阴影)</p>
+</blockquote>
+<img src="/images/post/2023/10/dalle3-pixel5.jpeg" class="" width="600" height="400">
+
+<blockquote>
+<p>SUBJECT: a vampire | STYLE: 90’s RPG screenshot | ANGLE: isometric | PLACE: city | TONES: 16-bit neon<br>(主题：一个吸血鬼 | 风格：90 年代 RPG 游戏截图 | 角度：等轴测 | 地点：城市 | 色调：16 位霓虹灯)</p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>ChatGPT 目前 DALL-E 3 功能并不是对所有 Plus 用户都开放，只是开发给某些 Plus 用户进行灰度测试，但 OpenAI 公司表示，他们将在未来几周内逐步向所有 Plus 用户开放这些功能。以上就是 DALL-E 3 的一些好玩的功能，如果你有更好的灵感，欢迎在评论区留言，下期我们将继续介绍 GPT-4V 的一些有意思的玩法，敬请期待。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://example.com/2023/10/15/interesting-dalle3/';
+            this.page.identifier = 'https://example.com/2023/10/15/interesting-dalle3/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2023
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

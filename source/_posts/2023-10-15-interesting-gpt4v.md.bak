@@ -1,0 +1,66 @@
+---
+layout: post
+title: 好玩到停不下来的 GPT-4V
+date: 2023-10-15 21:43:38
+description: 好玩到停不下来的 GPT-4V
+keywords: gpt-4v, openai, chatgpt
+comments: true
+categories: ai
+tags: [gpt-4v, openai, chatgpt]
+---
+
+{% img /images/post/2023/10/dalle3.png 400 300 %}
+
+最近 ChatGPT 对 Plus 用户逐步开放一些多模态的功能，包括 DALL-E 3（图像生成）、 GPT4V（图像识别），等，很多网友乐此不疲地对这些新功能进行试用，目前已经解锁了不少有趣的玩法，笔者将这些好玩的功能进行了整理并介绍给大家，希望能给大家带来一些灵感。
+
+<!--more-->
+
+## 功能介绍
+
+ChatGPT 新推出了图像识别、图像生成以及语音对话等多模态的功能，目前该功能只开放给 Plus 用户，而且只能在 ChatGPT 的 Web 页面和 APP（iOS 和安卓） 上使用，还没有提供 API。
+
+### GPT4V
+
+ChatGPT 的 GPT-4V（视觉版）是 GPT-4 的一个扩展，它使得用户能够指导 GPT-4 分析由用户提供的图像输入，这是 ChatGPT 最新广泛提供的功能。GPT-4V 不仅能处理文本提示，还能解释图像，使 AI 聊天机器人成为一个**多模态**大型语言模型，这标志着 GPT-4 向多模态模型的转变，也代表了人工智能研究的一个关键前沿。GPT-4V 被训练以处理文本和视觉数据，开创了视觉 AI 的新时代。通过这种扩展，GPT-4V 能够在接收到与图像相关的查询时，提供更为丰富和准确的回应。
+
+这就好比让 ChatGPT 有了眼睛，跟人类一样可以看图片，然后根据看到的东西进行回答用户的问题。
+
+## 图生图
+
+了解完 DALL-E 3 的玩法后，我们再来看看 ChatGPT 的 GPT-4V 的玩法。有网友想到，既然 ChatGPT 可以读取图片的内容，又能通过文字生成图片，那么是不是我们可以先上传一张图片，然后让 ChatGPT 读取图片的内容，我们再将这个内容交给 ChatGPT 生成同样的图片呢？下面是一位网友将蒙娜丽莎的图片不断通过 GPT-4V 读取图片描述，再将描述提交给 DALL-E 3 生成图片，这样重复 N 次后的效果：
+
+{% img /images/post/2023/10/gpt4v-dalle3.gif 600 400 %}
+
+可以看到，图片的内容越来越模糊，这是因为图片到文字会损失一些信息，文字再到图片又会损失一些信息，这样反复多次后，图片的内容就会越来越模糊，最后变成了一张模糊的图片。
+
+### 完美还原图片技巧
+
+有网友提供了一种来让 GPT-4V 和 DALL-E 3 还原原始图片的方法，以下是这种方法的提示词：
+
+> "Please provide a detailed description of the contents in the provided image. I'd like the description to be structured in the following way:
+>
+> 1. Break down the image layer by layer. For instance: 'Gray pavement in the background. Hand holding a paper plate in the foreground.'
+> 2. List each element in the image with a rough positional reference.
+> 3. Present the description in two formats: first as a list, then as a cohesive paragraph."
+>    请提供对所提供图像内容的详细描述。我希望描述按照以下方式进行结构化：
+>    1）逐层分解图像。例如：“背景是灰色的人行道。前景中有一只手拿着一个纸盘。”
+>    2）列出图像中的每个元素，并给出大致的位置参考。
+>    3）以列表形式和连贯的段落形式呈现描述。
+
+以下是对图像的描述：
+
+列表格式：
+
+- 背景是灰色的人行道。
+- 前景中有一只手拿着一个纸盘。
+
+段落格式：
+这张图像的背景是灰色的人行道。在前景中，可以看到一只手拿着一个纸盘。
+
+### 像素动画生成
+
+## 安全问题
+
+### 不可见内容攻击
+
+### 图片文字攻击

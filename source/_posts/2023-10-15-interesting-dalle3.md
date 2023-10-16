@@ -77,12 +77,12 @@ ChatGPT 刚推出 DALL-E 3 功能不久，就有网友用它在 15 分钟内画�
 {% img /images/post/2023/10/dalle3-knol1.jpeg 600 400 %}
 
 > Knolling product photo of a perfume bottle surrounded by fragrant flower petals, essential oils, cinnamon sticks, and a clear dropper, arranged on a clean background.
-> (香水瓶被芳香的花瓣、精油、肉桂棒和一个透明的滴管包围，排列在干净的背景上。)
+> (Knolling 产品照片，香水瓶被芳香的花瓣、精油、肉桂棒和一个透明的滴管包围，排列在干净的背景上。)
 
 {% img /images/post/2023/10/dalle3-knol2.jpeg 600 400 %}
 
 > Knolling product photo of a delicious roast chicken surrounded by rosemary sprigs, lemon halves, garlic bulbs, kitchen twine, and a carving knife arranged on a clean background.
-> (一只美味的烤鸡被迷迭香枝、柠檬半、大蒜球、厨房绳和一把雕刻刀包围，排列在干净的背景上。)
+> (Knolling 产品照片，一只美味的烤鸡被迷迭香枝、柠檬半、大蒜球、厨房绳和一把雕刻刀包围，排列在干净的背景上。)
 
 {% img /images/post/2023/10/dalle3-knol3.jpeg 600 400 %}
 
@@ -231,6 +231,8 @@ ChatGPT 刚推出 DALL-E 3 功能不久，就有网友用它在 15 分钟内画�
 
 > SUBJECT: a [subject] | STYLE: 90's RPG screenshot | ANGLE: isometric | PLACE: [place] | TONES: [X]-bit [palette]
 > (主题：一个 [主题] | 风格：90 年代 RPG 游戏截图 | 角度：等轴测 | 地点：[地点] | 色调：[X]-位 [调色板])
+
+将其中的主题、地点、X、调色板换成自定义的内容即可，以下是效果图：
 
 {% img /images/post/2023/10/dalle3-pixel2.jpeg 600 400 %}
 

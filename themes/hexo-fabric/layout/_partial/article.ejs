@@ -1,6 +1,6 @@
 <% if (index) { %>
 	<h2 class="title">
-		<a href="<%= post.path %>"><%= post.title %></a>
+		<a href="<%= url_for(post.path) %>"><%= post.title %></a>
 	</h2>
     <div class="entry-content">
     <div class="meta">

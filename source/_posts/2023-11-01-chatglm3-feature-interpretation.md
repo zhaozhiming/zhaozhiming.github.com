@@ -53,7 +53,7 @@ def web_search(
 
 ```
 
-在代码中，我们使用`@register_tool`标签注册工具，工具方法参数使用`Anotated`进行标注，然后再调用 SerpApi 的方法进行网络查询，其中的`process_response`方法是对查询结果进行解析，获取第一条查询结果提取内容并返回，具体实现可以参考 LangChain 的这个[源码方法](https://github.com/langchain-ai/langchain/blob/master/libs/langchain/langchain/utilities/serpapi.py#L127-L220)。
+在代码中，我们使用`@register_tool`标签注册工具，工具方法参数使用`Anotated`进行标注，然后再调用 SerpApi 的方法进行网络查询，其中的`process_response`方法是对查询结果进行解析，获取第一条查询结果提取内容并返回，具体实现可以参考 LangChain 的这个[方法源码](https://github.com/langchain-ai/langchain/blob/master/libs/langchain/langchain/utilities/serpapi.py#L127-L220)。
 
 添加完代码后，我们重启下 WebUI 服务，试用下新增的工具，查看运行结果：
 
@@ -61,7 +61,7 @@ def web_search(
 
 ## 使用 API 接口进行工具调用
 
-我们再来看如何在 API 接口中使用工具调用，在 API 的请求参数`messages`的每个元素中，除了`role`和`content`外，还新增`metadata`和`tools`参数，`metadata`是具体工具名称，`tools`是可以用到的所有工具列表，其实 ChatGLM3 是参考了 OpenAI 的[Function Calling](https://platform.openai.com/docs/guides/gpt/function-calling)功能，这 2 个参数分别对应 OpenAI 的`function_call`和`functions`。
+我们再来看如何在 API 接口中使用工具调用，在 API 请求参数`messages`的每个元素中，除了`role`和`content`外，还新增`metadata`和`tools`参数，`metadata`是具体工具名称，`tools`是可以用到的所有工具列表，其实 ChatGLM3 是参考了 ChatGPT 的[Function Calling](https://platform.openai.com/docs/guides/gpt/function-calling)功能，这 2 个参数分别对应 ChatGPT 的`function_call`和`functions`。
 
 在初始请求中，我们需要传递`tools`参数，来告诉 LLM 有哪些工具可以使用，`tools`参数中每个元素有以下几个属性：
 
@@ -163,14 +163,16 @@ response = openai.ChatCompletion.create(
 print(response.choices[0].message.content)
 ```
 
-- LLM 根据用户的问题在工具集中选择了`get_weather`工具
+- LLM 根据用户的问题在工具集合中选择工具，这里选择了`get_weather`工具
 - 使用`dispatch_tool`方法执行工具，`dispatch_tool`方法实现的方式很多，使用函数式编程的方式可以很方便地实现该功能
-- 将工具执行结果通过`observation`角色的对话新信息添加到历史记录，相当将工具执行结果返回给 LLM
-- 再次发起 ChatCompletion 请求，让 LLM 生成最终答案
+- 通过`observation`角色的对话信息将工具执行结果添加到历史对话中，相当将工具执行结果返回给 LLM
+- 再次发起 ChatCompletion 请求，让 LLM 生成最终答案，最后打印出 LLM 生成的最终结果
+
+这就是使用 API 调用工具的方法，更多细节可以参考[官方源码](https://github.com/THUDM/ChatGLM3/tree/main/tool_using)。
 
 ## 代码解释器
 
-通过查看代码解释器的示例代码，发现其大概的流程是这样的：用户提出问题 -> LLM 生成代码 -> 提取生成的代码 -> 调用代码执行工具 -> 使用工具(Jupyter)执行代码 -> 提取(Jupyter)执行结果 -> 返回结果给用户。
+通过查看代码解释器的示例代码，发现其大概的流程是这样的：用户提出问题 --> LLM 生成代码 --> 提取生成的代码 --> 调用代码执行工具 --> 使用工具(Jupyter)执行代码 --> 提取(Jupyter)执行结果 --> 返回结果给用户。
 
 ChatGLM3 在原有的 3 种角色（`system`、`user`、`assistant`）上增加了另外 3 个角色：`observation`、`interpreter`、`tool`：
 
@@ -189,7 +191,7 @@ class Role(Enum):
                 return "<|observation|>"
 ```
 
-`tool`角色是工具调用，`interpreter`角色是代码解释器，`observation`角色是用来观察各种结果并做对应的操作，包括 LLM 的输出、工具的返回结果、代码编辑器的执行结果等。我们再来看下代码编辑器具体的功能是如何实现的：
+`tool`角色是工具调用，`interpreter`角色是代码解释器，`observation`角色是用来观察各种结果，包括 LLM 的输出、工具的返回结果、代码编辑器的执行结果等。我们再来看下代码编辑器具体的功能是如何实现的：
 
 ```py
 case '<|observation|>':
@@ -229,7 +231,11 @@ case '<|observation|>':
     break
 ```
 
-首先从 LLM 的输出中通过`extract_code`方法提取代码，然后增加一个`interpreter`角色的对话记录，将代码显示在页面上，然后执行代码并获取执行结果，增加一个`observation`角色的对话记录，将执行结果返回给 LLM，LLM 再根据结果生成最终的答案，并将最终答案显示在页面上。下面是从 markdown 提取代码的功能，通过正则解析将 markdown 中的代码提取出来：
+- 从 LLM 的输出中通过`extract_code`方法提取代码，一般在 markdown 格式的文档中提取
+- 再增加一个`interpreter`角色的对话记录，将代码显示在页面上
+- 执行代码并获取执行结果，增加一个`observation`角色的对话记录，将执行结果返回给 LLM，LLM 再根据结果生成最终的答案，并将最终答案显示在页面上
+
+下面是提取代码的功能，通过正则解析将 markdown 中的代码提取出来：
 
 ````py
 def extract_code(text: str) -> str:
@@ -238,10 +244,10 @@ def extract_code(text: str) -> str:
     return matches[-1][1]
 ````
 
-更多的细节可以参考官网[综合 Demo 的源码](https://github.com/THUDM/ChatGLM3/tree/main/composite_demo)，如果在测试过程中遇到问题，也可以根据源码排斥原因。
+更多的细节可以参考官网[综合 Demo 的源码](https://github.com/THUDM/ChatGLM3/tree/main/composite_demo)，如果在测试过程中遇到问题，也可以根据源码排查原因。
 
 ## 总结
 
-其实 ChatGPT 之前就已经实现了工具调用和代码解释器的功能，但因为它是闭源的，我们无法窥视其中的原理，但 ChatGLM3 在开源产品的基础上实现了这些功能，让我们可以更好地理解其中的原理，也可以根据自己的需求进行二次开发，这也是开源的魅力所在。因笔者水平有限，如果文中有不正确的地方，希望在评论区留言讨论。
+其实 ChatGPT 之前就已经实现了工具调用和代码解释器的功能，但因为它是闭源的，我们无法窥视其中的原理，但 ChatGLM3 在开源产品的基础上实现了这些功能，让我们可以更好地理解其中的原理，也可以根据自己的需求进行二次开发，这也是开源的魅力所在。因研究的时间有限，文中难免有所疏漏，如果文中有不正确的地方，希望在评论区留言讨论。
 
 关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。

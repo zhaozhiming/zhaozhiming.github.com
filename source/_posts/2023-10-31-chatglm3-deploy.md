@@ -78,7 +78,7 @@ python web_demo.py
 +model_path = "/root/autodl-tmp/chatglm3-6b"
 ```
 
-然后执行以下命令启动 Streamlit 服务，服务启动后在浏览器中可以访问该服务进行对话：
+然后执行以下命令启动 Streamlit 服务：
 
 ```bash
 streamlit run web_demo2.py
@@ -111,7 +111,7 @@ ngrok                                                                           
 Introducing Always-On Global Server Load Balancer: https://ngrok.com/r/gslb
 
 Session Status                online
-Account                       zhaozhiming (Plan: Free)
+Account                       yourAccount (Plan: Free)
 Version                       3.3.5
 Region                        Japan (jp)
 Latency                       -

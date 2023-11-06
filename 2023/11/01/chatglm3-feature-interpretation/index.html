@@ -188,7 +188,7 @@
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">extract_code</span>(<span class="params">text: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    pattern = <span class="string">r&#x27;```([^\n]*)\n(.*?)```&#x27;</span></span><br><span class="line">    matches = re.findall(pattern, text, re.DOTALL)</span><br><span class="line">    <span class="keyword">return</span> matches[-<span class="number">1</span>][<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
 
 <p>更多的细节可以参考官网<a target="_blank" rel="noopener" href="https://github.com/THUDM/ChatGLM3/tree/main/composite_demo">综合 Demo 的源码</a>，如果在测试过程中遇到问题，也可以根据源码排查原因。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>其实 ChatGPT 之前就已经实现了工具调用的功能，但因为它是闭源的，我们无法窥视其中的原理，但 ChatGLM3 在开源产品的基础上实现了这些功能，让我们可以更好地理解其中的原理，也可以根据自己的需求进行二次开发，这也是开源的魅力所在。因研究的时间有限，文中难免有所疏漏，如果文中有不正确的地方，希望在评论区留言讨论。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>其实 ChatGPT 之前就已经实现了工具调用和代码解释器的功能，但因为它是闭源的，我们无法窥视其中的原理，但 ChatGLM3 在开源产品的基础上实现了这些功能，让我们可以更好地理解其中的原理，也可以根据自己的需求进行二次开发，这也是开源的魅力所在。因研究的时间有限，文中难免有所疏漏，如果文中有不正确的地方，希望在评论区留言讨论。</p>
 <p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
 </div>
 

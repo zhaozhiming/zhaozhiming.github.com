@@ -240,7 +240,7 @@ response = client.chat.completions.create(
 
 - 首先使用我们定义了对话中要用到的工具集 tools，ChatGPT 会根据用户的问题来选择调用哪个工具，示例代码中我们用到一个查询天气的工具。
 - tools 参数以前叫做 functions，现在改名为 tools，但是功能是一样的，都是用来定义工具集的。需要定义工具的名称、描述和参数信息（名称、类型、描述和是否必需）。
-- model 参数是指使用的模型，一次调用多个工具需要可以选择新模型： gpt-3.5-turbo-1106 或者 gpt-4-1106-preview。
+- model 参数是指使用的模型，一次调用多个工具需要选择新模型： gpt-3.5-turbo-1106 或者 gpt-4-1106-preview。
 - tool_choice 参数以前叫做 function_call，现在改名为 tool_choice，是指选择的工具，有以下 3 种值：
   - auto：根据用户问题选择工具，是默认值
   - none：不选择任何工具，直接返回生成的消息

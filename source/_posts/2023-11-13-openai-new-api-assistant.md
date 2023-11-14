@@ -11,7 +11,7 @@ tags: [openai, chatgpt, api, assistant]
 
 {% img /images/post/2023/11/openai-api-assistant.png 400 300 %}
 
-上次我们介绍了 OpenAI 的新版 API，包括语音转文字、生成图片和图片识别等功能，这次 API 的更新还包含了一个重量级的功能，就是类似 GPTs 的 Assistant API，它不仅可以完成 GPTs 的所有功能，还能使用自定义的工具，可以说是比 GPTs 更加强大。今天我们就来介绍 Assistant API 的基本原理和使用方法，最后通过一些代码示例来展示它的强大功能。
+上次我们[介绍了 OpenAI 的新版 API](https://zhaozhiming.github.io/2023/11/11/openai-new-api-introduct/)，包括语音转文字、生成图片和图片识别等功能，这次 API 的更新还包含了一个重量级的功能，就是类似 GPTs 的 Assistant API，它不仅可以完成 GPTs 的所有功能，还能使用自定义的工具，可以说是比 GPTs 更加强大。今天我们就来介绍 Assistant API 的基本原理和使用方法，最后通过一些代码示例来展示它的强大功能。
 
 <!--more-->
 

@@ -1,0 +1,8 @@
+.textfield {
+  flex: 1;
+  width: 100%;
+  border-top: none;
+  font-size: 16px;
+  background: transparent;
+  font-family: monospace;
+}

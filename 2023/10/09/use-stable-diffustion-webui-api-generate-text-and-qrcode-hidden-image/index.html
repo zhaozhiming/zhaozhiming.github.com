@@ -151,7 +151,7 @@
 <h4 id="sd-webui-qrcode-toolkit"><a href="#sd-webui-qrcode-toolkit" class="headerlink" title="sd-webui-qrcode-toolkit"></a>sd-webui-qrcode-toolkit</h4><p><a target="_blank" rel="noopener" href="https://github.com/antfu/sd-webui-qrcode-toolkit">sd-webui-qrcode-toolkit</a>插件主要用来生成普通的二维码，然后将生成后的二维码图片放到文生图中制作隐藏效果图，安装方法可以参考其仓库上的安装说明。</p>
 <h4 id="ADetailer"><a href="#ADetailer" class="headerlink" title="ADetailer"></a>ADetailer</h4><p><a target="_blank" rel="noopener" href="https://github.com/Bing-su/adetaile">ADetailer</a>插件主要是用来做人物面部修复，隐藏效果图中如果包含人物，生成出来的图片有时候会因为隐藏信息导致人物的面部发生扭曲，使用这个插件可以修复这个问题，安装方法同样参考其仓库上的安装说明。</p>
 <h2 id="手动实现"><a href="#手动实现" class="headerlink" title="手动实现"></a>手动实现</h2><p>想要通过 API 实现隐藏效果图，我们先要知道在 sd-webui 页面上是如何实现的，然后再根据这个过程来实现 API 功能。</p>
-<h3 id="隐藏文字图片"><a href="#隐藏文字图片" class="headerlink" title="隐藏文字图片"></a>隐藏文字图片</h3><p>首先我们来看隐藏文字图片的生成，和普通图片的生成一样，需要先构造图片的提示词，这里推荐<a href="www.ai-anywhere.com/#/?c=F43MLO6Q">灵羽助手</a>这个基于 ChatGPT 的桌面 AI 工具，它有多种提示词模板，其中包括中英文翻译，生成 AI 绘画中文提示词等，每天有 10 次免费的额度，想白嫖的话用每天的免费额度就足够了。</p>
+<h3 id="隐藏文字图片"><a href="#隐藏文字图片" class="headerlink" title="隐藏文字图片"></a>隐藏文字图片</h3><p>首先我们来看隐藏文字图片的生成，和普通图片的生成一样，需要先构造图片的提示词，这里推荐<a target="_blank" rel="noopener" href="https://www.ai-anywhere.com/#/?c=F43MLO6Q">灵羽助手</a>这个基于 ChatGPT 的桌面 AI 工具，它有多种提示词模板，其中包括中英文翻译，生成 AI 绘画中文提示词等，每天有 10 次免费的额度，想白嫖的话用每天的免费额度就足够了。</p>
 <p>在灵羽助手中先通过<code>生成AI绘画中文提示词</code>命令加上几个简单的词语描述就可以生成一段文生图的中文提示词，然后再利用<code>翻译成英文</code>命令将其翻译成英文，最后将英文提示词放到 sd-webui 的<strong>文生图</strong>正向提示词框中就可以了，这里我们准备生成一张海岸和海浪的图片。</p>
 <img src="/images/post/2023/10/ai-anywhere.png" class="" width="600" height="400">
 

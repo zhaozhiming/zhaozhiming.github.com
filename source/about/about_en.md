@@ -19,7 +19,7 @@ date: 2010-01-01 20:04:21
 - Zhao Zhiming / Male
 - Bachelor / Nanchang Hangkong University - Computer Science and Applications
 - Years of work: 15+
-- Blog: http://zhaozhiming.github.io
+- Blog: https://medium.com/@zhaozhiming
 - Github: https://github.com/zhaozhiming
 - Stackoverflow: https://stackoverflow.com/users/1954315/zhaozhiming
 - Desired position: Full-stack Engineer, Senior Programmer, Front-end Engineer, Back-end Engineer, Architect

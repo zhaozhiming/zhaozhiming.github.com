@@ -19,11 +19,13 @@ date: 2010-01-01 20:04:21
 - 赵芝明 / 男
 - 本科 / 南昌航空大学 - 计算机科学与应用
 - 工作年限：15+ 年
-- 技术博客：http://zhaozhiming.github.io
-- Github: https://github.com/zhaozhiming
-- Stackoverflow: https://stackoverflow.com/users/1954315/zhaozhiming
 - 期望职位：全栈工程师，高级程序员，前端工程师，后端工程师，架构师
 - 期望城市：成都，远程
+- Github: https://github.com/zhaozhiming
+- Stackoverflow: https://stackoverflow.com/users/1954315/zhaozhiming
+- 微信公众号（技术博客）：
+
+{% img /images/wxgzh_qrcode.jpg 150 150 %}
 
 ---
 

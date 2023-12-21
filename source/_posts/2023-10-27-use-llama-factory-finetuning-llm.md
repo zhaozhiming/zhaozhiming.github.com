@@ -135,6 +135,38 @@ CUDA_VISIBLE_DEVICES=0 python src/train_web.py
 
 {% img /images/post/2023/10/llama-factory-loss.png 600 400 %}
 
+如果在微调过程中报`AttributeError: 'BaichuanTokenizer' object has no attribute 'sp_model'`这个错误，可以修改 BaiChuan 模型中的文件`tokenization_baichuan.py`，修改的内容如下：
+
+```diff
+@@ -68,6 +68,11 @@ class BaichuanTokenizer(PreTrainedTokenizer):
+             if isinstance(pad_token, str)
+             else pad_token
+         )
++        self.vocab_file = vocab_file
++        self.add_bos_token = add_bos_token
++        self.add_eos_token = add_eos_token
++        self.sp_model = spm.SentencePieceProcessor(**self.sp_model_kwargs)
++        self.sp_model.Load(vocab_file)
+         super().__init__(
+            bos_token=bos_token,
+            eos_token=eos_token,
+            unk_token=unk_token,
+            pad_token=pad_token,
+            add_bos_token=add_bos_token,
+            add_eos_token=add_eos_token,
+            sp_model_kwargs=self.sp_model_kwargs,
+            clean_up_tokenization_spaces=clean_up_tokenization_spaces,
+            **kwargs,
+         )
+-        self.vocab_file = vocab_file
+-        self.add_bos_token = add_bos_token
+-        self.add_eos_token = add_eos_token
+-        self.sp_model = spm.SentencePieceProcessor(**self.sp_model_kwargs)
+-        self.sp_model.Load(vocab_file)
+```
+
+关于这个报错的更多信息可以参考这个[issue](https://github.com/baichuan-inc/Baichuan2/issues/204)。
+
 ## 模型试用
 
 微调完成后，进入`Chat`页签对微调模型进行试用。首先点击页面上的`刷新断点`按钮，然后选择我们最近微调的断点名称，再点击`加载模型`按钮，等待加载完成后就可以进行对话了，输入微调数据集中的问题，然后来看看微调后的 LLM 的回答吧。

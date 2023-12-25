@@ -49,7 +49,7 @@ sse(): Observable<MessageEvent> {
   return interval(1000).pipe(map((_) => ({ data: { hello: 'world' } })));
 }
 ```
-Nestjs 中已经内置了 SSE 的实现，只需要使用装饰符`Sse`即可，再通过`rsjs`的 Observable 对象返回流式数据。
+Nestjs 中已经内置了 SSE 的实现，只需要使用装饰符`Sse`即可，再通过`rxjs`的 Observable 对象返回流式数据。
 
 然后再看看客户端的代码示例：
 

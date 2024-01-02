@@ -8,9 +8,7 @@ date: 2010-01-01 20:04:21
 # Contact
 
 - Email: zhaozhiming003@gmail.com
-- Wechat(Scan QR Code):
-
-{% img /images/resume_qrcode.jpg 150 150 %}
+- Wahtsapp: +86 159 2851 5643
 
 ---
 

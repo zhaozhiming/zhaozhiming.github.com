@@ -53,14 +53,29 @@ Software engineer responsible for the development and maintenance of medical ins
 
 # Project Experience
 
-## AI Projects
+## AI Security Platform
+
+Tech Stack: LangChain, OpenAI API, Function calling, Next.js, Node.js, TypeScript, Python
+
+This is an AI security system that incorporates multiple security tools. Users input natural language, and the system executes corresponding tools based on user requests, providing results in different formats.
+
+My main responsibilities include initial framework setup, core feature development, and deployment of the system.
+
+## Knowledge Base AI Question-Answering System
+
+Tech Stack: LangChain, ChatGLM2, React, Node.js, TypeScript, Python
+
+This is an AI-based knowledge base question-answering system that utilizes RAG (Retrieval-Augmented Generation) technology, allowing large language models to search for relevant materials when answering user questions, reducing hallucinations.
+
+My main responsibilities include local deployment of large language models and backend system development.
+
+## AI mini Projects
 
 Technology stack: chatgpt, langchain, prompt engineering, chatglm, vector db, next.js, AI SDK, nest.js, vercel
 
 Several AI projects:
 
 - A chatgpt-based website, developed using the openai API, with the front-end built on next.js and the back-end on nest.js.
-- A knowledge base AI question-answering system built with langchain and chatglm2.
 - An AI-powered legal consultation service using LLM, developed using prompt engineering and chatgpt, with next.js AI SDK, and deployed on vercel (https://next-lawqa.vercel.app/).
 
 I am primarily responsible for project architecture design, core feature development, and other related tasks.
@@ -81,100 +96,47 @@ This is a project that allows developers to run their development environment in
 
 I am primarily responsible for feature design, development, design reviews, code reviews, and other related tasks.
 
-## Efficiency Platform
-
-Technology stack: React, Node.js, Typescript, Ant Design, microservice, Docker, K8s
-
-This is a project management platform that integrates with Jira to provide users with a simplified interface for managing projects, aligning more closely with internal project management processes within the company.
-
-I am primarily responsible for system architecture design, core feature development, feature design reviews, code reviews, and other related tasks.
-
-## Standard Box
-
-Technology stack: React(Hooks), Node.js, Python, Typescript, Ant Design, micro-frontend, microservice, grpc, Linux, Docker, Docker-compose
-
-It is a development platform designed for hardware products, which encapsulates some common functions, including login and registration, user management, permission management, security audit, etc. Other products can use it to focus on developing their own business functions without the need to repeat the development of common functions.
-
-I am mainly responsible for project architecture design, product design, project management, and main function development.
-
-## Wind Hunter
-
-Technology stack: React(Hooks), Node.js, Typescript, Python, Linux KVM
-
-This is a product developed for enterprise security, which can generate multiple realistic operating system or web service environments to prevent hackers from attacking to real servers, so as to protect the internal network security of enterprises.
-
-I am mainly responsible for system architecture design, core function development, project management code review, etc.
-
-## Ethereum Wallet
-
-Technology stack: React Natvie, Etheresum, smart contracts, web3, geth
-
-Using React Native to develop an wallet App based on Etheresum, including features such as creation wallet, helper word generation, private key import, transfer, receipt, and support for Etheresum tokens.
-
-I am mainly responsible for the main architecture setup, core ethereum function development and App page development.
-
-## Blockchain Texas Poker
-
-Technology stack: Electron, websocket, testrpc
-
-A Texas Pocker game developed based on blockchain technology, using Electron to develop the desktop application, the back-end data is mainly simulated from Testrpc.
-
-I am mainly responsible for building the basic framework of the project, integrating back-end data structure for front-end calls, front-end page development, code review and overall project progress control.
-
-## Front-end development platform
-
-Technology stack: React, Redux, React-Router, Webpack, Ant Design, yarn, eslint, stylelint, commitlint, prettier, Hapi, mongoose
-
-The platform integrates technologies such as Create React App and Hapi, target is to improve team development efficiency, unify team development specification, and combine with the company's container platform tools for continuous integration and deployment.
-
-I am mainly responsible for building the basic framework of the project, and tackling the problems of using basic components, including redux, react-router, webpack and other basic components.
-
-## Big Data Visualization Project
-
-Using React and Redux front-end technology to build front-end pages, Webpack to package front-end projects, Hapi framework to provide GraphQL API on the back-end, and ElasticSearch for data storage on the database.
-
-I am mainly responsible for project framework building, programming, code writing, performance optimization, etc.
-
-## Customer Relationship Management Project
-
-A web project developed quickly using React + Hapi technology stack.
-
-I was responsible for requirement matching, application development, demo debugging, testing and deployment.
-
-## Cloud Storage Project
-
-Cloud storage project based on Openstack swift and Ceph, in which I was mainly responsible for the design and coding of the monitoring server and the testing of the cloud storage environment.
-
-## Telematics project
-
-The backend application of mobile APP "Ping An Good Car Owner", using Redis, ActiveMQ, HBase, Mysql and other middleware. I was mainly responsible for the design and coding of the backend calculation logic.
-
-## P2P online financial supermarket
-
-A web application using SpringMVC+Hibernate, in which I was mainly responsible for writing automated test cases and bug fixing. In this project, I learned agile development, automated testing, continuous integration, etc.
-
 ---
 
-# List of skills
+# Skills List
 
-- Languages：JS/TS/ES6/CSS/Nodejs/Python/Bash/Java，Rust/Ruby/Go/PHP
-- Development frameworks: React/Redux, React Native，Django/Django rest, Node/Nest/Egg/Hapi/Meteor, Spring/Hibernate/Mybatis
-- Front-end frameworks: React/Next.js/Umi.js/Ant Design/Expo/Electron/Bootstrap/AngularJS/Semmantic-UI/JQuery/JSP
-- AI: ChatGPT/Prompt Engineering/LangChain/LLM/Vector DB/Stable Diffustion
-- Relational Databases: MySQL/Sqlite3/PgSQL/Oracle
-- web-related: Restful/GraphQL/Grpc/Json/XML
-- DevOps: K8s/Docker/Vagrant/VMWare/VirtualBox
-- Cache/Nosql: MongoDB/Redis/Ssdb/Memorycache
-- RPC/ Search Engine / Messaging Middleware: Kafka/ElasticSearch/ActiveMq/Thrift/Solr/Openfire
-- Versioning: Git/Svn/ClearCase
-- Build tools: Webpack/Gradle/Maven/Ant
-- Testing: Moche/Jest/Enzyme/Junit/Mockito/Jbehave/Selenium/Galting
-- Cloud and Open Platform: Alibaba Cloud/Tencent Cloud/AWS/Azure/WeChat App Development/WeChat Applet
-- Agile development: Scrum/Kanban/CICD/Jenkins/TDD/Refactor/Sonar/PMP
-- OS: Mac/Ubuntu/Centos/Unix/Window
-- IDE and Editor: Vscode/Vim/IntelliJ IDEA/Eclipse
-- Blockchain: Ether technology / ERC20 tokens / smart contracts / Geth / web3
-- Container middleware: Tomcat/Jetty/Weblogic
+## Primary Skills (Mastered)
+
+- Programming Languages: TS/JS/ES6/CSS/Nodejs
+- Development Frameworks
+  - Front-end: React/Nextjs/Tailwind CSS
+  - Back-end: Nestjs/Eggjs/Hapi/Express/Koa
+- Artificial Intelligence: ChatGPT/Prompt Engineering/LangChain/LLamaIndex/LLM Finetuning/Vector DB/LLM quantification/Stable Diffustion
+- Version Control: Git
+- Databases: MongoDB/Mysql/Redis/ElasticSearch
+- DevOps: Docker/K8s
+- Testing Tools: Jest/Enzyme/Playwright
+- Cloud Platforms: AWS/Azure/GCP/Aliyun/Tencent Cloud
+- Agile Development: Scrum/Kanban/CICD/TDD/Reactor
+- Web-related: Restful/Grpc/Json
+- Middleware: Kafka/RabbitMq
+- Operating Systems: Mac/Ubuntu
+- IDE: Vscode/Vim
+
+## Secondary Skills (Familiar)
+
+- Programming Languages: Python/Bash
+- Development Frameworks: Flask
+
+## Other Skills (Understand)
+
+- Programming Languages: Rust/Go/Ruby/Java
+- Development Frameworks: React Native/Umi.js/Ant Design/Expo/Electron/AngularJS/JQuery/Spring
+- Version Control: SVN/ClearCase
+- Databases: Sqlite3/PgSQL/Oracle
+- Blockchain: Ethereum Technology/ERC20 Tokens/Smart Contracts/Geth/web3
+- Container Middleware: Tomcat/Jetty/Weblogic
+- Operating Systems: Centos/Unix/Windows
+- IDE: IntelliJ IDEA/Eclipse
+- Build Tools: Webpack/Gradle/Maven/Ant
+- Web-related: GraphQL/XML
+- Middleware: ActiveMq/Thrift/Solr/Openfire
+- DevOps: Vagrant/VMWare/VirtualBox
 
 ---
 

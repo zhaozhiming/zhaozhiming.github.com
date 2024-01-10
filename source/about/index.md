@@ -57,19 +57,32 @@ date: 2010-01-01 20:04:21
 
 # 项目经验
 
-## AI 项目
+## AI 安全平台
+
+技术栈：LangChain, OpenAI API, Function calling, Next.js, Node.js, TypeScript, Python
+
+这是一个 AI 安全类的系统，系统内置了多种安全工具，用户输入自然语言，系统会根据用户的要求执行对应的工具，并输出不同格式的结果。
+
+我主要负责系统初期的框架搭建，核心功能开发和部署等工作。
+
+## 知识库 AI 问答系统
+
+技术栈：LangChain, ChatGLM2, React, Node.js, TypeScript, Python
+
+这是一个基于 AI 的知识库问答系统，使用 RAG（增强式检索）技术，让大语言模型回答用户问题时可以查找相关材料，减小幻觉。
+
+我主要负责本地大语言模型部署，后端系统开发等工作。
+
+## AI 小项目
 
 技术栈：chatgpt, langchain, prompt engineering, chatglm, vector db, next.js, AI SDK, nest.js, vercel
 
-几个 AI 项目:
-
 - chatgpt 高仿网站，利用 openai api 开发，前端使用 nesx.js，后端使用 nest.js
-- 基于 langchain 和 chatglm2 打造的知识库 AI 问答系统
 - 使用 LLM 提供法律咨询，基于 prompt engineering 和 chatgpt，使用 next.js AI SDK 开发，使用 vercel 进行部署(https://next-lawqa.vercel.app/)
 
 我主要负责项目的架构设计，核心功能开发等工作。
 
-## 流水线
+## 流水线平台
 
 技术栈: tekten, Node.js, Typescript, Docker, K8s
 
@@ -85,100 +98,47 @@ date: 2010-01-01 20:04:21
 
 我主要负责功能设计、功能开发、设计评审、代码评审等工作。
 
-## 效能平台
-
-技术栈: React, Node.js, Typescript, Ant Design, microservice, Docker, K8s
-
-这是一个项目管理平台，后台可以接入 Jira 相关数据，为用户提供更简化的项目管理操作界面，更加贴合公司内部项目管理流程。
-
-我主要负责系统架构设计、核心功能开发、功能设计评审、代码评审等工作。
-
-## 标准盒子
-
-技术栈: React, Node.js, Python, Typescript, Ant Design, micro-frontend, microservice, grpc, Linux, Docker, Docker-compose
-
-这是一个为硬件产品设计的开发平台，它封装了一些通用的功能，包括登陆注册、用户管理、权限管理，安全审计等，其他产品使用它可以专心开发自己的业务功能而无需重复开发通用功能。
-
-我主要负责项目的架构设计、产品设计、项目管理，主要功能开发等工作。
-
-## 猎风
-
-技术栈： React, Node.js, Typescript, Python, Linux KVM
-
-这是一个为企业安全开发的产品，可以产生多个拟真的操作系统或者 web 服务环境，防止黑客攻击到真实的服务器，以此来保护企业内部的网络安全
-
-我主要负责系统架构设计、核心功能开发、项目管理代码评审等工作。
-
-## 以太坊电子钱包
-
-技术栈：React Natvie，Etheresum，智能合约，web3，geth
-
-使用 React Native 开发基于以太坊的一款电子钱包，包括功能有创建钱包，助记词生成，私钥导入，转账，收款，支持以太坊代币等功能。
-
-我主要负责其中的主要架构设置，核心以太坊功能开发以及 App 页面的开发。
-
-## 区块链德州扑克
-
-技术栈：Electron，websocket，testrpc
-
-基于区块链技术开发的一款德州扑克游戏，使用 Electron 开发桌面端应用，后端数据主要是从 Testrpc 中模拟得到。
-
-我主要负责项目的基础框架搭建，整合后端数据结构供前端调用，前端页面开发，代码 review 和整体项目进度把控等工作。
-
-## 前端开发平台
-
-技术栈：React, Redux，React-Router，Webpack，Ant Design，yarn，eslint，stylelint，commitlint，prettier，Hapi，mongoose
-
-平台整合 Create React App 和 Hapi 等技术，目的为提高团队开发效率，统一团队开发规范，并结合公司容器平台工具进行持续集成和部署
-
-我主要负责项目的基础框架搭建，攻关基础组件的使用难题，包括 redux，react-router，webpack 等基础组件
-
-## 大数据可视化项目
-
-使用 React + Redux 前端技术构建前端页面，Webpack 打包前端工程，后端使用 Hapi 框架提供 GraphQL API，数据库使用 ElasticSearch 做数据存储。
-
-我主要负责项目框架搭建，程序设计，代码编写，性能优化等工作。
-
-## 客户关系管理项目
-
-使用 React + Hapi 技术栈快速开发的一个 Web 项目。
-
-我主要负责需求对接，程序开发，演示调试，测试部署等工作。
-
-## 云存储项目
-
-基于 Openstack swift 和 Ceph 开发的云存储项目，我在其中主要负责监控服务器的设计和编码工作，和云存储环境的测试工作。
-
-## 车联网项目
-
-手机 APP”平安好车主“的后台应用，使用了 Redis，ActiveMQ，HBase，Mysql 等中间件。我在其中主要负责后台计算逻辑的设计和编码工作。
-
-## P2P 网上金融超市
-
-使用 SpringMVC+Hibernate 做的一个 Web 应用，我在其中主要负责自动化测试案例的编写，bug 修复等工作。在这个项目里学习了敏捷开发，自动化测试，持续集成等。
-
 ---
 
 # 技能清单
 
-- 语言：JS/TS/ES6/CSS/Nodejs/Python/Bash/Java，Rust/Ruby/Go/PHP
-- 开发框架：React/Redux, React Native，Django/Django rest, Node/Nest/Egg/Hapi/Meteor, Spring/Hibernate/Mybatis
-- 前端框架：React/Next.js/Umi.js/Ant Design/Expo/Electron/Bootstrap/AngularJS/Semmantic-UI/JQuery/JSP
-- 人工智能: ChatGPT/Prompt Engineering/LangChain/LLM 训练/Vector DB/Stable Diffustion
-- 关系型数据库：MySQL/Sqlite3/PgSQL/Oracle
-- web 相关: Restful/GraphQL/Grpc/Json/XML
-- DevOps: K8s/Docker/Vagrant/VMWare/VirtualBox
-- 缓存 /Nosql: MongoDB/Redis/Ssdb/Memorycache
-- RPC/ 搜索引擎 / 消息中间件：Kafka/ElasticSearch/ActiveMq/Thrift/Solr/Openfire
-- 版本管理：Git/Svn/ClearCase
-- 构建工具：Webpack/Gradle/Maven/Ant
-- 测试：Moche/Jest/Enzyme/Junit/Mockito/Jbehave/Selenium/Galting
-- 云和开放平台：阿里云/腾讯云/AWS/Azure/ 微信应用开发 / 微信小程序
-- 敏捷开发：Scrum/看板/CICD/Jenkins/TDD/Refactor/Sonar/PMP
-- 操作系统：Mac/Ubuntu/Centos/Unix/Window
-- IDE 和编辑器：Vscode/Vim/IntelliJ IDEA/Eclipse
+## 主要技能（熟悉）
+
+- 编程语言：TS/JS/ES6/CSS/Nodejs
+- 开发框架
+  - 前端：React/Nextjs/Tailwind Css
+  - 后端：Nestjs/Eggjs/Hapi/Express/Koa
+- 人工智能: ChatGPT/Prompt Engineering/LangChain/LLamaIndex/LLM Finetuning/Vector DB/LLM quantification/Stable Diffustion
+- 版本管理：Git
+- 数据库：MongoDB/Mysql/Redis/ElasticSearch
+- 运维：Docker/K8s
+- 测试工具：Jest/Enzyme/Playwright
+- 云平台：阿里云/腾讯云/AWS/Azure/GCP
+- 敏捷开发： Scrum/Kanban/CICD/TDD/Reactor
+- web 相关: Restful/Grpc/Json
+- 中间件：Kafka/RabbitMq
+- 操作系统：Mac/Ubuntu
+- IDE：Vscode/Vim
+
+## 次要技能（掌握）
+
+- 编程语言：Python/Bash
+- 开发框架：Flask
+
+## 其他技能（了解）
+
+- 编程语言：Rust/Go/Ruby/Java
+- 开发框架：React Native/Umi.js/Ant Design/Expo/Electron/AngularJS/JQuery/Spring
+- 版本管理：SVN/ClearCase
+- 数据库：Sqlite3/PgSQL/Oracle
 - 区块链：以太坊技术 / ERC20 代币 / 智能合约 / Geth/ web3
 - 容器中间件：Tomcat/Jetty/Weblogic
+- 操作系统：Centos/Unix/Window
+- IDE：IntelliJ IDEA/Eclipse
+- 构建工具：Webpack/Gradle/Maven/Ant
+- web 相关: GraphQL/XML
+- 中间件：ActiveMq/Thrift/Solr/Openfire
+- DevOps: Vagrant/VMWare/VirtualBox
 
 ---
 

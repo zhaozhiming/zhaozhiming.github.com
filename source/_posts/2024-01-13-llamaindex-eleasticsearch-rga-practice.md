@@ -3,10 +3,10 @@ layout: post
 title: 使用 LlamaIndex 结合 Eleasticsearch 进行 RAG 检索增强生成
 date: 2024-01-13 15:12:46
 description: 介绍 Elasticsearch 部署、Embedding 模型部署以及如何使用 LlamaIndex 进行 RAG
-keywords: llamaindex, elasticsearch, embdding, rag
+keywords: llamaindex, elasticsearch, embedding, rag
 comments: true
 categories: ai
-tags: [llamaindex, elasticsearch, embdding, rag]
+tags: [llamaindex, elasticsearch, embedding, rag]
 ---
 
 {% img /images/post/2024/01/llamaindex-es.png 400 300 %}

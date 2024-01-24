@@ -59,7 +59,7 @@ date: 2010-01-01 20:04:21
 
 ## AI 安全平台
 
-技术栈：LangChain, OpenAI API, Function calling, Next.js, Node.js, TypeScript, Python
+技术栈：LangChain, OpenAI API, Function calling, React, Next.js, Node.js, TypeScript, Python
 
 这是一个 AI 安全类的系统，系统内置了多种安全工具，用户输入自然语言，系统会根据用户的要求执行对应的工具，并输出不同格式的结果。
 
@@ -75,16 +75,16 @@ date: 2010-01-01 20:04:21
 
 ## AI 小项目
 
-技术栈：chatgpt, langchain, prompt engineering, chatglm, vector db, next.js, AI SDK, nest.js, vercel
+技术栈：ChatGPT, LangChain, Prompt Engineering, ChatGLM, Vector DB, React, Next.js, AI SDK, Nest.js, Vercel
 
-- chatgpt 高仿网站，利用 openai api 开发，前端使用 nesx.js，后端使用 nest.js
-- 使用 LLM 提供法律咨询，基于 prompt engineering 和 chatgpt，使用 next.js AI SDK 开发，使用 vercel 进行部署(https://next-lawqa.vercel.app/)
+- ChatGPT 高仿网站，利用 Openai api 开发，前端使用 Nesx.js，后端使用 Nest.js
+- 使用 LLM 提供法律咨询，基于 Prompt Engineering 和 ChatGPT，使用 Next.js AI SDK 开发，使用 Vercel 进行部署(https://next-lawqa.vercel.app/)
 
 我主要负责项目的架构设计，核心功能开发等工作。
 
 ## 流水线平台
 
-技术栈: tekten, Node.js, Typescript, Docker, K8s
+技术栈: Tekten, Node.js, Typescript, Docker, K8s
 
 这是一个基于 Tekton 的 CI/CD 平台，可以帮助用户快速搭建 CI/CD 流水线，可以进行容器化部署以及主机部署。
 

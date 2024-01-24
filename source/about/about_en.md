@@ -55,7 +55,7 @@ Software engineer responsible for the development and maintenance of medical ins
 
 ## AI Security Platform
 
-Tech Stack: LangChain, OpenAI API, Function calling, Next.js, Node.js, TypeScript, Python
+Tech Stack: LangChain, OpenAI API, Function calling, React, Next.js, Node.js, TypeScript, Python
 
 This is an AI security system that incorporates multiple security tools. Users input natural language, and the system executes corresponding tools based on user requests, providing results in different formats.
 
@@ -71,18 +71,18 @@ My main responsibilities include local deployment of large language models and b
 
 ## AI mini Projects
 
-Technology stack: chatgpt, langchain, prompt engineering, chatglm, vector db, next.js, AI SDK, nest.js, vercel
+Technology stack：ChatGPT, LangChain, Prompt Engineering, ChatGLM, Vector DB, React, Next.js, AI SDK, Nest.js, Vercel
 
 Several AI projects:
 
-- A chatgpt-based website, developed using the openai API, with the front-end built on next.js and the back-end on nest.js.
-- An AI-powered legal consultation service using LLM, developed using prompt engineering and chatgpt, with next.js AI SDK, and deployed on vercel (https://next-lawqa.vercel.app/).
+- A ChatGPT-based website, developed using the Openai API, with the front-end built on Next.js and the back-end on Nest.js.
+- An AI-powered legal consultation service using LLM, developed using Prompt Engineering and ChatGPT, with next.js AI SDK, and deployed on Vercel (https://next-lawqa.vercel.app/).
 
 I am primarily responsible for project architecture design, core feature development, and other related tasks.
 
 ## Pipeline
 
-Technology stack: tekton, Node.js, Typescript, Docker, K8s
+Technology stack: Tekten, Node.js, Typescript, Docker, K8s
 
 This is a CI/CD platform based on Tekton that helps users quickly set up CI/CD pipelines for containerized and host deployments.
 

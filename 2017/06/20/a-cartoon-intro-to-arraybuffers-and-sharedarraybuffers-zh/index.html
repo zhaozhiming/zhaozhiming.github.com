@@ -190,7 +190,7 @@
 <p>我将在<a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2017/06/21/avoiding-race-conditions-in-sharedarraybuffers-with-atomics-zh/">下一篇文章</a> 中解释。  </p>
 <h2 id="SharedArrayBuffers-当前的现状是怎样的？"><a href="#SharedArrayBuffers-当前的现状是怎样的？" class="headerlink" title="SharedArrayBuffers 当前的现状是怎样的？"></a>SharedArrayBuffers 当前的现状是怎样的？</h2><p>SharedArrayBuffers 不久将会出现在所有主流浏览器中。  </p>
 <img src="https://2r4s9p1yi1fa2jd7j43zph8r-wpengine.netdna-ssl.com/files/2017/06/02_14.png" class="" width="400" height="350">
-<p>它们已经在 Safari（在 Safari 10.1）里了，Firefox 和 Chrome 将在他们的 7/8 月的发布中引进它们，而且 Edge 也将在秋季的 Windows 更新中引进它们。  </p>
+<p>它们已经在 Safari（在 Safari 10.1）里了，Firefox 和 Chrome 将在他们的 7&#x2F;8 月的发布中引进它们，而且 Edge 也将在秋季的 Windows 更新中引进它们。  </p>
 <p>不过即使它们在所有主流浏览器中都可用，我们也不希望应用开发人员直接使用它们。实际上，我们推荐不用它们，你应该使用最高级别的抽象封装。  </p>
 <p>我们希望 JavaScript 库开发人员来创建对应的库来让你更方便和安全地使用 SharedArrayBuffers。  </p>
 <p>另外，一旦 SharedArrayBuffers 内置到平台中，WebAssembly 就可以使用它们来实现多线程支持。一旦到位，你就可以使用像 Rust 那样的并发抽象技术，Rust 的主要目标之一就是让你无所畏惧地使用并发编程。  </p>

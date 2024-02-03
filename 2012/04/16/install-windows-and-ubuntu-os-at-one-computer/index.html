@@ -134,15 +134,15 @@
 <p>我下载的是青苹果的一个iso镜像，下载下来之后刻录成启动光盘，然后用光盘启动系统，发现里面只有winPE选项有用，其他选项都是废的。。。进入PE后，用里面的工具重新分了下区，然后用ghost安装了win7。这个版本的镜像里面没有offic软件，没办法只好上网找了office2007，找到一个石油学院的office iso镜像，兼容win7 64位，又免序列号的。安装成功之后将C盘系统用ghost克隆了一个备份保存，win7安装完成。  </p>
 <p><strong>2.安装ubuntu</strong>  </p>
 <p>开始我安装的是ubuntu11，用的是以前的安装盘，这里纠结了一下是用wubi装还是正规安装，网上说是wubi安装属体验系统，功能可能不全，最后用ubuntu的启动光盘正常安装了ubuntu11。  </p>
-<p>安装ubuntu时，开始有3个选项，一是跟win7一起安装，一个是替代wiin7，一个是自定义。看了网上攻略我选择了自定义，选择自定义时要自己划分ubuntu分区。我划分了3个，一个是主分区，这个分区相当与windows的系统C盘，大小10G，挂载点“/”。第二个是交换空间，相当是win7的虚拟内存空间，我划分了4G。最后一个是home区，这个相当与windows系统的其他分区（比如D盘，E盘。。。)，我划分了20个G，挂载点是“/home”。  </p>
-<p>安装完后重启系统，就可以看到ubuntu的启动引导菜单了。如果你想将win7放在菜单首位，可以进入ubuntu系统修改/boot/grub/grub.cfg文件，将里面的win7菜单移到ubuntu菜单前面就可以了。  </p>
+<p>安装ubuntu时，开始有3个选项，一是跟win7一起安装，一个是替代wiin7，一个是自定义。看了网上攻略我选择了自定义，选择自定义时要自己划分ubuntu分区。我划分了3个，一个是主分区，这个分区相当与windows的系统C盘，大小10G，挂载点“&#x2F;”。第二个是交换空间，相当是win7的虚拟内存空间，我划分了4G。最后一个是home区，这个相当与windows系统的其他分区（比如D盘，E盘。。。)，我划分了20个G，挂载点是“&#x2F;home”。  </p>
+<p>安装完后重启系统，就可以看到ubuntu的启动引导菜单了。如果你想将win7放在菜单首位，可以进入ubuntu系统修改&#x2F;boot&#x2F;grub&#x2F;grub.cfg文件，将里面的win7菜单移到ubuntu菜单前面就可以了。  </p>
 <p><strong>3.重装ubuntu</strong>  </p>
 <p>后来发现ubuntu11上网网速极慢，查了很多都不知道是哪里出问题，就重新下载了ubuntu12，安装过程与上面一样。安装完成之后重启电脑发现ubuntu引导目录不见了，要重新做ubuntu的菜单引导。  </p>
 <p>先用ubuntu的启动光盘进入试用版ubuntu，然后打开终端，输入下面命令查询ubuntu的安装区，我的是sda9。  </p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fdisk -l</span><br></pre></td></tr></table></figure>    
 
 <p>然后创建了一个临时目录，这个目录是为了后面mount ubuntu启动分区用的，命令如下：  </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /media/tmpdir</span><br><span class="line">mount  /dev/sda8  /media/tmpdir</span><br></pre></td></tr></table></figure>    
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /media/tmpdir</span><br><span class="line">mount  /dev/sda8  /media/tmpdir</span><br></pre></td></tr></table></figure>    
 
 <p>接下来是最重要的一步，输入命令下面命令：  </p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo grub-install --root-directory=/media/tmpdir /dev/sda </span><br></pre></td></tr></table></figure>    

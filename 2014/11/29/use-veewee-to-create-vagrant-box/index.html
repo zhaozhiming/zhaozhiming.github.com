@@ -135,11 +135,11 @@
 <ul>
 <li><a target="_blank" rel="noopener" href="https://www.vagrantup.com/">Vagrant</a>: 这个没必要说了，我们就是要制作它的box文件。  </li>
 <li><a target="_blank" rel="noopener" href="https://www.virtualbox.org/">VirtualBox</a>: 跟VMWare一样的虚拟机软件，不过它是免费的。  </li>
-<li><a target="_blank" rel="noopener" href="https://github.com/jedi4ever/veewee">Veewee</a>: 这是一款可以轻松创建Vagrant的box文件的工具，它还可以创建KVM和其他虚拟机镜像。  </li>
+<li><a target="_blank" rel="noopener" href="https://github.com/jedi4ever/veewee">Veewee</a>: 这是一款可以轻松创建Vagrant的box文件的工具，它还可以创建KVM和其他虚拟机镜像。</li>
 </ul>
 <p>这些软件的安装我就不介绍了，请到软件网站自行了解。  </p>
 <h2 id="使用Veewee创建Box"><a href="#使用Veewee创建Box" class="headerlink" title="使用Veewee创建Box"></a>使用Veewee创建Box</h2><ul>
-<li>首先查找Veewee下面有哪些VirtualBox的模板，下面的vbox表示VirtualBox，当然你也可以换成其他的虚拟机工具。  </li>
+<li>首先查找Veewee下面有哪些VirtualBox的模板，下面的vbox表示VirtualBox，当然你也可以换成其他的虚拟机工具。</li>
 </ul>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ veewee vbox templates</span><br></pre></td></tr></table></figure>   
 <ul>
@@ -151,12 +151,12 @@
 </ul>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vi definitions/rhel65-64bit/definition.rb</span><br></pre></td></tr></table></figure>   
 <p><code>definition.rb</code>是Veewee的创建脚本，我们将其中的<code>iso-file</code>的值修改为iso的文件名，比如<code>rhel-server-6.5-x86_64-dvd.iso</code>，其他iso开头的选项可以不修改或删除。  </p>
-<figure class="highlight ruby"><figcaption><span>definition.rb</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Veewee::Session.declare(&#123;</span><br><span class="line">  ...</span><br><span class="line">  ...</span><br><span class="line">  <span class="symbol">:iso_file</span> =&gt; <span class="string">&quot;rhel-server-6.5-x86_64-dvd.iso&quot;</span>,</span><br><span class="line">  ...</span><br><span class="line">  ...</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>   
+<figure class="highlight ruby"><figcaption><span>definition.rb</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Veewee</span><span class="symbol">:</span><span class="symbol">:Session</span>.declare(&#123;</span><br><span class="line">  ...</span><br><span class="line">  ...</span><br><span class="line">  <span class="symbol">:iso_file</span> =&gt; <span class="string">&quot;rhel-server-6.5-x86_64-dvd.iso&quot;</span>,</span><br><span class="line">  ...</span><br><span class="line">  ...</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>   
 <ul>
 <li>然后下载rhel6.5的iso文件，上网查一下资源还是比较多的，这里就不贴iso文件的链接了，怕链接以后会失效，请自行搜索。</li>
-<li>在当前目录下创建iso的子文件夹，将下载的iso文件放到这个文件夹中。  </li>
+<li>在当前目录下创建iso的子文件夹，将下载的iso文件放到这个文件夹中。</li>
 </ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir iso</span><br><span class="line">$ mv /your/iso/path/rhel-server-6.5-x86_64-dvd.iso iso</span><br></pre></td></tr></table></figure>   
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">mkdir</span> iso</span><br><span class="line">$ <span class="built_in">mv</span> /your/iso/path/rhel-server-6.5-x86_64-dvd.iso iso</span><br></pre></td></tr></table></figure>   
 <ul>
 <li>执行命令创建Box，然后去喝杯咖啡，等一会儿回来看看RHEL6.5的VM应该就创建好了。</li>
 </ul>
@@ -174,7 +174,7 @@
 <li>安装一些基本的软件，比如ssh, wget, curl等。</li>
 <li>设置root用户密码为<code>vagrant</code>。</li>
 <li>新增用户<code>vagrant</code>，密码也是设置为<code>vagrant</code>。</li>
-<li>修改visudo的配置，让vagrant用户使用sudo时不需要输入密码。  </li>
+<li>修改visudo的配置，让vagrant用户使用sudo时不需要输入密码。</li>
 </ul>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ visudo</span><br></pre></td></tr></table></figure>   
 <p>在最后一行增加以下内容:  </p>
@@ -182,11 +182,11 @@
 <ul>
 <li>安装Guset Additions，这个是为了可以使用vagrant来创建共享文件夹。</li>
 </ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://download.virtualbox.org/virtualbox/4.3.18/VBoxGuestAdditions_4.3.18.iso </span><br><span class="line">$ sudo mkdir -p /media/VBoxGuestAdditions</span><br><span class="line">$ sudo mount -o loop,ro VBoxGuestAdditions_4.3.8.iso /media/VBoxGuestAdditions</span><br><span class="line">$ sudo /media/VBoxGuestAdditions/VBoxLinuxAdditions.run</span><br></pre></td></tr></table></figure>   
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://download.virtualbox.org/virtualbox/4.3.18/VBoxGuestAdditions_4.3.18.iso </span><br><span class="line">$ sudo <span class="built_in">mkdir</span> -p /media/VBoxGuestAdditions</span><br><span class="line">$ sudo mount -o loop,ro VBoxGuestAdditions_4.3.8.iso /media/VBoxGuestAdditions</span><br><span class="line">$ sudo /media/VBoxGuestAdditions/VBoxLinuxAdditions.run</span><br></pre></td></tr></table></figure>   
 <ul>
 <li>修改ssh配置，让vagrant可以无密码ssh登陆VM。</li>
 </ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> /home/vagrant</span><br><span class="line">$ mkdir .ssh</span><br><span class="line">$ wget https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub -O .ssh/authorized_keys</span><br><span class="line">$ chmod 700 .ssh</span><br><span class="line">$ chmod 600 .ssh/authorized_keys</span><br><span class="line">$ chown -R vagrant:vagrant .ssh</span><br></pre></td></tr></table></figure>   
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> /home/vagrant</span><br><span class="line">$ <span class="built_in">mkdir</span> .ssh</span><br><span class="line">$ wget https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub -O .ssh/authorized_keys</span><br><span class="line">$ <span class="built_in">chmod</span> 700 .ssh</span><br><span class="line">$ <span class="built_in">chmod</span> 600 .ssh/authorized_keys</span><br><span class="line">$ <span class="built_in">chown</span> -R vagrant:vagrant .ssh</span><br></pre></td></tr></table></figure>   
 <p>上面这些做好以后，就可以退出VM，后面的步骤就跟Veewee创建Box一样了，就是使用vagrant来生成box文件，添加box，启动VM。</p>
 </div>
 

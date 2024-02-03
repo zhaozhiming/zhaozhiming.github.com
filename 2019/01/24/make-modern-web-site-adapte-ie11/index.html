@@ -132,7 +132,7 @@
 <blockquote><p>前端：兼容 IE 是不可能的，这辈子都不可能兼容 IE<br>BOSS：给你加薪 50%<br>前端：IE 是我用过最好用的浏览器（真诚脸）</p>
 </blockquote>
 
-<p>当你的网页使用了最新的流行技术（比如 React、CSS3, ES6/7 等）却被要求兼容 IE 浏览器的时候你的内心其实是崩溃的，但毕竟 IE 存在了这么久要指望它一下子消失是不太现实的，所以作为一个有 (mei) 追 (ban) 求 (fa) 的前端我们还是来看看如何兼容 IE 吧（这里只考虑 IE11，其他的 IE 古董版本建议放弃）。</p>
+<p>当你的网页使用了最新的流行技术（比如 React、CSS3, ES6&#x2F;7 等）却被要求兼容 IE 浏览器的时候你的内心其实是崩溃的，但毕竟 IE 存在了这么久要指望它一下子消失是不太现实的，所以作为一个有 (mei) 追 (ban) 求 (fa) 的前端我们还是来看看如何兼容 IE 吧（这里只考虑 IE11，其他的 IE 古董版本建议放弃）。</p>
 <span id="more"></span>
 
 <p>React 是目前用于编写前端页面最流行且使用最多的前端视图库（没有之一），所以我们主要介绍在 React 环境下如何兼容 IE11。</p>
@@ -140,8 +140,8 @@
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>这样页面就会使用系统中最高版本的 IE 引擎来加载页面，更多资料可以参考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/6771258/what-does-meta-http-equiv-x-ua-compatible-content-ie-edge-do">这里</a>。</p>
-<h2 id="ES-6-7"><a href="#ES-6-7" class="headerlink" title="ES 6/7"></a>ES 6/7</h2><p>现在越来越多的网页开始使用 ES6 的语法，ES6 相对于 ES5 新增了很多新特性和语法糖，减少了原始 JS 的一些语法混乱，让代码更加简洁，让 JS 开发人员更加高效。</p>
-<p>React 可以在支持 ES5 的浏览器上运行，包括 IE9 和 IE10，但如果你使用了 ES6/7 的语法，则需要额外做一些操作才能兼容 IE11。</p>
+<h2 id="ES-6-x2F-7"><a href="#ES-6-x2F-7" class="headerlink" title="ES 6&#x2F;7"></a>ES 6&#x2F;7</h2><p>现在越来越多的网页开始使用 ES6 的语法，ES6 相对于 ES5 新增了很多新特性和语法糖，减少了原始 JS 的一些语法混乱，让代码更加简洁，让 JS 开发人员更加高效。</p>
+<p>React 可以在支持 ES5 的浏览器上运行，包括 IE9 和 IE10，但如果你使用了 ES6&#x2F;7 的语法，则需要额外做一些操作才能兼容 IE11。</p>
 <h3 id="React-Polyfill"><a href="#React-Polyfill" class="headerlink" title="React Polyfill"></a>React Polyfill</h3><p>大部分 React 开发人员通过 <a target="_blank" rel="noopener" href="https://github.com/facebook/create-react-app">Create React App</a> 来创建项目，它是 Facebook 提供的 React 脚手架工具，可以方便 React 新人快速创建 React 项目。</p>
 <p>在这个脚手架的代码仓库中，包含了一些 polyfill（可以理解为一种补丁，让不支持该功能的设备或环境可以正常运行的补丁），可以让 React 项目在 IE 浏览器中完美运行。</p>
 <h4 id="功能特性"><a href="#功能特性" class="headerlink" title="功能特性"></a>功能特性</h4><ul>
@@ -158,7 +158,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在文件的第一行导入，兼容 IE11</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;react-app-polyfill/ie11&#x27;</span>;</span><br></pre></td></tr></table></figure>
 
 <p>更多内容可以查阅<a target="_blank" rel="noopener" href="https://github.com/facebook/create-react-app/tree/master/packages/react-app-polyfill">这里</a>。</p>
-<h3 id="core-js"><a href="#core-js" class="headerlink" title="core-js"></a>core-js</h3><p>即使使用了<code>React Polyfill</code>你的项目也可能在 IE11 上运行不起来，因为<code>React Polyfill</code>并没有支持全部 ES6 的语法，这时候我们可以选择另外一个第三方库 <a target="_blank" rel="noopener" href="https://github.com/zloirock/core-js">core-js</a>，这个库除了支持<code>React Polyfill</code>的功能特性外（window.fetch 不支持），<strong>还支持 ES6/7/8 一些常用的 API，比如 array.includes，string.includes，string.startsWith 等</strong>，可以在不支持这些特性的浏览器上正常运行。</p>
+<h3 id="core-js"><a href="#core-js" class="headerlink" title="core-js"></a>core-js</h3><p>即使使用了<code>React Polyfill</code>你的项目也可能在 IE11 上运行不起来，因为<code>React Polyfill</code>并没有支持全部 ES6 的语法，这时候我们可以选择另外一个第三方库 <a target="_blank" rel="noopener" href="https://github.com/zloirock/core-js">core-js</a>，这个库除了支持<code>React Polyfill</code>的功能特性外（window.fetch 不支持），<strong>还支持 ES6&#x2F;7&#x2F;8 一些常用的 API，比如 array.includes，string.includes，string.startsWith 等</strong>，可以在不支持这些特性的浏览器上正常运行。</p>
 <h4 id="使用步骤-1"><a href="#使用步骤-1" class="headerlink" title="使用步骤"></a>使用步骤</h4><ul>
 <li>通过<code>npm install core-js</code>命令进行安装</li>
 <li>在入口文件（通常是<code>src/index.js</code>）的第一行引入该库</li>
@@ -167,14 +167,14 @@
 
 <p><code>core-js</code>包含了<code>React Polyfill</code>大部分的功能（除了 window.fetch），所以通常没有必要两个库一起使用，只需要使用<code>core-js</code>就好了。</p>
 <h2 id="CSS-变量"><a href="#CSS-变量" class="headerlink" title="CSS 变量"></a>CSS 变量</h2><p>在很多 CSS 预处理器中已经包含了变量的特性，比如 Less、Sass 等，但在 CSS 的最新语法中已经可以支持变量，用法如下：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-pseudo">:root</span> &#123;</span><br><span class="line">  --<span class="selector-tag">main</span>-bg-<span class="attribute">color</span>: brown;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.app</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="built_in">var</span>(--main-bg-color);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-pseudo">:root</span> &#123;</span><br><span class="line">  <span class="attr">--main-bg-color</span>: brown;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.app</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="built_in">var</span>(--main-bg-color);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>虽然微软已经在 Edge 浏览器中支持 CSS 变量，但很遗憾，在 IE11 中仍然不支持，如果想在 IE11 中运行有 CSS 变量的代码，我们需要引入 <a target="_blank" rel="noopener" href="https://github.com/jhildenbiddle/css-vars-ponyfill">css-vars-ponyfill</a> 这个库。</p>
 <h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><ul>
 <li>首先通过命令安装这个库<code>npm install css-vars-ponyfill</code>。</li>
 <li>然后在入口文件引入这个库就可以了。</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cssVars <span class="keyword">from</span> <span class="string">&#x27;css-vars-ponyfill&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 默认配置</span></span><br><span class="line">cssVars();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 还可以带配置参数</span></span><br><span class="line">cssVars(&#123;</span><br><span class="line">  <span class="comment">// 配置参数</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cssVars <span class="keyword">from</span> <span class="string">&#x27;css-vars-ponyfill&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 默认配置</span></span><br><span class="line"><span class="title function_">cssVars</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 还可以带配置参数</span></span><br><span class="line"><span class="title function_">cssVars</span>(&#123;</span><br><span class="line">  <span class="comment">// 配置参数</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
 <p><code>css-vars-ponyfill</code>会将项目中的 CSS 变量进行转换，在 IE11 中会直接转换成对应的变量值，这样带有 CSS 变量的项目就可以在 IE11 中运行了。</p>
 <h2 id="Flexbox"><a href="#Flexbox" class="headerlink" title="Flexbox"></a>Flexbox</h2><p>Flexbox 弹性盒子布局出来已经有一段时间了，广受前端开发人员喜欢，现在慢慢地其他平台也在使用这种布局方式，比如 React Native 等。</p>
@@ -191,7 +191,7 @@
 <p>更多的资料可以查阅这里：</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://jeffclayton.wordpress.com/2014/07/14/separating-internet-explorer-10-and-11-via-css-styles/">Separating Internet Explorer 10 and 11 via CSS Hacks</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.ryadel.com/en/css3-media-query-target-only-ie-ie6-ie11-firefox-chrome-safari-edge/">CSS3 Media Query to target only Internet Explorer (from IE6 to IE11+), Firefox, Chrome, Safari and/or Edge</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.ryadel.com/en/css3-media-query-target-only-ie-ie6-ie11-firefox-chrome-safari-edge/">CSS3 Media Query to target only Internet Explorer (from IE6 to IE11+), Firefox, Chrome, Safari and&#x2F;or Edge</a></li>
 </ul>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>文章从 HTML、JS 和 CSS 几个方面介绍了如何兼容 IE11 浏览器，但这里只是介绍了笔者经常遇到的一些问题，其实在兼容浏览器过程还会遇到更多更复杂的场景，需要根据具体问题进行具体分析，希望有相关经验的同学一起留言讨论，谢谢。</p>
 </div>

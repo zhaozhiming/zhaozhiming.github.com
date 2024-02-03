@@ -135,7 +135,7 @@
 <p>查出来的结果好像这样：TCP    0.0.0.0:8888           0.0.0.0:0              LISTENING       1844<br>其中最后一项是进程号（PID），要怎么取到PID并杀掉进程呢？  </p>
 <p>可以使用for语句来操作，for默认是以空格或tab为分割，即上面的结果会分割成5个部分，而pid正好是第5部分的内容，所以命令可以这样写：  </p>
 <figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> /f &quot;tokens=<span class="number">5</span>&quot; <span class="variable">%%i</span> <span class="keyword">in</span> (&quot;netstat -ano | <span class="built_in">findstr</span> <span class="number">8888</span>&quot;) <span class="keyword">do</span> <span class="built_in">taskkill</span> /f /pid <span class="variable">%%i</span> /t</span><br></pre></td></tr></table></figure>  
-<p>taskkill命令是杀进程的，/f表示强制进行，/t表示将其子进程一并杀掉。  </p>
+<p>taskkill命令是杀进程的，&#x2F;f表示强制进行，&#x2F;t表示将其子进程一并杀掉。  </p>
 <p>这样就不怕tomcat服务关不掉了，重启也正常了，自动化部署成功。  </p>
 </div>
 

@@ -15,7 +15,7 @@
 &lt;li&gt;前面的yourpath是放jacocoagent.jar文件的目录路径；&lt;/li&gt;
 &lt;li&gt;includes是指要收集哪些类（注意不要关写包名，最后要写.*)，不写的话默认是*，会收集应用服务上所有的类，包括服务器和其他中间件的类，一般要过滤；&lt;/li&gt;
 &lt;li&gt;output有4个值，分别是file,tcpserver,tcpclient,mbean，默认是file。使用file的方式只有在停掉应用服务的时候才能产生覆盖率文件，而使用tcpserver的方式可以在不停止应用服务的情况下下载覆盖率文件，后面会介绍如何使用dump方法来得到覆盖率文件。&lt;/li&gt;
-&lt;li&gt;address是ip， port是端口，这是使用tcpserver方式需要的2个参数，也是后面dump方法要用到的。（这里的address我只能使用服务器的ip，如果使用其他ip，服务启动时会报错。）  &lt;/li&gt;
+&lt;li&gt;address是ip， port是端口，这是使用tcpserver方式需要的2个参数，也是后面dump方法要用到的。（这里的address我只能使用服务器的ip，如果使用其他ip，服务启动时会报错。）&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;更多参数可以参考[java agent][url1]。&lt;br&gt;[url1]: &lt;a href=&#34;http://www.eclemma.org/jacoco/trunk/doc/agent.html&#34;&gt;http://www.eclemma.org/jacoco/trunk/doc/agent.html&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;配置完应用服务的JAVA_OPTIONS之后，启动服务器，然后可以开始跑你的集成测试，跑完之后，实际上jacocoagent已经将覆盖率数据记录下来了，我们可以使用下面的ant任务来dump出覆盖率文件：  &lt;/p&gt;
@@ -25,7 +25,7 @@
 &lt;p&gt;有2种方法可以得到覆盖率文件所需的class文件：  &lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;将应用服务部署的包（ear或war或jar）包下载下来之后解压，即可得到对应的class文件；  &lt;/li&gt;
-&lt;li&gt;在前面做单元测试之后，可以将class文件打成一个zip包，然后上传到服务器，最后在需要的时候去服务器上取。  &lt;/li&gt;
+&lt;li&gt;在前面做单元测试之后，可以将class文件打成一个zip包，然后上传到服务器，最后在需要的时候去服务器上取。&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;得到集成测试的覆盖率文件之后，结合之前取到的单元测试覆盖率文件，我们可以将2个文件合并，得到综合的覆盖率文件，命令如下：  &lt;/p&gt;
 &lt;figure class=&#34;highlight xml&#34;&gt;&lt;figcaption&gt;&lt;span&gt;build.xml&lt;/span&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;　&lt;span class=&#34;tag&#34;&gt;&amp;lt;&lt;span class=&#34;name&#34;&gt;target&lt;/span&gt; &lt;span class=&#34;attr&#34;&gt;name&lt;/span&gt;=&lt;span class=&#34;string&#34;&gt;&amp;quot;mergeCoverage&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;     &lt;span class=&#34;tag&#34;&gt;&amp;lt;&lt;span class=&#34;name&#34;&gt;jacoco:merge&lt;/span&gt; &lt;span class=&#34;attr&#34;&gt;destfile&lt;/span&gt;=&lt;span class=&#34;string&#34;&gt;&amp;quot;merged.exec&amp;quot;&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;         &lt;span class=&#34;tag&#34;&gt;&amp;lt;&lt;span class=&#34;name&#34;&gt;fileset&lt;/span&gt; &lt;span class=&#34;attr&#34;&gt;dir&lt;/span&gt;=&lt;span class=&#34;string&#34;&gt;&amp;quot;$&amp;#123;basedir&amp;#125;&amp;quot;&lt;/span&gt; &lt;span class=&#34;attr&#34;&gt;includes&lt;/span&gt;=&lt;span class=&#34;string&#34;&gt;&amp;quot;*.exec&amp;quot;&lt;/span&gt;/&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;     &lt;span class=&#34;tag&#34;&gt;&amp;lt;/&lt;span class=&#34;name&#34;&gt;jacoco:merge&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;tag&#34;&gt;&amp;lt;/&lt;span class=&#34;name&#34;&gt;target&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;  
@@ -160,7 +160,7 @@
 <li>前面的yourpath是放jacocoagent.jar文件的目录路径；</li>
 <li>includes是指要收集哪些类（注意不要关写包名，最后要写.*)，不写的话默认是*，会收集应用服务上所有的类，包括服务器和其他中间件的类，一般要过滤；</li>
 <li>output有4个值，分别是file,tcpserver,tcpclient,mbean，默认是file。使用file的方式只有在停掉应用服务的时候才能产生覆盖率文件，而使用tcpserver的方式可以在不停止应用服务的情况下下载覆盖率文件，后面会介绍如何使用dump方法来得到覆盖率文件。</li>
-<li>address是ip， port是端口，这是使用tcpserver方式需要的2个参数，也是后面dump方法要用到的。（这里的address我只能使用服务器的ip，如果使用其他ip，服务启动时会报错。）  </li>
+<li>address是ip， port是端口，这是使用tcpserver方式需要的2个参数，也是后面dump方法要用到的。（这里的address我只能使用服务器的ip，如果使用其他ip，服务启动时会报错。）</li>
 </ol>
 <p>更多参数可以参考[java agent][url1]。<br>[url1]: <a target="_blank" rel="noopener" href="http://www.eclemma.org/jacoco/trunk/doc/agent.html">http://www.eclemma.org/jacoco/trunk/doc/agent.html</a></p>
 <p>配置完应用服务的JAVA_OPTIONS之后，启动服务器，然后可以开始跑你的集成测试，跑完之后，实际上jacocoagent已经将覆盖率数据记录下来了，我们可以使用下面的ant任务来dump出覆盖率文件：  </p>
@@ -170,7 +170,7 @@
 <p>有2种方法可以得到覆盖率文件所需的class文件：  </p>
 <ol>
 <li>将应用服务部署的包（ear或war或jar）包下载下来之后解压，即可得到对应的class文件；  </li>
-<li>在前面做单元测试之后，可以将class文件打成一个zip包，然后上传到服务器，最后在需要的时候去服务器上取。  </li>
+<li>在前面做单元测试之后，可以将class文件打成一个zip包，然后上传到服务器，最后在需要的时候去服务器上取。</li>
 </ol>
 <p>得到集成测试的覆盖率文件之后，结合之前取到的单元测试覆盖率文件，我们可以将2个文件合并，得到综合的覆盖率文件，命令如下：  </p>
 <figure class="highlight xml"><figcaption><span>build.xml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">　<span class="tag">&lt;<span class="name">target</span> <span class="attr">name</span>=<span class="string">&quot;mergeCoverage&quot;</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">jacoco:merge</span> <span class="attr">destfile</span>=<span class="string">&quot;merged.exec&quot;</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">fileset</span> <span class="attr">dir</span>=<span class="string">&quot;$&#123;basedir&#125;&quot;</span> <span class="attr">includes</span>=<span class="string">&quot;*.exec&quot;</span>/&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="name">jacoco:merge</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">target</span>&gt;</span></span><br></pre></td></tr></table></figure>  

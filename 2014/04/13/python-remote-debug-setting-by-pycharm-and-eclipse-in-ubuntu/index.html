@@ -134,33 +134,59 @@
 
 <p>##pycharm远程调试<br>pycharmd的远程调试比eclipse的简单多了，而且调试程序也比较稳定，不像eclipse那样容易出一些莫名其妙的问题，步骤如下。  </p>
 <ol>
-<li>将pycharm安装目录下的pycharm-debug.egg文件拷贝到远程机器上（如果是python3的话就拷贝pycharm-debug-py3k.egg文件）。</li>
-<li>在远程机器上安装pycharm-debug.egg，安装命令： <code>easy_install pycharm-debug.egg</code>。</li>
-<li>在pycharm中设置断点监听配置。  <img src="/images/post/2014-4/pycharm-debug/pycharm-1.png" class="">  
+<li><p>将pycharm安装目录下的pycharm-debug.egg文件拷贝到远程机器上（如果是python3的话就拷贝pycharm-debug-py3k.egg文件）。</p>
+</li>
+<li><p>在远程机器上安装pycharm-debug.egg，安装命令： <code>easy_install pycharm-debug.egg</code>。</p>
+</li>
+<li><p>在pycharm中设置断点监听配置。  </p>
+<img src="/images/post/2014-4/pycharm-debug/pycharm-1.png" class="">  
 <img src="/images/post/2014-4/pycharm-debug/pycharm-2.png" class="">  
-<img src="/images/post/2014-4/pycharm-debug/pycharm-3.png" class="">  </li>
-<li>启动调试监听程序。  <img src="/images/post/2014-4/pycharm-debug/pycharm-4.png" class="">  
-<img src="/images/post/2014-4/pycharm-debug/pycharm-5.png" class=""> </li>
-<li>在远程机器上启动服务并发起http请求。  <img src="/images/post/2014-4/eclipse-debug/eclipse-10.png" class="">  </li>
-<li>pycharm监听到请求会进入断点。<img src="/images/post/2014-4/pycharm-debug/pycharm-6.png" class=""> </li>
+<img src="/images/post/2014-4/pycharm-debug/pycharm-3.png" class="">  
+</li>
+<li><p>启动调试监听程序。  </p>
+<img src="/images/post/2014-4/pycharm-debug/pycharm-4.png" class="">  
+<img src="/images/post/2014-4/pycharm-debug/pycharm-5.png" class=""> 
+</li>
+<li><p>在远程机器上启动服务并发起http请求。  </p>
+<img src="/images/post/2014-4/eclipse-debug/eclipse-10.png" class="">  
+</li>
+<li><p>pycharm监听到请求会进入断点。</p>
+<img src="/images/post/2014-4/pycharm-debug/pycharm-6.png" class=""></li>
 </ol>
 <p>更多关于pycharm远程调试的信息可以参阅<a target="_blank" rel="noopener" href="http://www.jetbrains.com/pycharm/webhelp/remote-debugging.html">这里</a>。</p>
 <p>##eclipse远程调试<br>使用eclipse进行python远程调试，需要先在ubuntu下面安装eclipse和eclipse的python插件PyDev。  </p>
 <ul>
-<li>Eclipse安装比较简单，直接解压下载后的eclipse包即可使用。</li>
-<li>PyDev可以按照<a target="_blank" rel="noopener" href="http://pydev.org/manual_101_install.html">官网的向导</a>进行安装。<br>安装完后按照下面的步骤进行远程调试。  </li>
-<li>在window-&gt;Preperences-&gt;PyDev-&gt;Debug中，设置debug端口，比如12306。  <img src="/images/post/2014-4/eclipse-debug/eclipse-1.png" class="">  </li>
-<li>新增PyDev视图。  <img src="/images/post/2014-4/eclipse-debug/eclipse-2.png" class="">  
+<li><p>Eclipse安装比较简单，直接解压下载后的eclipse包即可使用。</p>
+</li>
+<li><p>PyDev可以按照<a target="_blank" rel="noopener" href="http://pydev.org/manual_101_install.html">官网的向导</a>进行安装。<br>安装完后按照下面的步骤进行远程调试。  </p>
+</li>
+<li><p>在window-&gt;Preperences-&gt;PyDev-&gt;Debug中，设置debug端口，比如12306。  </p>
+<img src="/images/post/2014-4/eclipse-debug/eclipse-1.png" class="">  
+</li>
+<li><p>新增PyDev视图。  </p>
+<img src="/images/post/2014-4/eclipse-debug/eclipse-2.png" class="">  
 <img src="/images/post/2014-4/eclipse-debug/eclipse-3.png" class="">  
 </li>
-<li>在Pydev试图中增加remote debug菜单。  <img src="/images/post/2014-4/eclipse-debug/eclipse-4.png" class="">  
-<img src="/images/post/2014-4/eclipse-debug/eclipse-5.png" class="">  </li>
-<li>在远程机器的源码里面添加调试代码和断点。  <img src="/images/post/2014-4/eclipse-debug/eclipse-6.png" class="">  </li>
-<li>断点设置语句：<br><code>pydevd.settrace(&#39;192.168.8.128&#39;, port=12306, stdoutToServer=True, stderrToServer=True)</code><br>注意：这里的ip是指设置了调试监听的机器ip。  <img src="/images/post/2014-4/eclipse-debug/eclipse-7.png" class="">  </li>
-<li>通过Pydev菜单打开调试监听。  <img src="/images/post/2014-4/eclipse-debug/eclipse-8.png" class="">  
-开始监听显示信息如下：  <img src="/images/post/2014-4/eclipse-debug/eclipse-9.png" class="">  </li>
-<li>启动远程服务并发起http请求。<img src="/images/post/2014-4/eclipse-debug/eclipse-10.png" class="">  </li>
-<li>Pydev监听到请求后就会进入断点。<img src="/images/post/2014-4/eclipse-debug/eclipse-11.png" class="">  </li>
+<li><p>在Pydev试图中增加remote debug菜单。  </p>
+<img src="/images/post/2014-4/eclipse-debug/eclipse-4.png" class="">  
+<img src="/images/post/2014-4/eclipse-debug/eclipse-5.png" class="">  
+</li>
+<li><p>在远程机器的源码里面添加调试代码和断点。  </p>
+<img src="/images/post/2014-4/eclipse-debug/eclipse-6.png" class="">  
+</li>
+<li><p>断点设置语句：<br><code>pydevd.settrace(&#39;192.168.8.128&#39;, port=12306, stdoutToServer=True, stderrToServer=True)</code><br>注意：这里的ip是指设置了调试监听的机器ip。  </p>
+<img src="/images/post/2014-4/eclipse-debug/eclipse-7.png" class="">  
+</li>
+<li><p>通过Pydev菜单打开调试监听。  </p>
+<img src="/images/post/2014-4/eclipse-debug/eclipse-8.png" class="">  
+<p>开始监听显示信息如下：  </p>
+<img src="/images/post/2014-4/eclipse-debug/eclipse-9.png" class="">  
+</li>
+<li><p>启动远程服务并发起http请求。</p>
+<img src="/images/post/2014-4/eclipse-debug/eclipse-10.png" class="">  
+</li>
+<li><p>Pydev监听到请求后就会进入断点。</p>
+<img src="/images/post/2014-4/eclipse-debug/eclipse-11.png" class=""></li>
 </ul>
 <p>更多远程调试的内容可以参照Pydev的<a target="_blank" rel="noopener" href="http://pydev.org/manual_adv_remote_debugger.html">官网步骤</a>。</p>
 </div>

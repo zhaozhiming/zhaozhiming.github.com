@@ -133,15 +133,15 @@
 <span id="more"></span>
 
 <h2 id="原理简介"><a href="#原理简介" class="headerlink" title="原理简介"></a>原理简介</h2><p>比特币的交易和以太坊的交易差别比较大，以太坊的交易是现实生活中普遍存在的那种基于账户的交易方式，比如从 A 账户中转出 100 元给 B 账户，那么 A 账户金额就减少 100 元，B 账户则增加 100 元，这种方式由于已经在广大人民群众中形成了普遍共识，所以在理解上不存在困难。但是比特币的交易却完全不一样！</p>
-<h3 id="inputs-和-outputs"><a href="#inputs-和-outputs" class="headerlink" title="inputs 和 outputs"></a>inputs 和 outputs</h3><p>每个比特币交易都存在两个重要组成部分：<code>inputs</code>和<code>outputs</code>。<code>inputs</code>相当于交易的转出，而<code>outputs</code>相当于交易的接收，二者的金额转换关系是这样的：<code>inputs</code>的金额 = <code>outputs</code>的金额 + 矿工费用。</p>
+<h3 id="inputs-和-outputs"><a href="#inputs-和-outputs" class="headerlink" title="inputs 和 outputs"></a>inputs 和 outputs</h3><p>每个比特币交易都存在两个重要组成部分：<code>inputs</code>和<code>outputs</code>。<code>inputs</code>相当于交易的转出，而<code>outputs</code>相当于交易的接收，二者的金额转换关系是这样的：<code>inputs</code>的金额 &#x3D; <code>outputs</code>的金额 + 矿工费用。</p>
 <p><code>inputs</code>和<code>outputs</code>都是数组结构，数组里面可以存放多个元素，这意味着每笔比特币交易可以有多个<code>input</code>和多个<code>ouput</code>。那<code>input</code>和<code>output</code>到底是什么东西呢？</p>
 <p><code>input</code>其实是一个历史交易的 UTXO（下面会介绍），暂时可以理解为金额转出信息（包括转出的地址和金额），所以一笔比特币交易的转出来源可以是多个地址，比如有一笔交易的<code>inputs</code>包括张三 100 BTC 和李四的 100 BTC，那么该笔交易的转出金额为 200 BTC，来自张三和李四两个账号。</p>
 <p><code>output</code>是交易转出的信息（包括转出的地址和金额），一笔比特币交易可以同时指定多个转出地址，比如同时转给王五 50 BTC 和赵六 150 BTC（含矿工费用）。</p>
 <p>所以比特币的交易不是基于账户的交易，而是基于交易的交易，每一笔交易都依赖于其他的历史交易，按照上面的假设情况形成的一笔比特币交易的结构大概是这样的：</p>
 <ul>
-<li><code>inputs</code> = [ 张三的 100 BTC，李四的 100 BTC ]</li>
-<li><code>outputs</code> = [ 王五的 50 BTC，赵六的 149 BTC ]</li>
-<li>矿工费用 = 1 BTC</li>
+<li><code>inputs</code> &#x3D; [ 张三的 100 BTC，李四的 100 BTC ]</li>
+<li><code>outputs</code> &#x3D; [ 王五的 50 BTC，赵六的 149 BTC ]</li>
+<li>矿工费用 &#x3D; 1 BTC</li>
 </ul>
 <h3 id="UTXO"><a href="#UTXO" class="headerlink" title="UTXO"></a>UTXO</h3><p>UTXO 的英文全称是<code>Unspent Transaction Output</code>，中文叫<code>未花费输出</code>。那么<code>Unspent</code>是什么意思呢？其实它表示这个输出还没有被使用过的，可以拿来使用的意思。每一个<code>input</code>必须是历史交易的 UTXO，已经<code>Spent</code>过的输出不能拿来做<code>input</code>。</p>
 <p>每笔刚形成的交易的<code>output</code>都是<code>Unspent</code>状态，当下一笔交易将该<code>output</code>作为<code>input</code>时，这个<code>output</code>才从<code>Unspent</code>变为<code>Spent</code>，表示该<code>output</code>已经被使用（花费）了。</p>

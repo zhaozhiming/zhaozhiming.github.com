@@ -124,7 +124,7 @@
 </div>
         <div class="tags">Tags: 
 
-<a href="/tags/java/">java</a> <a href="/tags/ant/">ant</a>
+<a href="/tags/ant/">ant</a> <a href="/tags/java/">java</a>
 </div>
     </div>
 	<div class="entry-content"><p>使用ant编译java文件时，如果没有设置debug属性，则不会产生编译信息，ant的默认设置是不打印编译信息。  </p>
@@ -142,25 +142,11 @@
 </thead>
 <tbody><tr>
 <td>debuglevel</td>
-<td>Keyword list to be appended to the -g command-line switch. This will be ignored by all implementations except modern, classic(ver &gt;= 1.2) and jikes. Legal values are none or a comma-separated list of the following keywords: lines, vars, and source. If debuglevel is not specified, by default, nothing will be appended to -g. If debug is not turned on, this attribute will be ignored.</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>这里要注意的是如果设置debug属性为true，但是没有设置debuglevel属性，编译时还是不会打印信息，因为debuglevel的默认值是none，只有单独设置为lines, vars, source或其组合才会打印出信息。</td>
-<td></td>
+<td>Keyword list to be appended to the -g command-line switch. This will be ignored by all implementations except modern, classic(ver &gt;&#x3D; 1.2) and jikes. Legal values are none or a comma-separated list of the following keywords: lines, vars, and source. If debuglevel is not specified, by default, nothing will be appended to -g. If debug is not turned on, this attribute will be ignored.</td>
 <td></td>
 </tr>
 </tbody></table>
+<p>这里要注意的是如果设置debug属性为true，但是没有设置debuglevel属性，编译时还是不会打印信息，因为debuglevel的默认值是none，只有单独设置为lines, vars, source或其组合才会打印出信息。  </p>
 </div>
 
 </article>

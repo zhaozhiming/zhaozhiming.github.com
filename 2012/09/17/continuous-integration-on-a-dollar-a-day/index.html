@@ -22,7 +22,7 @@
 &lt;p&gt;###第四步：让你的构建自动化  &lt;/p&gt;
 &lt;p&gt;噢！这是最难的一步。好消息是CruiseControl 的好处之一就是可以使你的构建自动化。更好的消息是你接下来要做的持续集成，可以做的事情比CruiseControl的自动化构建要多，并且我将帮你获得所有的这些好处。但你还是需要让你的构建自动化。  &lt;/p&gt;
 &lt;p&gt;好吧，这个很难，我知道。如果你已经依赖你的IDE为你构建，让构建自动化可能意味着要做很多的工作。现在，你可能要创建一个批处理文件来跑你的IDE并要求它来构建。程序运行的时间太长不是件好事，所以还是回来做正确的事情吧。  &lt;/p&gt;
-&lt;p&gt;如果你已经有了自动化检查的单元测试，比如JUnit/NUnit 测试，也将它们放到构建里面。  &lt;/p&gt;
+&lt;p&gt;如果你已经有了自动化检查的单元测试，比如JUnit&amp;#x2F;NUnit 测试，也将它们放到构建里面。  &lt;/p&gt;
 &lt;p&gt;在你继续之前，走向那台旧电脑（见第一步），然后确认你的版本库中的最新代码可以成功构建。没有使用任何版本控制工具？额…好吧…放下键盘然后离开电脑。现在，跟我读：“原谅我，老天爷，我错了。我又一次没有使用版本控制来编程。我会马上下载TortoiseSvn（译者注：现在当然是git了），安装使用它。从今以后我不会再犯了。”谢谢。  &lt;/p&gt;
 &lt;p&gt;如果一个干净运行的自动化构建超过10分钟，那么请停下来。你还没为持续集成做好准备，你需要加速你的构建。你可以做接下来的步骤，或者你可以使用CruiseControl，但真正的持续集成现在还不属于你。  &lt;/p&gt;
 &lt;p&gt;###第五步：洗脑  &lt;/p&gt;
@@ -53,7 +53,7 @@
 &lt;p&gt;首先，每天至少检入代码2次。这是“持续”的部分。当你熟练以后，你将每1~2个小时检入一次。  &lt;/p&gt;
 &lt;p&gt;在获取版本库的最新代码之前，看下有没有人手里有橡皮鸡。如果有，先等他们把代码检入。  &lt;/p&gt;
 &lt;p&gt;当你检入时，遵循以下步骤：  &lt;/p&gt;
-&lt;p&gt;A 在本地跑构建/测试脚本，确认100%通过。&lt;br&gt;B 把橡皮鸡从它原来的地方拿过来。如果橡皮鸡不在原地，找一下看在谁那里，然后一直烦着他们直到他们检入代码。&lt;br&gt;C 从版本库下载最新代码然后再次运行构建脚本。如果没有运行成功，你知道刚下的代码有问题。发发牢骚抱怨一下，然后找到最后检入代码的那个人帮你解决问题。解决问题后重新开始。&lt;br&gt;D 检入你的代码。&lt;br&gt;E 走向那台破旧的构建电脑，从版本库获取最新代码，再次运行构建脚本。如果没有运行成功，将你检入的代码还原。没成功的原因，可能是你安装了一些新的软件，或者修改了一个环境变量，或者设置注册表环境，或者忘记添加文件到版本库，或者其他原因。不管怎样，你需要在你的电脑上修复这个问题然后重新试一次。你可以暂时保留橡皮鸡，但如果其他人需要你要还回去（然后重新开始）。&lt;br&gt;F 让铃铛响起来。（其他人会为你鼓掌，或以其他方式为你高兴。）把橡皮鸡放回去，你已经做完了。  &lt;/p&gt;
+&lt;p&gt;A 在本地跑构建&amp;#x2F;测试脚本，确认100%通过。&lt;br&gt;B 把橡皮鸡从它原来的地方拿过来。如果橡皮鸡不在原地，找一下看在谁那里，然后一直烦着他们直到他们检入代码。&lt;br&gt;C 从版本库下载最新代码然后再次运行构建脚本。如果没有运行成功，你知道刚下的代码有问题。发发牢骚抱怨一下，然后找到最后检入代码的那个人帮你解决问题。解决问题后重新开始。&lt;br&gt;D 检入你的代码。&lt;br&gt;E 走向那台破旧的构建电脑，从版本库获取最新代码，再次运行构建脚本。如果没有运行成功，将你检入的代码还原。没成功的原因，可能是你安装了一些新的软件，或者修改了一个环境变量，或者设置注册表环境，或者忘记添加文件到版本库，或者其他原因。不管怎样，你需要在你的电脑上修复这个问题然后重新试一次。你可以暂时保留橡皮鸡，但如果其他人需要你要还回去（然后重新开始）。&lt;br&gt;F 让铃铛响起来。（其他人会为你鼓掌，或以其他方式为你高兴。）把橡皮鸡放回去，你已经做完了。  &lt;/p&gt;
 &lt;p&gt;顺便说一下，当步骤E失败了，你可能会冒险在构建机器上直接修复问题，但如果你这样做了，下一个可怜的家伙下载了最新代码后将会构建失败。  &lt;/p&gt;
 &lt;p&gt;最后，但并非最不重要：保持你的构建时间在10分钟之内，少于5分钟更好。如果运行时间太长，这个过程将不再是一件愉快的事情而是痛苦的开始。而且一般来说快速构建对你有好处，不管怎样，因为速度慢的构建往往意味着测试方法的缺陷。  &lt;/p&gt;
 &lt;p&gt;###为什么比 CruiseControl 好？  &lt;/p&gt;
@@ -71,10 +71,10 @@
 &lt;p&gt;最后祝你好运！别忘了给我一美元。  &lt;/p&gt;
 &lt;p&gt;&lt;em&gt;相关材料：&lt;/em&gt;  &lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.martinfowler.com/articles/continuousIntegration.html&#34;&gt;Continuous Integration&lt;/a&gt; (Martin Fowler)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://jamesshore.com/Blog/Red-Green-Refactor.html&#34;&gt;Red-Green-Refactor&lt;/a&gt; (James Shore)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://jamesshore.com/Blog/Continuous-Integration-is-an-Attitude.html&#34;&gt;Continuous Integration is an Attitude, Not a Tool&lt;/a&gt; (James Shore)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://blogs.msdn.com/mswanson/articles/169058.aspx&#34;&gt;Automated Continuous Integration and the Ambient Orb&lt;/a&gt; (Michael Swanson)&lt;/li&gt;
+&lt;li&gt;[Continuous Integration][url4] (Martin Fowler)&lt;/li&gt;
+&lt;li&gt;[Red-Green-Refactor][url5] (James Shore)&lt;/li&gt;
+&lt;li&gt;[Continuous Integration is an Attitude, Not a Tool][url6] (James Shore)&lt;/li&gt;
+&lt;li&gt;[Automated Continuous Integration and the Ambient Orb][url7] (Michael Swanson)&lt;br&gt;[url4]: &lt;a href=&#34;http://www.martinfowler.com/articles/continuousIntegration.html&#34;&gt;http://www.martinfowler.com/articles/continuousIntegration.html&lt;/a&gt;&lt;br&gt;&lt;br&gt;[url5]: &lt;a href=&#34;http://jamesshore.com/Blog/Red-Green-Refactor.html&#34;&gt;http://jamesshore.com/Blog/Red-Green-Refactor.html&lt;/a&gt;&lt;br&gt;&lt;br&gt;[url6]: &lt;a href=&#34;http://jamesshore.com/Blog/Continuous-Integration-is-an-Attitude.html&#34;&gt;http://jamesshore.com/Blog/Continuous-Integration-is-an-Attitude.html&lt;/a&gt;&lt;br&gt;&lt;br&gt;[url7]: &lt;a href=&#34;http://blogs.msdn.com/mswanson/articles/169058.aspx&#34;&gt;http://blogs.msdn.com/mswanson/articles/169058.aspx&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 "> <!-- TODO: truncate -->
 	
@@ -213,7 +213,7 @@
 <p>###第四步：让你的构建自动化  </p>
 <p>噢！这是最难的一步。好消息是CruiseControl 的好处之一就是可以使你的构建自动化。更好的消息是你接下来要做的持续集成，可以做的事情比CruiseControl的自动化构建要多，并且我将帮你获得所有的这些好处。但你还是需要让你的构建自动化。  </p>
 <p>好吧，这个很难，我知道。如果你已经依赖你的IDE为你构建，让构建自动化可能意味着要做很多的工作。现在，你可能要创建一个批处理文件来跑你的IDE并要求它来构建。程序运行的时间太长不是件好事，所以还是回来做正确的事情吧。  </p>
-<p>如果你已经有了自动化检查的单元测试，比如JUnit/NUnit 测试，也将它们放到构建里面。  </p>
+<p>如果你已经有了自动化检查的单元测试，比如JUnit&#x2F;NUnit 测试，也将它们放到构建里面。  </p>
 <p>在你继续之前，走向那台旧电脑（见第一步），然后确认你的版本库中的最新代码可以成功构建。没有使用任何版本控制工具？额…好吧…放下键盘然后离开电脑。现在，跟我读：“原谅我，老天爷，我错了。我又一次没有使用版本控制来编程。我会马上下载TortoiseSvn（译者注：现在当然是git了），安装使用它。从今以后我不会再犯了。”谢谢。  </p>
 <p>如果一个干净运行的自动化构建超过10分钟，那么请停下来。你还没为持续集成做好准备，你需要加速你的构建。你可以做接下来的步骤，或者你可以使用CruiseControl，但真正的持续集成现在还不属于你。  </p>
 <p>###第五步：洗脑  </p>
@@ -244,7 +244,7 @@
 <p>首先，每天至少检入代码2次。这是“持续”的部分。当你熟练以后，你将每1~2个小时检入一次。  </p>
 <p>在获取版本库的最新代码之前，看下有没有人手里有橡皮鸡。如果有，先等他们把代码检入。  </p>
 <p>当你检入时，遵循以下步骤：  </p>
-<p>A 在本地跑构建/测试脚本，确认100%通过。<br>B 把橡皮鸡从它原来的地方拿过来。如果橡皮鸡不在原地，找一下看在谁那里，然后一直烦着他们直到他们检入代码。<br>C 从版本库下载最新代码然后再次运行构建脚本。如果没有运行成功，你知道刚下的代码有问题。发发牢骚抱怨一下，然后找到最后检入代码的那个人帮你解决问题。解决问题后重新开始。<br>D 检入你的代码。<br>E 走向那台破旧的构建电脑，从版本库获取最新代码，再次运行构建脚本。如果没有运行成功，将你检入的代码还原。没成功的原因，可能是你安装了一些新的软件，或者修改了一个环境变量，或者设置注册表环境，或者忘记添加文件到版本库，或者其他原因。不管怎样，你需要在你的电脑上修复这个问题然后重新试一次。你可以暂时保留橡皮鸡，但如果其他人需要你要还回去（然后重新开始）。<br>F 让铃铛响起来。（其他人会为你鼓掌，或以其他方式为你高兴。）把橡皮鸡放回去，你已经做完了。  </p>
+<p>A 在本地跑构建&#x2F;测试脚本，确认100%通过。<br>B 把橡皮鸡从它原来的地方拿过来。如果橡皮鸡不在原地，找一下看在谁那里，然后一直烦着他们直到他们检入代码。<br>C 从版本库下载最新代码然后再次运行构建脚本。如果没有运行成功，你知道刚下的代码有问题。发发牢骚抱怨一下，然后找到最后检入代码的那个人帮你解决问题。解决问题后重新开始。<br>D 检入你的代码。<br>E 走向那台破旧的构建电脑，从版本库获取最新代码，再次运行构建脚本。如果没有运行成功，将你检入的代码还原。没成功的原因，可能是你安装了一些新的软件，或者修改了一个环境变量，或者设置注册表环境，或者忘记添加文件到版本库，或者其他原因。不管怎样，你需要在你的电脑上修复这个问题然后重新试一次。你可以暂时保留橡皮鸡，但如果其他人需要你要还回去（然后重新开始）。<br>F 让铃铛响起来。（其他人会为你鼓掌，或以其他方式为你高兴。）把橡皮鸡放回去，你已经做完了。  </p>
 <p>顺便说一下，当步骤E失败了，你可能会冒险在构建机器上直接修复问题，但如果你这样做了，下一个可怜的家伙下载了最新代码后将会构建失败。  </p>
 <p>最后，但并非最不重要：保持你的构建时间在10分钟之内，少于5分钟更好。如果运行时间太长，这个过程将不再是一件愉快的事情而是痛苦的开始。而且一般来说快速构建对你有好处，不管怎样，因为速度慢的构建往往意味着测试方法的缺陷。  </p>
 <p>###为什么比 CruiseControl 好？  </p>
@@ -262,10 +262,10 @@
 <p>最后祝你好运！别忘了给我一美元。  </p>
 <p><em>相关材料：</em>  </p>
 <ul>
-<li><a target="_blank" rel="noopener" href="http://www.martinfowler.com/articles/continuousIntegration.html">Continuous Integration</a> (Martin Fowler)</li>
-<li><a target="_blank" rel="noopener" href="http://jamesshore.com/Blog/Red-Green-Refactor.html">Red-Green-Refactor</a> (James Shore)</li>
-<li><a target="_blank" rel="noopener" href="http://jamesshore.com/Blog/Continuous-Integration-is-an-Attitude.html">Continuous Integration is an Attitude, Not a Tool</a> (James Shore)</li>
-<li><a target="_blank" rel="noopener" href="http://blogs.msdn.com/mswanson/articles/169058.aspx">Automated Continuous Integration and the Ambient Orb</a> (Michael Swanson)</li>
+<li>[Continuous Integration][url4] (Martin Fowler)</li>
+<li>[Red-Green-Refactor][url5] (James Shore)</li>
+<li>[Continuous Integration is an Attitude, Not a Tool][url6] (James Shore)</li>
+<li>[Automated Continuous Integration and the Ambient Orb][url7] (Michael Swanson)<br>[url4]: <a target="_blank" rel="noopener" href="http://www.martinfowler.com/articles/continuousIntegration.html">http://www.martinfowler.com/articles/continuousIntegration.html</a><br><br>[url5]: <a target="_blank" rel="noopener" href="http://jamesshore.com/Blog/Red-Green-Refactor.html">http://jamesshore.com/Blog/Red-Green-Refactor.html</a><br><br>[url6]: <a target="_blank" rel="noopener" href="http://jamesshore.com/Blog/Continuous-Integration-is-an-Attitude.html">http://jamesshore.com/Blog/Continuous-Integration-is-an-Attitude.html</a><br><br>[url7]: <a target="_blank" rel="noopener" href="http://blogs.msdn.com/mswanson/articles/169058.aspx">http://blogs.msdn.com/mswanson/articles/169058.aspx</a></li>
 </ul>
 </div>
 

@@ -131,10 +131,10 @@
 <p>前段时间AppStore出了一款神器<a target="_blank" rel="noopener" href="https://itunes.apple.com/cn/app/surge-web-developer-tool-proxy/id1040100637?ls=1&mt=8">Surge</a>，可以让iOS像其他平台使用<a target="_blank" rel="noopener" href="https://github.com/shadowsocks/shadowsocks/wiki">Shadowsocks</a>（以下简称ss）一样地轻松科学上网，因为以前都是用买的SSH或VPN科学上网，所以对自建的VPN服务这一块没有太多关注，甚至错过了ss这种成熟的工具。最近试用了过后觉得非常方便，所以在这里记录一下。</p>
 <span id="more"></span>  
 <h2 id="ss介绍"><a href="#ss介绍" class="headerlink" title="ss介绍"></a>ss介绍</h2><p>简单的说，ss就是帮助你翻过伟大的GFW的一个工具，只要你有一台可以访问国外网站的服务器，你就可以建立自己的VPN服务。它的方案十分完备，有服务端和各种操作系统的客户端，而且还内置了一个路由列表，在访问网站时会自动识别该网站是否需要科学上网，如果需要的则走国外线路，否则走本地线路，非常智能。  </p>
-<h2 id="vps选择"><a href="#vps选择" class="headerlink" title="vps选择"></a>vps选择</h2><p>要搭建自己的VPN，首先需要一台国外的服务器。老牌的vps有<a target="_blank" rel="noopener" href="http://www.linode.com/">Linode</a>和<a target="_blank" rel="noopener" href="https://www.digitalocean.com/">DigitalOcean</a>，都是不错的选择，后起之秀有<a target="_blank" rel="noopener" href="https://www.vultr.com/">vultr</a>，我选择vultr是因为它最近在做活动，每个新用户送50美元，但是50美元需要在2个月内使用完，相当于头2个月可以选择25美元/月的服务器，这种价位的服务器性能是很高的。  </p>
+<h2 id="vps选择"><a href="#vps选择" class="headerlink" title="vps选择"></a>vps选择</h2><p>要搭建自己的VPN，首先需要一台国外的服务器。老牌的vps有<a target="_blank" rel="noopener" href="http://www.linode.com/">Linode</a>和<a target="_blank" rel="noopener" href="https://www.digitalocean.com/">DigitalOcean</a>，都是不错的选择，后起之秀有<a target="_blank" rel="noopener" href="https://www.vultr.com/">vultr</a>，我选择vultr是因为它最近在做活动，每个新用户送50美元，但是50美元需要在2个月内使用完，相当于头2个月可以选择25美元&#x2F;月的服务器，这种价位的服务器性能是很高的。  </p>
 <p>vultr50美元的活动链接是这个：<a target="_blank" rel="noopener" href="https://www.vultr.com/freetrial/">50美元活动</a>，需点击页面中的<code>TRY VULTR CLOUD SERVERS FREE</code>按钮来注册用户，注册之后会要求绑定银行信用卡，绑定成功后vultr会在信用卡上预约扣款2.5美元，放心这个钱后面会退的。因为vultr需要24小时来审核你的账户，vultr要求每个人只能有一个账号，不允许一个人建立多个账号。</p>
 <p>当过了2个月之后，还可以使用其他优惠码来对账户进行充值，优惠码链接请看这里：<a target="_blank" rel="noopener" href="http://vultr.youhuima.cc/">vultr优惠码</a>。</p>
-<h2 id="vps使用"><a href="#vps使用" class="headerlink" title="vps使用"></a>vps使用</h2><p>vps就是一台云服务器，创建的时候要选择机房的物理位置、对应的操作系统和服务器配置，vultr最低的配置是5美元/月，对普通的搭搭博客和搭建VPN的需求是绰绰有余了。  </p>
+<h2 id="vps使用"><a href="#vps使用" class="headerlink" title="vps使用"></a>vps使用</h2><p>vps就是一台云服务器，创建的时候要选择机房的物理位置、对应的操作系统和服务器配置，vultr最低的配置是5美元&#x2F;月，对普通的搭搭博客和搭建VPN的需求是绰绰有余了。  </p>
 <img src="/images/post/2015-11/vultr_size.png" class="">  
 <p>搭建完后就可以对机器进行相关的配置了，最常用的就是配置自己的访问电脑<code>SSH KEYS</code>，这样每次ssh登陆就可以不用输入密码了。  </p>
 <img src="/images/post/2015-11/vultr_ssh.png" class="">  
@@ -149,15 +149,15 @@
 <img src="/images/post/2015-11/chrome_proxy.png" class="" width="400" height="350">  
 <h2 id="proxifier"><a href="#proxifier" class="headerlink" title="proxifier"></a>proxifier</h2><p>在Mac上安装了ss的客户端之后，虽然可以通过浏览器科学上网了，但是如果想让其他软件，比如邮箱，terminal等也能科学上网的话，就需要将你的ss代理全局化了。这里介绍一个软件<a target="_blank" rel="noopener" href="https://www.proxifier.com/">proxifier</a>，它可以很方便地将ss的服务设置为全局服务。  </p>
 <ul>
-<li>首先创建代理  </li>
+<li>首先创建代理</li>
 </ul>
 <img src="/images/post/2015-11/proxy_create.png" class="" width="400" height="350">  
 <ul>
-<li>然后再创建规则，注意这时要将Mac上的ss客户端ShadowsocksX设为<code>直连</code>，其他应用设为走ss代理。  </li>
+<li>然后再创建规则，注意这时要将Mac上的ss客户端ShadowsocksX设为<code>直连</code>，其他应用设为走ss代理。</li>
 </ul>
 <img src="/images/post/2015-11/proxy_rule.png" class="" width="400" height="350">  
 <ul>
-<li>最后观看proxifier的连接信息，就可以看到电脑上应用的网络连接信息了。  </li>
+<li>最后观看proxifier的连接信息，就可以看到电脑上应用的网络连接信息了。</li>
 </ul>
 </div>
 

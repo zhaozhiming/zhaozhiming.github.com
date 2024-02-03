@@ -153,7 +153,7 @@
 <ul>
 <li>复制monitor的keyring文件到每个monitor的data目录</li>
 </ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /tmp/ceph.mon.keyring /var/lib/ceph/mon/ceph-a/keyring</span><br></pre></td></tr></table></figure>   
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> /tmp/ceph.mon.keyring /var/lib/ceph/mon/ceph-a/keyring</span><br></pre></td></tr></table></figure>   
 <ul>
 <li>为每个OSD产生keyring，id是OSD的编号</li>
 </ul>
@@ -178,9 +178,9 @@
 <ul>
 <li>创建文件并增加权限</li>
 </ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo ceph-authtool --create-keyring /etc/ceph/ceph.client.radosgw.keyring</span><br><span class="line">sudo chmod +r /etc/ceph/ceph.client.radosgw.keyring</span><br></pre></td></tr></table></figure>   
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo ceph-authtool --create-keyring /etc/ceph/ceph.client.radosgw.keyring</span><br><span class="line">sudo <span class="built_in">chmod</span> +r /etc/ceph/ceph.client.radosgw.keyring</span><br></pre></td></tr></table></figure>   
 <ul>
-<li>使用ceph-authtool在keyring文件中生成随机密码 </li>
+<li>使用ceph-authtool在keyring文件中生成随机密码</li>
 </ul>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ceph-authtool /etc/ceph/ceph.client.radosgw.keyring -n client.radosgw.gateway --gen-key</span><br></pre></td></tr></table></figure>   
 <ul>
@@ -194,7 +194,7 @@
 <ul>
 <li>将生成的keyring文件上传到gateway的机器</li>
 </ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo scp /etc/ceph/ceph.client.radosgw.keyring  ceph@&#123;hostname&#125;:/home/ceph</span><br><span class="line">ssh &#123;hostname&#125;</span><br><span class="line">sudo mv ceph.client.radosgw.keyring /etc/ceph/ceph.client.radosgw.keyring</span><br></pre></td></tr></table></figure>   
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo scp /etc/ceph/ceph.client.radosgw.keyring  ceph@&#123;hostname&#125;:/home/ceph</span><br><span class="line">ssh &#123;hostname&#125;</span><br><span class="line">sudo <span class="built_in">mv</span> ceph.client.radosgw.keyring /etc/ceph/ceph.client.radosgw.keyring</span><br></pre></td></tr></table></figure>   
 <ul>
 <li>在ceph.conf中配置gateway的keyring文件路径</li>
 </ul>

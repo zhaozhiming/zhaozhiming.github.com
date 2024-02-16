@@ -138,7 +138,7 @@ python openai_api.py
 
 ```bash
 curl -X 'POST' \
-  'https://localhost:7861/v1/chat/completions' \
+  'http://localhost:7861/v1/chat/completions' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{

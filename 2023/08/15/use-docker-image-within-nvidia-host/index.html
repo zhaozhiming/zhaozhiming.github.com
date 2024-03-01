@@ -100,7 +100,7 @@
     <li>
     <div id="dark">
         <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
-            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="hidden" name="sitesearch" value="http://zhaozhiming.github.io" />
             <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
         </form>
     </div>
@@ -129,7 +129,7 @@
     </div>
 	<div class="entry-content"><img src="/images/post/2023/08/nvidia-docker.png" class="" width="400" height="300">
 
-<p>之前给大家介绍了主机安装方式——<a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/2023/08/12/ubuntu22-install-cuda-and-nvidia-driver-and-pytorch/">如何在 Ubuntu 操作系统下安装部署 AI 环境</a>，但随着容器化技术的普及，越来越多的程序以容器的形式进行部署，通过容器的方式不仅可以简化部署流程，还可以随时切换不同的环境。实际上很多云服务厂商也是这么干的，用一台带有 NVIDIA 显卡的机器来部署多个容器，然后通过容器的方式来提供给用户使用，这样就可以充分利用显卡资源了。今天给大家介绍一下如何使用 Docker 的方式来部署我们之前部署过的 AI 环境。</p>
+<p>之前给大家介绍了主机安装方式——<a href="https://zhaozhiming.github.io/2023/08/12/ubuntu22-install-cuda-and-nvidia-driver-and-pytorch/">如何在 Ubuntu 操作系统下安装部署 AI 环境</a>，但随着容器化技术的普及，越来越多的程序以容器的形式进行部署，通过容器的方式不仅可以简化部署流程，还可以随时切换不同的环境。实际上很多云服务厂商也是这么干的，用一台带有 NVIDIA 显卡的机器来部署多个容器，然后通过容器的方式来提供给用户使用，这样就可以充分利用显卡资源了。今天给大家介绍一下如何使用 Docker 的方式来部署我们之前部署过的 AI 环境。</p>
 <span id="more"></span>
 
 <h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>我们可以跟之前一样制定一个小目标：</p>
@@ -142,7 +142,7 @@
 <p>Docker 安装完成后，如果你想以非 root 用户执行<code>docker</code>命令的话，还需要将当前用户添加到<code>docker</code>用户组中，命令如下：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先确保 docker 用户组已存在</span></span><br><span class="line">sudo usermod -aG docker &lt;user-name&gt;</span><br></pre></td></tr></table></figure>
 
-<h2 id="安装-NVIDIA-驱动"><a href="#安装-NVIDIA-驱动" class="headerlink" title="安装 NVIDIA 驱动"></a>安装 NVIDIA 驱动</h2><p>安装 NVIDIA 驱动的步骤可以参考<a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/2023/08/12/ubuntu22-install-cuda-and-nvidia-driver-and-pytorch/">之前的文章</a>，这里就不再赘述了。</p>
+<h2 id="安装-NVIDIA-驱动"><a href="#安装-NVIDIA-驱动" class="headerlink" title="安装 NVIDIA 驱动"></a>安装 NVIDIA 驱动</h2><p>安装 NVIDIA 驱动的步骤可以参考<a href="https://zhaozhiming.github.io/2023/08/12/ubuntu22-install-cuda-and-nvidia-driver-and-pytorch/">之前的文章</a>，这里就不再赘述了。</p>
 <h2 id="安装-NVIDIA-Container-Toolkit"><a href="#安装-NVIDIA-Container-Toolkit" class="headerlink" title="安装 NVIDIA Container Toolkit"></a>安装 NVIDIA Container Toolkit</h2><p>NVIDIA Container Toolkit 允许开发者和用户将 NVIDIA GPU 的能力无缝地加入到 Docker 容器中。通过简单地安装一个插件，用户就可以运行为 GPU 优化的容器，无需进行任何修改。该工具集包括 NVIDIA 驱动、CUDA 等必要组件，确保 GPU 在容器环境中的高性能执行，对 AI、数据分析和高性能计算场景特别有用。</p>
 <p>我们可以通过以下命令来安装 NVIDIA Container Toolkit：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先切换到 root 用户</span></span><br><span class="line">curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -</span><br><span class="line"><span class="comment"># 添加源</span></span><br><span class="line">curl -s -L https://nvidia.github.io/nvidia-docker/ubuntu22.04/nvidia-docker.list &gt; /etc/apt/sources.list.d/nvidia-docker.list</span><br><span class="line"><span class="comment"># 更新源</span></span><br><span class="line">apt update</span><br><span class="line"><span class="comment"># 安装 NVIDIA Container Toolkit</span></span><br><span class="line">apt -y install nvidia-container-toolkit</span><br><span class="line"><span class="comment"># 重启 Docker 服务</span></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
@@ -207,8 +207,8 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-            this.page.url = 'https://example.com/2023/08/15/use-docker-image-within-nvidia-host/';
-            this.page.identifier = 'https://example.com/2023/08/15/use-docker-image-within-nvidia-host/';
+            this.page.url = 'http://zhaozhiming.github.io/2023/08/15/use-docker-image-within-nvidia-host/';
+            this.page.identifier = 'http://zhaozhiming.github.io/2023/08/15/use-docker-image-within-nvidia-host/';
         };
 
         (function() {

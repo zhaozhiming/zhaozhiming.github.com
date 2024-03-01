@@ -100,7 +100,7 @@
     <li>
     <div id="dark">
         <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
-            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="hidden" name="sitesearch" value="http://zhaozhiming.github.io" />
             <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
         </form>
     </div>
@@ -161,7 +161,7 @@
 <p>接着我们编辑<code>truffle.js</code>文件中的网络配置信息：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">networks</span>: &#123;</span><br><span class="line">    <span class="attr">rinkeby</span>: &#123;</span><br><span class="line">      <span class="attr">host</span>: <span class="string">&#x27;127.0.0.1&#x27;</span>,</span><br><span class="line">      <span class="attr">port</span>: <span class="number">8545</span>,</span><br><span class="line">      <span class="attr">from</span>: <span class="string">&#x27;0xd2e7c99558878629bb841678a022508b8ff585ff&#x27;</span>, <span class="comment">// 这里指定由哪个账号来创建智能合约</span></span><br><span class="line">      <span class="attr">network_id</span>: <span class="number">4</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>注意<code>from</code>属性是指通过哪个账号来创建合约，但这个账号必须在 Rinkeby 网络中有一定数量的 ETH，否则创建合约将失败，Rinkeby 网络获取 ETH 方法可以参照<a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/blog/2018/04/18/how-to-earn-eth-and-token-in-rinkeby/">如何在 Rinkeby 网络赚取以太币及代币</a>。</p>
+<p>注意<code>from</code>属性是指通过哪个账号来创建合约，但这个账号必须在 Rinkeby 网络中有一定数量的 ETH，否则创建合约将失败，Rinkeby 网络获取 ETH 方法可以参照<a href="https://zhaozhiming.github.io/blog/2018/04/18/how-to-earn-eth-and-token-in-rinkeby/">如何在 Rinkeby 网络赚取以太币及代币</a>。</p>
 <p>在发布合约之前，我们还需要将刚才提到的账号解锁，在<code>Geth 的 console 页面</code>输入解锁命令和账号密码，看到返回结果为<code>true</code>则表示解锁成功。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; personal.unlockAccount(<span class="string">&#x27;0xd2e7c99558878629bb841678a022508b8ff585ff&#x27;</span>)</span><br><span class="line">Unlock account 0xd2e7c99558878629bb841678a022508b8ff585ff</span><br><span class="line">Passphrase:</span><br><span class="line"><span class="literal">true</span></span><br></pre></td></tr></table></figure>
 
@@ -227,8 +227,8 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-            this.page.url = 'https://example.com/2018/07/26/token-deploy-migrate-contract/';
-            this.page.identifier = 'https://example.com/2018/07/26/token-deploy-migrate-contract/';
+            this.page.url = 'http://zhaozhiming.github.io/2018/07/26/token-deploy-migrate-contract/';
+            this.page.identifier = 'http://zhaozhiming.github.io/2018/07/26/token-deploy-migrate-contract/';
         };
 
         (function() {

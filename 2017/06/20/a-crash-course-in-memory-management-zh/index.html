@@ -100,7 +100,7 @@
     <li>
     <div id="dark">
         <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
-            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="hidden" name="sitesearch" value="http://zhaozhiming.github.io" />
             <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
         </form>
     </div>
@@ -133,8 +133,8 @@
 <p>这是 3 篇文章中的第一篇：</p>
 <ul>
 <li>内存管理速成教程</li>
-<li><a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2017/06/20/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers-zh/">通俗漫画介绍 ArrayBuffers 和 SharedArrayBuffers</a></li>
-<li><a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2017/06/21/avoiding-race-conditions-in-sharedarraybuffers-with-atomics-zh/">在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件</a></li>
+<li><a href="http://zhaozhiming.github.io/blog/2017/06/20/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers-zh/">通俗漫画介绍 ArrayBuffers 和 SharedArrayBuffers</a></li>
+<li><a href="http://zhaozhiming.github.io/blog/2017/06/21/avoiding-race-conditions-in-sharedarraybuffers-with-atomics-zh/">在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件</a></li>
 </ul>
 <p>原文链接：<a target="_blank" rel="noopener" href="https://hacks.mozilla.org/2017/06/a-crash-course-in-memory-management/">A crash course in memory management</a></p>
 <span id="more"></span>
@@ -178,7 +178,7 @@
 <p>你可以使用<code>malloc</code>方法（内存分配）来让运行期找到哪些内存地址可以来存放你的数据，这将从自由列表中取出这些地址，当你处理完这些数据，你必须使用<code>free</code>方法来释放内存，然后这些地址将重新回到自由列表中。  </p>
 <p>你必须计算出什么时候来调用这些方法，这就是为什么我们叫它做手动内存管理了，你要自己来管理内存。  </p>
 <p>对于一个开发人员来说，计算出什么时候该释放哪个区域的内存是很难的，如果你的计算时间出错了，那么将可能引发缺陷甚至会导致一个安全漏洞，如果你不释放内存，那么内存终将会耗尽。  </p>
-<p>这就是为什么很多现代语言会使用自动内存管理，为了避免人为的错误，但这也带来了性能上的开销，我会在<a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2017/06/20/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers-zh/">下一篇文章</a> 讲更多这方面的内容。</p>
+<p>这就是为什么很多现代语言会使用自动内存管理，为了避免人为的错误，但这也带来了性能上的开销，我会在<a href="http://zhaozhiming.github.io/blog/2017/06/20/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers-zh/">下一篇文章</a> 讲更多这方面的内容。</p>
 </div>
 
 </article>
@@ -211,8 +211,8 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-            this.page.url = 'https://example.com/2017/06/20/a-crash-course-in-memory-management-zh/';
-            this.page.identifier = 'https://example.com/2017/06/20/a-crash-course-in-memory-management-zh/';
+            this.page.url = 'http://zhaozhiming.github.io/2017/06/20/a-crash-course-in-memory-management-zh/';
+            this.page.identifier = 'http://zhaozhiming.github.io/2017/06/20/a-crash-course-in-memory-management-zh/';
         };
 
         (function() {

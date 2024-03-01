@@ -100,7 +100,7 @@
     <li>
     <div id="dark">
         <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
-            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="hidden" name="sitesearch" value="http://zhaozhiming.github.io" />
             <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
         </form>
     </div>
@@ -134,8 +134,8 @@
 
 <h2 id="术语介绍"><a href="#术语介绍" class="headerlink" title="术语介绍"></a>术语介绍</h2><p>在开始实际操作之前，我们需要了解这次操作中涉及到的工具和术语的含义，这样才能更好的理解后面的内容。</p>
 <h3 id="Colab"><a href="#Colab" class="headerlink" title="Colab"></a>Colab</h3><p><a target="_blank" rel="noopener" href="https://colab.research.google.com/">Colab</a> 是由 Google 提供的一种免费的云端 Jupyter 笔记本服务。它允许用户在云端运行和共享 Python 代码，而无需进行任何设置或配置。它的一个最大的优势是可以免费试用 Google 的服务器，免费用户可以使用 CPU 服务器和 T4 GPU 服务器，而付费用户可以使用 TPU 服务器和 A100、V100 等 GPU 服务器。</p>
-<h3 id="ChatGLM3-6B"><a href="#ChatGLM3-6B" class="headerlink" title="ChatGLM3-6B"></a>ChatGLM3-6B</h3><p>ChatGLM3-6B 是智源研究院（智谱 AI）和清华大学知识工程实验室联合开发的最新一代对话预训练模型。这个模型在保留了前两代模型的流畅对话和低部署门槛等优秀特性的基础上，引入了工具调用、代码解释器等新功能。更多细节可以参考我之前的文章 <a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/2023/10/31/chatglm3-deploy/">ChatGLM3-6B 部署指南</a>、<a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/2023/11/01/chatglm3-feature-interpretation/">ChatGLM3-6B 功能原理解析</a>。</p>
-<h3 id="GGML"><a href="#GGML" class="headerlink" title="GGML"></a>GGML</h3><p><a target="_blank" rel="noopener" href="https://github.com/ggerganov/ggml">GGML</a> 是一个 LLM 量化的工具库，也是量化文件的一种格式，量化的 LLM 不仅在容量上大幅降低（ChatGLM3-6B 从 12G 降低到 3.5G），而且可以直接在纯 CPU 的服务器上运行。更多的 LLM 量化格式可以参考我之前的文章 <a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/2023/08/31/llm-quantization-format-introduce/">AI 模型量化格式介绍</a>。</p>
+<h3 id="ChatGLM3-6B"><a href="#ChatGLM3-6B" class="headerlink" title="ChatGLM3-6B"></a>ChatGLM3-6B</h3><p>ChatGLM3-6B 是智源研究院（智谱 AI）和清华大学知识工程实验室联合开发的最新一代对话预训练模型。这个模型在保留了前两代模型的流畅对话和低部署门槛等优秀特性的基础上，引入了工具调用、代码解释器等新功能。更多细节可以参考我之前的文章 <a href="https://zhaozhiming.github.io/2023/10/31/chatglm3-deploy/">ChatGLM3-6B 部署指南</a>、<a href="https://zhaozhiming.github.io/2023/11/01/chatglm3-feature-interpretation/">ChatGLM3-6B 功能原理解析</a>。</p>
+<h3 id="GGML"><a href="#GGML" class="headerlink" title="GGML"></a>GGML</h3><p><a target="_blank" rel="noopener" href="https://github.com/ggerganov/ggml">GGML</a> 是一个 LLM 量化的工具库，也是量化文件的一种格式，量化的 LLM 不仅在容量上大幅降低（ChatGLM3-6B 从 12G 降低到 3.5G），而且可以直接在纯 CPU 的服务器上运行。更多的 LLM 量化格式可以参考我之前的文章 <a href="https://zhaozhiming.github.io/2023/08/31/llm-quantization-format-introduce/">AI 模型量化格式介绍</a>。</p>
 <h2 id="chatglm-cpp-介绍"><a href="#chatglm-cpp-介绍" class="headerlink" title="chatglm.cpp 介绍"></a>chatglm.cpp 介绍</h2><p>我们将使用<a target="_blank" rel="noopener" href="https://github.com/li-plus/chatglm.cpp">chatglm.cpp</a>这个工具来进行模型量化，它是基于<a target="_blank" rel="noopener" href="https://github.com/ggerganov/ggml">GGML</a>库实现的量化工具，除了可以量化 ChatGLM 系列的 LLM 外，还支持其他比如 BaiChuan、CodeGeeX、InternLM 等 LLM 的量化。</p>
 <p>chatglm.cpp 除了提供量化功能外，还提供了多种运行量化模型的方式，包括源码编译运行、Python 代码运行、 Web 服务和 API 服务等，这些运行方式可以让我们在不同的场景下使用量化后的模型。</p>
 <h2 id="量化-ChatGLM3-6B-模型"><a href="#量化-ChatGLM3-6B-模型" class="headerlink" title="量化 ChatGLM3-6B 模型"></a>量化 ChatGLM3-6B 模型</h2><p>首先我们在 Colab 上新建一个 Jupyter 笔记本，然后将笔记本连接上一个运行时服务器，量化时因为需要用到比较大的内存（大概 15G），而 Colab 给免费用户提供的服务器内存只有 12G，所以我们需要使用付费用户的服务器。所幸 Colab 的付费价格并不高，可以选择 9.99 美元 100 个计算单元的计费模式，也可以选择每月 9.99 美元的 Pro 模式。升级为付费模式后，我们就选择大内存服务器了。这里我们选择大内存的 <strong>CPU</strong> 服务器，本文的所有操作都只需在 CPU 服务器上运行，所以选择 CPU 服务器即可。</p>
@@ -266,8 +266,8 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-            this.page.url = 'https://example.com/2023/12/18/quantification-chatglm3-6b-and-deploy-on-colab/';
-            this.page.identifier = 'https://example.com/2023/12/18/quantification-chatglm3-6b-and-deploy-on-colab/';
+            this.page.url = 'http://zhaozhiming.github.io/2023/12/18/quantification-chatglm3-6b-and-deploy-on-colab/';
+            this.page.identifier = 'http://zhaozhiming.github.io/2023/12/18/quantification-chatglm3-6b-and-deploy-on-colab/';
         };
 
         (function() {

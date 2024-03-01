@@ -100,7 +100,7 @@
     <li>
     <div id="dark">
         <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
-            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="hidden" name="sitesearch" value="http://zhaozhiming.github.io" />
             <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
         </form>
     </div>
@@ -161,7 +161,7 @@
 <h2 id="Provider"><a href="#Provider" class="headerlink" title="Provider"></a>Provider</h2><p>钱包的创建是离线的，不需要依赖网络即可创建钱包地址，但如果想获取钱包的相关信息，比如金额、交易记录，又或者想广播交易的话，就需要让钱包连上以太坊的网络了。</p>
 <p>在 Web3 中是用 provider 来进行网络连接的，Ethers.js 也是一样，而且 Ethers.js 提供了集成多种 Provider 的方式。</p>
 <h3 id="Provider-类型"><a href="#Provider-类型" class="headerlink" title="Provider 类型"></a>Provider 类型</h3><ul>
-<li>Etherscan Provider：连接 Etherscan API 的 provider，需要 2 个参数，一个是网络名称，一个查询 API 所需的 token（<a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2018/04/20/how-to-use-etherscan-api/">之前的文章</a> 有讲过，查询 Etherscan 的 API 时 apitoken 不是必须的，但如果没有的话会受到每秒 5 次的调用限制）。</li>
+<li>Etherscan Provider：连接 Etherscan API 的 provider，需要 2 个参数，一个是网络名称，一个查询 API 所需的 token（<a href="http://zhaozhiming.github.io/blog/2018/04/20/how-to-use-etherscan-api/">之前的文章</a> 有讲过，查询 Etherscan 的 API 时 apitoken 不是必须的，但如果没有的话会受到每秒 5 次的调用限制）。</li>
 <li>Json Rpc Provider：连接本地以太坊网点的 Provider。</li>
 <li>Infura Provider：连接 Infura 网络的 Provider，Infura 是一套以太坊的基础设施服务，同样有以太坊的主网络和测试网络。</li>
 <li>Web3 Provider：连接已有 web3 对象的 provider。</li>
@@ -228,8 +228,8 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-            this.page.url = 'https://example.com/2018/04/25/how-to-use-ethers-dot-js/';
-            this.page.identifier = 'https://example.com/2018/04/25/how-to-use-ethers-dot-js/';
+            this.page.url = 'http://zhaozhiming.github.io/2018/04/25/how-to-use-ethers-dot-js/';
+            this.page.identifier = 'http://zhaozhiming.github.io/2018/04/25/how-to-use-ethers-dot-js/';
         };
 
         (function() {

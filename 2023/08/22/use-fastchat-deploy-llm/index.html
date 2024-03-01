@@ -100,7 +100,7 @@
     <li>
     <div id="dark">
         <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
-            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="hidden" name="sitesearch" value="http://zhaozhiming.github.io" />
             <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
         </form>
     </div>
@@ -129,7 +129,7 @@
     </div>
 	<div class="entry-content"><img src="/images/post/2023/08/fastchat.png" class="" width="400" height="300">
 
-<p>之前介绍了<a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/2023/08/17/deploy-langchain-chatchat/">Langchain-Chatchat 项目的部署</a>，该项目底层改用了 FastChat 来提供 LLM(大语言模型)的 API 服务，下来出于好奇又研究了一下 FastChat，发现它的功能很强大，可以用来部署市面上大部分的 LLM 模型，可以将 LLM 部署为带有标准应用程序编程接口（API）的软件服务，它还提供了 WebUI 界面方便用户通过浏览器来使用 LLM。今天我们就来介绍一下如何使用 FastChat 来部署 ChatGLM2-6B 和 Llama2 模型。</p>
+<p>之前介绍了<a href="https://zhaozhiming.github.io/2023/08/17/deploy-langchain-chatchat/">Langchain-Chatchat 项目的部署</a>，该项目底层改用了 FastChat 来提供 LLM(大语言模型)的 API 服务，下来出于好奇又研究了一下 FastChat，发现它的功能很强大，可以用来部署市面上大部分的 LLM 模型，可以将 LLM 部署为带有标准应用程序编程接口（API）的软件服务，它还提供了 WebUI 界面方便用户通过浏览器来使用 LLM。今天我们就来介绍一下如何使用 FastChat 来部署 ChatGLM2-6B 和 Llama2 模型。</p>
 <span id="more"></span>
 
 <h2 id="FastChat-介绍"><a href="#FastChat-介绍" class="headerlink" title="FastChat 介绍"></a>FastChat 介绍</h2><p><a target="_blank" rel="noopener" href="https://github.com/lm-sys/FastChat">FastChat</a>是一个用于训练、服务和评估基于大型语言模型的聊天机器人的开放平台。其核心功能包括：</p>
@@ -146,7 +146,7 @@
 <h2 id="LLM-下载"><a href="#LLM-下载" class="headerlink" title="LLM 下载"></a>LLM 下载</h2><p>LLM 的下载我们可以通过<code>git clone</code>直接从<code>HuggingFace</code>上进行下载，我们在这次演示中需要下载 2 个 LLM，一个是<code>ChatGLM2-6B</code>，一个是<code>Llama2</code>，下载命令如下所示：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 开启大文件下载</span></span><br><span class="line">git lfs install</span><br><span class="line"><span class="comment"># 下载 ChatGLM2-6B</span></span><br><span class="line">git <span class="built_in">clone</span> https://huggingface.co/THUDM/chatglm2-6b</span><br><span class="line"><span class="comment"># 下载 Llama2-7B-chat-hf</span></span><br><span class="line">git <span class="built_in">clone</span> https://huggingface.co/meta-llama/Llama-2-7b-chat-hf</span><br></pre></td></tr></table></figure>
 
-<p>如果 Llama2 下载不下来，可能是没有同意协议，可以参考我之前的<a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/2023/07/23/llama2-deploy-and-free-use/">这篇文章</a>来解决。</p>
+<p>如果 Llama2 下载不下来，可能是没有同意协议，可以参考我之前的<a href="https://zhaozhiming.github.io/2023/07/23/llama2-deploy-and-free-use/">这篇文章</a>来解决。</p>
 <p>另外如果你是用 AutoDL 的 GPU 服务器的话，可以在终端开启<a target="_blank" rel="noopener" href="https://www.autodl.com/docs/network_turbo/">学术资源加速</a>，开启后下载 HuggingFace 的资源会快很多。</p>
 <h2 id="FastChat-命令行部署"><a href="#FastChat-命令行部署" class="headerlink" title="FastChat 命令行部署"></a>FastChat 命令行部署</h2><p>准备工作做好后，我们就可以使用 FastChat 来部署 LLM 了，FastChat 提供了命令行的方式来部署 LLM，命令行的方式比较简单，可以在命令行和 LLM 进行问答交互，我们先看下 FastChat 与 ChatGLM2 的命令行交互：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ python -m fastchat.serve.cli --model-path /你的下载路径/chatglm2-6b</span><br><span class="line">问: 你好</span><br><span class="line">答: 你好！我是人工智能助手 ChatGLM2-6B，很高兴见到你，欢迎问我任何问题。</span><br></pre></td></tr></table></figure>
@@ -213,8 +213,8 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-            this.page.url = 'https://example.com/2023/08/22/use-fastchat-deploy-llm/';
-            this.page.identifier = 'https://example.com/2023/08/22/use-fastchat-deploy-llm/';
+            this.page.url = 'http://zhaozhiming.github.io/2023/08/22/use-fastchat-deploy-llm/';
+            this.page.identifier = 'http://zhaozhiming.github.io/2023/08/22/use-fastchat-deploy-llm/';
         };
 
         (function() {

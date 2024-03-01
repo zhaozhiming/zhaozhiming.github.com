@@ -100,7 +100,7 @@
     <li>
     <div id="dark">
         <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
-            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="hidden" name="sitesearch" value="http://zhaozhiming.github.io" />
             <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
         </form>
     </div>
@@ -213,7 +213,7 @@
       
         <img src="/images/post/2023/08/fastchat.png" class="" width="400" height="300">
 
-<p>之前介绍了<a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/2023/08/17/deploy-langchain-chatchat/">Langchain-Chatchat 项目的部署</a>，该项目底层改用了 FastChat 来提供 LLM(大语言模型)的 API 服务，下来出于好奇又研究了一下 FastChat，发现它的功能很强大，可以用来部署市面上大部分的 LLM 模型，可以将 LLM 部署为带有标准应用程序编程接口（API）的软件服务，它还提供了 WebUI 界面方便用户通过浏览器来使用 LLM。今天我们就来介绍一下如何使用 FastChat 来部署 ChatGLM2-6B 和 Llama2 模型。</p>
+<p>之前介绍了<a href="https://zhaozhiming.github.io/2023/08/17/deploy-langchain-chatchat/">Langchain-Chatchat 项目的部署</a>，该项目底层改用了 FastChat 来提供 LLM(大语言模型)的 API 服务，下来出于好奇又研究了一下 FastChat，发现它的功能很强大，可以用来部署市面上大部分的 LLM 模型，可以将 LLM 部署为带有标准应用程序编程接口（API）的软件服务，它还提供了 WebUI 界面方便用户通过浏览器来使用 LLM。今天我们就来介绍一下如何使用 FastChat 来部署 ChatGLM2-6B 和 Llama2 模型。</p>
         
           <p class="more-link">
             <a href="2023/08/22/use-fastchat-deploy-llm/#more">Read More</a>
@@ -240,7 +240,7 @@
       
         <img src="/images/post/2023/08/langchain-chatchat.jpeg" class="" width="400" height="300">
 
-<p>之前写了一篇文章介绍<a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/2023/07/12/deploy-langchain-chatglm-on-cloud%20gpu/">Langchain-ChatGLM 项目的部署</a>，最近该项目更新了<code>0.2</code>新版本，这个版本与之前的版本差别很大，底层的架构发生了很大的变化。该项目最早是基于 ChatGLM 这个 LLM（大语言模型）来搭建的，但后来集成的 LLM 越来越多, (我估计）项目团队也借此机会将项目名称改成了<code>Langchain-Chatchat</code>。版本更新之后，项目的部署方式也发生了变化，之前的部署方式已经不适用了，这里我将介绍一下新版本的部署方式。</p>
+<p>之前写了一篇文章介绍<a href="https://zhaozhiming.github.io/2023/07/12/deploy-langchain-chatglm-on-cloud%20gpu/">Langchain-ChatGLM 项目的部署</a>，最近该项目更新了<code>0.2</code>新版本，这个版本与之前的版本差别很大，底层的架构发生了很大的变化。该项目最早是基于 ChatGLM 这个 LLM（大语言模型）来搭建的，但后来集成的 LLM 越来越多, (我估计）项目团队也借此机会将项目名称改成了<code>Langchain-Chatchat</code>。版本更新之后，项目的部署方式也发生了变化，之前的部署方式已经不适用了，这里我将介绍一下新版本的部署方式。</p>
         
           <p class="more-link">
             <a href="2023/08/17/deploy-langchain-chatchat/#more">Read More</a>
@@ -267,7 +267,7 @@
       
         <img src="/images/post/2023/08/nvidia-docker.png" class="" width="400" height="300">
 
-<p>之前给大家介绍了主机安装方式——<a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/2023/08/12/ubuntu22-install-cuda-and-nvidia-driver-and-pytorch/">如何在 Ubuntu 操作系统下安装部署 AI 环境</a>，但随着容器化技术的普及，越来越多的程序以容器的形式进行部署，通过容器的方式不仅可以简化部署流程，还可以随时切换不同的环境。实际上很多云服务厂商也是这么干的，用一台带有 NVIDIA 显卡的机器来部署多个容器，然后通过容器的方式来提供给用户使用，这样就可以充分利用显卡资源了。今天给大家介绍一下如何使用 Docker 的方式来部署我们之前部署过的 AI 环境。</p>
+<p>之前给大家介绍了主机安装方式——<a href="https://zhaozhiming.github.io/2023/08/12/ubuntu22-install-cuda-and-nvidia-driver-and-pytorch/">如何在 Ubuntu 操作系统下安装部署 AI 环境</a>，但随着容器化技术的普及，越来越多的程序以容器的形式进行部署，通过容器的方式不仅可以简化部署流程，还可以随时切换不同的环境。实际上很多云服务厂商也是这么干的，用一台带有 NVIDIA 显卡的机器来部署多个容器，然后通过容器的方式来提供给用户使用，这样就可以充分利用显卡资源了。今天给大家介绍一下如何使用 Docker 的方式来部署我们之前部署过的 AI 环境。</p>
         
           <p class="more-link">
             <a href="2023/08/15/use-docker-image-within-nvidia-host/#more">Read More</a>

@@ -100,7 +100,7 @@
     <li>
     <div id="dark">
         <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
-            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="hidden" name="sitesearch" value="http://zhaozhiming.github.io" />
             <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
         </form>
     </div>
@@ -144,7 +144,7 @@
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> semantic_kernel <span class="keyword">as</span> sk</span><br><span class="line"><span class="keyword">import</span> semantic_kernel.connectors.ai.hugging_face <span class="keyword">as</span> sk_hf</span><br><span class="line"></span><br><span class="line">kernel = sk.Kernel()</span><br><span class="line">kernel.add_text_completion_service(</span><br><span class="line">    <span class="string">&quot;gpt2&quot;</span>, sk_hf.HuggingFaceTextCompletion(<span class="string">&quot;gpt2&quot;</span>, task=<span class="string">&quot;text-generation&quot;</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 
 <p>使用 Semantic Kernel 添加 HuggingFace 上模型，会根据模型名称从 HuggingFace 上下载模型，或者根据模型的文件路径加载模型，跟接入 OpenAI 模型不同的地方是，接入 HuggingFace 模型需要在本地机器上运行模型，这往往意味着需要昂贵的 GPU 资源，而 OpenAI 模型是运行在 OpenAI 的服务器上，本地只是调用其 API 接口。</p>
-<p>目前 Semantic Kernel 只支持以上这些模型的接入，相对于 LangChain 来说可接入的模型还是比较少的，LangChain 最大的好处是可以通过兼容 OpenAI API 的接口来接入本地的 LLM（大语言模型），这对于企业来说是非常有吸引力的，对于 LangChain 如何集成本地 LLM 可以参考我之前的<a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/2023/09/11/langchain-custom-llm/">这篇文章</a>。</p>
+<p>目前 Semantic Kernel 只支持以上这些模型的接入，相对于 LangChain 来说可接入的模型还是比较少的，LangChain 最大的好处是可以通过兼容 OpenAI API 的接口来接入本地的 LLM（大语言模型），这对于企业来说是非常有吸引力的，对于 LangChain 如何集成本地 LLM 可以参考我之前的<a href="https://zhaozhiming.github.io/2023/09/11/langchain-custom-llm/">这篇文章</a>。</p>
 <h2 id="语义函数-vs-自然函数"><a href="#语义函数-vs-自然函数" class="headerlink" title="语义函数 vs. 自然函数"></a>语义函数 vs. 自然函数</h2><p>Semantic Kernel 中的<strong>语义函数</strong>和<strong>自然函数</strong>是开发者创建自定义插件的两种方式。语义函数是用逻辑语言模型创建的，而自然函数则是用传统编程语言如 Python 编写的。语义函数通常用于处理与 AI 交互的任务，而自然函数则更适用于执行常规编程任务和集成现有应用。</p>
 <h3 id="语义函数"><a href="#语义函数" class="headerlink" title="语义函数"></a>语义函数</h3><p>每个语义函数都会有 2 个文件——提示词模板文件和配置文件，我们来看一个<strong>讲笑话</strong>的语义函数例子，首先是提示词文件<code>skprompt.txt</code>：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">请精确地写出一个关于以下主题的笑话或幽默故事：</span><br><span class="line"></span><br><span class="line">笑话必须要符合以下要求：</span><br><span class="line">- 简短，不超过100字</span><br><span class="line">- 安全适用于职场和家庭</span><br><span class="line">不得包含性别歧视、种族歧视或其他偏见/偏执行为。</span><br><span class="line"></span><br><span class="line">请发挥创意，制造欢乐。我想笑一笑。</span><br><span class="line">如果提供了风格建议，请将其融入其中：&#123;&#123;$style&#125;&#125;</span><br><span class="line">+++++</span><br><span class="line"></span><br><span class="line">&#123;&#123;$input&#125;&#125;</span><br><span class="line">+++++</span><br></pre></td></tr></table></figure>
@@ -171,7 +171,7 @@
 <p>在官方仓库中，Semantic Kernel 还提供了一系列常用的语义函数，如翻译、总结、写邮件等（见下图），以方便开发者直接使用。我个人认为，Semantic Kernel 在规范语义函数方面做得非常出色，例如语义函数的文件命名规范和目录结构规范等。这样一来，开发者能够更有效地开发语义函数，并保持每个语义函数的一致风格。</p>
 <img src="/images/post/2023/10/sk-plugins.png" class="" width="1000" height="600">
 
-<h2 id="Planner"><a href="#Planner" class="headerlink" title="Planner"></a>Planner</h2><p>了解 LangChain 的同学应该对其强大的 Agent 功能有所了解，不熟悉的同学也可以看下我之前<a target="_blank" rel="noopener" href="https://zhaozhiming.github.io/2023/09/06/langchain-agent-implementation-principle/">这篇关于 Agent 的文章</a>。而 Semantic Kernel 也有类似的功能——Planner。</p>
+<h2 id="Planner"><a href="#Planner" class="headerlink" title="Planner"></a>Planner</h2><p>了解 LangChain 的同学应该对其强大的 Agent 功能有所了解，不熟悉的同学也可以看下我之前<a href="https://zhaozhiming.github.io/2023/09/06/langchain-agent-implementation-principle/">这篇关于 Agent 的文章</a>。而 Semantic Kernel 也有类似的功能——Planner。</p>
 <p>在 Semantic Kernel 中，<code>Planner</code>是一个功能，它接收用户的请求，并返回完成请求所需的计划。它通过使用 AI 来混合和匹配在 Semantic Kernel 中注册的插件，以便将它们重新组合成一系列完成目标的步骤。这是一个强大的概念，因为它允许你创建可能连你都未曾想到的功能。例如，如果你有任务和日历事件插件，Planner 可以将它们组合起来创建工作流，例如”提醒我去商店时购买牛奶”或”提醒我明天给妈妈打电话”，而无需为这些情境明确编写代码。</p>
 <p>Semantic Kernel 提供了几种开箱即用的 Planner，每种 Planner 有其特定的用途。这些 Planner 的目的是自动化地编排 AI 功能，使开发者能够构建复杂的 AI 应用，而无需为每个可能的用户请求手动创建工作流程。</p>
 <h3 id="Action-Planner"><a href="#Action-Planner" class="headerlink" title="Action Planner"></a>Action Planner</h3><p>Action Planner 是其中一个开箱即用的 Planner，它的作用是根据用户问题，在一组函数（语义函数或自然函数）中找到最适合的一个函数来执行。我们来看一个例子：</p>
@@ -331,8 +331,8 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-            this.page.url = 'https://example.com/2023/10/02/semantic-kernel-intro/';
-            this.page.identifier = 'https://example.com/2023/10/02/semantic-kernel-intro/';
+            this.page.url = 'http://zhaozhiming.github.io/2023/10/02/semantic-kernel-intro/';
+            this.page.identifier = 'http://zhaozhiming.github.io/2023/10/02/semantic-kernel-intro/';
         };
 
         (function() {

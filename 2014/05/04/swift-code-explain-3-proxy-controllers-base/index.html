@@ -100,7 +100,7 @@
     <li>
     <div id="dark">
         <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
-            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="hidden" name="sitesearch" value="http://zhaozhiming.github.io" />
             <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
         </form>
     </div>
@@ -127,7 +127,7 @@
 <a href="/tags/swift/">swift</a>
 </div>
     </div>
-	<div class="entry-content"><h2 id="回swift代码结构目录"><a href="#回swift代码结构目录" class="headerlink" title="回swift代码结构目录"></a><a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2014/04/19/swift-code-explain-total/">回swift代码结构目录</a></h2><h3 id="update-headers"><a href="#update-headers" class="headerlink" title="update_headers"></a>update_headers</h3><span id="more"></span>  
+	<div class="entry-content"><h2 id="回swift代码结构目录"><a href="#回swift代码结构目录" class="headerlink" title="回swift代码结构目录"></a><a href="http://zhaozhiming.github.io/blog/2014/04/19/swift-code-explain-total/">回swift代码结构目录</a></h2><h3 id="update-headers"><a href="#update-headers" class="headerlink" title="update_headers"></a>update_headers</h3><span id="more"></span>  
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">update_headers</span>(<span class="params">response, headers</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Helper function to update headers in the response.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param response: swob.Response object</span></span><br><span class="line"><span class="string">    :param headers: dictionary headers</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(headers, <span class="string">&#x27;items&#x27;</span>):</span><br><span class="line">        headers = headers.items()</span><br><span class="line">    <span class="keyword">for</span> name, value <span class="keyword">in</span> headers:</span><br><span class="line">        <span class="keyword">if</span> name == <span class="string">&#x27;etag&#x27;</span>:</span><br><span class="line">            response.headers[name] = value.replace(<span class="string">&#x27;&quot;&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">        <span class="keyword">elif</span> name <span class="keyword">not</span> <span class="keyword">in</span> (<span class="string">&#x27;date&#x27;</span>, <span class="string">&#x27;content-length&#x27;</span>, <span class="string">&#x27;content-type&#x27;</span>,</span><br><span class="line">                          <span class="string">&#x27;connection&#x27;</span>, <span class="string">&#x27;x-put-timestamp&#x27;</span>, <span class="string">&#x27;x-delete-after&#x27;</span>):</span><br><span class="line">            response.headers[name] = value</span><br></pre></td></tr></table></figure>  
 <ul>
 <li>更新response的header。</li>
@@ -404,8 +404,8 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-            this.page.url = 'https://example.com/2014/05/04/swift-code-explain-3-proxy-controllers-base/';
-            this.page.identifier = 'https://example.com/2014/05/04/swift-code-explain-3-proxy-controllers-base/';
+            this.page.url = 'http://zhaozhiming.github.io/2014/05/04/swift-code-explain-3-proxy-controllers-base/';
+            this.page.identifier = 'http://zhaozhiming.github.io/2014/05/04/swift-code-explain-3-proxy-controllers-base/';
         };
 
         (function() {

@@ -100,7 +100,7 @@
     <li>
     <div id="dark">
         <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
-            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="hidden" name="sitesearch" value="http://zhaozhiming.github.io" />
             <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
         </form>
     </div>
@@ -131,14 +131,14 @@
 
 <p>这是 3 篇文章中的第三篇：</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2017/06/20/a-crash-course-in-memory-management-zh/">内存管理速成教程</a></li>
-<li><a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2017/06/20/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers-zh/">通俗漫画介绍 ArrayBuffers 和 SharedArrayBuffers</a></li>
+<li><a href="http://zhaozhiming.github.io/blog/2017/06/20/a-crash-course-in-memory-management-zh/">内存管理速成教程</a></li>
+<li><a href="http://zhaozhiming.github.io/blog/2017/06/20/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers-zh/">通俗漫画介绍 ArrayBuffers 和 SharedArrayBuffers</a></li>
 <li>在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件</li>
 </ul>
 <p>原文链接：<a target="_blank" rel="noopener" href="https://hacks.mozilla.org/2017/06/avoiding-race-conditions-in-sharedarraybuffers-with-atomics/">Avoiding race conditions in SharedArrayBuffers with Atomics</a></p>
 <span id="more"></span>
 
-<h1 id="在-Sharedarraybuffers-中使用-Atomics-来避免竞态条件"><a href="#在-Sharedarraybuffers-中使用-Atomics-来避免竞态条件" class="headerlink" title="在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件"></a>在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件</h1><p>在<a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2017/06/20/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers-zh/">上一篇文章</a> 中，我讲述了使用 SharedArrayBuffers 会导致竞态条件，这让 SharedArrayBuffers 使用困难，我们不希望应用开发人员直接使用 SharedArrayBuffers。  </p>
+<h1 id="在-Sharedarraybuffers-中使用-Atomics-来避免竞态条件"><a href="#在-Sharedarraybuffers-中使用-Atomics-来避免竞态条件" class="headerlink" title="在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件"></a>在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件</h1><p>在<a href="http://zhaozhiming.github.io/blog/2017/06/20/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers-zh/">上一篇文章</a> 中，我讲述了使用 SharedArrayBuffers 会导致竞态条件，这让 SharedArrayBuffers 使用困难，我们不希望应用开发人员直接使用 SharedArrayBuffers。  </p>
 <p>但在其他语言上有多线程开发经验的库开发人员可以使用新的底层 API 来创建高级别的工具，应用开发人员就可以使用这些工具而无需直接接触 SharedArrayBuffers 和 Atomics。  </p>
 <img src="https://2r4s9p1yi1fa2jd7j43zph8r-wpengine.netdna-ssl.com/files/2017/06/02_15.png" class="" width="400" height="350">
 <p>尽管你可能不会直接同 SharedArrayBuffers 和 Atomics 打交道，但我觉得了解它们的工作原理还是比较有意思的，所以在这篇文章中，我将讲解它们会带来哪种类型的竞态条件，然后 Atomics 是如何帮助我们避开它们的。  </p>
@@ -285,8 +285,8 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-            this.page.url = 'https://example.com/2017/06/21/avoiding-race-conditions-in-sharedarraybuffers-with-atomics-zh/';
-            this.page.identifier = 'https://example.com/2017/06/21/avoiding-race-conditions-in-sharedarraybuffers-with-atomics-zh/';
+            this.page.url = 'http://zhaozhiming.github.io/2017/06/21/avoiding-race-conditions-in-sharedarraybuffers-with-atomics-zh/';
+            this.page.identifier = 'http://zhaozhiming.github.io/2017/06/21/avoiding-race-conditions-in-sharedarraybuffers-with-atomics-zh/';
         };
 
         (function() {

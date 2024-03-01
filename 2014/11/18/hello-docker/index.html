@@ -100,7 +100,7 @@
     <li>
     <div id="dark">
         <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
-            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="hidden" name="sitesearch" value="http://zhaozhiming.github.io" />
             <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
         </form>
     </div>
@@ -128,7 +128,7 @@
 </div>
     </div>
 	<div class="entry-content"><img src="/images/post/2014-11/docker.png" class="">  
-<p>作为这个时代的程序员真的很幸福，每天不但有一些改变世界的产品出现，而且提高程序员开发效率的工具也是层出不穷。之前介绍过如何使用<a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2014/10/02/ceph-install-with-vagrant-and-ansible/">Vagrant来创建Ceph环境</a>，使用Vagrant可以很方便的管理我们的虚拟机，同时来定制开发团队的开发环境，现在又出现了Docker，让我们有了一个更好的选择。  </p>
+<p>作为这个时代的程序员真的很幸福，每天不但有一些改变世界的产品出现，而且提高程序员开发效率的工具也是层出不穷。之前介绍过如何使用<a href="http://zhaozhiming.github.io/blog/2014/10/02/ceph-install-with-vagrant-and-ansible/">Vagrant来创建Ceph环境</a>，使用Vagrant可以很方便的管理我们的虚拟机，同时来定制开发团队的开发环境，现在又出现了Docker，让我们有了一个更好的选择。  </p>
 <span id="more"></span>
 
 <h2 id="Docker介绍"><a href="#Docker介绍" class="headerlink" title="Docker介绍"></a><a target="_blank" rel="noopener" href="https://www.docker.com/">Docker</a>介绍</h2><p>之前有幸参加了OSChina在成都举办的源创会，听到了Docker中国社区创始人马全一老师介绍Docker，他们团队在去年就开始研究Docker，但不知道为什么Docker今年开始火了起来，原因可能是Docker今年搞了一次宣传会，IT界各种大佬公司都去捧场了，有Google，RedHat等，然后媒体争相报道，于是Docker就火了。  </p>
@@ -154,7 +154,7 @@
 </ul>
 <h2 id="Docker镜像"><a href="#Docker镜像" class="headerlink" title="Docker镜像"></a>Docker镜像</h2><p>在Docker官网上可以看到已经有很多做好的镜像，比如Ubuntu，CentOS，MySql等，而且每天都有一些新的镜像不断在上传，因为上传一个镜像就像github上传代码一样简单。  </p>
 <img src="/images/post/2014-11/docker-images.png" class="">  
-<p>但是Docker在下载镜像的时候会发现速度很慢，有时候甚至连不上，这时候需要翻墙(可以看看我之前的文章，<a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2014/08/29/let-the-router-cross-great-wall-part-1/">让路由飞越长城(一)</a>，<a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2014/08/30/let-the-router-cross-great-wall-part-2/">让路由飞越长城(二)</a>)，或者找一下国内的镜像(可以看下<a target="_blank" rel="noopener" href="https://docker.cn/">这里</a>)，虽然国内的镜像没有Docker官网的那么全，但基本的镜像还是有的。  </p>
+<p>但是Docker在下载镜像的时候会发现速度很慢，有时候甚至连不上，这时候需要翻墙(可以看看我之前的文章，<a href="http://zhaozhiming.github.io/blog/2014/08/29/let-the-router-cross-great-wall-part-1/">让路由飞越长城(一)</a>，<a href="http://zhaozhiming.github.io/blog/2014/08/30/let-the-router-cross-great-wall-part-2/">让路由飞越长城(二)</a>)，或者找一下国内的镜像(可以看下<a target="_blank" rel="noopener" href="https://docker.cn/">这里</a>)，虽然国内的镜像没有Docker官网的那么全，但基本的镜像还是有的。  </p>
 <h2 id="Docker-amp-Vagrant"><a href="#Docker-amp-Vagrant" class="headerlink" title="Docker &amp; Vagrant"></a>Docker &amp; Vagrant</h2><p>在没有Docker之前，我使用Vagrant来创建自己的开发环境，Docker和Vagrant都有一个很好的特点，就是通过虚拟化环境来创建开发环境，这样的好处是不会影响本机的环境配置。  </p>
 <p>试想一下，如果在你需要安装Mysql，Ruby，Apache等服务，在本机上就需要做各种配置，像修改环境变量等，遇到版本升级还需要删除本地配置，然后再更新，久而久之本地环境就会被”污染”了，这时候想安装其他服务可能就会报各种莫名其妙的错误。  </p>
 <p>如果我们有虚拟化环境就不会存在这种问题了，在虚拟环境安装各种服务，不需要的话销毁环境重新创建一个即可，简单又方便。  </p>
@@ -197,8 +197,8 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-            this.page.url = 'https://example.com/2014/11/18/hello-docker/';
-            this.page.identifier = 'https://example.com/2014/11/18/hello-docker/';
+            this.page.url = 'http://zhaozhiming.github.io/2014/11/18/hello-docker/';
+            this.page.identifier = 'http://zhaozhiming.github.io/2014/11/18/hello-docker/';
         };
 
         (function() {

@@ -100,7 +100,7 @@
     <li>
     <div id="dark">
         <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
-            <input type="hidden" name="sitesearch" value="https://example.com" />
+            <input type="hidden" name="sitesearch" value="http://zhaozhiming.github.io" />
             <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
         </form>
     </div>
@@ -129,7 +129,7 @@
     </div>
 	<div class="entry-content"><img src="/images/post/2018/04/erc20.png" class="" width="400" height="300">
 
-<p>在<a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2018/04/25/how-to-use-ethers-dot-js/">上一篇文章</a> 中介绍了 <a target="_blank" rel="noopener" href="https://github.com/ethers-io/ethers.js">Ethers.js</a> 这个工具库，但在介绍智能合约时觉得这一部分涉及的内容会比较多，感觉重新写一篇文章来介绍会更好，所以我们今天就来看下怎么使用 Ethers.js 来进行以太坊代币（以下简称 token）的操作。</p>
+<p>在<a href="http://zhaozhiming.github.io/blog/2018/04/25/how-to-use-ethers-dot-js/">上一篇文章</a> 中介绍了 <a target="_blank" rel="noopener" href="https://github.com/ethers-io/ethers.js">Ethers.js</a> 这个工具库，但在介绍智能合约时觉得这一部分涉及的内容会比较多，感觉重新写一篇文章来介绍会更好，所以我们今天就来看下怎么使用 Ethers.js 来进行以太坊代币（以下简称 token）的操作。</p>
 <span id="more"></span>
 <p>首先要说明一下，这里介绍的 token 都是基于<code>ERC20</code>标准，其他标准的 token 暂时不涉及。</p>
 <p>在使用 Ethers.js 的 API 之前，我们需要先获取 token 的两个信息：</p>
@@ -137,7 +137,7 @@
 <li>token 的智能合约地址</li>
 <li>token 的智能合约接口</li>
 </ul>
-<p>找 token 智能合约地址的方法在<a target="_blank" rel="noopener" href="http://zhaozhiming.github.io/blog/2018/04/18/how-to-earn-eth-and-token-in-rinkeby/">之前的文章</a> 里面有介绍过，大家可以参考一下。</p>
+<p>找 token 智能合约地址的方法在<a href="http://zhaozhiming.github.io/blog/2018/04/18/how-to-earn-eth-and-token-in-rinkeby/">之前的文章</a> 里面有介绍过，大家可以参考一下。</p>
 <h2 id="获取-token-的智能合约接口"><a href="#获取-token-的智能合约接口" class="headerlink" title="获取 token 的智能合约接口"></a>获取 token 的智能合约接口</h2><p>除了 token 的地址外，还需要 token 的接口，它的全称是<code>Application Binary Interface</code>，简称<code>ABI</code>，更多信息可以参考<a target="_blank" rel="noopener" href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">以太坊的文档</a>，我们现在只需要知道它是一个 json 对象就可以了。</p>
 <p>那要如何获取 abi 呢？下面介绍两种方法。</p>
 <h3 id="直接从-etherscan-上面查找"><a href="#直接从-etherscan-上面查找" class="headerlink" title="直接从 etherscan 上面查找"></a>直接从 etherscan 上面查找</h3><p>第一种方法是直接在 etherscan 网站上查找，一些相对靠谱的 token 会将自己的智能合约源码公开并放到 etherscan 上，我们可以通过下面的方式来查找到 abi 对象。</p>
@@ -231,8 +231,8 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-            this.page.url = 'https://example.com/2018/04/30/how-to-operate-ethereum-token-contract/';
-            this.page.identifier = 'https://example.com/2018/04/30/how-to-operate-ethereum-token-contract/';
+            this.page.url = 'http://zhaozhiming.github.io/2018/04/30/how-to-operate-ethereum-token-contract/';
+            this.page.identifier = 'http://zhaozhiming.github.io/2018/04/30/how-to-operate-ethereum-token-contract/';
         };
 
         (function() {

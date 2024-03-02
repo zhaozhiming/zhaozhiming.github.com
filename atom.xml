@@ -3,11 +3,11 @@
   <title>Hacker and Geeker&#39;s Way</title>
   
   
-  <link href="http://zhaozhiming.github.io/atom.xml" rel="self"/>
+  <link href="https://zhaozhiming.github.io/atom.xml" rel="self"/>
   
-  <link href="http://zhaozhiming.github.io/"/>
+  <link href="https://zhaozhiming.github.io/"/>
   <updated>2024-02-16T03:47:23.338Z</updated>
-  <id>http://zhaozhiming.github.io/</id>
+  <id>https://zhaozhiming.github.io/</id>
   
   <author>
     <name>赵芝明</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>使用 Xinference 进行模型部署</title>
-    <link href="http://zhaozhiming.github.io/2024/02/13/use-xinference-deploy-llm/"/>
-    <id>http://zhaozhiming.github.io/2024/02/13/use-xinference-deploy-llm/</id>
+    <link href="https://zhaozhiming.github.io/2024/02/13/use-xinference-deploy-llm/"/>
+    <id>https://zhaozhiming.github.io/2024/02/13/use-xinference-deploy-llm/</id>
     <published>2024-02-13T01:18:07.000Z</published>
     <updated>2024-02-16T03:47:23.338Z</updated>
     
@@ -30,19 +30,19 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="llm" scheme="http://zhaozhiming.github.io/tags/llm/"/>
+    <category term="llm" scheme="https://zhaozhiming.github.io/tags/llm/"/>
     
-    <category term="xinference" scheme="http://zhaozhiming.github.io/tags/xinference/"/>
+    <category term="xinference" scheme="https://zhaozhiming.github.io/tags/xinference/"/>
     
   </entry>
   
   <entry>
     <title>使用 Trulens 评估 RAG 应用</title>
-    <link href="http://zhaozhiming.github.io/2024/01/29/use-trulens-to-evaluate-rag-application/"/>
-    <id>http://zhaozhiming.github.io/2024/01/29/use-trulens-to-evaluate-rag-application/</id>
+    <link href="https://zhaozhiming.github.io/2024/01/29/use-trulens-to-evaluate-rag-application/"/>
+    <id>https://zhaozhiming.github.io/2024/01/29/use-trulens-to-evaluate-rag-application/</id>
     <published>2024-01-29T01:47:05.000Z</published>
     <updated>2024-02-07T01:37:56.972Z</updated>
     
@@ -53,21 +53,21 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="llm" scheme="http://zhaozhiming.github.io/tags/llm/"/>
+    <category term="llm" scheme="https://zhaozhiming.github.io/tags/llm/"/>
     
-    <category term="rag" scheme="http://zhaozhiming.github.io/tags/rag/"/>
+    <category term="rag" scheme="https://zhaozhiming.github.io/tags/rag/"/>
     
-    <category term="trulens" scheme="http://zhaozhiming.github.io/tags/trulens/"/>
+    <category term="trulens" scheme="https://zhaozhiming.github.io/tags/trulens/"/>
     
   </entry>
   
   <entry>
     <title>Rerank 模型的部署及使用</title>
-    <link href="http://zhaozhiming.github.io/2024/01/18/rerank-model-deploy-and-usage/"/>
-    <id>http://zhaozhiming.github.io/2024/01/18/rerank-model-deploy-and-usage/</id>
+    <link href="https://zhaozhiming.github.io/2024/01/18/rerank-model-deploy-and-usage/"/>
+    <id>https://zhaozhiming.github.io/2024/01/18/rerank-model-deploy-and-usage/</id>
     <published>2024-01-18T03:55:56.000Z</published>
     <updated>2024-01-19T06:13:16.464Z</updated>
     
@@ -78,21 +78,21 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="rerank" scheme="http://zhaozhiming.github.io/tags/rerank/"/>
+    <category term="rerank" scheme="https://zhaozhiming.github.io/tags/rerank/"/>
     
-    <category term="llamaindex" scheme="http://zhaozhiming.github.io/tags/llamaindex/"/>
+    <category term="llamaindex" scheme="https://zhaozhiming.github.io/tags/llamaindex/"/>
     
-    <category term="text-embedding-inherence" scheme="http://zhaozhiming.github.io/tags/text-embedding-inherence/"/>
+    <category term="text-embedding-inherence" scheme="https://zhaozhiming.github.io/tags/text-embedding-inherence/"/>
     
   </entry>
   
   <entry>
     <title>使用 LlamaIndex 结合 Eleasticsearch 进行 RAG 检索增强生成</title>
-    <link href="http://zhaozhiming.github.io/2024/01/13/llamaindex-eleasticsearch-rga-practice/"/>
-    <id>http://zhaozhiming.github.io/2024/01/13/llamaindex-eleasticsearch-rga-practice/</id>
+    <link href="https://zhaozhiming.github.io/2024/01/13/llamaindex-eleasticsearch-rga-practice/"/>
+    <id>https://zhaozhiming.github.io/2024/01/13/llamaindex-eleasticsearch-rga-practice/</id>
     <published>2024-01-13T07:12:46.000Z</published>
     <updated>2024-01-18T03:59:05.315Z</updated>
     
@@ -103,23 +103,23 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="elasticsearch" scheme="http://zhaozhiming.github.io/tags/elasticsearch/"/>
+    <category term="elasticsearch" scheme="https://zhaozhiming.github.io/tags/elasticsearch/"/>
     
-    <category term="llamaindex" scheme="http://zhaozhiming.github.io/tags/llamaindex/"/>
+    <category term="llamaindex" scheme="https://zhaozhiming.github.io/tags/llamaindex/"/>
     
-    <category term="embedding" scheme="http://zhaozhiming.github.io/tags/embedding/"/>
+    <category term="embedding" scheme="https://zhaozhiming.github.io/tags/embedding/"/>
     
-    <category term="rag" scheme="http://zhaozhiming.github.io/tags/rag/"/>
+    <category term="rag" scheme="https://zhaozhiming.github.io/tags/rag/"/>
     
   </entry>
   
   <entry>
     <title>在 CPU 服务器上部署 ChatGLM3-6B 模型</title>
-    <link href="http://zhaozhiming.github.io/2023/12/18/quantification-chatglm3-6b-and-deploy-on-colab/"/>
-    <id>http://zhaozhiming.github.io/2023/12/18/quantification-chatglm3-6b-and-deploy-on-colab/</id>
+    <link href="https://zhaozhiming.github.io/2023/12/18/quantification-chatglm3-6b-and-deploy-on-colab/"/>
+    <id>https://zhaozhiming.github.io/2023/12/18/quantification-chatglm3-6b-and-deploy-on-colab/</id>
     <published>2023-12-18T07:04:11.000Z</published>
     <updated>2023-12-20T09:10:47.089Z</updated>
     
@@ -130,23 +130,23 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="chatglm" scheme="http://zhaozhiming.github.io/tags/chatglm/"/>
+    <category term="chatglm" scheme="https://zhaozhiming.github.io/tags/chatglm/"/>
     
-    <category term="ggml" scheme="http://zhaozhiming.github.io/tags/ggml/"/>
+    <category term="ggml" scheme="https://zhaozhiming.github.io/tags/ggml/"/>
     
-    <category term="quantification" scheme="http://zhaozhiming.github.io/tags/quantification/"/>
+    <category term="quantification" scheme="https://zhaozhiming.github.io/tags/quantification/"/>
     
-    <category term="colab" scheme="http://zhaozhiming.github.io/tags/colab/"/>
+    <category term="colab" scheme="https://zhaozhiming.github.io/tags/colab/"/>
     
   </entry>
   
   <entry>
     <title>GPTs Action 使用指南</title>
-    <link href="http://zhaozhiming.github.io/2023/11/28/in-depth-explanation-and-practice-of-gpts-actions-and-principles/"/>
-    <id>http://zhaozhiming.github.io/2023/11/28/in-depth-explanation-and-practice-of-gpts-actions-and-principles/</id>
+    <link href="https://zhaozhiming.github.io/2023/11/28/in-depth-explanation-and-practice-of-gpts-actions-and-principles/"/>
+    <id>https://zhaozhiming.github.io/2023/11/28/in-depth-explanation-and-practice-of-gpts-actions-and-principles/</id>
     <published>2023-11-28T08:37:40.000Z</published>
     <updated>2023-12-08T09:25:52.898Z</updated>
     
@@ -157,23 +157,23 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="chatgpt" scheme="http://zhaozhiming.github.io/tags/chatgpt/"/>
+    <category term="chatgpt" scheme="https://zhaozhiming.github.io/tags/chatgpt/"/>
     
-    <category term="openai" scheme="http://zhaozhiming.github.io/tags/openai/"/>
+    <category term="openai" scheme="https://zhaozhiming.github.io/tags/openai/"/>
     
-    <category term="gpts" scheme="http://zhaozhiming.github.io/tags/gpts/"/>
+    <category term="gpts" scheme="https://zhaozhiming.github.io/tags/gpts/"/>
     
-    <category term="action" scheme="http://zhaozhiming.github.io/tags/action/"/>
+    <category term="action" scheme="https://zhaozhiming.github.io/tags/action/"/>
     
   </entry>
   
   <entry>
     <title>OpenAI Assistants API 使用指南</title>
-    <link href="http://zhaozhiming.github.io/2023/11/13/openai-new-api-assistant/"/>
-    <id>http://zhaozhiming.github.io/2023/11/13/openai-new-api-assistant/</id>
+    <link href="https://zhaozhiming.github.io/2023/11/13/openai-new-api-assistant/"/>
+    <id>https://zhaozhiming.github.io/2023/11/13/openai-new-api-assistant/</id>
     <published>2023-11-13T05:48:56.000Z</published>
     <updated>2023-11-14T09:17:50.201Z</updated>
     
@@ -184,23 +184,23 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="api" scheme="http://zhaozhiming.github.io/tags/api/"/>
+    <category term="api" scheme="https://zhaozhiming.github.io/tags/api/"/>
     
-    <category term="chatgpt" scheme="http://zhaozhiming.github.io/tags/chatgpt/"/>
+    <category term="chatgpt" scheme="https://zhaozhiming.github.io/tags/chatgpt/"/>
     
-    <category term="openai" scheme="http://zhaozhiming.github.io/tags/openai/"/>
+    <category term="openai" scheme="https://zhaozhiming.github.io/tags/openai/"/>
     
-    <category term="assistant" scheme="http://zhaozhiming.github.io/tags/assistant/"/>
+    <category term="assistant" scheme="https://zhaozhiming.github.io/tags/assistant/"/>
     
   </entry>
   
   <entry>
     <title>OpenAI 新版 API 使用介绍</title>
-    <link href="http://zhaozhiming.github.io/2023/11/11/openai-new-api-introduct/"/>
-    <id>http://zhaozhiming.github.io/2023/11/11/openai-new-api-introduct/</id>
+    <link href="https://zhaozhiming.github.io/2023/11/11/openai-new-api-introduct/"/>
+    <id>https://zhaozhiming.github.io/2023/11/11/openai-new-api-introduct/</id>
     <published>2023-11-11T08:03:41.000Z</published>
     <updated>2023-11-13T01:36:38.237Z</updated>
     
@@ -211,21 +211,21 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="api" scheme="http://zhaozhiming.github.io/tags/api/"/>
+    <category term="api" scheme="https://zhaozhiming.github.io/tags/api/"/>
     
-    <category term="chatgpt" scheme="http://zhaozhiming.github.io/tags/chatgpt/"/>
+    <category term="chatgpt" scheme="https://zhaozhiming.github.io/tags/chatgpt/"/>
     
-    <category term="openai" scheme="http://zhaozhiming.github.io/tags/openai/"/>
+    <category term="openai" scheme="https://zhaozhiming.github.io/tags/openai/"/>
     
   </entry>
   
   <entry>
     <title>ChatGLM3-6B 功能原理解析</title>
-    <link href="http://zhaozhiming.github.io/2023/11/01/chatglm3-feature-interpretation/"/>
-    <id>http://zhaozhiming.github.io/2023/11/01/chatglm3-feature-interpretation/</id>
+    <link href="https://zhaozhiming.github.io/2023/11/01/chatglm3-feature-interpretation/"/>
+    <id>https://zhaozhiming.github.io/2023/11/01/chatglm3-feature-interpretation/</id>
     <published>2023-11-01T10:10:49.000Z</published>
     <updated>2023-11-07T03:35:29.955Z</updated>
     
@@ -236,15 +236,15 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
   </entry>
   
   <entry>
     <title>ChatGLM3-6B 部署指南</title>
-    <link href="http://zhaozhiming.github.io/2023/10/31/chatglm3-deploy/"/>
-    <id>http://zhaozhiming.github.io/2023/10/31/chatglm3-deploy/</id>
+    <link href="https://zhaozhiming.github.io/2023/10/31/chatglm3-deploy/"/>
+    <id>https://zhaozhiming.github.io/2023/10/31/chatglm3-deploy/</id>
     <published>2023-10-31T06:15:17.000Z</published>
     <updated>2024-02-14T09:38:32.743Z</updated>
     
@@ -255,19 +255,19 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="llm" scheme="http://zhaozhiming.github.io/tags/llm/"/>
+    <category term="llm" scheme="https://zhaozhiming.github.io/tags/llm/"/>
     
-    <category term="chatglm3" scheme="http://zhaozhiming.github.io/tags/chatglm3/"/>
+    <category term="chatglm3" scheme="https://zhaozhiming.github.io/tags/chatglm3/"/>
     
   </entry>
   
   <entry>
     <title>使用 LLaMA Factory 进行大语言模型微调</title>
-    <link href="http://zhaozhiming.github.io/2023/10/27/use-llama-factory-finetuning-llm/"/>
-    <id>http://zhaozhiming.github.io/2023/10/27/use-llama-factory-finetuning-llm/</id>
+    <link href="https://zhaozhiming.github.io/2023/10/27/use-llama-factory-finetuning-llm/"/>
+    <id>https://zhaozhiming.github.io/2023/10/27/use-llama-factory-finetuning-llm/</id>
     <published>2023-10-27T02:02:06.000Z</published>
     <updated>2023-12-21T08:56:12.110Z</updated>
     
@@ -278,21 +278,21 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="llm" scheme="http://zhaozhiming.github.io/tags/llm/"/>
+    <category term="llm" scheme="https://zhaozhiming.github.io/tags/llm/"/>
     
-    <category term="fine-tuning" scheme="http://zhaozhiming.github.io/tags/fine-tuning/"/>
+    <category term="fine-tuning" scheme="https://zhaozhiming.github.io/tags/fine-tuning/"/>
     
-    <category term="llama_factory" scheme="http://zhaozhiming.github.io/tags/llama-factory/"/>
+    <category term="llama_factory" scheme="https://zhaozhiming.github.io/tags/llama-factory/"/>
     
   </entry>
   
   <entry>
     <title>好玩到停不下来的 GPT-4V</title>
-    <link href="http://zhaozhiming.github.io/2023/10/15/interesting-gpt4v/"/>
-    <id>http://zhaozhiming.github.io/2023/10/15/interesting-gpt4v/</id>
+    <link href="https://zhaozhiming.github.io/2023/10/15/interesting-gpt4v/"/>
+    <id>https://zhaozhiming.github.io/2023/10/15/interesting-gpt4v/</id>
     <published>2023-10-15T13:43:38.000Z</published>
     <updated>2023-10-16T06:45:31.653Z</updated>
     
@@ -303,21 +303,21 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="chatgpt" scheme="http://zhaozhiming.github.io/tags/chatgpt/"/>
+    <category term="chatgpt" scheme="https://zhaozhiming.github.io/tags/chatgpt/"/>
     
-    <category term="openai" scheme="http://zhaozhiming.github.io/tags/openai/"/>
+    <category term="openai" scheme="https://zhaozhiming.github.io/tags/openai/"/>
     
-    <category term="gpt-4v" scheme="http://zhaozhiming.github.io/tags/gpt-4v/"/>
+    <category term="gpt-4v" scheme="https://zhaozhiming.github.io/tags/gpt-4v/"/>
     
   </entry>
   
   <entry>
     <title>好玩到停不下来的 DALL-E 3</title>
-    <link href="http://zhaozhiming.github.io/2023/10/15/interesting-dalle3/"/>
-    <id>http://zhaozhiming.github.io/2023/10/15/interesting-dalle3/</id>
+    <link href="https://zhaozhiming.github.io/2023/10/15/interesting-dalle3/"/>
+    <id>https://zhaozhiming.github.io/2023/10/15/interesting-dalle3/</id>
     <published>2023-10-15T07:34:19.000Z</published>
     <updated>2023-10-16T01:33:03.085Z</updated>
     
@@ -328,21 +328,21 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="chatgpt" scheme="http://zhaozhiming.github.io/tags/chatgpt/"/>
+    <category term="chatgpt" scheme="https://zhaozhiming.github.io/tags/chatgpt/"/>
     
-    <category term="openai" scheme="http://zhaozhiming.github.io/tags/openai/"/>
+    <category term="openai" scheme="https://zhaozhiming.github.io/tags/openai/"/>
     
-    <category term="dall-e3" scheme="http://zhaozhiming.github.io/tags/dall-e3/"/>
+    <category term="dall-e3" scheme="https://zhaozhiming.github.io/tags/dall-e3/"/>
     
   </entry>
   
   <entry>
     <title>使用 API 生成 Stable Diffustion 文字和二维码隐藏图片</title>
-    <link href="http://zhaozhiming.github.io/2023/10/09/use-stable-diffustion-webui-api-generate-text-and-qrcode-hidden-image/"/>
-    <id>http://zhaozhiming.github.io/2023/10/09/use-stable-diffustion-webui-api-generate-text-and-qrcode-hidden-image/</id>
+    <link href="https://zhaozhiming.github.io/2023/10/09/use-stable-diffustion-webui-api-generate-text-and-qrcode-hidden-image/"/>
+    <id>https://zhaozhiming.github.io/2023/10/09/use-stable-diffustion-webui-api-generate-text-and-qrcode-hidden-image/</id>
     <published>2023-10-09T01:58:06.000Z</published>
     <updated>2023-11-25T01:06:30.276Z</updated>
     
@@ -353,25 +353,25 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="stable-diffustion" scheme="http://zhaozhiming.github.io/tags/stable-diffustion/"/>
+    <category term="stable-diffustion" scheme="https://zhaozhiming.github.io/tags/stable-diffustion/"/>
     
-    <category term="webui" scheme="http://zhaozhiming.github.io/tags/webui/"/>
+    <category term="webui" scheme="https://zhaozhiming.github.io/tags/webui/"/>
     
-    <category term="qrcode" scheme="http://zhaozhiming.github.io/tags/qrcode/"/>
+    <category term="qrcode" scheme="https://zhaozhiming.github.io/tags/qrcode/"/>
     
-    <category term="controlnet" scheme="http://zhaozhiming.github.io/tags/controlnet/"/>
+    <category term="controlnet" scheme="https://zhaozhiming.github.io/tags/controlnet/"/>
     
-    <category term="hidden-image" scheme="http://zhaozhiming.github.io/tags/hidden-image/"/>
+    <category term="hidden-image" scheme="https://zhaozhiming.github.io/tags/hidden-image/"/>
     
   </entry>
   
   <entry>
     <title>Semantic Kernel —— LangChain 的替代品？</title>
-    <link href="http://zhaozhiming.github.io/2023/10/02/semantic-kernel-intro/"/>
-    <id>http://zhaozhiming.github.io/2023/10/02/semantic-kernel-intro/</id>
+    <link href="https://zhaozhiming.github.io/2023/10/02/semantic-kernel-intro/"/>
+    <id>https://zhaozhiming.github.io/2023/10/02/semantic-kernel-intro/</id>
     <published>2023-10-02T06:02:51.000Z</published>
     <updated>2023-10-04T01:03:34.111Z</updated>
     
@@ -382,27 +382,27 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="langchain" scheme="http://zhaozhiming.github.io/tags/langchain/"/>
+    <category term="langchain" scheme="https://zhaozhiming.github.io/tags/langchain/"/>
     
-    <category term="semantic-kernel" scheme="http://zhaozhiming.github.io/tags/semantic-kernel/"/>
+    <category term="semantic-kernel" scheme="https://zhaozhiming.github.io/tags/semantic-kernel/"/>
     
-    <category term="semantic function" scheme="http://zhaozhiming.github.io/tags/semantic-function/"/>
+    <category term="semantic function" scheme="https://zhaozhiming.github.io/tags/semantic-function/"/>
     
-    <category term="native function" scheme="http://zhaozhiming.github.io/tags/native-function/"/>
+    <category term="native function" scheme="https://zhaozhiming.github.io/tags/native-function/"/>
     
-    <category term="planner" scheme="http://zhaozhiming.github.io/tags/planner/"/>
+    <category term="planner" scheme="https://zhaozhiming.github.io/tags/planner/"/>
     
-    <category term="ReAct" scheme="http://zhaozhiming.github.io/tags/ReAct/"/>
+    <category term="ReAct" scheme="https://zhaozhiming.github.io/tags/ReAct/"/>
     
   </entry>
   
   <entry>
     <title>使用 LangChain 生成海报文案</title>
-    <link href="http://zhaozhiming.github.io/2023/09/19/use-langchain-to-generate-poster-copywriter/"/>
-    <id>http://zhaozhiming.github.io/2023/09/19/use-langchain-to-generate-poster-copywriter/</id>
+    <link href="https://zhaozhiming.github.io/2023/09/19/use-langchain-to-generate-poster-copywriter/"/>
+    <id>https://zhaozhiming.github.io/2023/09/19/use-langchain-to-generate-poster-copywriter/</id>
     <published>2023-09-19T09:26:02.000Z</published>
     <updated>2023-09-21T01:46:23.731Z</updated>
     
@@ -413,19 +413,19 @@
     
     
     
-    <category term="secure" scheme="http://zhaozhiming.github.io/categories/secure/"/>
+    <category term="secure" scheme="https://zhaozhiming.github.io/categories/secure/"/>
     
     
-    <category term="langchain" scheme="http://zhaozhiming.github.io/tags/langchain/"/>
+    <category term="langchain" scheme="https://zhaozhiming.github.io/tags/langchain/"/>
     
-    <category term="prompt-engineering" scheme="http://zhaozhiming.github.io/tags/prompt-engineering/"/>
+    <category term="prompt-engineering" scheme="https://zhaozhiming.github.io/tags/prompt-engineering/"/>
     
   </entry>
   
   <entry>
     <title>Docker 远程API安全问题</title>
-    <link href="http://zhaozhiming.github.io/2023/09/17/docker-remote-api-secure-vulner/"/>
-    <id>http://zhaozhiming.github.io/2023/09/17/docker-remote-api-secure-vulner/</id>
+    <link href="https://zhaozhiming.github.io/2023/09/17/docker-remote-api-secure-vulner/"/>
+    <id>https://zhaozhiming.github.io/2023/09/17/docker-remote-api-secure-vulner/</id>
     <published>2023-09-17T04:33:24.000Z</published>
     <updated>2023-09-19T10:31:12.230Z</updated>
     
@@ -436,21 +436,21 @@
     
     
     
-    <category term="secure" scheme="http://zhaozhiming.github.io/categories/secure/"/>
+    <category term="secure" scheme="https://zhaozhiming.github.io/categories/secure/"/>
     
     
-    <category term="docker" scheme="http://zhaozhiming.github.io/tags/docker/"/>
+    <category term="docker" scheme="https://zhaozhiming.github.io/tags/docker/"/>
     
-    <category term="remote-api" scheme="http://zhaozhiming.github.io/tags/remote-api/"/>
+    <category term="remote-api" scheme="https://zhaozhiming.github.io/tags/remote-api/"/>
     
-    <category term="secure" scheme="http://zhaozhiming.github.io/tags/secure/"/>
+    <category term="secure" scheme="https://zhaozhiming.github.io/tags/secure/"/>
     
   </entry>
   
   <entry>
     <title>LangChain 自定义LLM</title>
-    <link href="http://zhaozhiming.github.io/2023/09/11/langchain-custom-llm/"/>
-    <id>http://zhaozhiming.github.io/2023/09/11/langchain-custom-llm/</id>
+    <link href="https://zhaozhiming.github.io/2023/09/11/langchain-custom-llm/"/>
+    <id>https://zhaozhiming.github.io/2023/09/11/langchain-custom-llm/</id>
     <published>2023-09-11T03:16:42.000Z</published>
     <updated>2023-09-12T09:49:13.026Z</updated>
     
@@ -461,21 +461,21 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="langchain" scheme="http://zhaozhiming.github.io/tags/langchain/"/>
+    <category term="langchain" scheme="https://zhaozhiming.github.io/tags/langchain/"/>
     
-    <category term="chatglm" scheme="http://zhaozhiming.github.io/tags/chatglm/"/>
+    <category term="chatglm" scheme="https://zhaozhiming.github.io/tags/chatglm/"/>
     
-    <category term="llm" scheme="http://zhaozhiming.github.io/tags/llm/"/>
+    <category term="llm" scheme="https://zhaozhiming.github.io/tags/llm/"/>
     
   </entry>
   
   <entry>
     <title>LangChain Agent 原理解析</title>
-    <link href="http://zhaozhiming.github.io/2023/09/06/langchain-agent-implementation-principle/"/>
-    <id>http://zhaozhiming.github.io/2023/09/06/langchain-agent-implementation-principle/</id>
+    <link href="https://zhaozhiming.github.io/2023/09/06/langchain-agent-implementation-principle/"/>
+    <id>https://zhaozhiming.github.io/2023/09/06/langchain-agent-implementation-principle/</id>
     <published>2023-09-06T11:53:31.000Z</published>
     <updated>2023-09-07T09:59:10.955Z</updated>
     
@@ -486,19 +486,19 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="langchain" scheme="http://zhaozhiming.github.io/tags/langchain/"/>
+    <category term="langchain" scheme="https://zhaozhiming.github.io/tags/langchain/"/>
     
-    <category term="agent" scheme="http://zhaozhiming.github.io/tags/agent/"/>
+    <category term="agent" scheme="https://zhaozhiming.github.io/tags/agent/"/>
     
   </entry>
   
   <entry>
     <title>AI 模型量化格式介绍</title>
-    <link href="http://zhaozhiming.github.io/2023/08/31/llm-quantization-format-introduce/"/>
-    <id>http://zhaozhiming.github.io/2023/08/31/llm-quantization-format-introduce/</id>
+    <link href="https://zhaozhiming.github.io/2023/08/31/llm-quantization-format-introduce/"/>
+    <id>https://zhaozhiming.github.io/2023/08/31/llm-quantization-format-introduce/</id>
     <published>2023-08-31T07:50:19.000Z</published>
     <updated>2023-09-03T13:08:17.861Z</updated>
     
@@ -509,18 +509,18 @@
     
     
     
-    <category term="ai" scheme="http://zhaozhiming.github.io/categories/ai/"/>
+    <category term="ai" scheme="https://zhaozhiming.github.io/categories/ai/"/>
     
     
-    <category term="llm" scheme="http://zhaozhiming.github.io/tags/llm/"/>
+    <category term="llm" scheme="https://zhaozhiming.github.io/tags/llm/"/>
     
-    <category term="quantization" scheme="http://zhaozhiming.github.io/tags/quantization/"/>
+    <category term="quantization" scheme="https://zhaozhiming.github.io/tags/quantization/"/>
     
-    <category term="gptq" scheme="http://zhaozhiming.github.io/tags/gptq/"/>
+    <category term="gptq" scheme="https://zhaozhiming.github.io/tags/gptq/"/>
     
-    <category term="ggml" scheme="http://zhaozhiming.github.io/tags/ggml/"/>
+    <category term="ggml" scheme="https://zhaozhiming.github.io/tags/ggml/"/>
     
-    <category term="gguf" scheme="http://zhaozhiming.github.io/tags/gguf/"/>
+    <category term="gguf" scheme="https://zhaozhiming.github.io/tags/gguf/"/>
     
   </entry>
   

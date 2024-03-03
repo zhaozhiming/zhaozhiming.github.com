@@ -194,4 +194,4 @@ public class Author {
 
 下一篇: [最近小项目的一些记录（二）][url1]
 
-[url1]: http://zhaozhiming.github.io/blog/2014/05/31/some-tips-in-my-recent-project-2/
+[url1]: http://zhaozhiming.github.io/2014/05/31/some-tips-in-my-recent-project-2/

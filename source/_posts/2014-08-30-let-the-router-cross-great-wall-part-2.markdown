@@ -70,28 +70,28 @@ root@DD-WRT:~#
 * 登陆后执行下面的命令；  
 
 {% codeblock lang:sh %}
-# mkdir /jffs/pptp
-# cd /jffs/pptp
-# wget http://autoddvpn.googlecode.com/svn/trunk/grace.d/vpnup.sh
-# wget http://autoddvpn.googlecode.com/svn/trunk/grace.d/vpndown.sh
-# wget http://autoddvpn.googlecode.com/svn/trunk/pptp/jffs/run.sh
-# chmod a+x *.sh
-# nvram set rc_startup='/jffs/pptp/run.sh'
-# nvram commit
+mkdir /jffs/pptp
+cd /jffs/pptp
+wget http://autoddvpn.googlecode.com/svn/trunk/grace.d/vpnup.sh
+wget http://autoddvpn.googlecode.com/svn/trunk/grace.d/vpndown.sh
+wget http://autoddvpn.googlecode.com/svn/trunk/pptp/jffs/run.sh
+chmod a+x *.sh
+nvram set rc_startup='/jffs/pptp/run.sh'
+nvram commit
 {% endcodeblock %} 
 
 一般执行上面的wget命令都是不行的，因为autoddvpn网站要翻墙才能访问，所以可以在pptp目录下创建那3个脚本文件，然后将网站上脚本的内容copy到脚本文件里面，命令更新如下。  
 
 {% codeblock lang:sh %}
-# mkdir /jffs/pptp
-# cd /jffs/pptp
-# touch vpnup.sh
-# touch vpndown.sh
-# touch run.sh
+mkdir /jffs/pptp
+cd /jffs/pptp
+touch vpnup.sh
+touch vpndown.sh
+touch run.sh
 # ...直接从网站上复制脚本内容，再拷贝到文件里面
-# chmod a+x *.sh
-# nvram set rc_startup='/jffs/pptp/run.sh'
-# nvram commit
+chmod a+x *.sh
+nvram set rc_startup='/jffs/pptp/run.sh'
+nvram commit
 {% endcodeblock %}  
 
 * 参考[文档][autoddvpn-pptp-client]的`设置PPTP client`部分进行dd-wrt的PPTP客户端设置;

@@ -70,8 +70,7 @@ jacoco:coverage的destfile参数是指生成的覆盖率文件路径，不写默
 </target>
 {% endcodeblock %}  
   
-生成覆盖率报告需要覆盖率文件（exec）、源码、编译后的class文件。这里导出的格式是html，还有xml和cvs 2种格式可以导出，具体参考[jacoco:report][url1]。  
-[url1]: http://www.eclemma.org/jacoco/trunk/doc/ant.html#report
+生成覆盖率报告需要覆盖率文件（exec）、源码、编译后的class文件。这里导出的格式是html，还有xml和cvs 2种格式可以导出，具体参考[jacoco:report](http://www.eclemma.org/jacoco/trunk/doc/ant.html#report)。  
 
 注意，这里的class文件和exec文件必须用同一个jvm执行，如果是用JVM A来编译class文件，然后用JVM B来生成覆盖率文件，生成出来的报告覆盖率会为0%。**这一点对生成集成测试的覆盖率特别重要。**  
 

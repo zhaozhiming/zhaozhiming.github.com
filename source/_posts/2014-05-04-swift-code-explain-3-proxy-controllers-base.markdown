@@ -1474,5 +1474,5 @@ def close_swift_conn(src):
 {% endcodeblock %}  
 * 在response的header中增加相关header，分别有'access-control-allow-origin','access-control-max-age','access-control-allow-methods'和'access-control-allow-headers'。
   
-[url1]: http://zhaozhiming.github.io/blog/2014/04/19/swift-code-explain-total/
+[url1]: http://zhaozhiming.github.io/2014/04/19/swift-code-explain-total/
 

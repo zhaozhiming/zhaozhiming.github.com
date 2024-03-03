@@ -14,14 +14,14 @@ tags: [openstack, swift, middleware]
 关于openstack swift的资料可以看[这里][url1]，[这里][url2]还有[这里][url3]。  
 <!--more-->  
 
-##准备环境
+## 准备环境
 从零开始接触的同学可以先从swift的[all in one][url4]部署开始学习，在本机搭建好swift环境就可以进行简单的测试了。由于swift是用Python语言写的，如果要开发swift的中间件的还需要在本地安装Pythone的IDE，我比较喜欢JETBRAIN（他们比较出名的是JAVA的IDE——IDEA）公司的IDE——Pycharm。准备环境如下:  
 
 * Ububutn 12.04 LTS 64bit
 * Python2.7(虽然现在已经有Python3了，但swift是用2.x的Python写的，Python3不向后兼容Python2) 
 * Pycharm3
   
-##中间件介绍
+## 中间件介绍
 swift通过提供基于HTTP协议的API给外界调用来完成对象存储的功能，我们从swift的各个部署说明里面可以看到，proxy server和storage node的配置文件里面都有一个`[pipeline:main]`，这个是swift各个服务的请求链，由多个中间件组成的一个中间件集合。pipeline有点像J2EE里面filter，每个http请求需要经过各个服务的pipeline。
   
 {% codeblock proxy-server.conf lang:xml %}
@@ -40,7 +40,7 @@ pipeline = recon account-server
 ...
 {% endcodeblock %} 
   
-##中间件编写
+## 中间件编写
 了解了swift的基本功能流程后，我们就可以来写自己的中间件了。  
   
 没有写过中间件的同学可以通过学习其他中间件开始，在swift的源码中配置了很多中间件，有一些功能非常简单。比如name_check中间件，这个中间件的作用是拿来分析请求的url，判断url中是否有特殊字符，长度是否超出规定长度等。这个中间件没有配置在swift的标准配置中，有需要的可以自行加上本机的swift环境做测试。  
@@ -99,15 +99,15 @@ if __name__ == '__main__':
   
 学习完这个简单的中间件后，相信大家都可以依葫芦画瓢开始写自己的中间件了。  
   
-##修改配置文件
+## 修改配置文件
 编写完中间件之后，还需要将中间件配置到swift中，这样才算真正完成中间件的创建。  
   
-####首先先停止swift的服务
+#### 首先先停止swift的服务
 {% codeblock shell lang:xml %}
 swift@ubuntu:~$ swift-init main stop
 {% endcodeblock %} 
   
-####接着修改conf文件
+#### 接着修改conf文件
 假设你增加的中间件是proxy server的中间件，就修改proxy-server.conf，自行决定要放到pipeline中的哪个位置，具体要看你的中间件是执行什么功能。
 {% codeblock proxy-server.conf lang:xml %}
 [pipeline:main]
@@ -127,13 +127,13 @@ paste.filter_factory =
 	name_check = swift.common.middleware.name_check:filter_factory
 {% endcodeblock %} 
 
-####执行命令重新安装swift
+#### 执行命令重新安装swift
 {% codeblock shell lang:xml %}
 swift@ubuntu:~$ cd swift目录
 swift@ubuntu:~$ sudo python setyp.py develop
 {% endcodeblock %} 
 
-####最后重启swift服务
+#### 最后重启swift服务
 {% codeblock shell lang:xml %}
 swift@ubuntu:~$ swift-init main start
 {% endcodeblock %} 

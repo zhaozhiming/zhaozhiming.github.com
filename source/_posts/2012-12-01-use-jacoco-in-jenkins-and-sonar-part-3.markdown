@@ -23,8 +23,7 @@ tags: [jacoco, jenkins, sonar]
 3. output有4个值，分别是file,tcpserver,tcpclient,mbean，默认是file。使用file的方式只有在停掉应用服务的时候才能产生覆盖率文件，而使用tcpserver的方式可以在不停止应用服务的情况下下载覆盖率文件，后面会介绍如何使用dump方法来得到覆盖率文件。
 4. address是ip， port是端口，这是使用tcpserver方式需要的2个参数，也是后面dump方法要用到的。（这里的address我只能使用服务器的ip，如果使用其他ip，服务启动时会报错。）  
   
-更多参数可以参考[java agent][url1]。  
-[url1]: http://www.eclemma.org/jacoco/trunk/doc/agent.html
+更多参数可以参考[java agent](http://www.eclemma.org/jacoco/trunk/doc/agent.html)。  
   
 配置完应用服务的JAVA_OPTIONS之后，启动服务器，然后可以开始跑你的集成测试，跑完之后，实际上jacocoagent已经将覆盖率数据记录下来了，我们可以使用下面的ant任务来dump出覆盖率文件：  
 

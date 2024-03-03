@@ -8,8 +8,7 @@ tags: javascript
 ---
   
   
-**译注：原文是《JavaScript高级程序设计》的作者Nicholas Zakas写的，本翻译纯属为自己学习而做，仅供参考。原文链接：[这里][url1]**  
-[url1]: http://www.nczonline.net/blog/2012/05/31/working-with-files-in-javascript-part-5-Blobs  
+**译注：原文是《JavaScript高级程序设计》的作者Nicholas Zakas写的，本翻译纯属为自己学习而做，仅供参考。原文链接：[这里](http://www.nczonline.net/blog/2012/05/31/working-with-files-in-javascript-part-5-Blobs)**  
 
 ***
   
@@ -18,7 +17,7 @@ tags: javascript
 <!--more-->  
 在大部分情况下，Blobs和Files可以用在同一个地方。例如，你可以使用一个FileReader从一个Blob中读取数据，并且你可以在一个Blob中使用URL.createObjectURL()方法来创建一个对象URL。  
   
-##slice  
+## slice  
 
 使用Blobs的一件有趣的事情是可以基于另外一个Blob的小部分来创建一个新的Blob。由于每个Blob代表的是数据的内存地址，而不是数据本身，所以你可以快速创建一个指向其他Blob子部分数据的Blob对象。这可以通过使用slice()方法来做到。  
   
@@ -41,7 +40,7 @@ function sliceBlob(blob, start, end, type) {
   
 比如，你可以使用这个函数将一个大文件拆分成一块块然后进行上传。每一个新产生的Blob都和原始的文件互不相干，即使每个blob的数据有重叠的部分。网络相册的工程师们使用blob分割来读取照片的可交换图片文件信息，这些照片是正在上传*[1]*的而不是已经上传到了服务器。当文件被选择的时候，上传文件和从照片中读取可交换图片文件信息，这2个动作在网络相册上传页面是同时开始的。这就允许在文件上传的时候，可以同时预览已经上传的部分数据的图像。  
   
-##创建Blobs的老方法  
+## 创建Blobs的老方法  
   
 ile对象在浏览器中开始出现后不久，开发人员意识到Blob对象是如此强大，以致想不通过用户交互就可以直接创建它们。毕竟，任何数据都可以放在Blob里面，而不一定要绑定一个文件。浏览器可以快速的创建BlobBuilder，这个对象类型的唯一目的就是将数据封装在一个Blob对象里面。这是一个非标准类型并且已经在Firefox（像MozBlobBuilder），IE10（像MSBlobBuilder）和Chrome（像WebKitBlobBuilder）中实现。  
   
@@ -76,7 +75,7 @@ worker.postMessage();
   
 你可以任意次调用append()来创建Blob的内容。  
 
-##创建Blobs的新方式  
+## 创建Blobs的新方式  
 
 因为开发人员一直呼吁可以有一种方式来直接创建Blob对象，然后浏览器出现了BlobBuilder，它决定添加一个Blob构造器。这个构造器现在是规范的一部分，将是未来创建Blob对象的一种方式。  
   
@@ -88,11 +87,11 @@ var blob = new Blob(["Hello world!"], { type: "text/plain" });
     
 像你看到的一样，这比使用BlobBuilder更加简单。Chrome的nightly builds版本和未来的Firefox 13将支持Blob构造器。其他浏览器还没有宣布实现该构造器的计划，尽管如此，现在它是File API*[3]*标准的一部分，期望以后会被普遍支持。  
   
-##总结  
+## 总结  
   
 这是“在JavaScript中进行文件处理”这一系列的最后一部分。我希望你了解到，File API非常强大，在web应用中开辟了很多全新的方式来处理文件。当用户需要上传文件时你不再需要坚持使用文件上传框，现在你可以在客户端读取文件，为客户端操作开辟了多种可能性。你可以在上传文件之前重置图片的大小（使用FileReader和`<canvas>`）；你可以单纯在浏览器里创建一个文本编辑器；你可以分隔大文件进行逐步上载。可能性不是无穷无尽的，但也很接近无穷尽了。  
   
-####引用  
+#### 引用  
 
 * [Parsing Exif client-side using JavaScript](http://www.google.com/gwt/x?wsc=tb&source=wax&u=http%3A%2F%2Fcode.flickr.com/blog/2012/06/01/parsing-exif-client-side-using-javascript-2/&ei=DcsYUMuwAcSmkAXmvoHoAg) by Flickr Team
 * [The Basics of Web Workers](http://www.google.com/gwt/x?wsc=tb&source=wax&u=http%3A%2F%2Fwww.html5rocks.com/en/tutorials/workers/basics/&ei=DcsYUMuwAcSmkAXmvoHoAg) by Eric Bidelman
@@ -100,9 +99,9 @@ var blob = new Blob(["Hello world!"], { type: "text/plain" });
 
 ---
 
-- [在JavaScript中进行文件处理，第一部分：基础](http://zhaozhiming.github.io/blog/2012/07/08/working-with-files-in-javascript-part-1/)
-- [在JavaScript中进行文件处理，第二部分：文件读取](http://zhaozhiming.github.io/blog/2012/07/16/working-with-files-in-javascript-part-2/)
-- [在JavaScript中进行文件处理，第三部分：处理事件和错误](http://zhaozhiming.github.io/blog/2012/07/23/working-with-files-in-javascript-part-3/)
-- [在JavaScript中进行文件处理，第四部分：对象URLs](http://zhaozhiming.github.io/blog/2012/07/30/working-with-files-in-javascript-part-4/)
+- [在JavaScript中进行文件处理，第一部分：基础](http://zhaozhiming.github.io/2012/07/08/working-with-files-in-javascript-part-1/)
+- [在JavaScript中进行文件处理，第二部分：文件读取](http://zhaozhiming.github.io/2012/07/16/working-with-files-in-javascript-part-2/)
+- [在JavaScript中进行文件处理，第三部分：处理事件和错误](http://zhaozhiming.github.io/2012/07/23/working-with-files-in-javascript-part-3/)
+- [在JavaScript中进行文件处理，第四部分：对象URLs](http://zhaozhiming.github.io/2012/07/30/working-with-files-in-javascript-part-4/)
 
 

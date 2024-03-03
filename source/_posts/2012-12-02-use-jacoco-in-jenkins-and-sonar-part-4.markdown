@@ -53,9 +53,7 @@ tags: [jacoco, jenkins, sonar]
 * sonar.jacoco.reportPath是单元测试覆盖率文件的路径。
 * sonar.jacoco.itReportPath是集成测试覆盖率文件的路径。
   
-更多参数可以参考这里：[单元测试][url1]，[集成测试][url2]  
-[url1]: http://docs.codehaus.org/display/SONAR/Code+Coverage+by+Unit+Tests
-[url2]: http://docs.codehaus.org/display/SONAR/Code+Coverage+by+Integration+Tests  
+更多参数可以参考这里：[单元测试](http://docs.codehaus.org/display/SONAR/Code+Coverage+by+Unit+Tests)，[集成测试](http://docs.codehaus.org/display/SONAR/Code+Coverage+by+Integration+Tests)  
   
 在sonar 3.3的版本会自动将单元测试和集成测试的覆盖率合并，最后附上sonar上的覆盖率显示：  
 

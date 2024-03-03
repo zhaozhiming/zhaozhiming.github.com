@@ -7,15 +7,14 @@ categories: translate
 tags: javascript
 ---
   
-**译注：原文是《JavaScript高级程序设计》的作者Nicholas Zakas写的，本翻译纯属为自己学习而做，仅供参考。原文链接：[这里][url1]**  
-[url1]: http://www.nczonline.net/blog/2012/05/22/working-with-files-in-javascript-part-3/
+**译注：原文是《JavaScript高级程序设计》的作者Nicholas Zakas写的，本翻译纯属为自己学习而做，仅供参考。原文链接：[这里](http://www.nczonline.net/blog/2012/05/22/working-with-files-in-javascript-part-3/)**  
 
 ***
 
 FileReader对象用来读取浏览器可以访问的文件的内容。在我前一篇blog中，你学习到了如何使用FileReader对象轻松读取文件，并将文件内容转换为各种形式。FileReader在很多方面和XMLHttpRequest非常相似。  
 
 <!--more-->  
-##进度事件  
+## 进度事件  
   
 progress事件变得如此普遍，以致实际上它们写在一个独立的规范*[1]*里面。这些事件设计用来表示数据传输的进度。这些传输不只发生在从服务器端请求数据的时候，而且也发生在从磁盘上请求数据的时候，这都是FileReader可以做的。  
   
@@ -30,7 +29,7 @@ progress事件变得如此普遍，以致实际上它们写在一个独立的规
   
 error和load事件我们在前一篇blog已经讨论了。其他事件让你更好地控制在数据传输。  
   
-##跟踪进度  
+## 跟踪进度  
   
 当你想要跟踪一个文件读取的进度，你可以使用progress事件。这个事件对象包含了3个属性来监控数据的传输：  
 
@@ -66,7 +65,7 @@ reader.readAsText(file);
   
 这与Gmail用拖拽方式进行文件上传的方法相似，拖拽一个文件到email后你可以立即看到一个进度条。这个进度条表示有多少文件已经被传输到服务器。  
 
-##错误处理  
+## 错误处理  
   
 即使你已经在读取一个本地文件，但仍然有可能读取失败。在File API规范*[2]*中定义了4种错误类型：    
   
@@ -117,21 +116,21 @@ reader.readAsText(file);
 {% endcodeblock %}
   
 ***
-####下集预告  
+#### 下集预告  
   
 FileReader是一个全面的对象，有着非常多的功能，并且和XMLHttpRequest很相似。在学习了这3篇blog之后，你现在应该可以使用JavaScript来读取文件数据，如果需要的话，还可以将数据发送回给服务器。尽管如此，File API的功能和内容比我们在这个系列里讨论的东西要多得多，在下一章你将学习到一个强大全新的功能设计来处理文件。  
   
-####相关链接  
+#### 相关链接  
   
 * [Progress Events](http://www.w3.org/TR/progress-events/)
 * [File API]([url3]: http://www.w3.org/TR/FileAPI/)
 
 ---
 
-- [在JavaScript中进行文件处理，第一部分：基础](http://zhaozhiming.github.io/blog/2012/07/08/working-with-files-in-javascript-part-1/)
-- [在JavaScript中进行文件处理，第二部分：文件读取](http://zhaozhiming.github.io/blog/2012/07/16/working-with-files-in-javascript-part-2/)
-- [在JavaScript中进行文件处理，第四部分：对象URLs](http://zhaozhiming.github.io/blog/2012/07/30/working-with-files-in-javascript-part-4/)
-- [在JavaScript中进行文件处理，第五部分：Blobs](http://zhaozhiming.github.io/blog/2012/08/01/working-with-files-in-javascript-part-5/)
+- [在JavaScript中进行文件处理，第一部分：基础](http://zhaozhiming.github.io/2012/07/08/working-with-files-in-javascript-part-1/)
+- [在JavaScript中进行文件处理，第二部分：文件读取](http://zhaozhiming.github.io/2012/07/16/working-with-files-in-javascript-part-2/)
+- [在JavaScript中进行文件处理，第四部分：对象URLs](http://zhaozhiming.github.io/2012/07/30/working-with-files-in-javascript-part-4/)
+- [在JavaScript中进行文件处理，第五部分：Blobs](http://zhaozhiming.github.io/2012/08/01/working-with-files-in-javascript-part-5/)
 
 
 

@@ -14,7 +14,7 @@ tags: [python,remote debug,pycharm,eclipse,ubuntu]
 我比较喜欢Pycharm，因为这个是JetBrains公司出的python IDE工具，该公司下的java IDE工具——IDEA，无论从界面还是操作上都甩eclipse几条街，但项目组里有些人使用eclipse比较久了，一时让他们转pycharm比较困难，所以还是两边的设置都介绍一下吧。  
 <!--more-->  
 
-##pycharm远程调试
+## pycharm远程调试
 pycharmd的远程调试比eclipse的简单多了，而且调试程序也比较稳定，不像eclipse那样容易出一些莫名其妙的问题，步骤如下。  
   
 1. 将pycharm安装目录下的pycharm-debug.egg文件拷贝到远程机器上（如果是python3的话就拷贝pycharm-debug-py3k.egg文件）。
@@ -36,7 +36,7 @@ pycharmd的远程调试比eclipse的简单多了，而且调试程序也比较�
   
 更多关于pycharm远程调试的信息可以参阅[这里][url1]。
 
-##eclipse远程调试  
+## eclipse远程调试  
 使用eclipse进行python远程调试，需要先在ubuntu下面安装eclipse和eclipse的python插件PyDev。  
 
 * Eclipse安装比较简单，直接解压下载后的eclipse包即可使用。

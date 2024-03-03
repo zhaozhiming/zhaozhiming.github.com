@@ -164,4 +164,4 @@ html代码:
 
 [url1]: https://github.com/jhy/jsoup
 [url2]: https://github.com/caitp/angular-semantic
-[url3]: http://zhaozhiming.github.io/blog/2014/05/31/some-tips-in-my-recent-project/
+[url3]: http://zhaozhiming.github.io/2014/05/31/some-tips-in-my-recent-project/

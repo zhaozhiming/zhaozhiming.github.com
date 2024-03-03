@@ -19,10 +19,9 @@ tags: jenkins plugins
 * IDE--IDEA或eclipse
 * web服务器：jetty或tomcat（可选）
   
-###Maven  
+### Maven  
   
-jenkins插件需要用到Maven这个构建工具，大家可以去Maven的官网下载：[这里][url1]  
-[url1]: http://maven.apache.org/download.cgi  
+jenkins插件需要用到Maven这个构建工具，大家可以去Maven的官网下载：[这里](http://maven.apache.org/download.cgi) 
   
 如何安装Maven？以windows环境为例：  
   
@@ -32,15 +31,14 @@ jenkins插件需要用到Maven这个构建工具，大家可以去Maven的官网
 4. 环境变量中确保有JAVA_HOME这个环境变量，有的话在cmd窗口可以直接用java -version打印JDK版本信息；
 5. 配置完所有环境变量后，在cmd窗口打印命名mvn -v，会打印出Maven和JDK的信息，这样就表示安装Maven成功了；
   
-更详细的安装说明请看[这里][url2]。  
+更详细的安装说明请看[这里](http://maven.apache.org/download.cgi)。  
 [url2]: http://maven.apache.org/download.cgi  
   
-###IDE  
+### IDE  
 
 我以前的blog还介绍过IDEA，相对于eclipse我还是比较喜欢用IDEA来开发。因为IDEA已经集成了Maven的插件，所以可以直接通过项目中的pom文件打开整个项目。在IDEA主界面右边有个maven projects的区域，打开可以看到工程的各个maven命令（图1）。  
   
-使用IDEA还需要添加一个针对jelly页面的插件，这个插件可以对jelly文件进行语法提示和高亮显示，插件地址点击[这里][url3]，效果见图2。  
-[url3]: http://plugins.intellij.net/plugin/?id=1885  
+使用IDEA还需要添加一个针对jelly页面的插件，这个插件可以对jelly文件进行语法提示和高亮显示，插件地址点击[这里](http://plugins.intellij.net/plugin/?id=1885)，效果见图2。  
   
 图1:  
 {% img /images/post/29152926-97e25c38b1754deca8843030a113cb3e.png 图1 %}
@@ -48,7 +46,7 @@ jenkins插件需要用到Maven这个构建工具，大家可以去Maven的官网
 图2:  
 {% img /images/post/29152950-1f91f25eac354a75a44e34287f75cbba.png 图2 %}
    
-###Jetty(可选)  
+### Jetty(可选)  
   
 其实运行插件工程的hpi:run就可以通过maven启动一个自带的Jetty6服务器，不需要额外再安装jetty服务器。但为了让我们的插件测试更接近真实环境，我们可以将做好的插件放到另外一个的Jetty服务器中，来测试插件的运行效果。  
   
@@ -80,8 +78,8 @@ jenkins插件需要用到Maven这个构建工具，大家可以去Maven的官网
 
 ---
   
-* [jenkins插件开发（二）-- HelloWorld](http://zhaozhiming.github.io/blog/2013/02/02/jenkins-plugins-develop-part-2/)
-* [jenkins插件开发（三）-- 插件编写](http://zhaozhiming.github.io/blog/2013/02/03/jenkins-plugins-develop-part-3/)
-* [jenkins插件开发（四）-- 插件发布](http://zhaozhiming.github.io/blog/2013/02/04/jenkins-plugins-develop-part-4/)
+* [jenkins插件开发（二）-- HelloWorld](http://zhaozhiming.github.io/2013/02/02/jenkins-plugins-develop-part-2/)
+* [jenkins插件开发（三）-- 插件编写](http://zhaozhiming.github.io/2013/02/03/jenkins-plugins-develop-part-3/)
+* [jenkins插件开发（四）-- 插件发布](http://zhaozhiming.github.io/2013/02/04/jenkins-plugins-develop-part-4/)
   
 

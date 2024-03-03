@@ -6,35 +6,38 @@
 	<title>利用Sonar定制自定义JS扫描规则（二）——自定义JS扫描规则 - Hacker and Geeker&#39;s Way</title>
     <meta name="author" content="">
     
-	<meta name="description" content="&lt;p&gt;在上一篇blog中，我们将sonar几个需要的环境都搭建好了，包括sonar的服务器，sonar runner，sonar的javascript插件。现在我们就来讲如何自定义JS扫描规则。  &lt;/p&gt;
-&lt;span id=&#34;more&#34;&gt;&lt;/span&gt;  
-&lt;p&gt;实际上有3种方法可以自定义代码的校验规则：  &lt;/p&gt;
+	<meta name="description" content="&lt;p&gt;在上一篇 blog 中，我们将 sonar 几个需要的环境都搭建好了，包括 sonar 的服务器，sonar runner，sonar 的 javascript 插件。现在我们就来讲如何自定义 JS 扫描规则。&lt;/p&gt;
+&lt;span id=&#34;more&#34;&gt;&lt;/span&gt;
+
+&lt;p&gt;实际上有 3 种方法可以自定义代码的校验规则：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;直接在sonar的web接口中增加XPath规则；&lt;/li&gt;
-&lt;li&gt;通过插件的功能来增加自定义规则，比如checkstyle，pmd等插件是允许自定义规则的；&lt;/li&gt;
+&lt;li&gt;直接在 sonar 的 web 接口中增加 XPath 规则；&lt;/li&gt;
+&lt;li&gt;通过插件的功能来增加自定义规则，比如 checkstyle，pmd 等插件是允许自定义规则的；&lt;/li&gt;
 &lt;li&gt;通过新增一个代码分析器来实现自定义规则；&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;sonar官方推荐的方式是使用最简单的XPath方式来增加自定义规则，如果语言太复杂或者XPath无法查询其结构的，再使用自定义插件的方式，所以我们这里重点介绍的是使用XPath的方式。  &lt;/p&gt;
-&lt;p&gt;###使用XPath增加自定义JS规则  &lt;/p&gt;
-&lt;p&gt;sonar为大部分流行的语言（C, C#, C++, Cobol, Flex, JavaScript, PL&amp;#x2F;I, PL&amp;#x2F;SQL, Python and VB.NET）提供了一个简洁的方式来增加代码规则。这些新增规则必须使用[XPath][url1]来实现，这样的话语言的每一部分都可以映射到[Abstract Syntax Tree][url2]（AST）。对于每一种语言，SSLR Toolkit 工具提供了代码转AST的功能，该工具具体的使用在下面会介绍，这里是[SSLR Javascript Toolkit][url3]工具的下载。如果对XPath不熟悉，可以参考这里看一下例子[&lt;a href=&#34;http://www.w3schools.com/xpath/][url4]%E3%80%82&#34;&gt;http://www.w3schools.com/xpath/][url4]。&lt;/a&gt;&lt;br&gt;[url1]: &lt;a href=&#34;http://en.wikipedia.org/wiki/XPath&#34;&gt;http://en.wikipedia.org/wiki/XPath&lt;/a&gt;&lt;br&gt;[url2]: &lt;a href=&#34;http://en.wikipedia.org/wiki/Abstract_syntax_tree&#34;&gt;http://en.wikipedia.org/wiki/Abstract_syntax_tree&lt;/a&gt;&lt;br&gt;[url3]: &lt;a href=&#34;http://repository.codehaus.org/org/codehaus/sonar-plugins/javascript/sslr-javascript-toolkit/1.3/sslr-javascript-toolkit-1.3.jar&#34;&gt;http://repository.codehaus.org/org/codehaus/sonar-plugins/javascript/sslr-javascript-toolkit/1.3/sslr-javascript-toolkit-1.3.jar&lt;/a&gt;&lt;br&gt;[url4]: &lt;a href=&#34;http://www.w3schools.com/xpath/&#34;&gt;http://www.w3schools.com/xpath/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;1、首先使用管理员的角色登录sonar，然后去到Settings &amp;gt; Quality Profile页面，选择Js规则（如下图所示）。    &lt;/p&gt;
-&lt;img src=&#34;/images/post/02070803-9bce5fab1bf543059071fafff2ae37d8.png&#34; class=&#34;&#34;&gt;  
-&lt;p&gt;2、接着在Coding rules页面输入查询条件，找到XPath规则：  &lt;/p&gt;
-&lt;img src=&#34;/images/post/02070943-c9a5b7732ea6478fba266555c308fc29.png&#34; class=&#34;&#34;&gt;  
-&lt;p&gt;3、查询结果出来后，点击Copy rule连接来新增规则：  &lt;/p&gt;
-&lt;img src=&#34;/images/post/02071054-da90a48498234fc19d34aff75c84a104.png&#34; class=&#34;&#34;&gt;  
-&lt;p&gt;4、按照XPath的语法编写自己的规则：  &lt;/p&gt;
-&lt;img src=&#34;/images/post/02071436-15c170e9f4eb4f6684d95df76fe6e628.png&#34; class=&#34;&#34;&gt;   
-&lt;p&gt;如果对XPath不熟悉，建议先学习一些XPath的语法，下面给出3个javascript xpath的规则：  &lt;/p&gt;
-&lt;p&gt;#####不要使用document.write:  &lt;/p&gt;
-&lt;figure class=&#34;highlight text&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;//callExpression/memberExpression[count(*) = 3 and primaryExpression[@tokenValue = &amp;quot;document&amp;quot;] and identifierName[@tokenValue = &amp;quot;write&amp;quot;]]&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;  
-&lt;p&gt;#####if&amp;#x2F;else语句后面必须接大括号：  &lt;/p&gt;
-&lt;figure class=&#34;highlight text&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;//ifStatement/statement[not(block)] &lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;  
-&lt;p&gt;#####本地变量名以XX开头：  &lt;/p&gt;
-&lt;figure class=&#34;highlight text&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;//functionBody//variableDeclaration/IDENTIFIER[not(starts-with(@tokenValue,&amp;#x27;zzm&amp;#x27;))]&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;  
+&lt;p&gt;sonar 官方推荐的方式是使用最简单的 XPath 方式来增加自定义规则，如果语言太复杂或者 XPath 无法查询其结构的，再使用自定义插件的方式，所以我们这里重点介绍的是使用 XPath 的方式。&lt;/p&gt;
+&lt;h3 id=&#34;使用-XPath-增加自定义-JS-规则&#34;&gt;&lt;a href=&#34;#使用-XPath-增加自定义-JS-规则&#34; class=&#34;headerlink&#34; title=&#34;使用 XPath 增加自定义 JS 规则&#34;&gt;&lt;/a&gt;使用 XPath 增加自定义 JS 规则&lt;/h3&gt;&lt;p&gt;sonar 为大部分流行的语言（C, C#, C++, Cobol, Flex, JavaScript, PL&amp;#x2F;I, PL&amp;#x2F;SQL, Python and VB.NET）提供了一个简洁的方式来增加代码规则。这些新增规则必须使用&lt;a href=&#34;http://en.wikipedia.org/wiki/XPath&#34;&gt;XPath&lt;/a&gt;来实现，这样的话语言的每一部分都可以映射到&lt;a href=&#34;http://en.wikipedia.org/wiki/Abstract_syntax_tree&#34;&gt;Abstract Syntax Tree&lt;/a&gt;（AST）。对于每一种语言，SSLR Toolkit 工具提供了代码转 AST 的功能，该工具具体的使用在下面会介绍，这里是&lt;a href=&#34;http://repository.codehaus.org/org/codehaus/sonar-plugins/javascript/sslr-javascript-toolkit/1.3/sslr-javascript-toolkit-1.3.jar&#34;&gt;SSLR Javascript Toolkit&lt;/a&gt;工具的下载。如果对 XPath 不熟悉，可以参考这里看一下例子&lt;a href=&#34;http://www.w3schools.com/xpath/&#34;&gt;http://www.w3schools.com/xpath/&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;1、首先使用管理员的角色登录 sonar，然后去到 Settings &amp;gt; Quality Profile 页面，选择 Js 规则（如下图所示）。&lt;/p&gt;
+&lt;img src=&#34;/images/post/02070803-9bce5fab1bf543059071fafff2ae37d8.png&#34; class=&#34;&#34;&gt;
 
-&lt;p&gt;5、创建好规则之后，把规则设置为active，将规则的级别调高一些就会自动变为active，然后重新跑一下规则分析，这样新增的规则就生效了。  &lt;/p&gt;
-&lt;img src=&#34;/images/post/02072520-4308a5a558d04ded998bb54f452c71f7.png&#34; class=&#34;&#34;&gt;  
+&lt;p&gt;2、接着在 Coding rules 页面输入查询条件，找到 XPath 规则：&lt;/p&gt;
+&lt;img src=&#34;/images/post/02070943-c9a5b7732ea6478fba266555c308fc29.png&#34; class=&#34;&#34;&gt;
+
+&lt;p&gt;3、查询结果出来后，点击 Copy rule 连接来新增规则：&lt;/p&gt;
+&lt;img src=&#34;/images/post/02071054-da90a48498234fc19d34aff75c84a104.png&#34; class=&#34;&#34;&gt;
+
+&lt;p&gt;4、按照 XPath 的语法编写自己的规则：&lt;/p&gt;
+&lt;img src=&#34;/images/post/02071436-15c170e9f4eb4f6684d95df76fe6e628.png&#34; class=&#34;&#34;&gt;
+
+&lt;p&gt;如果对 XPath 不熟悉，建议先学习一些 XPath 的语法，下面给出 3 个 javascript xpath 的规则：&lt;/p&gt;
+&lt;h5 id=&#34;不要使用-document-write&#34;&gt;&lt;a href=&#34;#不要使用-document-write&#34; class=&#34;headerlink&#34; title=&#34;不要使用 document.write:&#34;&gt;&lt;/a&gt;不要使用 document.write:&lt;/h5&gt;&lt;figure class=&#34;highlight text&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;//callExpression/memberExpression[count(\*) = 3 and primaryExpression[@tokenValue = &amp;quot;document&amp;quot;] and identifierName[@tokenValue = &amp;quot;write&amp;quot;]]&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;h5 id=&#34;if-x2F-else-语句后面必须接大括号：&#34;&gt;&lt;a href=&#34;#if-x2F-else-语句后面必须接大括号：&#34; class=&#34;headerlink&#34; title=&#34;if&amp;#x2F;else 语句后面必须接大括号：&#34;&gt;&lt;/a&gt;if&amp;#x2F;else 语句后面必须接大括号：&lt;/h5&gt;&lt;figure class=&#34;highlight text&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;//ifStatement/statement[not(block)]&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;h5 id=&#34;本地变量名以-XX-开头：&#34;&gt;&lt;a href=&#34;#本地变量名以-XX-开头：&#34; class=&#34;headerlink&#34; title=&#34;本地变量名以 XX 开头：&#34;&gt;&lt;/a&gt;本地变量名以 XX 开头：&lt;/h5&gt;&lt;figure class=&#34;highlight text&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;//functionBody//variableDeclaration/IDENTIFIER[not(starts-with(@tokenValue,&amp;#x27;zzm&amp;#x27;))]&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;5、创建好规则之后，把规则设置为 active，将规则的级别调高一些就会自动变为 active，然后重新跑一下规则分析，这样新增的规则就生效了。&lt;/p&gt;
+&lt;img src=&#34;/images/post/02072520-4308a5a558d04ded998bb54f452c71f7.png&#34; class=&#34;&#34;&gt;
 "> <!-- TODO: truncate -->
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -156,35 +159,38 @@
 <a href="/tags/sonar/">sonar</a> <a href="/tags/js/">js</a>
 </div>
     </div>
-	<div class="entry-content"><p>在上一篇blog中，我们将sonar几个需要的环境都搭建好了，包括sonar的服务器，sonar runner，sonar的javascript插件。现在我们就来讲如何自定义JS扫描规则。  </p>
-<span id="more"></span>  
-<p>实际上有3种方法可以自定义代码的校验规则：  </p>
+	<div class="entry-content"><p>在上一篇 blog 中，我们将 sonar 几个需要的环境都搭建好了，包括 sonar 的服务器，sonar runner，sonar 的 javascript 插件。现在我们就来讲如何自定义 JS 扫描规则。</p>
+<span id="more"></span>
+
+<p>实际上有 3 种方法可以自定义代码的校验规则：</p>
 <ul>
-<li>直接在sonar的web接口中增加XPath规则；</li>
-<li>通过插件的功能来增加自定义规则，比如checkstyle，pmd等插件是允许自定义规则的；</li>
+<li>直接在 sonar 的 web 接口中增加 XPath 规则；</li>
+<li>通过插件的功能来增加自定义规则，比如 checkstyle，pmd 等插件是允许自定义规则的；</li>
 <li>通过新增一个代码分析器来实现自定义规则；</li>
 </ul>
-<p>sonar官方推荐的方式是使用最简单的XPath方式来增加自定义规则，如果语言太复杂或者XPath无法查询其结构的，再使用自定义插件的方式，所以我们这里重点介绍的是使用XPath的方式。  </p>
-<p>###使用XPath增加自定义JS规则  </p>
-<p>sonar为大部分流行的语言（C, C#, C++, Cobol, Flex, JavaScript, PL&#x2F;I, PL&#x2F;SQL, Python and VB.NET）提供了一个简洁的方式来增加代码规则。这些新增规则必须使用[XPath][url1]来实现，这样的话语言的每一部分都可以映射到[Abstract Syntax Tree][url2]（AST）。对于每一种语言，SSLR Toolkit 工具提供了代码转AST的功能，该工具具体的使用在下面会介绍，这里是[SSLR Javascript Toolkit][url3]工具的下载。如果对XPath不熟悉，可以参考这里看一下例子[<a target="_blank" rel="noopener" href="http://www.w3schools.com/xpath/][url4]%E3%80%82">http://www.w3schools.com/xpath/][url4]。</a><br>[url1]: <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/XPath">http://en.wikipedia.org/wiki/XPath</a><br>[url2]: <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">http://en.wikipedia.org/wiki/Abstract_syntax_tree</a><br>[url3]: <a target="_blank" rel="noopener" href="http://repository.codehaus.org/org/codehaus/sonar-plugins/javascript/sslr-javascript-toolkit/1.3/sslr-javascript-toolkit-1.3.jar">http://repository.codehaus.org/org/codehaus/sonar-plugins/javascript/sslr-javascript-toolkit/1.3/sslr-javascript-toolkit-1.3.jar</a><br>[url4]: <a target="_blank" rel="noopener" href="http://www.w3schools.com/xpath/">http://www.w3schools.com/xpath/</a></p>
-<p>1、首先使用管理员的角色登录sonar，然后去到Settings &gt; Quality Profile页面，选择Js规则（如下图所示）。    </p>
-<img src="/images/post/02070803-9bce5fab1bf543059071fafff2ae37d8.png" class="">  
-<p>2、接着在Coding rules页面输入查询条件，找到XPath规则：  </p>
-<img src="/images/post/02070943-c9a5b7732ea6478fba266555c308fc29.png" class="">  
-<p>3、查询结果出来后，点击Copy rule连接来新增规则：  </p>
-<img src="/images/post/02071054-da90a48498234fc19d34aff75c84a104.png" class="">  
-<p>4、按照XPath的语法编写自己的规则：  </p>
-<img src="/images/post/02071436-15c170e9f4eb4f6684d95df76fe6e628.png" class="">   
-<p>如果对XPath不熟悉，建议先学习一些XPath的语法，下面给出3个javascript xpath的规则：  </p>
-<p>#####不要使用document.write:  </p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//callExpression/memberExpression[count(*) = 3 and primaryExpression[@tokenValue = &quot;document&quot;] and identifierName[@tokenValue = &quot;write&quot;]]</span><br></pre></td></tr></table></figure>  
-<p>#####if&#x2F;else语句后面必须接大括号：  </p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//ifStatement/statement[not(block)] </span><br></pre></td></tr></table></figure>  
-<p>#####本地变量名以XX开头：  </p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//functionBody//variableDeclaration/IDENTIFIER[not(starts-with(@tokenValue,&#x27;zzm&#x27;))]</span><br></pre></td></tr></table></figure>  
+<p>sonar 官方推荐的方式是使用最简单的 XPath 方式来增加自定义规则，如果语言太复杂或者 XPath 无法查询其结构的，再使用自定义插件的方式，所以我们这里重点介绍的是使用 XPath 的方式。</p>
+<h3 id="使用-XPath-增加自定义-JS-规则"><a href="#使用-XPath-增加自定义-JS-规则" class="headerlink" title="使用 XPath 增加自定义 JS 规则"></a>使用 XPath 增加自定义 JS 规则</h3><p>sonar 为大部分流行的语言（C, C#, C++, Cobol, Flex, JavaScript, PL&#x2F;I, PL&#x2F;SQL, Python and VB.NET）提供了一个简洁的方式来增加代码规则。这些新增规则必须使用<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/XPath">XPath</a>来实现，这样的话语言的每一部分都可以映射到<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Abstract_syntax_tree">Abstract Syntax Tree</a>（AST）。对于每一种语言，SSLR Toolkit 工具提供了代码转 AST 的功能，该工具具体的使用在下面会介绍，这里是<a target="_blank" rel="noopener" href="http://repository.codehaus.org/org/codehaus/sonar-plugins/javascript/sslr-javascript-toolkit/1.3/sslr-javascript-toolkit-1.3.jar">SSLR Javascript Toolkit</a>工具的下载。如果对 XPath 不熟悉，可以参考这里看一下例子<a target="_blank" rel="noopener" href="http://www.w3schools.com/xpath/">http://www.w3schools.com/xpath/</a>。</p>
+<p>1、首先使用管理员的角色登录 sonar，然后去到 Settings &gt; Quality Profile 页面，选择 Js 规则（如下图所示）。</p>
+<img src="/images/post/02070803-9bce5fab1bf543059071fafff2ae37d8.png" class="">
 
-<p>5、创建好规则之后，把规则设置为active，将规则的级别调高一些就会自动变为active，然后重新跑一下规则分析，这样新增的规则就生效了。  </p>
-<img src="/images/post/02072520-4308a5a558d04ded998bb54f452c71f7.png" class="">  
+<p>2、接着在 Coding rules 页面输入查询条件，找到 XPath 规则：</p>
+<img src="/images/post/02070943-c9a5b7732ea6478fba266555c308fc29.png" class="">
+
+<p>3、查询结果出来后，点击 Copy rule 连接来新增规则：</p>
+<img src="/images/post/02071054-da90a48498234fc19d34aff75c84a104.png" class="">
+
+<p>4、按照 XPath 的语法编写自己的规则：</p>
+<img src="/images/post/02071436-15c170e9f4eb4f6684d95df76fe6e628.png" class="">
+
+<p>如果对 XPath 不熟悉，建议先学习一些 XPath 的语法，下面给出 3 个 javascript xpath 的规则：</p>
+<h5 id="不要使用-document-write"><a href="#不要使用-document-write" class="headerlink" title="不要使用 document.write:"></a>不要使用 document.write:</h5><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//callExpression/memberExpression[count(\*) = 3 and primaryExpression[@tokenValue = &quot;document&quot;] and identifierName[@tokenValue = &quot;write&quot;]]</span><br></pre></td></tr></table></figure>
+
+<h5 id="if-x2F-else-语句后面必须接大括号："><a href="#if-x2F-else-语句后面必须接大括号：" class="headerlink" title="if&#x2F;else 语句后面必须接大括号："></a>if&#x2F;else 语句后面必须接大括号：</h5><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//ifStatement/statement[not(block)]</span><br></pre></td></tr></table></figure>
+
+<h5 id="本地变量名以-XX-开头："><a href="#本地变量名以-XX-开头：" class="headerlink" title="本地变量名以 XX 开头："></a>本地变量名以 XX 开头：</h5><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//functionBody//variableDeclaration/IDENTIFIER[not(starts-with(@tokenValue,&#x27;zzm&#x27;))]</span><br></pre></td></tr></table></figure>
+
+<p>5、创建好规则之后，把规则设置为 active，将规则的级别调高一些就会自动变为 active，然后重新跑一下规则分析，这样新增的规则就生效了。</p>
+<img src="/images/post/02072520-4308a5a558d04ded998bb54f452c71f7.png" class="">
 </div>
 
 </article>

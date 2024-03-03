@@ -132,16 +132,16 @@
 <p>关于openstack swift的资料可以看<a target="_blank" rel="noopener" href="http://zh.wikipedia.org/wiki/OpenStack">这里</a>，<a target="_blank" rel="noopener" href="http://www.programmer.com.cn/12403/">这里</a>还有<a target="_blank" rel="noopener" href="http://www.ibm.com/developerworks/cn/cloud/library/1310_zhanghua_openstackswift/">这里</a>。  </p>
 <span id="more"></span>  
 
-<p>##准备环境<br>从零开始接触的同学可以先从swift的<a target="_blank" rel="noopener" href="http://docs.openstack.org/developer/swift/development_saio.html">all in one</a>部署开始学习，在本机搭建好swift环境就可以进行简单的测试了。由于swift是用Python语言写的，如果要开发swift的中间件的还需要在本地安装Pythone的IDE，我比较喜欢JETBRAIN（他们比较出名的是JAVA的IDE——IDEA）公司的IDE——Pycharm。准备环境如下:  </p>
+<h2 id="准备环境"><a href="#准备环境" class="headerlink" title="准备环境"></a>准备环境</h2><p>从零开始接触的同学可以先从swift的<a target="_blank" rel="noopener" href="http://docs.openstack.org/developer/swift/development_saio.html">all in one</a>部署开始学习，在本机搭建好swift环境就可以进行简单的测试了。由于swift是用Python语言写的，如果要开发swift的中间件的还需要在本地安装Pythone的IDE，我比较喜欢JETBRAIN（他们比较出名的是JAVA的IDE——IDEA）公司的IDE——Pycharm。准备环境如下:  </p>
 <ul>
 <li>Ububutn 12.04 LTS 64bit</li>
 <li>Python2.7(虽然现在已经有Python3了，但swift是用2.x的Python写的，Python3不向后兼容Python2) </li>
 <li>Pycharm3</li>
 </ul>
-<p>##中间件介绍<br>swift通过提供基于HTTP协议的API给外界调用来完成对象存储的功能，我们从swift的各个部署说明里面可以看到，proxy server和storage node的配置文件里面都有一个<code>[pipeline:main]</code>，这个是swift各个服务的请求链，由多个中间件组成的一个中间件集合。pipeline有点像J2EE里面filter，每个http请求需要经过各个服务的pipeline。</p>
+<h2 id="中间件介绍"><a href="#中间件介绍" class="headerlink" title="中间件介绍"></a>中间件介绍</h2><p>swift通过提供基于HTTP协议的API给外界调用来完成对象存储的功能，我们从swift的各个部署说明里面可以看到，proxy server和storage node的配置文件里面都有一个<code>[pipeline:main]</code>，这个是swift各个服务的请求链，由多个中间件组成的一个中间件集合。pipeline有点像J2EE里面filter，每个http请求需要经过各个服务的pipeline。</p>
 <figure class="highlight xml"><figcaption><span>proxy-server.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">[pipeline:main]</span><br><span class="line"># Yes, proxy-logging appears twice. This is so that</span><br><span class="line"># middleware-originated requests get logged too.</span><br><span class="line">pipeline = catch_errors healthcheck proxy-logging bulk ratelimit crossdomain slo cache tempurl tempauth staticweb account-quotas container-quotas proxy-logging proxy-server</span><br><span class="line">...</span><br></pre></td></tr></table></figure> 
 <figure class="highlight xml"><figcaption><span>account-server.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">[pipeline:main]</span><br><span class="line">pipeline = recon account-server</span><br><span class="line">...</span><br></pre></td></tr></table></figure> 
-<p>##中间件编写<br>了解了swift的基本功能流程后，我们就可以来写自己的中间件了。  </p>
+<h2 id="中间件编写"><a href="#中间件编写" class="headerlink" title="中间件编写"></a>中间件编写</h2><p>了解了swift的基本功能流程后，我们就可以来写自己的中间件了。  </p>
 <p>没有写过中间件的同学可以通过学习其他中间件开始，在swift的源码中配置了很多中间件，有一些功能非常简单。比如name_check中间件，这个中间件的作用是拿来分析请求的url，判断url中是否有特殊字符，长度是否超出规定长度等。这个中间件没有配置在swift的标准配置中，有需要的可以自行加上本机的swift环境做测试。  </p>
 <p>我们先来看一下name_check中间件的配置信息：</p>
 <figure class="highlight xml"><figcaption><span>proxy-server.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[pipeline:main]</span><br><span class="line">pipeline = catch_errors healthcheck name_check cache ratelimit tempauth sos</span><br><span class="line">           proxy-logging proxy-server</span><br><span class="line"></span><br><span class="line">[filter:name_check]</span><br><span class="line">use = egg:swift#name_check</span><br><span class="line">forbidden_chars = &#x27;&quot;`<span class="tag">&lt;&gt;</span></span><br><span class="line">maximum_length = 255</span><br></pre></td></tr></table></figure> 
@@ -160,20 +160,17 @@
 <li>filter_factory: 这个是类以外的方法，在swift服务启动时会创建中间件实例，并加入到pipeline中。</li>
 </ul>
 <p>学习完这个简单的中间件后，相信大家都可以依葫芦画瓢开始写自己的中间件了。  </p>
-<p>##修改配置文件<br>编写完中间件之后，还需要将中间件配置到swift中，这样才算真正完成中间件的创建。  </p>
-<p>####首先先停止swift的服务</p>
-<figure class="highlight xml"><figcaption><span>shell</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swift@ubuntu:~$ swift-init main stop</span><br></pre></td></tr></table></figure> 
-<p>####接着修改conf文件<br>假设你增加的中间件是proxy server的中间件，就修改proxy-server.conf，自行决定要放到pipeline中的哪个位置，具体要看你的中间件是执行什么功能。</p>
+<h2 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h2><p>编写完中间件之后，还需要将中间件配置到swift中，这样才算真正完成中间件的创建。  </p>
+<h4 id="首先先停止swift的服务"><a href="#首先先停止swift的服务" class="headerlink" title="首先先停止swift的服务"></a>首先先停止swift的服务</h4><figure class="highlight xml"><figcaption><span>shell</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swift@ubuntu:~$ swift-init main stop</span><br></pre></td></tr></table></figure> 
+<h4 id="接着修改conf文件"><a href="#接着修改conf文件" class="headerlink" title="接着修改conf文件"></a>接着修改conf文件</h4><p>假设你增加的中间件是proxy server的中间件，就修改proxy-server.conf，自行决定要放到pipeline中的哪个位置，具体要看你的中间件是执行什么功能。</p>
 <figure class="highlight xml"><figcaption><span>proxy-server.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[pipeline:main]</span><br><span class="line">pipeline = catch_errors healthcheck your_middleware cache ratelimit tempauth sos</span><br><span class="line">           proxy-logging proxy-server</span><br><span class="line"></span><br><span class="line">[filter:your_middleware]</span><br><span class="line">use = egg:swift#your_middleware</span><br><span class="line">your_middleware_config1 = value1</span><br><span class="line">your_middleware_config1 = value2</span><br></pre></td></tr></table></figure> 
 
 <p>####要修改swift的根目录下的setup.cfg文件</p>
 <figure class="highlight xml"><figcaption><span>setup.cfg</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">paste.filter_factory =</span><br><span class="line">	#这里加入一行自己的中间件，可以看下name_check中间件是怎么写的</span><br><span class="line">	name_check = swift.common.middleware.name_check:filter_factory</span><br></pre></td></tr></table></figure> 
 
-<p>####执行命令重新安装swift</p>
-<figure class="highlight xml"><figcaption><span>shell</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">swift@ubuntu:~$ cd swift目录</span><br><span class="line">swift@ubuntu:~$ sudo python setyp.py develop</span><br></pre></td></tr></table></figure> 
+<h4 id="执行命令重新安装swift"><a href="#执行命令重新安装swift" class="headerlink" title="执行命令重新安装swift"></a>执行命令重新安装swift</h4><figure class="highlight xml"><figcaption><span>shell</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">swift@ubuntu:~$ cd swift目录</span><br><span class="line">swift@ubuntu:~$ sudo python setyp.py develop</span><br></pre></td></tr></table></figure> 
 
-<p>####最后重启swift服务</p>
-<figure class="highlight xml"><figcaption><span>shell</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swift@ubuntu:~$ swift-init main start</span><br></pre></td></tr></table></figure> 
+<h4 id="最后重启swift服务"><a href="#最后重启swift服务" class="headerlink" title="最后重启swift服务"></a>最后重启swift服务</h4><figure class="highlight xml"><figcaption><span>shell</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swift@ubuntu:~$ swift-init main start</span><br></pre></td></tr></table></figure> 
 
 
 </div>

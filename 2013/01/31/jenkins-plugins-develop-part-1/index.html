@@ -136,8 +136,7 @@
 <li>IDE–IDEA或eclipse</li>
 <li>web服务器：jetty或tomcat（可选）</li>
 </ul>
-<p>###Maven  </p>
-<p>jenkins插件需要用到Maven这个构建工具，大家可以去Maven的官网下载：[这里][url1]<br>[url1]: <a target="_blank" rel="noopener" href="http://maven.apache.org/download.cgi">http://maven.apache.org/download.cgi</a>  </p>
+<h3 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h3><p>jenkins插件需要用到Maven这个构建工具，大家可以去Maven的官网下载：<a target="_blank" rel="noopener" href="http://maven.apache.org/download.cgi">这里</a> </p>
 <p>如何安装Maven？以windows环境为例：  </p>
 <ol>
 <li>解压下载的zip包（比如：apache-maven-3.0.4-bin.zip）到一个指定的目录（比如：D:\apache-maven-3.0.4）；</li>
@@ -146,16 +145,14 @@
 <li>环境变量中确保有JAVA_HOME这个环境变量，有的话在cmd窗口可以直接用java -version打印JDK版本信息；</li>
 <li>配置完所有环境变量后，在cmd窗口打印命名mvn -v，会打印出Maven和JDK的信息，这样就表示安装Maven成功了；</li>
 </ol>
-<p>更详细的安装说明请看[这里][url2]。<br>[url2]: <a target="_blank" rel="noopener" href="http://maven.apache.org/download.cgi">http://maven.apache.org/download.cgi</a>  </p>
-<p>###IDE  </p>
-<p>我以前的blog还介绍过IDEA，相对于eclipse我还是比较喜欢用IDEA来开发。因为IDEA已经集成了Maven的插件，所以可以直接通过项目中的pom文件打开整个项目。在IDEA主界面右边有个maven projects的区域，打开可以看到工程的各个maven命令（图1）。  </p>
-<p>使用IDEA还需要添加一个针对jelly页面的插件，这个插件可以对jelly文件进行语法提示和高亮显示，插件地址点击[这里][url3]，效果见图2。<br>[url3]: <a target="_blank" rel="noopener" href="http://plugins.intellij.net/plugin/?id=1885">http://plugins.intellij.net/plugin/?id=1885</a>  </p>
+<p>更详细的安装说明请看<a target="_blank" rel="noopener" href="http://maven.apache.org/download.cgi">这里</a>。<br>[url2]: <a target="_blank" rel="noopener" href="http://maven.apache.org/download.cgi">http://maven.apache.org/download.cgi</a>  </p>
+<h3 id="IDE"><a href="#IDE" class="headerlink" title="IDE"></a>IDE</h3><p>我以前的blog还介绍过IDEA，相对于eclipse我还是比较喜欢用IDEA来开发。因为IDEA已经集成了Maven的插件，所以可以直接通过项目中的pom文件打开整个项目。在IDEA主界面右边有个maven projects的区域，打开可以看到工程的各个maven命令（图1）。  </p>
+<p>使用IDEA还需要添加一个针对jelly页面的插件，这个插件可以对jelly文件进行语法提示和高亮显示，插件地址点击<a target="_blank" rel="noopener" href="http://plugins.intellij.net/plugin/?id=1885">这里</a>，效果见图2。  </p>
 <p>图1:  </p>
 <img src="/images/post/29152926-97e25c38b1754deca8843030a113cb3e.png" class="" title="图1">
 <p>图2:  </p>
 <img src="/images/post/29152950-1f91f25eac354a75a44e34287f75cbba.png" class="" title="图2">
-<p>###Jetty(可选)  </p>
-<p>其实运行插件工程的hpi:run就可以通过maven启动一个自带的Jetty6服务器，不需要额外再安装jetty服务器。但为了让我们的插件测试更接近真实环境，我们可以将做好的插件放到另外一个的Jetty服务器中，来测试插件的运行效果。  </p>
+<h3 id="Jetty-可选"><a href="#Jetty-可选" class="headerlink" title="Jetty(可选)"></a>Jetty(可选)</h3><p>其实运行插件工程的hpi:run就可以通过maven启动一个自带的Jetty6服务器，不需要额外再安装jetty服务器。但为了让我们的插件测试更接近真实环境，我们可以将做好的插件放到另外一个的Jetty服务器中，来测试插件的运行效果。  </p>
 <ol>
 <li>去Jetty官网下载最新的Jetty包；</li>
 <li>将包解压到本地目录；</li>
@@ -168,9 +165,9 @@
 <p>注意：如果用hpi:run启动的服务，jenkins地址是：localhost:8080，而使用真实Jetty启动的服务，地址是：localhost:8080&#x2F;jenkins。<br>到这里你的jenkins插件开发环境已经搭建好了，我们在下一篇blog再继续介绍具体的插件开发，谢谢！  </p>
 <hr>
 <ul>
-<li><a href="http://zhaozhiming.github.io/blog/2013/02/02/jenkins-plugins-develop-part-2/">jenkins插件开发（二）– HelloWorld</a></li>
-<li><a href="http://zhaozhiming.github.io/blog/2013/02/03/jenkins-plugins-develop-part-3/">jenkins插件开发（三）– 插件编写</a></li>
-<li><a href="http://zhaozhiming.github.io/blog/2013/02/04/jenkins-plugins-develop-part-4/">jenkins插件开发（四）– 插件发布</a></li>
+<li><a href="http://zhaozhiming.github.io/2013/02/02/jenkins-plugins-develop-part-2/">jenkins插件开发（二）– HelloWorld</a></li>
+<li><a href="http://zhaozhiming.github.io/2013/02/03/jenkins-plugins-develop-part-3/">jenkins插件开发（三）– 插件编写</a></li>
+<li><a href="http://zhaozhiming.github.io/2013/02/04/jenkins-plugins-develop-part-4/">jenkins插件开发（四）– 插件发布</a></li>
 </ul>
 </div>
 

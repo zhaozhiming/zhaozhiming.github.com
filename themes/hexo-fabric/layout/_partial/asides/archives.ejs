@@ -1,0 +1,10 @@
+<% if (site.posts.length){ %>
+  <div class="widget-wrap">
+    <h2 class="widget-title">历年文章</h2>
+    <div class="widget">
+      <%- list_archives({show_count: true, type: 'yearly', transform(str) {
+        return str + ' 年';
+      }}) %>
+    </div>
+  </div>
+<% } %>

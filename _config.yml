@@ -90,8 +90,8 @@ pagination_dir: page
 
 # Include / Exclude file(s)
 ## include:/exclude: options only apply to the 'source/' folder
-include:
-exclude:
+include: []
+exclude: []
 ignore:
 
 # Extensions
@@ -111,6 +111,7 @@ deploy:
 default_asides:
   - '_partial/asides/recent_post'
   - '_partial/asides/tags'
+  - '_partial/asides/archives'
     
 # rss
 feed:

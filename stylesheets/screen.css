@@ -4180,3 +4180,21 @@ body {
     justify-content: flex-start;
   }
 }
+
+.widget .archive-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 8px;
+}
+
+.widget .archive-list-count {
+  margin-left: 5px;
+}
+
+.widget .archive-list-count::before {
+  content: '(';
+}
+
+.widget .archive-list-count::after{
+  content: ')';
+}

@@ -133,6 +133,10 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
+		  <a href="/2024/03/11/sentence-windows-rag/">高级 RAG 检索策略之句子窗口检索</a>
+	    </li>
+	  
+	    <li class="post">
 		  <a href="/2024/02/13/use-xinference-deploy-llm/">使用 Xinference 进行模型部署</a>
 	    </li>
 	  
@@ -146,10 +150,6 @@
 	  
 	    <li class="post">
 		  <a href="/2024/01/13/llamaindex-eleasticsearch-rga-practice/">使用 LlamaIndex 结合 Eleasticsearch 进行 RAG 检索增强生成</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2023/12/18/quantification-chatglm3-6b-and-deploy-on-colab/">在 CPU 服务器上部署 ChatGLM3-6B 模型</a>
 	    </li>
 	  
     </ul>
@@ -169,7 +169,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -178,6 +178,31 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2014/06/16/spring-mvc-unit-test-part-1/">基于Spring MVC做单元测试（一）——使用Spring Test框架</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2014-06-16T02:54:00.000Z" itemprop="datePublished">6月 16, 2014</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/spring/">spring</a> <a href="/tags/unit-test/">unit test</a>
+</div>
+    </div>
+      
+        <p>最近用Spring Mvc框架做了几个小项目，但都没有做单元测试，最近想恶补一下这方面的东西，包括基于Spring的单元测试，自动化测试和JS单元测试。今天先讲一下基于Spring框架的单元测试，测试使用的是Spring自带的test组件，再结合Mockito一起编写测试案例，以下示例会包括Controller和Service，由于Repository是基于Spring JPA，没有自己的逻辑，所以这里就不涉及Repository的单元测试，以后有需要再介绍。</p>
+        
+          <p class="more-link">
+            <a href="2014/06/16/spring-mvc-unit-test-part-1/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -400,36 +425,6 @@
         
           <p class="more-link">
             <a href="2014/04/13/python-remote-debug-setting-by-pycharm-and-eclipse-in-ubuntu/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2014/04/09/swift-multiply-nodes-deploy-in-one-machine/">swift单节点多dev环境部署</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2014-04-09T12:45:00.000Z" itemprop="datePublished">4月 9, 2014</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/swift/">swift</a>
-</div>
-    </div>
-      
-        <h2 id="环境目标"><a href="#环境目标" class="headerlink" title="环境目标"></a>环境目标</h2><ul>
-<li>同一台机器</li>
-<li>1台proxy server</li>
-<li>5个storage node</li>
-<li>每个storage node有2个dev</li>
-</ul>
-        
-          <p class="more-link">
-            <a href="2014/04/09/swift-multiply-nodes-deploy-in-one-machine/#more">Read More</a>
           </p>
         
       

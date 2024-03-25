@@ -36,7 +36,7 @@ node_parser = HierarchicalNodeParser.from_defaults(chunk_sizes=[2048, 512, 128])
 nodes = node_parser.get_nodes_from_documents(documents)
 ```
 
-- 首先我们从`data`目录中加载文档
+- 首先我们从`data`目录中加载文档，这个目录的文档是我们我们之前使用的维基百科上的[复仇者联盟](https://en.wikipedia.org/wiki/Avenger)电影剧情
 - 然后我们创建一个`HierarchicalNodeParser`文档解析器，并设置`chunk_sizes`为[2048, 512, 128]
 - 再使用文档解析器将文档解析成节点
 
@@ -159,7 +159,7 @@ child[0] node of deep1[0]: 自从宇宙魔方于1942年被人类发现后针对�
 
 {% img /images/post/2024/03/am-ratio-large.png 600 400 %}
 
-而且自动合并的功能是一个不断重复的过程，这表示自动合并会从最底层的节点开始合并，然后一直合并到最顶层的节点，最终得到所有合并后的文档，重复的次数取决于文档解析器拆分文档的层级，比如`chunk_sizes`是`[2048, 512, 128]`，那么文档拆分后的层级是 3，如果每一层的自动合并都被触发的话，就会自动合并 2 次。
+而且自动合并的功能是一个不断重复的过程，这表示自动合并会从最底层的节点开始合并，然后一直合并到最顶层的节点，最终得到所有合并后的文档，重复的次数取决于文档解析器拆分文档的层级和达到阀值的父节点数，比如`chunk_sizes`是`[2048, 512, 128]`，那么文档拆分后的层级是 3，如果拆分后的文档数从下到上如果是 4-2-1，并且每一层的自动合并都被触发的话，那么总共就会自动合并 2 次。
 
 {% img /images/post/2024/03/am-ratio-recursive.png 800 600 %}
 

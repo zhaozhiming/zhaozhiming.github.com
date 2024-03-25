@@ -140,7 +140,7 @@
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> SimpleDirectoryReader</span><br><span class="line"><span class="keyword">from</span> llama_index.core.node_parser <span class="keyword">import</span> HierarchicalNodeParser</span><br><span class="line"></span><br><span class="line">documents = SimpleDirectoryReader(<span class="string">&quot;./data&quot;</span>).load_data()</span><br><span class="line">node_parser = HierarchicalNodeParser.from_defaults(chunk_sizes=[<span class="number">2048</span>, <span class="number">512</span>, <span class="number">128</span>])</span><br><span class="line">nodes = node_parser.get_nodes_from_documents(documents)</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>首先我们从<code>data</code>目录中加载文档</li>
+<li>首先我们从<code>data</code>目录中加载文档，这个目录的文档是我们我们之前使用的维基百科上的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Avenger">复仇者联盟</a>电影剧情</li>
 <li>然后我们创建一个<code>HierarchicalNodeParser</code>文档解析器，并设置<code>chunk_sizes</code>为[2048, 512, 128]</li>
 <li>再使用文档解析器将文档解析成节点</li>
 </ul>
@@ -191,7 +191,7 @@
 <p>如果父节点有 4 个子节点，检索时发现有 3 个子节点，那么子节点被检索到的比例就是 0.75（3&#x2F;4），大于阀值 0.5，所以自动合并功能会生效，最终提交给 LLM 的上下文就是父节点的内容。</p>
 <img src="/images/post/2024/03/am-ratio-large.png" class="" width="600" height="400">
 
-<p>而且自动合并的功能是一个不断重复的过程，这表示自动合并会从最底层的节点开始合并，然后一直合并到最顶层的节点，最终得到所有合并后的文档，重复的次数取决于文档解析器拆分文档的层级，比如<code>chunk_sizes</code>是<code>[2048, 512, 128]</code>，那么文档拆分后的层级是 3，如果每一层的自动合并都被触发的话，就会自动合并 2 次。</p>
+<p>而且自动合并的功能是一个不断重复的过程，这表示自动合并会从最底层的节点开始合并，然后一直合并到最顶层的节点，最终得到所有合并后的文档，重复的次数取决于文档解析器拆分文档的层级和达到阀值的父节点数，比如<code>chunk_sizes</code>是<code>[2048, 512, 128]</code>，那么文档拆分后的层级是 3，如果拆分后的文档数从下到上如果是 4-2-1，并且每一层的自动合并都被触发的话，那么总共就会自动合并 2 次。</p>
 <img src="/images/post/2024/03/am-ratio-recursive.png" class="" width="800" height="600">
 
 <h2 id="自动合并使用"><a href="#自动合并使用" class="headerlink" title="自动合并使用"></a>自动合并使用</h2><p>下面我们再来看看自动合并检索在实际 RAG 项目中的使用，文档数据我们还是使用之前维基百科上的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Avenger">复仇者联盟</a>电影剧情来进行测试。</p>

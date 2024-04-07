@@ -78,7 +78,7 @@ Headlist 是我们重点要记忆的内容，在 Headlist 的使用过程中需�
 
 表达式可以从每天的外语学习中获取，比如阅读文章、观看视频、听音频资料等，在日常的学习中如果遇到陌生的表达式就及时记录下来，然后在每天的 Headlist 中进行誊写。
 
-这可能也是 Goldlist 方法的一个难点，因为每天要收集 20 个表达式对于忙碌的朋友来说可能有点困难，这里推荐一个 OpenAI 的一个 GPTs——[Goldlist Method](https://chat.openai.com/g/g-T7S43l5lU-goldlist-method)，它可以帮助我们快速生成 Headlist 的表达式。
+这可能也是 Goldlist 方法的一个难点，因为每天要收集 20 个表达式对于忙碌的朋友来说可能有点困难，这里推荐一个 OpenAI 的 GPTs——[Goldlist Method](https://chat.openai.com/g/g-T7S43l5lU-goldlist-method)，它可以帮助我们快速生成 Headlist 的表达式。
 
 {% img /images/post/2024/04/goldlist-method-gpts.png 800 600 %}
 

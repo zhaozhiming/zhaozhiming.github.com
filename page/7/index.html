@@ -133,6 +133,10 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
+		  <a href="/2024/04/09/recursive-retriever-rag/">高级 RAG 检索策略之递归检索</a>
+	    </li>
+	  
+	    <li class="post">
 		  <a href="/2024/03/31/englisth-learning-introduction-goldlist/">使用 Goldlist 方法学习外语</a>
 	    </li>
 	  
@@ -146,10 +150,6 @@
 	  
 	    <li class="post">
 		  <a href="/2024/03/11/sentence-windows-rag/">高级 RAG 检索策略之句子窗口检索</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/02/13/use-xinference-deploy-llm/">使用 Xinference 进行模型部署</a>
 	    </li>
 	  
     </ul>
@@ -169,7 +169,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -178,6 +178,34 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2018/04/25/how-to-use-ethers-dot-js/">以太坊工具包 Ethers.js 使用介绍</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2018-04-25T12:18:00.000Z" itemprop="datePublished">4月 25, 2018</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/ethereum/">ethereum</a> <a href="/tags/ethersjs/">ethersjs</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2018/04/ethers.png" class="" width="400" height="300">
+
+<p>在之前的文章介绍过，以太坊提供了两种形式的 API，一种是 <a target="_blank" rel="noopener" href="https://github.com/ethereum/wiki/wiki/JSON-RPC">JSON RPC</a>，另外一种是 <a target="_blank" rel="noopener" href="https://github.com/ethereum/wiki/wiki/JavaScript-API">Javascript API</a> —— 通过 Web3 这个工具包进行 API 调用，Web3 功能强大但缺点就是账号相关的 API 比较少，而且它底层用到了一些 Node 原生库的依赖，导致其在 React Native（以下简称 RN） 中使用会有一些问题，因为 Node 和 RN 是 2 个不同的环境。</p>
+<p>所以今天给大家介绍另外一个功能强大的 JS 以太坊工具库——<a target="_blank" rel="noopener" href="https://github.com/ethers-io/ethers.js/">Ethers.js</a>。</p>
+        
+          <p class="more-link">
+            <a href="2018/04/25/how-to-use-ethers-dot-js/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -419,32 +447,6 @@
         
           <p class="more-link">
             <a href="2017/10/21/how-to-add-4-corner-border-with-css/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2017/09/23/some-tips-of-employers-interview-part2/">研发面试官的面试指南（二）</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2017-09-23T11:33:00.000Z" itemprop="datePublished">9月 23, 2017</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/interview/">interview</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2017/09/interview2.png" class="" width="400" height="300">  
-<p>除了面试流程，研发面试最关键的还是技术面试环节，这个环节要确认应聘者的技术基本功是否扎实，以及技术的深度和广度，与公司部门的技术栈是否匹配等等。  </p>
-        
-          <p class="more-link">
-            <a href="2017/09/23/some-tips-of-employers-interview-part2/#more">Read More</a>
           </p>
         
       

@@ -1,0 +1,318 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>用 API 方式免费使用 GPT 写小说 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="介绍如何以 API 的方式免费使用 OpenAI 的 GPT3.5 模型写小说"> <!-- TODO: truncate -->
+	<meta name="keywords" content="gpt, llm, chatgpt">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">用 API 方式免费使用 GPT 写小说</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2024-04-26T06:32:39.000Z" itemprop="datePublished">4月 26, 2024</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/chatgpt/">chatgpt</a> <a href="/tags/llm/">llm</a> <a href="/tags/gpt/">gpt</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2024/04/free-gpt.jpeg" class="" width="400" height="300">
+
+<p>最近 OpenAI 宣布将降低网页版 ChatGPT 的使用门槛，允许没有账号的用户使用，这一好消息使我们可以在网页上免费访问 ChatGPT，但和 API 相比仍然缺乏灵活性，通过 API 开发人员可以编写代码来与 ChatGPT 进行自动化交互。今天我们将介绍如何利用 OpenAI 的这一免费功能，将其转化为 API 的形式来进行使用，并介绍如何通过这种方式来写一篇小说。</p>
+<span id="more"></span>
+
+<h2 id="ChatGPT"><a href="#ChatGPT" class="headerlink" title="ChatGPT"></a>ChatGPT</h2><p>最近一段时间，OpenAI 宣布用户无需注册即可使用 ChatGPT，免费使用的模型是 GPT3.5，这是一个非常强大的 LLM（大语言模型），处理日常工作的大多数任务都不在话下。但是没有注册的用户无法享受更多功能，包括保存和查看聊天记录、共享聊天和解锁其他功能，如语音对话和自定义指令等，更多的信息可以查看<a target="_blank" rel="noopener" href="https://openai.com/blog/start-using-chatgpt-instantly">这里</a>。</p>
+<img src="/images/post/2024/04/use-gpt-without-signup.png" class="" width="1000" height="600">
+
+<h2 id="以-API-方式使用"><a href="#以-API-方式使用" class="headerlink" title="以 API 方式使用"></a>以 API 方式使用</h2><p>虽然 OpenAI 提供了免费版的网页 ChatGPT，但如果能用 API 的方式来调用 ChatGPT 将会更加方便，我们可以做的事情也会更多。开源社区就有这么一个工具，可以将网页版 ChatGPT 转化为 API 的形式，这个工具叫做 <a target="_blank" rel="noopener" href="https://github.com/PawanOsman/ChatGPT">ChatGPT</a>，该工具通过反向代理的方式来免费访问 ChatGPT API，支持本地部署，无需提供 OpenAI 的 APIKEY。</p>
+<p>该工具的安装非常简单，提供了 2 种安装方式：</p>
+<h3 id="docker-安装"><a href="#docker-安装" class="headerlink" title="docker 安装"></a>docker 安装</h3><p>在本地提前安装好 <a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/">Docker</a>，然后执行以下命令即可启动服务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -dp 3040:3040 pawanosman/chatgpt:latest</span><br></pre></td></tr></table></figure>
+
+<h3 id="源码安装"><a href="#源码安装" class="headerlink" title="源码安装"></a>源码安装</h3><p>在本地提前安装好<a target="_blank" rel="noopener" href="https://nodejs.org/en/download">NodeJs</a>，下载源码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git <span class="built_in">clone</span> https://github.com/PawanOsman/ChatGPT.git</span><br></pre></td></tr></table></figure>
+
+<p>然后进入目录，执行启动脚本<code>bash start.sh</code>即可启动服务。</p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>本地服务的地址是：<code>http://localhost:3040</code>，可以通过 curl 命令来调用 API，例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:3040/v1/chat/completions \</span><br><span class="line">  -H <span class="string">&quot;Content-Type: application/json&quot;</span> \</span><br><span class="line">  -d <span class="string">&#x27;&#123;</span></span><br><span class="line"><span class="string">    &quot;messages&quot;: [</span></span><br><span class="line"><span class="string">      &#123;</span></span><br><span class="line"><span class="string">        &quot;role&quot;: &quot;user&quot;,</span></span><br><span class="line"><span class="string">        &quot;content&quot;: &quot;Hello!&quot;</span></span><br><span class="line"><span class="string">      &#125;</span></span><br><span class="line"><span class="string">    ]</span></span><br><span class="line"><span class="string">  &#125;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;id&quot;</span>: <span class="string">&quot;chatcmpl-SKCmI8iJ2cPswvySaCSKX55n8viL&quot;</span>,</span><br><span class="line">  <span class="string">&quot;created&quot;</span>: 1714120019,</span><br><span class="line">  <span class="string">&quot;model&quot;</span>: <span class="string">&quot;gpt-3.5-turbo&quot;</span>,</span><br><span class="line">  <span class="string">&quot;object&quot;</span>: <span class="string">&quot;chat.completion&quot;</span>,</span><br><span class="line">  <span class="string">&quot;choices&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;finish_reason&quot;</span>: <span class="string">&quot;stop&quot;</span>,</span><br><span class="line">      <span class="string">&quot;index&quot;</span>: 0,</span><br><span class="line">      <span class="string">&quot;message&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;content&quot;</span>: <span class="string">&quot;Hi there! How can I assist you today?&quot;</span>,</span><br><span class="line">        <span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;usage&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;prompt_tokens&quot;</span>: 2,</span><br><span class="line">    <span class="string">&quot;completion_tokens&quot;</span>: 10,</span><br><span class="line">    <span class="string">&quot;total_tokens&quot;</span>: 12</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 curl 命令中，我们没有提供 OpenAI 的 APIKEY 也能正常调用 ChatGPT API，返回的结果也是和真正的 ChatGPT API 一致。</p>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>因为 ChatGPT 的使用有地区限制，如果你所在地区无法访问 OpenAI 的服务，那么在调用接口时本地服务会提示以下错误信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Error getting a new session...</span><br><span class="line">If this error persists, your country may not be supported yet.</span><br><span class="line">If your country was the issue, please consider using a U.S. VPN or a U.S. residential proxy.</span><br></pre></td></tr></table></figure>
+
+<p>建议是找一台可以访问 OpenAI 服务的服务器，最好是美国地区的服务器，在上面部署服务。</p>
+<h2 id="使用-ChatGPT-写小说"><a href="#使用-ChatGPT-写小说" class="headerlink" title="使用 ChatGPT 写小说"></a>使用 ChatGPT 写小说</h2><p>有了免费的 ChatGPT API 后，我们就可以使用 ChatGPT 来做很多事情了，AI 现在最擅长的是文字生成，我们可以使用 ChatGPT 来写小说。</p>
+<p>这里介绍另外一个开源项目 <a target="_blank" rel="noopener" href="https://github.com/mshumer/gpt-author">gpt-author</a>，它提供了一系列的提示词来帮助我们完成一部小说，并且可以结合 Stable Diffustion 来生成小说封面。多种 LLM 模型可供选择，可以使用 OpenAI 的 GPT 模型，也可以使用 Anthropic 的 Claude 模型。如果想生成的小说效果越好，那么肯定需要能力越强的模型，比如 GPT4 或者 Claude，但这些模型目前都需要收费，所以我们可以先使用我们之前搭建的免费 ChatGPT API 来试试效果。</p>
+<p>gpt-author 的仓库主要是一个 ipynb 文件，里面包含了如何使用 ChatGPT 来写小说的代码，可以直接在本地运行，也可以在 Google Colab 上运行，下面我们来看下里面的代码并介绍其作用。</p>
+<p>代码中包含了如何使用 Anthropic 的 API，但我们只需要调用我们部署的 ChatGPT API 即可，所以涉及到 Anuthropic 的代码这里就不做介绍。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> openai</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> ebooklib <span class="keyword">import</span> epub</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">openai.api_key = <span class="string">&quot;YOUR OPENAI KEY&quot;</span> <span class="comment"># You can enter any string here</span></span><br><span class="line">openai.api_base = <span class="string">&quot;http://localhost:3040/v1&quot;</span></span><br><span class="line">stability_api_key = <span class="string">&quot;YOUR STABILITY KEY&quot;</span> <span class="comment"># get it at https://beta.dreamstudio.ai/</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果是在本地运行，需要提前安装相关的 python 库：<code>pip install openai ebooklib requests</code></li>
+<li><code>openai.api_key</code> 这里可以随便填写一个字符串，因为我们的 ChatGPT API 不需要 APIKEY</li>
+<li><code>openai.api_base</code> 这里填写我们部署的 ChatGPT API 地址，如果是在本地运行，填写<code>http://localhost:3040/v1</code>，注意不要遗漏地址最后的<code>/v1</code></li>
+<li><code>stability_api_key</code> 这里是 Stability Diffusion 的 APIKEY，用来生成小说封面的，如果不需要生成封面，可以不填写</li>
+</ul>
+<p>设置好 API 服务参数后，我们再来看其中的写小说的主方法<code>write_fantasy_novel</code>：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> ast</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">write_fantasy_novel</span>(<span class="params">prompt, num_chapters, writing_style, claude_true=<span class="literal">False</span></span>):</span><br><span class="line">    plots = generate_plots(prompt)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;generated plots&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    best_plot = select_most_engaging(plots)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;selected best plot&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    improved_plot = improve_plot(best_plot)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;plot improved&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    title = get_title(improved_plot)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;title generated&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    storyline = generate_storyline(improved_plot, num_chapters)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;storyline generated&#x27;</span>)</span><br><span class="line">    chapter_titles = ast.literal_eval(storyline)</span><br><span class="line">    novel = <span class="string">f&quot;Storyline:\n<span class="subst">&#123;storyline&#125;</span>\n\n&quot;</span></span><br><span class="line"></span><br><span class="line">    first_chapter = write_first_chapter(storyline, chapter_titles[<span class="number">0</span>], writing_style.strip(), claude_true)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;first chapter written&#x27;</span>)</span><br><span class="line">    novel += <span class="string">f&quot;Chapter 1:\n<span class="subst">&#123;first_chapter&#125;</span>\n&quot;</span></span><br><span class="line">    chapters = [first_chapter]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_chapters - <span class="number">1</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Writing chapter <span class="subst">&#123;i+<span class="number">2</span>&#125;</span>...&quot;</span>) <span class="comment"># + 2 because the first chapter was already added</span></span><br><span class="line"></span><br><span class="line">        chapter = write_chapter(novel, storyline, chapter_titles[i+<span class="number">1</span>])</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">          <span class="keyword">if</span> <span class="built_in">len</span>(<span class="built_in">str</span>(chapter)) &lt; <span class="number">100</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Length minimum not hit. Trying again.&#x27;</span>)</span><br><span class="line">            chapter = write_chapter(novel, storyline, chapter_titles[i+<span class="number">1</span>])</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">          chapter = write_chapter(novel, storyline, chapter_titles[i+<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">        novel += <span class="string">f&quot;Chapter <span class="subst">&#123;i+<span class="number">2</span>&#125;</span>:\n<span class="subst">&#123;chapter&#125;</span>\n&quot;</span></span><br><span class="line">        chapters.append(chapter)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> novel, title, chapters, chapter_titles</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这个方法罗列了编写小说的主要步骤，方法参数有提示词、章节数、写作风格，最后那个是否使用 Claude 模型的参数我们可以忽略</li>
+<li>首先是生成多个小说情节</li>
+<li>然后从这些小说情节中选择最吸引人的情节</li>
+<li>再对选择的情节进行改进</li>
+<li>根据最精彩的情节生成小说标题</li>
+<li>接下来生成小说的故事线，并将其转换成 Python 数组，形成章节标题</li>
+<li>使用第一个章节标题写小说第一章的内容</li>
+<li>创建<code>novel</code>对象保存小说内容，创建<code>chapters</code>数组来保存每一章的内容</li>
+<li>生成每一章节的内容，如果章节的内容较少（小于 100）则重新生成</li>
+<li>最后将每一章的内容添加到<code>novel</code>和<code>chapters</code>对象中</li>
+</ul>
+<p>我们再看生成小说章节的方法<code>generate_plots</code>：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> openai</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_plots</span>(<span class="params">prompt</span>):</span><br><span class="line">    response = openai.ChatCompletion.create(</span><br><span class="line">        model=<span class="string">&quot;gpt-4&quot;</span>,</span><br><span class="line">        messages=[</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;You are a creative assistant that generates engaging fantasy novel plots.&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">f&quot;Generate 10 fantasy novel plots based on this prompt: <span class="subst">&#123;prompt&#125;</span>&quot;</span>&#125;</span><br><span class="line">        ]</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    print_step_costs(response, <span class="string">&quot;gpt-4&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> response[<span class="string">&#x27;choices&#x27;</span>][<span class="number">0</span>][<span class="string">&#x27;message&#x27;</span>][<span class="string">&#x27;content&#x27;</span>].split(<span class="string">&#x27;\n&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>调用 ChatGPT API 生成 10 个小说情节</li>
+<li>这里的 model 参数即使填<code>gpt-4</code>也没有关系，我们的 API 服务始终只能调用 GPT3.5 模型</li>
+<li><code>print_step_costs</code>方法是计算 API 的花费金额，因为我们是用免费的 ChatGPT API 服务，所以这里不用关心费用</li>
+</ul>
+<p>接下来是选择最吸引人的情节的方法<code>select_most_engaging</code>：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">select_most_engaging</span>(<span class="params">plots</span>):</span><br><span class="line">    response = openai.ChatCompletion.create(</span><br><span class="line">        model=<span class="string">&quot;gpt-4&quot;</span>,</span><br><span class="line">        messages=[</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;You are an expert in writing fantastic fantasy novel plots.&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">f&quot;Here are a number of possible plots for a new novel: <span class="subst">&#123;plots&#125;</span>\n\n--\n\nNow, write the final plot that we will go with. It can be one of these, a mix of the best elements of multiple, or something completely new and better. The most important thing is the plot should be fantastic, unique, and engaging.&quot;</span>&#125;</span><br><span class="line">        ]</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    print_step_costs(response, <span class="string">&quot;gpt-4&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> response[<span class="string">&#x27;choices&#x27;</span>][<span class="number">0</span>][<span class="string">&#x27;message&#x27;</span>][<span class="string">&#x27;content&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>调用 ChatGPT API ，根据我们刚才生成的 10 个小说情节，生成最吸引人的情节</li>
+<li>生成的内容可以是 10 个情节中的一个，也可以是多个情节的组合，或者是一个全新的情节</li>
+</ul>
+<p>接下来是改进情节的方法<code>improve_plot</code>和生成小说标题的方法<code>get_title</code>，代码功能基本和前面的方法一致，我们主要看方法内部的提示词：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">improve_plot</span>(<span class="params">plot</span>):</span><br><span class="line">    response = openai.ChatCompletion.create(</span><br><span class="line">        model=<span class="string">&quot;gpt-4&quot;</span>,</span><br><span class="line">        messages=[</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;You are an expert in improving and refining story plots.&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">f&quot;Improve this plot: <span class="subst">&#123;plot&#125;</span>&quot;</span>&#125;</span><br><span class="line">        ]</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    print_step_costs(response, <span class="string">&quot;gpt-4&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> response[<span class="string">&#x27;choices&#x27;</span>][<span class="number">0</span>][<span class="string">&#x27;message&#x27;</span>][<span class="string">&#x27;content&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_title</span>(<span class="params">plot</span>):</span><br><span class="line">    response = openai.ChatCompletion.create(</span><br><span class="line">        model=<span class="string">&quot;gpt-3.5-turbo-16k&quot;</span>,</span><br><span class="line">        messages=[</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;You are an expert writer.&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">f&quot;Here is the plot: <span class="subst">&#123;plot&#125;</span>\n\nWhat is the title of this book? Just respond with the title, do nothing else.&quot;</span>&#125;</span><br><span class="line">        ]</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    print_step_costs(response, <span class="string">&quot;gpt-3.5-turbo-16k&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> response[<span class="string">&#x27;choices&#x27;</span>][<span class="number">0</span>][<span class="string">&#x27;message&#x27;</span>][<span class="string">&#x27;content&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这里有个提示词小技巧，就是让 LLM 只回答我们想要的内容而不要输出其他内容，这里的提示词要求 LLM 只回答标题，不要做其他操作，这样就不会有额外的内容干扰</li>
+</ul>
+<p>接着是生成小说故事线的方法<code>generate_storyline</code>：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">generate_storyline</span>(<span class="params">prompt, num_chapters</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Generating storyline with chapters and high-level details...&quot;</span>)</span><br><span class="line">    json_format = <span class="string">&quot;&quot;&quot;[&#123;&quot;Chapter CHAPTER_NUMBER_HERE - CHAPTER_TITLE_GOES_HERE&quot;: &quot;CHAPTER_OVERVIEW_AND_DETAILS_GOES_HERE&quot;&#125;, ...]&quot;&quot;&quot;</span></span><br><span class="line">    response = openai.ChatCompletion.create(</span><br><span class="line">        model=<span class="string">&quot;gpt-4&quot;</span>,</span><br><span class="line">        messages=[</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;You are a world-class fantasy writer. Your job is to write a detailed storyline, complete with chapters, for a fantasy novel. Don&#x27;t be flowery -- you want to get the message across in as few words as possible. But those words should contain lots of information.&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">f&#x27;Write a fantastic storyline with <span class="subst">&#123;num_chapters&#125;</span> chapters and high-level details based on this plot: <span class="subst">&#123;prompt&#125;</span>.\n\nDo it in this list of dictionaries format <span class="subst">&#123;json_format&#125;</span>&#x27;</span>&#125;</span><br><span class="line">        ]</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    print_step_costs(response, <span class="string">&quot;gpt-4&quot;</span>)</span><br><span class="line">    improved_response = openai.ChatCompletion.create(</span><br><span class="line">        model=<span class="string">&quot;gpt-4&quot;</span>,</span><br><span class="line">        messages=[</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;You are a world-class fantasy writer. Your job is to take your student&#x27;s rough initial draft of the storyline of a fantasy novel, and rewrite it to be significantly better.&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">f&quot;Here is the draft storyline they wrote: <span class="subst">&#123;response[<span class="string">&#x27;choices&#x27;</span>][<span class="number">0</span>][<span class="string">&#x27;message&#x27;</span>][<span class="string">&#x27;content&#x27;</span>]&#125;</span>\n\nNow, rewrite the storyline, in a way that is far superior to your student&#x27;s version. It should have the same number of chapters, but it should be much improved in as many ways as possible. Remember to do it in this list of dictionaries format <span class="subst">&#123;json_format&#125;</span>&quot;</span>&#125;</span><br><span class="line">        ]</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    print_step_costs(improved_response, <span class="string">&quot;gpt-4&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> improved_response[<span class="string">&#x27;choices&#x27;</span>][<span class="number">0</span>][<span class="string">&#x27;message&#x27;</span>][<span class="string">&#x27;content&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在生成故事线的方法中，生成了 2 个版本的故事线，第一个版本是初稿，第二个版本是在第一版的基础上进行改进</li>
+<li>这里也有一个提示词技巧，就是让 LLM 返回我们想要的格式，这里的提示词要求 LLM 返回 JSON 格式的内容，这样后面才可以将其转换成 Python 数组</li>
+</ul>
+<p>再来是生成小说章节的方法<code>write_chapter</code>：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">write_chapter</span>(<span class="params">previous_chapters, plot, chapter_title, claude=<span class="literal">True</span></span>):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        response = openai.ChatCompletion.create(</span><br><span class="line">            model=<span class="string">&quot;gpt-4&quot;</span>,</span><br><span class="line">            messages=[</span><br><span class="line">                &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;You are a world-class fantasy writer.&quot;</span>&#125;,</span><br><span class="line">                &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">f&quot;Plot: <span class="subst">&#123;plot&#125;</span>, Previous Chapters: <span class="subst">&#123;previous_chapters&#125;</span>\n\n--\n\nWrite the next chapter of this novel, following the plot and taking in the previous chapters as context. Here is the plan for this chapter: <span class="subst">&#123;chapter_title&#125;</span>\n\nWrite it beautifully. Include only the chapter text. There is no need to rewrite the chapter name.&quot;</span>&#125;</span><br><span class="line">            ]</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        print_step_costs(response, <span class="string">&quot;gpt-4&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> response[<span class="string">&#x27;choices&#x27;</span>][<span class="number">0</span>][<span class="string">&#x27;message&#x27;</span>][<span class="string">&#x27;content&#x27;</span>]</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        response = openai.ChatCompletion.create(</span><br><span class="line">            model=<span class="string">&quot;gpt-4-32k&quot;</span>,</span><br><span class="line">            messages=[</span><br><span class="line">                &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;You are a world-class fantasy writer.&quot;</span>&#125;,</span><br><span class="line">                &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">f&quot;Plot: <span class="subst">&#123;plot&#125;</span>, Previous Chapters: <span class="subst">&#123;previous_chapters&#125;</span>\n\n--\n\nWrite the next chapter of this novel, following the plot and taking in the previous chapters as context. Here is the plan for this chapter: <span class="subst">&#123;chapter_title&#125;</span>\n\nWrite it beautifully. Include only the chapter text. There is no need to rewrite the chapter name.&quot;</span>&#125;</span><br><span class="line">            ]</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        print_step_costs(response, <span class="string">&quot;gpt-4-32k&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> response[<span class="string">&#x27;choices&#x27;</span>][<span class="number">0</span>][<span class="string">&#x27;message&#x27;</span>][<span class="string">&#x27;content&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方法的第二个参数<code>plot</code>实际上是我们之前生成的故事线，表示这个章节的内容要基于这个故事线来生成</li>
+<li>提示词中还加入了之前的章节内容，这样可以让 LLM 更好的理解整个小说的内容</li>
+<li>这里首先使用<code>gpt-4</code>模型进行生成，<code>gpt-4</code>模型默认是<code>8K</code>的上下文，如果生成的内容较多超出上下文限制就会报错，捕获异常后再次使用<code>gpt-4-32k</code>模型进行生成，最新的<code>gpt-4-turbo</code>模型是<code>128k</code>，大家可以根据自己的需求来选择模型。我们使用的是免费的 ChatGPT API，模型是<code>gpt-3.5-turbo</code>，上下文长度是<code>16k</code></li>
+</ul>
+<p>最后是整体的调用方法：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Example usage:</span></span><br><span class="line">prompt = <span class="string">&quot;A kingdom hidden deep in the forest, where every tree is a portal to another world.&quot;</span></span><br><span class="line">num_chapters = <span class="number">10</span></span><br><span class="line">writing_style = <span class="string">&quot;Clear and easily understandable, similar to a young adult novel. Lots of dialogue.&quot;</span></span><br><span class="line">novel, title, chapters, chapter_titles = write_fantasy_novel(prompt, num_chapters, writing_style, claude_true)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Replace chapter descriptions with body text in chapter_titles</span></span><br><span class="line"><span class="keyword">for</span> i, chapter <span class="keyword">in</span> <span class="built_in">enumerate</span>(chapters):</span><br><span class="line">    chapter_number_and_title = <span class="built_in">list</span>(chapter_titles[i].keys())[<span class="number">0</span>]</span><br><span class="line">    chapter_titles[i] = &#123;chapter_number_and_title: chapter&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create the cover</span></span><br><span class="line">create_cover_image(<span class="built_in">str</span>(chapter_titles))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create the EPUB file</span></span><br><span class="line">create_epub(title, <span class="string">&#x27;AI&#x27;</span>, chapter_titles, <span class="string">&#x27;/content/cover.png&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>prompt</code>描述想要创建什么内容的小说，<code>num_chapters</code>小说的章节数，<code>writing_style</code>写作风格</li>
+<li>将章节标题和内容组合成一个对象<code>chapter_titles</code></li>
+<li><code>create_cover_image</code>方法是使用 Stability Diffusion 生成小说封面，生成后的封面图片会保存到<code>/content/cover.png</code>文件中，你也可以直接将图片放到<code>/content/cover.png</code>文件中，这样就不需要调用这个方法了</li>
+<li><code>create_epub</code>方法是生成 EPUB 格式的小说文件，第一个参数是小说的标题，第二个是作者，第三个是小说内容，第四个参数是封面图片</li>
+</ul>
+<p>这就是<code>gpt-author</code>这个项目的主要代码，如果想了解它的其他代码可以查看它的 GitHub 仓库。理解使用 AI 生成小说的思路以后，你也可以根据自己的需求来调整代码，比如调整生成小说的章节数、写作风格等，然后尝试自己生成一部小说。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>今天我们介绍了如何以 API 的方式免费使用 OpenAI 的 ChatGPT 模型，以及如何使用 ChatGPT 来写一部小说。可能用免费的 ChatGPT 模型生成的小说还不够完美，但可以通过优化调整相关的提示词，让其生成的小说更加符合我们的需求。同样地，也可以将其中的提示词方法应用到编写其他类型的文章中，期待大家能够尝试并生成一些有趣的内容。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2024/04/26/free-use-gpt-api-write-novel/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2024/04/26/free-use-gpt-api-write-novel/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

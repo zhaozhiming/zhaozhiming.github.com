@@ -133,6 +133,10 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
+		  <a href="/2024/05/13/rag-query-rewrite/">高级 RAG 检索策略之查询重写</a>
+	    </li>
+	  
+	    <li class="post">
 		  <a href="/2024/05/04/use-llama3-to-build-develop-team-copilot/">使用 Llama3 打造开发团队的私有 Copilot</a>
 	    </li>
 	  
@@ -146,10 +150,6 @@
 	  
 	    <li class="post">
 		  <a href="/2024/04/22/llamaindex-and-evaluation-tools/">LlamaIndex 与 RAG 评估工具</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/04/09/recursive-retriever-rag/">高级 RAG 检索策略之递归检索</a>
 	    </li>
 	  
     </ul>
@@ -169,7 +169,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -178,6 +178,33 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2023/10/27/use-llama-factory-finetuning-llm/">使用 LLaMA Factory 进行大语言模型微调</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2023-10-27T02:02:06.000Z" itemprop="datePublished">10月 27, 2023</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/llm/">llm</a> <a href="/tags/fine-tuning/">fine-tuning</a> <a href="/tags/llama-factory/">llama_factory</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2023/10/llama-factory.png" class="" width="400" height="300">
+
+<p>LLM（大语言模型）微调一直都是老大难问题，不仅因为微调需要大量的计算资源，而且微调的方法也很多，要去尝试每种方法的效果，需要安装大量的第三方库和依赖，甚至要接入一些框架，可能在还没开始微调就已经因为环境配置而放弃了。今天我们来介绍一个可以帮助大家快速进行 LLM 微调的工具——LLaMA Factory，它可以帮助大家快速进行 LLM 微调，而且还可以在微调过程中进行可视化，非常方便。</p>
+        
+          <p class="more-link">
+            <a href="2023/10/27/use-llama-factory-finetuning-llm/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -415,33 +442,6 @@
         
           <p class="more-link">
             <a href="2023/08/31/llm-quantization-format-introduce/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2023/08/28/huggingface-inference-and-deploy/">HugggingFace 推理 API、推理端点和推理空间使用介绍</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2023-08-28T07:47:10.000Z" itemprop="datePublished">8月 28, 2023</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/huggingface/">huggingface</a> <a href="/tags/inference-api/">inference api</a> <a href="/tags/endpoint/">endpoint</a> <a href="/tags/space/">space</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2023/08/huggingface.jpg" class="" width="400" height="300">
-
-<p>接触 AI 的同学肯定对<a target="_blank" rel="noopener" href="https://huggingface.co/">HuggingFace</a>有所耳闻，它凭借一个开源的 Transformers 库迅速在机器学习社区大火，为研究者和开发者提供了大量的预训练模型，成为机器学习界的 GitHub。在 HuggingFace 上我们不仅可以托管模型，还可以方便地使用各种模型的 API 进行测试和验证，部署属于自己的模型 API 服务，创建自己的模型空间，分享自己的模型。本文将介绍 HuggingFace 的推理 API、推理端点和推理空间的使用方法。</p>
-        
-          <p class="more-link">
-            <a href="2023/08/28/huggingface-inference-and-deploy/#more">Read More</a>
           </p>
         
       

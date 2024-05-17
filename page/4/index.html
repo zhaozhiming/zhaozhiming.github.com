@@ -133,6 +133,10 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
+		  <a href="/2024/05/13/rag-query-rewrite/">高级 RAG 检索策略之查询重写</a>
+	    </li>
+	  
+	    <li class="post">
 		  <a href="/2024/05/04/use-llama3-to-build-develop-team-copilot/">使用 Llama3 打造开发团队的私有 Copilot</a>
 	    </li>
 	  
@@ -146,10 +150,6 @@
 	  
 	    <li class="post">
 		  <a href="/2024/04/22/llamaindex-and-evaluation-tools/">LlamaIndex 与 RAG 评估工具</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/04/09/recursive-retriever-rag/">高级 RAG 检索策略之递归检索</a>
 	    </li>
 	  
     </ul>
@@ -169,7 +169,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -178,6 +178,33 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2023/08/28/huggingface-inference-and-deploy/">HugggingFace 推理 API、推理端点和推理空间使用介绍</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2023-08-28T07:47:10.000Z" itemprop="datePublished">8月 28, 2023</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/huggingface/">huggingface</a> <a href="/tags/inference-api/">inference api</a> <a href="/tags/endpoint/">endpoint</a> <a href="/tags/space/">space</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2023/08/huggingface.jpg" class="" width="400" height="300">
+
+<p>接触 AI 的同学肯定对<a target="_blank" rel="noopener" href="https://huggingface.co/">HuggingFace</a>有所耳闻，它凭借一个开源的 Transformers 库迅速在机器学习社区大火，为研究者和开发者提供了大量的预训练模型，成为机器学习界的 GitHub。在 HuggingFace 上我们不仅可以托管模型，还可以方便地使用各种模型的 API 进行测试和验证，部署属于自己的模型 API 服务，创建自己的模型空间，分享自己的模型。本文将介绍 HuggingFace 的推理 API、推理端点和推理空间的使用方法。</p>
+        
+          <p class="more-link">
+            <a href="2023/08/28/huggingface-inference-and-deploy/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -415,33 +442,6 @@
         
           <p class="more-link">
             <a href="2023/07/19/langchain-mmr-and-metadata-filter/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2023/07/12/deploy-langchain-chatglm-on-cloud%20gpu/">部署 LangChain 和 ChatGLM2 来打造自有知识库问答系统</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2023-07-12T08:35:10.000Z" itemprop="datePublished">7月 12, 2023</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/langchain/">langchain</a> <a href="/tags/chatglm2/">chatglm2</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2023/07/embedding-docs-with-llm.png" class="" width="400" height="300">
-
-<p>随着人工智能技术的迅猛发展，问答机器人在多个领域中展示了广泛的应用潜力。在这个信息爆炸的时代，许多领域都面临着海量的知识和信息，人们往往需要耗费大量的时间和精力来搜索和获取他们所需的信息。在这种情况下，垂直领域的 AI 问答机器人应运而生。OpenAI 的 GPT3.5 和 GPT4 无疑是目前最好的 LLM（大语言模型），借助 OpenAI 的 GPT 确实可以快速地打造出一个高质量的 AI 问答机器人，但是 GPT 在实际应用上存在着不少限制。比如 ChatGPT 的知识库是通用领域的，对于垂直领域的知识理解有限，而且对于不熟悉的知识还会存在<code>幻觉</code>的问题。另外 GPT 的训练语料大部分是英文的，对于中文的理解也存在一定的问题，这对于国内公司来说是一个很大的问题。本文将介绍如何使用中文 LLM—— ChatGLM 结合 LangChain 来打造一个垂直领域的知识库问答系统，并在云 GPU 服务上部署运行。</p>
-        
-          <p class="more-link">
-            <a href="2023/07/12/deploy-langchain-chatglm-on-cloud gpu/#more">Read More</a>
           </p>
         
       

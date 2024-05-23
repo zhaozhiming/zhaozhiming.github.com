@@ -45,7 +45,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 ```bash
 git clone https://github.com/huggingface/text-embeddings-inference.git
-cd text--embeddings-inference
+cd text-embeddings-inference
 cargo install --path router -F candle -F metal
 ```
 
@@ -55,7 +55,7 @@ cargo install --path router -F candle -F metal
 TEI 安装完成后，我们使用它来部署 Rerank 模型，命令如下：
 
 ```bash
-text-embeddings-router --model-id BAAI/bge-reranker-large --revision refs/pr/5 --port 8080
+text-embeddings-router --model-id BAAI/bge-reranker-large --revision refs/pr/4 --port 8080
 ```
 
 - `--model-id`是指模型在 Huggingface 上的 ID，`revision`是相关的版本号

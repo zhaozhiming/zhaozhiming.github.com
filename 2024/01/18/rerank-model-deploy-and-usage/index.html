@@ -145,14 +145,14 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl --proto <span class="string">&#x27;=https&#x27;</span> --tlsv1.2 -sSf https://sh.rustup.rs | sh</span><br></pre></td></tr></table></figure>
 
 <p>然后下载 TEI 的 github 仓库，并安装相关依赖，命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/huggingface/text-embeddings-inference.git</span><br><span class="line"><span class="built_in">cd</span> text--embeddings-inference</span><br><span class="line">cargo install --path router -F candle -F metal</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/huggingface/text-embeddings-inference.git</span><br><span class="line"><span class="built_in">cd</span> text-embeddings-inference</span><br><span class="line">cargo install --path router -F candle -F metal</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>其中 router 是 TEI 仓库里面的一个目录</li>
 <li>安装成功后，可以使用<code>text-embeddings-router --help</code>命令来查看工具的相关参数</li>
 </ul>
 <p>TEI 安装完成后，我们使用它来部署 Rerank 模型，命令如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">text-embeddings-router --model-id BAAI/bge-reranker-large --revision refs/pr/5 --port 8080</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">text-embeddings-router --model-id BAAI/bge-reranker-large --revision refs/pr/4 --port 8080</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><code>--model-id</code>是指模型在 Huggingface 上的 ID，<code>revision</code>是相关的版本号</li>

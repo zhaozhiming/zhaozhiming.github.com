@@ -134,7 +134,11 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
-		  <a href="/2024/05/13/rag-query-rewrite/">高级 RAG 检索策略之查询重写</a>
+		  <a href="/2024/05/24/embedded-table-rag/">高级 RAG 检索策略之内嵌表格</a>
+	    </li>
+	  
+	    <li class="post">
+		  <a href="/2024/05/13/query-rewrite-rag/">高级 RAG 检索策略之查询重写</a>
 	    </li>
 	  
 	    <li class="post">
@@ -149,10 +153,6 @@
 		  <a href="/2024/04/26/free-use-gpt-api-write-novel/">用 API 方式免费使用 GPT 写小说</a>
 	    </li>
 	  
-	    <li class="post">
-		  <a href="/2024/04/22/llamaindex-and-evaluation-tools/">LlamaIndex 与 RAG 评估工具</a>
-	    </li>
-	  
     </ul>
   </section>
 
@@ -161,7 +161,7 @@
         
   <section>
     <h2>标签云</h2>
-      <a href="/tags/chatgpt/" style="font-size: 42px; color: #7c7873">chatgpt</a> <a href="/tags/java/" style="font-size: 36px; color: #7d7b77">java</a> <a href="/tags/react/" style="font-size: 36px; color: #7d7b77">react</a> <a href="/tags/ant/" style="font-size: 30px; color: #7f7d7c">ant</a> <a href="/tags/jenkins/" style="font-size: 30px; color: #7f7d7c">jenkins</a> <a href="/tags/sonar/" style="font-size: 30px; color: #7f7d7c">sonar</a> <a href="/tags/llm/" style="font-size: 30px; color: #7f7d7c">llm</a> <a href="/tags/javascript/" style="font-size: 24px; color: #808080">javascript</a>
+      <a href="/tags/chatgpt/" style="font-size: 42px; color: #7c7873">chatgpt</a> <a href="/tags/java/" style="font-size: 33px; color: #7e7c7a">java</a> <a href="/tags/react/" style="font-size: 33px; color: #7e7c7a">react</a> <a href="/tags/ant/" style="font-size: 24px; color: #808080">ant</a> <a href="/tags/jenkins/" style="font-size: 24px; color: #808080">jenkins</a> <a href="/tags/sonar/" style="font-size: 24px; color: #808080">sonar</a> <a href="/tags/llm/" style="font-size: 24px; color: #808080">llm</a> <a href="/tags/llamaindex/" style="font-size: 24px; color: #808080">llamaindex</a>
   </section>
 
 
@@ -170,7 +170,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -179,6 +179,35 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2018/01/30/docusaurus-vs-gatsby/">基于 React 的 CMS 框架对比：Docusaurus vs. Gatsby</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2018-01-30T12:01:00.000Z" itemprop="datePublished">1月 30, 2018</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/react/">react</a> <a href="/tags/docusaurus/">docusaurus</a> <a href="/tags/gatsby/">gatsby</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2018/01/vs.jpg" class="" width="400" height="350">
+
+<p>最近 Facebook 推出了一个文档工具 <a target="_blank" rel="noopener" href="http://docusaurus.io/">Docusaurus</a>，既可以用来做产品网站，也可以用来写博客，还提供很多很有用的功能，最重要的是它是基于 React 实现的。</p>
+<p>同样基于 React 技术的静态网站生成工具 <a target="_blank" rel="noopener" href="https://www.gatsbyjs.org/">Gatsby</a>，也具备了类似的功能，而且它提供了非常丰富的插件。</p>
+<p>可见两者各有千秋，那我们应该选择呢？或者说我们应该基于什么场景来使用它们呢？</p>
+        
+          <p class="more-link">
+            <a href="2018/01/30/docusaurus-vs-gatsby/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -422,39 +451,6 @@
         
           <p class="more-link">
             <a href="2017/06/21/avoiding-race-conditions-in-sharedarraybuffers-with-atomics-zh/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2017/06/20/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers-zh/">通俗漫画介绍 ArrayBuffers 和 SharedArrayBuffers</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2017-06-20T14:44:00.000Z" itemprop="datePublished">6月 20, 2017</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/SharedArrayBuffers/">SharedArrayBuffers</a> <a href="/tags/ArrayBuffers/">ArrayBuffers</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2017/06/02_15.png" class="" width="400" height="350">
-
-<p>这是 3 篇文章中的第二篇：</p>
-<ul>
-<li><a href="https://zhaozhiming.github.io/2017/06/20/a-crash-course-in-memory-management-zh/">内存管理速成教程</a></li>
-<li>通俗漫画介绍 ArrayBuffers 和 SharedArrayBuffers</li>
-<li><a href="https://zhaozhiming.github.io/2017/06/21/avoiding-race-conditions-in-sharedarraybuffers-with-atomics-zh/">在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件</a></li>
-</ul>
-<p>原文链接：<a target="_blank" rel="noopener" href="https://hacks.mozilla.org/2017/06/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers/">A cartoon intro to ArrayBuffers and SharedArrayBuffers</a></p>
-        
-          <p class="more-link">
-            <a href="2017/06/20/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers-zh/#more">Read More</a>
           </p>
         
       

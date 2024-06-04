@@ -143,7 +143,7 @@ VectorStoreIndex.from_documents(
 
 - 首先定义了一个 ElasticsearchStore 对象来连接 ElaticSearch 本地服务
 - 然后使用 SimpleDirectoryReader 加载本地的文档数据
-- 使用 SentenceSplitter 对文档进行分块处理，应为 TEI 的输入 Token 数最大只能 512，所以这里的 chunk_size 设置为 256，chunk_overlap 设置为 50
+- 使用 SentenceSplitter 对文档进行分块处理，因为 TEI 的输入 Token 数最大只能 512，所以这里的 chunk_size 设置为 256，chunk_overlap 设置为 50
 - 构建 StorageContext 对象，指定向量存储为之前定义的 ElasticsearchStore 对象
 - 创建一个自定义 Embeddings 对象，使用的是 TEI 部署的 Embeddings 模型服务，这里`CustomEmbeddings`的代码可以参考[这篇文章](https://zhaozhiming.github.io/2024/01/13/llamaindex-eleasticsearch-rga-practice/)中的代码
 - 最后使用 VectorStoreIndex 对象将文档数据入库

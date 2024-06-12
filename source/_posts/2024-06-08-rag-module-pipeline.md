@@ -113,7 +113,7 @@ p.add_link("retriever", "output", dest_key="nodes")
 - 通过`QueryPipeline`的`add_modules`方法添加了 3 个模块：`input`、`retriever`和`output`
 - `input`模块的实现类是`InputComponent`，这是查询流水线常用的输入组件，`retriever`模块是我们定义的检索器，`output`模块的实现类是`SimpleSummarize`，这是可以将问题和检索结果进行简单总结的输出组件
 - 接着我们添加模块间的连接关系，`add_link`方法用于连接模块之间的关系，第一个参数是源模块，第二个参数是目标模块
-- `dest_key`参数用于指定目标模块的输入参数，因为输出模块有 2 个参数，分别是问题和检索结果，所以我们需要指定`dest_key`参数，当目标模块只有一个参数时则不需要指定
+- `dest_key`参数用于指定目标模块的输入参数，因为`output`模块有 2 个参数，分别是问题和检索结果，所以我们需要指定`dest_key`参数，当目标模块只有一个参数时则不需要指定
 - 在`add_link`方法中，与`dest_key`参数对应的是`src_key`参数，当源模块有多个参数时，我们需要指定`src_key`参数，反之则不需要。
 
 查询流水线添加模块和连接关系的方式除了`add_modules`和`add_link`方法外，还可以通过`add_chain`方法添加，示例代码如下：
@@ -413,7 +413,7 @@ Stark and Banner discover an artificial intelligence within the scepter's gem, a
 
 最后我们再为查询流水线增加一个评估模块，用于评估查询流水线，这里我们使用[Ragas](https://docs.ragas.io/)来实现评估模块。
 
-> Ragas 是一个评估 RAG 应用的框架，拥有很多且详细的评估指标。
+> Ragas 是一个评估 RAG 应用的框架，拥有很多详细的评估指标。
 
 {% img /images/post/2024/06/rag-flow-evaluation.png 1000 600 %}
 

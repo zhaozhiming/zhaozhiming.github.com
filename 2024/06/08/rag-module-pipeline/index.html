@@ -170,7 +170,7 @@
 <li>通过<code>QueryPipeline</code>的<code>add_modules</code>方法添加了 3 个模块：<code>input</code>、<code>retriever</code>和<code>output</code></li>
 <li><code>input</code>模块的实现类是<code>InputComponent</code>，这是查询流水线常用的输入组件，<code>retriever</code>模块是我们定义的检索器，<code>output</code>模块的实现类是<code>SimpleSummarize</code>，这是可以将问题和检索结果进行简单总结的输出组件</li>
 <li>接着我们添加模块间的连接关系，<code>add_link</code>方法用于连接模块之间的关系，第一个参数是源模块，第二个参数是目标模块</li>
-<li><code>dest_key</code>参数用于指定目标模块的输入参数，因为输出模块有 2 个参数，分别是问题和检索结果，所以我们需要指定<code>dest_key</code>参数，当目标模块只有一个参数时则不需要指定</li>
+<li><code>dest_key</code>参数用于指定目标模块的输入参数，因为<code>output</code>模块有 2 个参数，分别是问题和检索结果，所以我们需要指定<code>dest_key</code>参数，当目标模块只有一个参数时则不需要指定</li>
 <li>在<code>add_link</code>方法中，与<code>dest_key</code>参数对应的是<code>src_key</code>参数，当源模块有多个参数时，我们需要指定<code>src_key</code>参数，反之则不需要。</li>
 </ul>
 <p>查询流水线添加模块和连接关系的方式除了<code>add_modules</code>和<code>add_link</code>方法外，还可以通过<code>add_chain</code>方法添加，示例代码如下：</p>
@@ -276,7 +276,7 @@
 <p>关于句子窗口检索的更多细节，可以参考我之前的<a href="https://zhaozhiming.github.io/2024/03/11/sentence-windows-rag/">这篇文章</a>。</p>
 <h3 id="增加评估模块"><a href="#增加评估模块" class="headerlink" title="增加评估模块"></a>增加评估模块</h3><p>最后我们再为查询流水线增加一个评估模块，用于评估查询流水线，这里我们使用<a target="_blank" rel="noopener" href="https://docs.ragas.io/">Ragas</a>来实现评估模块。</p>
 <blockquote>
-<p>Ragas 是一个评估 RAG 应用的框架，拥有很多且详细的评估指标。</p>
+<p>Ragas 是一个评估 RAG 应用的框架，拥有很多详细的评估指标。</p>
 </blockquote>
 <img src="/images/post/2024/06/rag-flow-evaluation.png" class="" width="1000" height="600">
 

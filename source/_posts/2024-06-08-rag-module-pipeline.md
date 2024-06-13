@@ -343,6 +343,7 @@ net.write_html("output/pipeline_dag.html")
 
 ```diff
 +from llama_index.core.node_parser import SentenceWindowNodeParser
++from llama_index.core.indices.postprocessor import MetadataReplacementPostProcessor
 
 -node_parser = SentenceSplitter()
 +node_parser = SentenceWindowNodeParser.from_defaults(

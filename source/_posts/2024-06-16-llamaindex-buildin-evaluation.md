@@ -173,7 +173,7 @@ LlamaIndex 中每种评估器的初始化参数都基本一致，以`AnswerRelev
 
 - llm: 评估使用的大语言模型
 - eval_template: 评估时所用的提示词模板
-- score_threshold: 这个参数在不同的评估器中不同的含义，在`AnswerRelevancyEvaluator` 中这个参数用来将反馈中的分数转换到 0~1 范围，在`CorrectnessEvaluator` 中这个参数用来评判答案是否正确
+- score_threshold: 这个参数在不同的评估器中有不同的含义，在`AnswerRelevancyEvaluator` 中这个参数用来将反馈中的分数转换到 0~1 范围，在`CorrectnessEvaluator` 中这个参数用来评判答案是否正确
 
 在上面的反馈结果中我们可以看到`[RESULT] 2`，这个值就是反馈中的分数，LLM 在评估过程中评估了 2 个问题，每个问题回答正确则得 1 分，从得分结果来看，2 个问题都回答正确，所以得分为 2，然后除以阀值 2.0，得到最终分数为 1.0。
 

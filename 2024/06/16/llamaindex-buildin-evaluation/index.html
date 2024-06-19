@@ -188,7 +188,7 @@
 <ul>
 <li>llm: 评估使用的大语言模型</li>
 <li>eval_template: 评估时所用的提示词模板</li>
-<li>score_threshold: 这个参数在不同的评估器中不同的含义，在<code>AnswerRelevancyEvaluator</code> 中这个参数用来将反馈中的分数转换到 0~1 范围，在<code>CorrectnessEvaluator</code> 中这个参数用来评判答案是否正确</li>
+<li>score_threshold: 这个参数在不同的评估器中有不同的含义，在<code>AnswerRelevancyEvaluator</code> 中这个参数用来将反馈中的分数转换到 0~1 范围，在<code>CorrectnessEvaluator</code> 中这个参数用来评判答案是否正确</li>
 </ul>
 <p>在上面的反馈结果中我们可以看到<code>[RESULT] 2</code>，这个值就是反馈中的分数，LLM 在评估过程中评估了 2 个问题，每个问题回答正确则得 1 分，从得分结果来看，2 个问题都回答正确，所以得分为 2，然后除以阀值 2.0，得到最终分数为 1.0。</p>
 <h4 id="评估提示词模板修改"><a href="#评估提示词模板修改" class="headerlink" title="评估提示词模板修改"></a>评估提示词模板修改</h4><p><code>eval_template</code>参数用来设置评估提示词模板，我们可以来看下<code>AnswerRelevancyEvaluator</code>默认的评估提示词：</p>

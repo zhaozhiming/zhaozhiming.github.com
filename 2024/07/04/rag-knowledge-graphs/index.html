@@ -141,7 +141,7 @@
 <p>在检索过程中，知识图谱 RAG 会将问题进行实体提取，将提取出来的实体通过图数据库进行检索，获取相关的实体和关系，检索结果往往是一个庞大的实体关系网络，最后将检索到的实体和关系结合问题提交给 LLM（大语言模型）进行答案生成。</p>
 <p>有些知识图谱 RAG 的实现也会结合图检索和向量检索两种方式，这样可以综合利用图检索和向量检索的优势，提高检索的准确性和效率。</p>
 <h3 id="解决的问题"><a href="#解决的问题" class="headerlink" title="解决的问题"></a>解决的问题</h3><p>在 RAG 中使用知识图谱主要解决在大型文档库上问答和理解困难的问题，特别是那些普通 RAG 方法难以处理的全局性问题。普通 RAG 在回答针对整个文档库的全局性问题时表现不佳，例如问题：<code>请告诉我所有关于 XXX 的事情</code>，这个问题涉及到的上下文可能分布在整个大型文档库中，普通 RAG 的向量检索方法很难得到这种分散、细粒度的文档信息，向量检索经常使用 top-k 算法来获取最相近的上下文文档，这种方式很容易遗漏关联的文档块，从而导致信息检索不完整。</p>
-<p>另外是 LLM 的上下文窗口限制问题，对于全局性问题往往涉及到非常多的上下文文档，如果要全部提交给 LLM 则很容易超出 LLM 的窗口限制，而知识图谱将文档提取成实体关系后，实际上大大压缩了文档块的大小，从而让所有相关文档提交给 LLM 成为可能。</p>
+<p>另外是 LLM 的上下文窗口限制问题，对于全局性问题往往涉及到非常多的上下文文档，如果要全部提交给 LLM 则很容易超出 LLM 的窗口限制，而知识图谱将文档提取成实体关系后再提交给 LLM，实际上大大压缩了文档块的大小，从而让所有相关文档提交给 LLM 成为可能。</p>
 <h3 id="与普通-RAG-的区别"><a href="#与普通-RAG-的区别" class="headerlink" title="与普通 RAG 的区别"></a>与普通 RAG 的区别</h3><ul>
 <li>知识图谱 RAG 使用图结构来表示和存储信息，捕捉实体间的复杂关系，而普通 RAG 通常使用向量化的文本数据</li>
 <li>知识图谱 RAG 通过图遍历和子图检索来获取相关信息，普通 RAG 主要依赖向量相似度搜索</li>
@@ -167,7 +167,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MATCH (n &#123;name: &#x27;Alice&#x27;&#125;)-[r]-(m)</span><br><span class="line">RETURN n, r, m</span><br></pre></td></tr></table></figure>
 
 <p>这个查询语句的意思是查找图数据库中所有与实体 Alice 相关的实体和关系，这样就可以获取到 Alice 相关的所有三元组。最后将得到的数据转换为文本，作为问题的上下文，提交给 LLM 进行答案生成。</p>
-<h2 id="LlamaIndex-知识图谱-RAG-实现"><a href="#LlamaIndex-知识图谱-RAG-实现" class="headerlink" title="LlamaIndex 知识图谱 RAG 实现"></a>LlamaIndex 知识图谱 RAG 实现</h2><p>​了解完知识图谱 RAG 的原理后，接下来我们来看下如何在实际项目中使用知识图谱 RAG ，在 LlamaIndex 框架中已经实现了知识图谱的功能，下面我们来看下如何使用 LlamaIndex 和 Neo4j 实现知识图谱 RAG。</p>
+<h2 id="LlamaIndex-知识图谱-RAG-实现"><a href="#LlamaIndex-知识图谱-RAG-实现" class="headerlink" title="LlamaIndex 知识图谱 RAG 实现"></a>LlamaIndex 知识图谱 RAG 实现</h2><p>​了解完知识图谱 RAG 的原理后，接下来我们来看下如何在实际项目中使用知识图谱 RAG ，在 LlamaIndex 框架中已经实现了知识图谱的功能，使用 LlamaIndex 和 Neo4j 可以快速地实现知识图谱 RAG。</p>
 <h3 id="Neo4j-安装"><a href="#Neo4j-安装" class="headerlink" title="Neo4j 安装"></a>Neo4j 安装</h3><p>Neo4j 是一个高性能的图形数据库，它将结构化数据存储在网络（从数学角度称为图）上而不是传统的表中，这种设计使得 Neo4j 在处理复杂的关系和连接时具有显著的优势。Neo4j 使用 Cypher 作为查询语言，Cypher 是一种声明式图数据库查询语言，类似于 SQL，但是专门用于图数据库。Cypher 语言的语法简单直观，易于学习和使用，可以快速编写复杂的图查询。Neo4j 除了支持图检索外，还支持其他多种检索方式，包括向量检索、全文检索等。</p>
 <p>下面我们来看在如何安装 Neo4j 数据库，Neo4j 的安装非常简单，只需要通过 Docker 下载镜像并启动就可以了，安装命令如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run --name neo4j -d \</span><br><span class="line">    --publish=7474:7474 --publish=7687:7687 \</span><br><span class="line">    --volume=/your/host/path/neo4j-data/data:/data \</span><br><span class="line">    --<span class="built_in">env</span> NEO4J_PLUGINS=<span class="string">&#x27;[&quot;apoc&quot;]&#x27;</span> \</span><br><span class="line">    neo4j:5.21.0</span><br></pre></td></tr></table></figure>
@@ -228,7 +228,7 @@
 <p>首先我们需要下载 GraphRAG 的源码：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/microsoft/graphrag.git</span><br><span class="line"><span class="built_in">cd</span> graphrag</span><br></pre></td></tr></table></figure>
 
-<p>然后我们需要使用 <a target="_blank" rel="noopener" href="https://python-poetry.org/">Poetry</a> 来安装 GraphRAG 的依赖，Poetry 的安装可以参考其官网的<a target="_blank" rel="noopener" href="https://python-poetry.org/docs/#installation">安装手册</a>，安装命令如下：</p>
+<p>然后我们需要使用 <a target="_blank" rel="noopener" href="https://python-poetry.org/">Poetry</a> 来安装 GraphRAG 的依赖，Poetry 的安装可以参考其官网的<a target="_blank" rel="noopener" href="https://python-poetry.org/docs/#installation">安装手册</a>，GraphRAG 安装依赖的命令如下：</p>
 <blockquote>
 <p>Poetry 是一个用于 Python 项目依赖管理和打包的工具，Poetry 使用一个 <code>pyproject.toml</code> 文件来管理项目的所有依赖项和元数据，使项目配置更加简洁明了，它会自动处理依赖项的版本冲突，并且能够生成锁文件 <code>poetry.lock</code>，确保在不同环境中安装相同的依赖版本。</p>
 </blockquote>
@@ -252,7 +252,7 @@
 <h3 id="检索流程"><a href="#检索流程" class="headerlink" title="检索流程"></a>检索流程</h3><p>文档入库完成后，我们就可以使用 GraphRAG 进行检索生成了，命令如下：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">poetry run poe query --root ./ragtest --method <span class="built_in">local</span> <span class="string">&quot;Which two members of the Avengers created Ultron?&quot;</span></span><br></pre></td></tr></table></figure>
 
-<p>GraphRAG 的检索模式有 2 种，分别是本地模式和全局模式，上面的命令使用<code>--method</code> 参数来指定哪种模式。</p>
+<p>GraphRAG 的检索模式有 2 种，分别是本地模式和全局模式，上面的命令使用 <code>--method</code> 参数来指定哪种模式。</p>
 <p>本地模式类似传统的知识图谱 RAG，通过结合来自知识图谱的相关数据和原始文档的文本块生成答案，而全局模式是通过在所有社区报告上进行搜索，以类似 map-reduce 的方式生成答案。以下是 GraphRAG 本地检索的流程图：</p>
 <img src="/images/post/2024/07/graphrag-query-local-flow.png" class="" width="1000" height="600">
 

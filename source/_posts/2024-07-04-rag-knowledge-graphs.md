@@ -35,7 +35,7 @@ RAG（Retrieval Augmented Generation）技术中检索是一个非常重要的�
 
 在 RAG 中使用知识图谱主要解决在大型文档库上问答和理解困难的问题，特别是那些普通 RAG 方法难以处理的全局性问题。普通 RAG 在回答针对整个文档库的全局性问题时表现不佳，例如问题：`请告诉我所有关于 XXX 的事情`，这个问题涉及到的上下文可能分布在整个大型文档库中，普通 RAG 的向量检索方法很难得到这种分散、细粒度的文档信息，向量检索经常使用 top-k 算法来获取最相近的上下文文档，这种方式很容易遗漏关联的文档块，从而导致信息检索不完整。
 
-另外是 LLM 的上下文窗口限制问题，对于全局性问题往往涉及到非常多的上下文文档，如果要全部提交给 LLM 则很容易超出 LLM 的窗口限制，而知识图谱将文档提取成实体关系后，实际上大大压缩了文档块的大小，从而让所有相关文档提交给 LLM 成为可能。
+另外是 LLM 的上下文窗口限制问题，对于全局性问题往往涉及到非常多的上下文文档，如果要全部提交给 LLM 则很容易超出 LLM 的窗口限制，而知识图谱将文档提取成实体关系后再提交给 LLM，实际上大大压缩了文档块的大小，从而让所有相关文档提交给 LLM 成为可能。
 
 ### 与普通 RAG 的区别
 
@@ -110,7 +110,7 @@ RETURN n, r, m
 
 ## LlamaIndex 知识图谱 RAG 实现
 
-​了解完知识图谱 RAG 的原理后，接下来我们来看下如何在实际项目中使用知识图谱 RAG ，在 LlamaIndex 框架中已经实现了知识图谱的功能，下面我们来看下如何使用 LlamaIndex 和 Neo4j 实现知识图谱 RAG。
+​了解完知识图谱 RAG 的原理后，接下来我们来看下如何在实际项目中使用知识图谱 RAG ，在 LlamaIndex 框架中已经实现了知识图谱的功能，使用 LlamaIndex 和 Neo4j 可以快速地实现知识图谱 RAG。
 
 ### Neo4j 安装
 
@@ -241,7 +241,7 @@ git clone https://github.com/microsoft/graphrag.git
 cd graphrag
 ```
 
-然后我们需要使用 [Poetry](https://python-poetry.org/) 来安装 GraphRAG 的依赖，Poetry 的安装可以参考其官网的[安装手册](https://python-poetry.org/docs/#installation)，安装命令如下：
+然后我们需要使用 [Poetry](https://python-poetry.org/) 来安装 GraphRAG 的依赖，Poetry 的安装可以参考其官网的[安装手册](https://python-poetry.org/docs/#installation)，GraphRAG 安装依赖的命令如下：
 
 > Poetry 是一个用于 Python 项目依赖管理和打包的工具，Poetry 使用一个 `pyproject.toml` 文件来管理项目的所有依赖项和元数据，使项目配置更加简洁明了，它会自动处理依赖项的版本冲突，并且能够生成锁文件 `poetry.lock`，确保在不同环境中安装相同的依赖版本。
 
@@ -300,7 +300,7 @@ poetry run poe index --root ./ragtest
 poetry run poe query --root ./ragtest --method local "Which two members of the Avengers created Ultron?"
 ```
 
-GraphRAG 的检索模式有 2 种，分别是本地模式和全局模式，上面的命令使用`--method` 参数来指定哪种模式。
+GraphRAG 的检索模式有 2 种，分别是本地模式和全局模式，上面的命令使用 `--method` 参数来指定哪种模式。
 
 本地模式类似传统的知识图谱 RAG，通过结合来自知识图谱的相关数据和原始文档的文本块生成答案，而全局模式是通过在所有社区报告上进行搜索，以类似 map-reduce 的方式生成答案。以下是 GraphRAG 本地检索的流程图：
 

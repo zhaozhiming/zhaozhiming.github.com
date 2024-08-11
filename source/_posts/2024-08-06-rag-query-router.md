@@ -3,10 +3,10 @@ layout: post
 title: 高级 RAG 检索策略之查询路由
 date: 2024-08-06 09:10:16
 description: 介绍 RAG 检索策略中的查询路由，以及如何在检索时使用
-keywords: rag, llamaindex, router
+keywords: rag, llamaindex, router, semantic-router
 comments: true
 categories: ai
-tags: [rag, llamaindex, router]
+tags: [rag, llamaindex, router, semantic-router]
 ---
 
 {% img /images/post/2024/08/rag-query-router.jpg 400 300 %}
@@ -331,6 +331,7 @@ class WebSearchComponent(CustomQueryComponent):
 - 首先我们创建一个 `BingSearchToolSpec` 对象，传入 Bing 搜索引擎的 API Key，这里我们将 API Key 保存到环境变量 `BING_SEARCH_API_KEY` 中
 - 这里我们使用了 LlamaIndex 的 Agent 功能，我们使用 `OpenAIAgent` 对象并传入 Bing 搜索工具
 - 最后通过 `kwargs["input"]` 获取用户问题并传递给 `agent.chat` 方法，得到搜索结果并返回
+- Bing 查询工具更多的用法可以参考[其文档](https://llamahub.ai/l/tools/llama-index-tools-bing-search?from=)
 
 3 个工具组件创建之后，我们需要创建一个路由模块，我们使用 Semantic Router 来实现这个路由模块，我们先定义 Semantic Router 的几个 Route，示例代码如下：
 

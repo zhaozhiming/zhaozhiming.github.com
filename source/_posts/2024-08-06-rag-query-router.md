@@ -81,7 +81,7 @@ query_engine.query("<query>")
 
 这 4 种选择器都是通过 LLM 来判断用户问题的意图，按选择结果可以分为单个结果选择器和多个结果选择器，单个结果选择器只返回一个选择结果，多个结果选择器返回多个选择结果，然后会将多个结果合并为一个最终结果。
 
-按解析结果可以分为文本结果选择器和对象结果选择器，文本结果选择器使用的是 LLM 的 completion API 来生成文本类型的选择结果，格式为：`<index>. <reason>`，`index`为选择结果的序号，`reason`为选择结果的原因，对象结果选择器使用的是 LLM 的 Function Calling API，将选择结果解析成一个 Python 对象，默认的对象为 `SingleSelection`，其定义如下：
+按解析结果可以分为文本结果选择器和对象结果选择器，文本结果选择器使用的是 LLM 的 completion API 来生成文本类型的选择结果，格式为：`<index>. <reason>`，`index`为选择结果的序号，`reason`为选择结果的原因。对象结果选择器使用的是 LLM 的 Function Calling API，将选择结果解析成一个 Python 对象，默认的对象为 `SingleSelection`，其定义如下：
 
 ```py
 class SingleSelection(BaseModel):
@@ -103,7 +103,7 @@ SingleSelection(index=2, reason="Useful for questions related to oranges")
 
 使用文本结果选择器得到选择结果后，还需要进行额外处理，比如提取出结果中的序号，而使用对象结果选择器则不需要额外处理，可以直接使用对象的属性得到结果。
 
-我们再来看下 Selector 的提示词模板：
+我们再来看下选择器的提示词模板：
 
 ```py
 DEFAULT_SINGLE_SELECT_PROMPT_TMPL = (

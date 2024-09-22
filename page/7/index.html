@@ -134,6 +134,10 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
+		  <a href="/2024/09/21/Cursor-helped-me-get-up-to-speed-with-Go-in-just-one-day/">Cursor 让我一天上手 Go 语言</a>
+	    </li>
+	  
+	    <li class="post">
 		  <a href="/2024/09/15/publish-company-npm-package-guide/">一步一步发布公司的 NPM 包</a>
 	    </li>
 	  
@@ -147,10 +151,6 @@
 	  
 	    <li class="post">
 		  <a href="/2024/07/04/rag-knowledge-graphs/">高级 RAG 检索策略之知识图谱</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/06/30/rag-selfrag/">高级 RAG 检索策略之 Self-RAG</a>
 	    </li>
 	  
     </ul>
@@ -170,7 +170,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -179,6 +179,34 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2019/09/14/use-filebeat-to-collect-docker-container-log/">使用 Filebeat 收集 Docker 容器日志</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2019-09-14T02:53:00.000Z" itemprop="datePublished">9月 14, 2019</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/docker/">docker</a> <a href="/tags/filebeat/">filebeat</a> <a href="/tags/elasticsearch/">elasticsearch</a> <a href="/tags/kibana/">kibana</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2019/09/log-collect.png" class="" width="400" height="300">
+
+<p>问题：开发人员查看测试环境或者生产环境的日志非常不方便，因为我们服务都是用 Docker 部署的，所以开发人员需要先登录到服务器，然后再登录到某个 Docker 容器才能看到日志。</p>
+<p>解决办法：搭建一套日志可视化环境，让开发人员可以通过浏览器直接查看系统各个服务的日志。下面介绍一下如何使用 Filebeat 来收集 Docker 容器日志，并将日志存入 Elasticsearch，再通过 Kibana 来展示。</p>
+        
+          <p class="more-link">
+            <a href="2019/09/14/use-filebeat-to-collect-docker-container-log/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -421,33 +449,6 @@
         
           <p class="more-link">
             <a href="2018/07/07/btc-transaction-intro-and-practice-part1/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2018/06/11/bitcoin-wallet/">比特币钱包原理简介及开发实践</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2018-06-10T23:50:00.000Z" itemprop="datePublished">6月 11, 2018</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/bitcoin/">bitcoin</a> <a href="/tags/blockchain/">blockchain</a> <a href="/tags/wallet/">wallet</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2018/06/bitcoin-wallet.jpg" class="" width="400" height="300">
-
-<p>比特币是最早出现的也是目前规模最大的加密货币，通过比特币很多人了解到了区块链技术，以太坊就是在其基础上演进形成的。我们之前了解了以太坊，现在回过头来我们再来看看比特币钱包的一些相关技术细节。</p>
-        
-          <p class="more-link">
-            <a href="2018/06/11/bitcoin-wallet/#more">Read More</a>
           </p>
         
       

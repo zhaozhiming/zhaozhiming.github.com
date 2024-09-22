@@ -134,6 +134,10 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
+		  <a href="/2024/09/21/Cursor-helped-me-get-up-to-speed-with-Go-in-just-one-day/">Cursor 让我一天上手 Go 语言</a>
+	    </li>
+	  
+	    <li class="post">
 		  <a href="/2024/09/15/publish-company-npm-package-guide/">一步一步发布公司的 NPM 包</a>
 	    </li>
 	  
@@ -147,10 +151,6 @@
 	  
 	    <li class="post">
 		  <a href="/2024/07/04/rag-knowledge-graphs/">高级 RAG 检索策略之知识图谱</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/06/30/rag-selfrag/">高级 RAG 检索策略之 Self-RAG</a>
 	    </li>
 	  
     </ul>
@@ -170,7 +170,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -179,6 +179,33 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2024/05/13/query-rewrite-rag/">高级 RAG 检索策略之查询重写</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2024-05-13T14:18:11.000Z" itemprop="datePublished">5月 13, 2024</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/llamaindex/">llamaindex</a> <a href="/tags/rag/">rag</a> <a href="/tags/query-rewrite/">query-rewrite</a> <a href="/tags/hyde/">hyde</a> <a href="/tags/stepback/">stepback</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2024/05/rag-query-rewrite.jpeg" class="" width="400" height="300">
+
+<p>在 RAG（Retrieval Augmented Generation）应用中，文档检索是保证 RAG 应用高质量回答的关键环节，我们在之前的文章中也有所介绍，但除此之外，对用户问题的优化也同样重要，有时候用户的问题可能不够清晰或者不够具体，这时候就需要对用户问题进行查询重写，这样才能更好地提高检索的准确性。今天我们就来介绍一些 RAG 应用中查询重写的策略，以及了解如何在实际项目中使用它们。</p>
+        
+          <p class="more-link">
+            <a href="2024/05/13/query-rewrite-rag/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -416,33 +443,6 @@
         
           <p class="more-link">
             <a href="2024/03/11/sentence-windows-rag/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2024/02/13/use-xinference-deploy-llm/">使用 Xinference 进行模型部署</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2024-02-13T01:18:07.000Z" itemprop="datePublished">2月 13, 2024</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/llm/">llm</a> <a href="/tags/xinference/">xinference</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2024/02/xinference.jpeg" class="" width="400" height="300">
-
-<p>今天为大家介绍一款大语言模型（LLM）部署和推理工具——<a target="_blank" rel="noopener" href="https://github.com/xorbitsai/inference">Xinference</a>，其特点是部署快捷、使用简单、推理高效，并且支持多种形式的开源模型，还提供了 WebGUI 界面和 API 接口，方便用户进行模型部署和推理。现在就让我们一起来了解和使用 Xinference 吧！</p>
-        
-          <p class="more-link">
-            <a href="2024/02/13/use-xinference-deploy-llm/#more">Read More</a>
           </p>
         
       

@@ -5,7 +5,7 @@ date: 2024-09-15 15:18:54
 description: 介绍管理员如何管理公司的 NPM 账号，以及指导开发人员如何发布公司的 NPM 包
 keywords: npm, javascript
 comments: true
-categories: ai
+categories: code
 tags: [npm, javascript]
 ---
 

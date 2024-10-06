@@ -57,7 +57,6 @@ class NewClient:
         )
         urlResp = urllib.request.urlopen(postUrl)
         urlResp = json.loads(urlResp.read())
-        print(urlResp)
         self.__accessToken = urlResp["access_token"]
         self.__leftTime = urlResp["expires_in"]
 
@@ -200,7 +199,6 @@ def replace_code(content):
     res = []
     for line in content.split("\n"):
         if "<code>" in line and "<span></span><code>" not in line:
-            print(f"line: {line}")
             line = line.replace("<code>", '<code style="background: #D6D6D6">')
         res.append(line)
     return "\n".join(res)
@@ -241,7 +239,6 @@ def replace_links(content):
 
     for r in refs:
         orig = '<a href="{}">{}</a>'.format(html.escape(r[0]), r[1])
-        print(orig)
         content = content.replace(orig, r[2])
     content = content + "\n" + gen_css("ref_header")
     content = content + """<section class="footnotes">"""
@@ -264,9 +261,7 @@ def fix_image(content):
         alt = text.split(" ")[5].strip() or ""
         alt = "" if alt == "%}" else alt
         link = """<img alt="{}" src="{}" />""".format(alt, image)
-        print("link: {}".format(link))
         figure = gen_css("figure", link, alt)
-        print("figure: {}".format(figure))
         content = content.replace(text, figure)
     return content
 
@@ -309,7 +304,6 @@ def upload_media_news(post_path):
         images = ["https://picsum.photos/seed/" + seed + "/400/600"] + images
     uploaded_images = {}
     for image in images:
-        print("image: {}".format(image))
         media_id = ""
         media_url = ""
         if image.startswith("http"):
@@ -355,16 +349,13 @@ def upload_media_news(post_path):
 
     postUrl = "https://api.weixin.qq.com/cgi-bin/draft/add?access_token=%s" % token
     r = requests.post(postUrl, data=datas, headers=headers)
-    print(f"""r: {r.text}""")
     resp = json.loads(r.text)
-    print(resp)
     media_id = resp["media_id"]
     cache_update(post_path)
     return resp
 
 
 def run(string_date):
-    # string_date = "2019-09-14"
     print(string_date)
     pathlist = Path("./source/_posts").glob("**/*.md")
     for path in pathlist:
@@ -375,7 +366,6 @@ def run(string_date):
             if file_processed(path_str):
                 print("{} has been processed".format(path_str))
                 continue
-            print(path_str)
             news_json = upload_media_news(path_str)
             # print(news_json)
             print("successful")

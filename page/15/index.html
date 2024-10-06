@@ -134,6 +134,10 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
+		  <a href="/2024/10/03/use-aws-role-to-isolate-resources-and-privilege/">使用 AWS 角色隔离资源和权限</a>
+	    </li>
+	  
+	    <li class="post">
 		  <a href="/2024/09/21/Cursor-helped-me-get-up-to-speed-with-Go-in-just-one-day/">Cursor 让我一天上手 Go 语言</a>
 	    </li>
 	  
@@ -147,10 +151,6 @@
 	  
 	    <li class="post">
 		  <a href="/2024/07/15/modern-python-project-tools-config/">都 2024 年了，你还在用 pip 吗？</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/07/04/rag-knowledge-graphs/">高级 RAG 检索策略之知识图谱</a>
 	    </li>
 	  
     </ul>
@@ -170,7 +170,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -179,6 +179,33 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2014/10/02/ceph-install-with-vagrant-and-ansible/">使用Vagrant和Ansible搭建Ceph环境</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2014-10-02T14:03:00.000Z" itemprop="datePublished">10月 2, 2014</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/ceph/">ceph</a> <a href="/tags/vagrant/">vagrant</a> <a href="/tags/ansible/">ansible</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2014-9/ceph-install.jpg" class="">  
+<h2 id="Ceph简介"><a href="#Ceph简介" class="headerlink" title="Ceph简介"></a><a target="_blank" rel="noopener" href="http://ceph.com/">Ceph</a>简介</h2><p>Ceph是一个高性能，高可用，高扩展的分布式对象存储框架和文件系统，而且是一个免费开源的项目。  </p>
+<p>但是Ceph的环境搭建起来比较麻烦，最简单的环境也需要2台VM(虚拟机，1台做mon和osd，另外一台做gateway)，而且按照官方文档上面的指南进行安装，经常报各种莫名其妙的问题，现在给大家介绍一个简单的方法来进行Ceph环境的搭建。下面先介绍几个要用到的工具。  </p>
+        
+          <p class="more-link">
+            <a href="2014/10/02/ceph-install-with-vagrant-and-ansible/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -409,31 +436,6 @@
         
           <p class="more-link">
             <a href="2014/06/17/spring-mvc-unit-test-part-2/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2014/06/16/spring-mvc-unit-test-part-1/">基于Spring MVC做单元测试（一）——使用Spring Test框架</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2014-06-16T02:54:00.000Z" itemprop="datePublished">6月 16, 2014</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/spring/">spring</a> <a href="/tags/unit-test/">unit test</a>
-</div>
-    </div>
-      
-        <p>最近用Spring Mvc框架做了几个小项目，但都没有做单元测试，最近想恶补一下这方面的东西，包括基于Spring的单元测试，自动化测试和JS单元测试。今天先讲一下基于Spring框架的单元测试，测试使用的是Spring自带的test组件，再结合Mockito一起编写测试案例，以下示例会包括Controller和Service，由于Repository是基于Spring JPA，没有自己的逻辑，所以这里就不涉及Repository的单元测试，以后有需要再介绍。</p>
-        
-          <p class="more-link">
-            <a href="2014/06/16/spring-mvc-unit-test-part-1/#more">Read More</a>
           </p>
         
       

@@ -1,0 +1,332 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>使用 AWS 角色隔离资源和权限 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="介绍如何使用 AWS 角色策略对资源和权限进行隔离"> <!-- TODO: truncate -->
+	<meta name="keywords" content="aws, role, policy, permission, go-lang">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">使用 AWS 角色隔离资源和权限</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2024-10-03T08:56:11.000Z" itemprop="datePublished">10月 3, 2024</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/go-lang/">go-lang</a> <a href="/tags/aws/">aws</a> <a href="/tags/role/">role</a> <a href="/tags/policy/">policy</a> <a href="/tags/permission/">permission</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2024/10/aws-role.jpg" class="" width="400" height="300">
+
+<p>AWS 是目前全球最大的云服务提供商，提供了丰富的云服务，开发 Web 应用时经常会用到 AWS 的各种服务。在开发这种应用时，有时候开发人员为了图方便省事，只创建一个 AWS 角色来管理应用所涉及的所有 AWS 资源，这样不仅不利于 AWS 资源的管理，而且还会因为权限不当导致系统的安全性受到威胁。本文将介绍 AWS 角色中权限相关的内容，以及如何使用 AWS 角色策略对资源和权限进行隔离。</p>
+<span id="more"></span>
+
+<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>假设一家初创公司在开发他们的电商平台时，决定使用 AWS 提供的几种服务，包括 Amazon S3 存储产品图片，Amazon RDS 存储用户数据，以及 Amazon Lambda 处理后台任务。为了快速开发和部署，开发人员创建了一个单一的 AWS 角色，这个角色被赋予了完全访问 S3、RDS 和 Lambda 的权限，以便可以无障碍地调用这些服务。这意味着所有用户共享相同的权限，没有进行细粒度的权限控制，导致潜在的安全隐患。</p>
+<img src="/images/post/2024/10/source-aws-design.png" class="" width="1000" height="600">
+
+<p>如果有坏人进入了这个应用程序，他们将能够访问所有的 AWS 资源，包括 S3、RDS 和 Lambda。这种情况下，坏人可以下载 S3 中所有的图片，删除 RDS 中的用户数据，或者通过 Lambda 执行恶意代码，造成严重的安全隐患。</p>
+<img src="/images/post/2024/10/source-aws-design-danger.png" class="" width="1000" height="600">
+
+<p>在这种情况下，我们可以使用 AWS 角色策略对资源和权限进行隔离。用户通过应用程序使用各自的 AWS 角色来访问 AWS 资源。每个角色被分配了相对应最低限度的权限，每个角色只能访问其对应的资源，而不能访问其他角色的资源。通过这种方式，每个用户只能访问与其相关的资源，避免了权限的滥用和安全隐患。</p>
+<img src="/images/post/2024/10/complete-aws-design.png" class="" width="1000" height="600">
+
+<h2 id="AWS-角色"><a href="#AWS-角色" class="headerlink" title="AWS 角色"></a>AWS 角色</h2><p>在 AWS 的 IAM（Identity and Access Management）服务中，角色是一个 AWS 身份，它不是与特定用户或组关联的，而是与 AWS 服务关联的。角色定义了一个实体，它可以代表一个用户、一个应用程序或者一个服务，以便可以访问 AWS 资源。角色可以通过权限策略来控制对资源的访问权限，以及信任关系来控制角色的使用者。</p>
+<h3 id="权限属性"><a href="#权限属性" class="headerlink" title="权限属性"></a>权限属性</h3><p>在日常使用中，<em>权限策略（Permission Policy）</em>和<em>信任关系（Trust Relationship）</em>是 AWS 角色权限最常用和最核心的两个属性。</p>
+<p><strong>权限策略</strong></p>
+<ul>
+<li>定义：权限策略是一个以 JSON 格式编写的文档，定义了角色被授予的具体权限。它描述了角色可以对哪些 AWS 资源执行哪些操作。</li>
+<li>作用：控制角色在 AWS 中<em>可以做什么</em>。例如，允许角色访问特定的 S3 存储桶、启动 EC2 实例、或调用特定的 Lambda 函数等。</li>
+</ul>
+<p><strong>信任关系</strong></p>
+<ul>
+<li>定义：信任关系也是一个以 JSON 格式编写的文档，定义了哪些实体（如用户、角色、服务）被允许扮演（Assume） 该角色。它指定了可以获得该角色临时凭证的主体。</li>
+<li>作用：控制<em>谁可以扮演这个角色</em>。例如，允许特定的 IAM 用户、其他角色或者 AWS 服务（如 EC2、Lambda）来扮演该角色。</li>
+</ul>
+<p>这两者共同构成了 IAM 角色的安全模型，权限策略确保角色只能执行被授予的操作，信任关系确保只有被信任的主体才能扮演该角色。</p>
+<h3 id="操作资源"><a href="#操作资源" class="headerlink" title="操作资源"></a>操作资源</h3><p>AWS 角色可以被授予访问任何 AWS 服务和资源的权限，具体取决于添加到该角色的权限策略，可操作的资源包括但不限于：</p>
+<ul>
+<li>AWS Lambda：创建、更新、调用函数；配置触发器和日志等。</li>
+<li>Amazon EventBridge Scheduler：可以按照预定的时间或间隔来调度任务或操作。</li>
+<li>AWS KMS（密钥管理服务）：创建和管理加密密钥；控制密钥的使用权限等</li>
+</ul>
+<p>还有很多其他 AWS 服务和资源没有列出来，这里只列出比较常用的几种 AWS 资源，我们在下面的示例也会着重介绍如何通过角色策略来控制这些资源的访问权限。</p>
+<h2 id="添加信任关系"><a href="#添加信任关系" class="headerlink" title="添加信任关系"></a>添加信任关系</h2><p>在 AWS 角色中，信任关系是一个非常重要的属性，它定义了哪些实体被允许扮演该角色。信任关系是一个以 JSON 格式编写的文档，它指定了可以获得该角色临时凭证的主体。这些实体可以是 AWS 服务或者 IAM 用户 。</p>
+<p>下面的信任关系中添加了 <code>event</code>、<code>lambda</code> 和 <code>scheduler</code> 3 个 AWS 服务，这意味着这些服务可以扮演该角色。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;Version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2012-10-17&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;Statement&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;Effect&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Principal&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;Service&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">          <span class="string">&quot;events.amazonaws.com&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;scheduler.amazonaws.com&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="string">&quot;lambda.amazonaws.com&quot;</span></span><br><span class="line">        <span class="punctuation">]</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sts:AssumeRole&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>下面的信任关系中添加了 IAM 用户 <code>user1</code> 作为扮演该角色的主体，这意味着 <code>user1</code> 可以扮演该角色。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;Version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2012-10-17&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;Statement&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;Effect&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Principal&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;AWS&quot;</span><span class="punctuation">:</span> <span class="string">&quot;arn:aws:iam::123456789012:user/user1@org1.com&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sts:AssumeRole&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>Statement</code> 是一个数组，这意味着你可以将多个实体添加到信任关系中，比如同时添加其他 AWS 服务和 IAM 用户。</p>
+<h2 id="添加权限策略"><a href="#添加权限策略" class="headerlink" title="添加权限策略"></a>添加权限策略</h2><p>在 AWS 角色中添加权限策略是控制角色对资源的访问权限的关键，我们可以通过以下两种方式来添加权限策略：</p>
+<img src="/images/post/2024/10/aws-role-permission.png" class="" width="1000" height="600">
+
+<h3 id="添加预定义策略"><a href="#添加预定义策略" class="headerlink" title="添加预定义策略"></a>添加预定义策略</h3><p>AWS 提供了一些预定义的策略，可以直接添加到角色中，这些策略包括了一些常用的权限，比如只读、只写、完全访问等。以 Lambda 服务为例，你可以在 AWS 控制台中选择<code>AWSLambda_FullAccess</code>、<code>AWSLambda_ReadOnlyAccess</code>、<code>AWSLambdaBasicExecutionRole</code> 等预定义策略，然后将其添加到角色中。</p>
+<p>添加预定义策略的好处是你不必了解所有的权限细节，比如你要添加 Lambda 函数的权限，你可以直接添加 <code>AWSLambda_FullAccess</code> 策略，这样就可以访问 Lambda 服务的所有权限。虽然这样做十分方便，，但是每个预定义策略的权限范围可能比你所需的权限更广泛或者更窄，甚至有时候为了添加几个不同资源的权限而添加了很多个预定义策略。</p>
+<h3 id="创建自定义策略"><a href="#创建自定义策略" class="headerlink" title="创建自定义策略"></a>创建自定义策略</h3><p>自定义策略就比预定义策略灵活的多，你可以根据自己的需求将不同 AWS 服务的权限添加到一个策略中，比如下面这个例子：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;Version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2012-10-17&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;Statement&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;Effect&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Action&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;lambda:InvokeFunction&quot;</span><span class="punctuation">,</span> <span class="string">&quot;lambda:GetFunction&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Resource&quot;</span><span class="punctuation">:</span> <span class="string">&quot;*&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;Effect&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Action&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;secretsmanager:GetSecretValue&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;secretsmanager:DescribeSecret&quot;</span></span><br><span class="line">      <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Resource&quot;</span><span class="punctuation">:</span> <span class="string">&quot;*&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>这个自定义策略允许角色执行 Lambda 函数的 <code>InvokeFunction</code> 和 <code>GetFunction</code> 操作，同时允许角色获取 Secrets Manager 中的 <code>GetSecretValue</code> 和 <code>DescribeSecret</code> 操作。不必添加诸如 AWS Lambda 和 Secrets Manager 的预定义策略，而且权限范围更加精准，更加符合你的实际需求。</p>
+<h2 id="权限隔离"><a href="#权限隔离" class="headerlink" title="权限隔离"></a>权限隔离</h2><p>下面我们再来介绍一下如何为 AWS 角色或者资源进行权限隔离，以保证资源和权限的安全性，下面以 Lambda 函数和 Secrets Manager 这两种资源为例进行介绍。</p>
+<h3 id="Lambda-函数"><a href="#Lambda-函数" class="headerlink" title="Lambda 函数"></a>Lambda 函数</h3><p>在刚才的示例中，我们为角色添加了访问 Lambda 函数的权限策略，这意味着角色可以调用 Lambda 函数，但如果我们想控制角色<strong>只能调用特定的 Lambda 函数</strong>，那么我们就需要在权限策略中添加特定的 Lambda 函数的 ARN（Amazon 资源名称）。下面是一个示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;Version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2012-10-17&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;Statement&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;Effect&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Action&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;lambda:InvokeFunction&quot;</span><span class="punctuation">,</span> <span class="string">&quot;lambda:GetFunction&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Resource&quot;</span><span class="punctuation">:</span> <span class="string">&quot;arn:aws:lambda:us-west-1:123456789012:function:role1-*&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以使用角色名称作为前缀来命名 Lambda 函数，然后在权限策略中添加限制，仅能调用以该前缀命名的 Lambda 函数，通过这种方式，可以保证该角色仅能调用属于自己的 Lambda 函数。假设我们的 AWS 角色名称为 <code>role1</code>，那么我们可以将 Lambda 函数的名称以 <code>role1-</code> 作为前缀，然后在角色的权限策略中添加只能调用以 <code>role1-</code> 为前缀的 Lambda 函数，这样就不会担心该角色调用其他 Lambda 函数。</p>
+<p>还有另外一种方法，我们也可以在 Lambda 函数权限中设置可访问的角色，这样确保该 Lambda 函数只能被某个角色调用。在 AWS 上设置 Lambda 函数权限的具体路径为：<code>Lambda -&gt; Functions -&gt; Your Lambda Function -&gt; Configuration -&gt; Permissions -&gt; Add Permission</code>。</p>
+<img src="/images/post/2024/10/aws-lambda-func-permission.png" class="" width="1000" height="600">
+
+<p>这两种方式都可以起到相同的作用，选择哪种方式取决于你的具体需求。当然你也可以同时使用这两种方式，这样可以让权限更加精确，但请确保这两者之间的权限不冲突。AWS 将同时评估两者，只有在两者都允许的情况下，访问才会被授予。</p>
+<h3 id="Secret-Manager"><a href="#Secret-Manager" class="headerlink" title="Secret Manager"></a>Secret Manager</h3><p>为 Secrets Manager 添加权限策略也是一样的，我们在角色的权限策略中对资源进行限制，让其只能访问特定的 Secret，而不能访问其他 Secret。下面是一个示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;Version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2012-10-17&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;Statement&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;Effect&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Action&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;secretsmanager:GetSecretValue&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;secretsmanager:DescribeSecret&quot;</span></span><br><span class="line">      <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Resource&quot;</span><span class="punctuation">:</span> <span class="string">&quot;arn:aws:secretsmanager:us-west-1:123456789012:secret:role1-*&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们将 Secret 的名字同样以角色名称为前缀，然后在权限策略中添加权限，只能访问以该前缀命名的 Secret，这样就可以确保该角色只能访问属于自己的 Secret。</p>
+<p>同样地，我们也可以在 Secret 的权限中设置中可访问的角色，这样确保该 Secret 只能被某些角色访问。相比 Lambda 函数，Secret 的权限策略更加灵活，Secret 可以支持设置多个角色对其进行访问，而 Lambda 函数只能设置一个角色。下面是 Secret 的权限设置示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;Version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2012-10-17&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;Statement&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;Effect&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Principal&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;AWS&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;arn:aws:iam::123456789012:role/role1&quot;</span><span class="punctuation">]</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Action&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;secretsmanager:GetSecretValue&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;secretsmanager:DescribeSecret&quot;</span></span><br><span class="line">      <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Resource&quot;</span><span class="punctuation">:</span> <span class="string">&quot;arn:aws:secretsmanager:us-west-1:123456789012:secret:role1-SEC-wBO2wW&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;Effect&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Deny&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Principal&quot;</span><span class="punctuation">:</span> <span class="string">&quot;*&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Action&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;secretsmanager:GetSecretValue&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Resource&quot;</span><span class="punctuation">:</span> <span class="string">&quot;arn:aws:secretsmanager:us-west-1:123456789012:secret:role1-SEC-wBO2wW&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;Condition&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;StringNotEquals&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;aws:PrincipalArn&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;arn:aws:iam::123456789012:role/role1&quot;</span><span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>在这个 Secret 的权限设置中，我们允许 <code>role1</code> 角色访问该 Secret，同时拒绝其他角色访问该 Secret。这样就保证了只有 <code>role1</code> 角色可以访问该 Secret，其他角色无法访问。</p>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p>如果手动来创建角色并设置权限策略，可能会比较繁琐，特别是当需要创建多个角色和资源的时候。为了提高效率，我们可以使用 AWS SDK 来快速执行这些操作。</p>
+<p>下面我们通过 Go 语言来演示如何使用 <a target="_blank" rel="noopener" href="https://aws.amazon.com/sdk-for-go/">AWS SDK</a> 来创建角色、Lambda 函数和 Secret，并设置权限策略。</p>
+<h3 id="创建角色并设置权限策略"><a href="#创建角色并设置权限策略" class="headerlink" title="创建角色并设置权限策略"></a>创建角色并设置权限策略</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;context&quot;</span></span><br><span class="line">    <span class="string">&quot;errors&quot;</span></span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/aws/aws-sdk-go/aws&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/aws/aws-sdk-go/service/iam&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">CreateAwsRole</span><span class="params">(c context.Context, amazonConfig aws.Config)</span></span> (*iam.CreateRoleOutput, <span class="type">error</span>) &#123;</span><br><span class="line">	roleName := <span class="string">&quot;role1&quot;</span></span><br><span class="line">	assumeRolePolicyDocument := <span class="string">`&#123;</span></span><br><span class="line"><span class="string">	&quot;Version&quot;: &quot;2012-10-17&quot;,</span></span><br><span class="line"><span class="string">	&quot;Statement&quot;: [</span></span><br><span class="line"><span class="string">		&#123;</span></span><br><span class="line"><span class="string">			&quot;Effect&quot;: &quot;Allow&quot;,</span></span><br><span class="line"><span class="string">			&quot;Principal&quot;: &#123;</span></span><br><span class="line"><span class="string">				&quot;Service&quot;: [</span></span><br><span class="line"><span class="string">					&quot;lambda.amazonaws.com&quot;,</span></span><br><span class="line"><span class="string">				]</span></span><br><span class="line"><span class="string">			&#125;,</span></span><br><span class="line"><span class="string">			&quot;Action&quot;: &quot;sts:AssumeRole&quot;</span></span><br><span class="line"><span class="string">		&#125;</span></span><br><span class="line"><span class="string">	]</span></span><br><span class="line"><span class="string">&#125;`</span></span><br><span class="line">	createRoleInput := &amp;iam.CreateRoleInput&#123;</span><br><span class="line">		RoleName:                 aws.String(roleName),</span><br><span class="line">		AssumeRolePolicyDocument: aws.String(assumeRolePolicyDocument),</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	iamClient := iam.NewFromConfig(amazonConfig)</span><br><span class="line">	role, err := iamClient.CreateRole(c, createRoleInput)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, errors.New(fmt.Sprintf(<span class="string">&quot;create aws role occurred error: %s&quot;</span>, err.Error()))</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> role, err</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在 <code>CreateRole</code> 的方法中，我们创建了一个名为 <code>role1</code> 的 AWS 角色，该角色的信任关系允许 Lambda 服务扮演该角色，这意味着该角色下的 Lambda 函数拥有该角色资源权限，比如该角色下的 Lambda 函数可以访问该角色下的 Secret。</li>
+<li>创建 AWS 角色需要 2 个参数，一个是角色名称 <code>role1</code>，另一个是信任关系文档 <code>assumeRolePolicyDocument</code>。</li>
+</ul>
+<p>然后我们再为这个角色添加权限策略：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">PutRolePolicy</span><span class="params">(c context.Context, amazonConfig aws.Config, roleName <span class="type">string</span>)</span></span> (<span class="type">error</span>) &#123;</span><br><span class="line">	policyDocument := <span class="string">`&#123;</span></span><br><span class="line"><span class="string">	&quot;Version&quot;: &quot;2012-10-17&quot;,</span></span><br><span class="line"><span class="string">	&quot;Statement&quot;: [</span></span><br><span class="line"><span class="string">		&#123;</span></span><br><span class="line"><span class="string">			&quot;Effect&quot;: &quot;Allow&quot;,</span></span><br><span class="line"><span class="string">			&quot;Action&quot;: [</span></span><br><span class="line"><span class="string">				&quot;lambda:InvokeFunction&quot;,</span></span><br><span class="line"><span class="string">				&quot;lambda:GetFunction&quot;</span></span><br><span class="line"><span class="string">			],</span></span><br><span class="line"><span class="string">			&quot;Resource&quot;: &quot;arn:aws:lambda:us-west-1:123456789012:function:role1-*&quot;</span></span><br><span class="line"><span class="string">		&#125;,</span></span><br><span class="line"><span class="string">		&#123;</span></span><br><span class="line"><span class="string">			&quot;Effect&quot;: &quot;Allow&quot;,</span></span><br><span class="line"><span class="string">			&quot;Action&quot;: [</span></span><br><span class="line"><span class="string">				&quot;secretsmanager:GetSecretValue&quot;,</span></span><br><span class="line"><span class="string">				&quot;secretsmanager:DescribeSecret&quot;</span></span><br><span class="line"><span class="string">			],</span></span><br><span class="line"><span class="string">            &quot;Resource&quot;: &quot;arn:aws:secretsmanager:us-west-1:123456789012:secret:role1-*&quot;</span></span><br><span class="line"><span class="string">	]</span></span><br><span class="line"><span class="string">&#125;`</span>,</span><br><span class="line">	putRolePolicyInput := &amp;iam.PutRolePolicyInput&#123;</span><br><span class="line">		PolicyName:     aws.String(fmt.Sprintf(<span class="string">&quot;%s-policy&quot;</span>, roleName)),</span><br><span class="line">		PolicyDocument: aws.String(policyDocument),</span><br><span class="line">		RoleName:       aws.String(roleName),</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	iamClient := iam.NewFromConfig(amazonConfig)</span><br><span class="line">	_, err = iamClient.PutRolePolicy(c, putRolePolicyInput)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> errors.New(fmt.Sprintf(<span class="string">&quot;put role policy for aws role occurred error: %s&quot;</span>, err.Error()))</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在 <code>PutRolePolicy</code> 的方法中，我们为 <code>role1</code> 角色添加了权限策略</li>
+<li>权限策略中允许该角色调用名称以 <code>role1-</code> 为前缀的 Lambda 函数</li>
+<li>权限策略中允许该角色访问名称以 <code>role1-</code> 为前缀的 Secret</li>
+<li>创建权限策略需要 3 个参数，一个是角色名称 <code>role1</code>，另一个是权限策略文档 <code>policyDocument</code>，最后一个是权限策略名称，这里我们使用角色名称加上 <code>-policy</code> 作为权限策略名称。</li>
+</ul>
+<h3 id="创建-Lambda-函数并设置角色权限"><a href="#创建-Lambda-函数并设置角色权限" class="headerlink" title="创建 Lambda 函数并设置角色权限"></a>创建 Lambda 函数并设置角色权限</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;context&quot;</span></span><br><span class="line">    <span class="string">&quot;errors&quot;</span></span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;strings&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/aws/aws-sdk-go/aws&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/aws/aws-sdk-go/service/lambda&quot;</span></span><br><span class="line">    lambTypes <span class="string">&quot;github.com/aws/aws-sdk-go/service/lambda/types&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> ReqFile <span class="keyword">struct</span> &#123;</span><br><span class="line">    _     <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line">    Name  <span class="type">string</span></span><br><span class="line">    Bytes []<span class="type">byte</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">CreateLambdaFunction</span><span class="params">(c context.Context, file *ReqFile, roleName <span class="type">string</span>, roleARN <span class="type">string</span>, amazonConfig aws.Config)</span></span> (*lambda.CreateFunctionOutput, <span class="type">error</span>) &#123;</span><br><span class="line">	splits := strings.Split(file.Name, <span class="string">&quot;.&quot;</span>)</span><br><span class="line">	fileName := splits[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">	lambdaClient := lambda.NewFromConfig(amazonConfig)</span><br><span class="line">	lambdaFun, err := lambdaClient.RegisterLambda(</span><br><span class="line">		c,</span><br><span class="line">		&amp;lambda.CreateFunctionInput&#123;</span><br><span class="line">			Code: &amp;lambTypes.FunctionCode&#123;</span><br><span class="line">				ZipFile: file.Bytes,</span><br><span class="line">			&#125;,</span><br><span class="line">			FunctionName: aws.String(fmt.Sprintf(<span class="string">&quot;%s-%s&quot;</span>, roleName, fileName)),</span><br><span class="line">			Role:        aws.String(roleARN),</span><br><span class="line">			Runtime:     lambTypes.RuntimeNodejs20x,</span><br><span class="line">			Timeout:     aws.Int32(<span class="number">30</span>),</span><br><span class="line">			Description: <span class="literal">nil</span>,</span><br><span class="line">			Handler:     aws.String(fmt.Sprintf(<span class="string">&quot;%s.handler&quot;</span>, fileName)),</span><br><span class="line">			PackageType: lambTypes.PackageTypeZip,</span><br><span class="line">			Publish:     <span class="literal">false</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">		<span class="function"><span class="keyword">func</span><span class="params">(opt *lambda.Options)</span></span> &#123;&#125;,</span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, errors.New(fmt.Sprintf(<span class="string">&quot;failed to create lambda function: %s, err: %s&quot;</span>, fileName, err.Error()))</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> lambdaFun, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在 <code>CreateLambdaFunction</code> 的方法中，我们创建了一个 Lambda 函数</li>
+<li>AWS SDK 的 <code>RegisterLambda</code> 方法需要多个参数，其中 <code>Role</code> 参数是角色的 ARN，就是我们刚才创建的那个角色</li>
+<li>Lambda 函数需要一个 Zip 格式的文件，这个文件包含了 Lambda 函数的代码，代码中的主要执行函数是 <code>handler</code>，这个函数需要在 <code>Handler</code> 参数中指定</li>
+<li>Lambda 函数的名称是角色名称加上文件名作为前缀，这样就保证了 Lambda 函数只能被该角色调用</li>
+</ul>
+<h3 id="创建-Secret-并设置角色权限"><a href="#创建-Secret-并设置角色权限" class="headerlink" title="创建 Secret 并设置角色权限"></a>创建 Secret 并设置角色权限</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;context&quot;</span></span><br><span class="line">    <span class="string">&quot;errors&quot;</span></span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/aws/aws-sdk-go/aws&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/aws/aws-sdk-go/service/secretsmanager&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">CreateAwsSecretKey</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	c context.Context,</span></span></span><br><span class="line"><span class="params"><span class="function">	awsRole *iam.CreateRoleOutput,</span></span></span><br><span class="line"><span class="params"><span class="function">	amazonConfig aws.Config,</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> (*secretsmanager.CreateSecretOutput, <span class="type">error</span>) &#123;</span><br><span class="line">	secretName := fmt.Sprintf(<span class="string">&quot;%s-Sec&quot;</span>, awsRole.Name)</span><br><span class="line">	secretValue := <span class="string">&quot;secret-value&quot;</span></span><br><span class="line">	input := &amp;secretsmanager.CreateSecretInput&#123;</span><br><span class="line">		Name:         aws.String(secretName),</span><br><span class="line">		SecretString: aws.String(secretValue),</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	secretManagerClient := secretsmanager.NewFromConfig(amazonConfig)</span><br><span class="line">	awsSecretKey, err := secretManagerClient.CreateSecret(c, input)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, errors.New(fmt.Sprintf(<span class="string">&quot;create aws secret key occurred error: %s&quot;</span>, err.Error()))</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> awsSecretKey, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在 <code>CreateAwsSecretKey</code> 的方法中，我们创建了一个 Secret</li>
+<li>参数 <code>awsRole</code> 是我们刚才创建的 AWS 角色，包含了角色的名称和 ARN</li>
+<li>创建 Secret 需要 2 个参数，一个是 Secret 名称，另一个是 Secret 值</li>
+<li>创建 Secret 名称时，我们使用角色名称加上 <code>-Sec</code> 作为 Secret 名称，这样就保证了 Secret 只能被该角色访问</li>
+</ul>
+<p>然后我们再为这个 Secret 添加资源策略：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">PutResourcePolicyForAwsSecretKey</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	c context.Context,</span></span></span><br><span class="line"><span class="params"><span class="function">	roleARN <span class="type">string</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">	awsSecretKey *secretsmanager.CreateSecretOutput,</span></span></span><br><span class="line"><span class="params"><span class="function">	amazonConfig aws.Config,</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span> <span class="type">error</span> &#123;</span><br><span class="line">	resourcePolicy := fmt.Sprintf(<span class="string">`&#123;</span></span><br><span class="line"><span class="string">		&quot;Version&quot;: &quot;2012-10-17&quot;,</span></span><br><span class="line"><span class="string">		&quot;Statement&quot;: [</span></span><br><span class="line"><span class="string">			&#123;</span></span><br><span class="line"><span class="string">				&quot;Effect&quot;: &quot;Allow&quot;,</span></span><br><span class="line"><span class="string">				&quot;Principal&quot;: &#123;</span></span><br><span class="line"><span class="string">					&quot;AWS&quot;: [ &quot;%s&quot;  ]</span></span><br><span class="line"><span class="string">				&#125;,</span></span><br><span class="line"><span class="string">				&quot;Action&quot;: [ &quot;secretsmanager:GetSecretValue&quot;, &quot;secretsmanager:DescribeSecret&quot; ],</span></span><br><span class="line"><span class="string">				&quot;Resource&quot;: &quot;%s&quot;</span></span><br><span class="line"><span class="string">			&#125;,</span></span><br><span class="line"><span class="string">			&#123;</span></span><br><span class="line"><span class="string">				&quot;Effect&quot;: &quot;Deny&quot;,</span></span><br><span class="line"><span class="string">				&quot;Principal&quot; : &quot;*&quot;,</span></span><br><span class="line"><span class="string">				&quot;Action&quot; : &quot;secretsmanager:GetSecretValue&quot;,</span></span><br><span class="line"><span class="string">				&quot;Resource&quot; : &quot;%s&quot;,</span></span><br><span class="line"><span class="string">				&quot;Condition&quot;: &#123;</span></span><br><span class="line"><span class="string">					&quot;StringNotEquals&quot;: &#123;</span></span><br><span class="line"><span class="string">						&quot;aws:PrincipalArn&quot;: [ &quot;%s&quot; ]</span></span><br><span class="line"><span class="string">					&#125;</span></span><br><span class="line"><span class="string">				&#125;</span></span><br><span class="line"><span class="string">			&#125;</span></span><br><span class="line"><span class="string">		]</span></span><br><span class="line"><span class="string">	&#125;`</span>,</span><br><span class="line">        roleARN,</span><br><span class="line">        awsSecretKey.ARN,</span><br><span class="line">        awsSecretKey.ARN,</span><br><span class="line">        roleARN,</span><br><span class="line">    )</span><br><span class="line">	policyInput := &amp;secretsmanager.PutResourcePolicyInput&#123;</span><br><span class="line">		SecretId:       aws.String(awsSecretKey.Name),</span><br><span class="line">		ResourcePolicy: aws.String(resourcePolicy),</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	secretManagerClient = secretsmanager.NewFromConfig(amazonConfig)</span><br><span class="line">	_, err = secretManagerClient.PutResourcePolicy(c, policyInput)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> errors.New(fmt.Sprintf(<span class="string">&quot;put resource policy for aws secret key occurred error: %s&quot;</span>, err.Error()))</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在 <code>PutResourcePolicyForAwsSecretKey</code> 的方法中，我们为 Secret 添加了资源策略</li>
+<li>参数 <code>awsSecret</code> 是我们刚才创建的 AWS Secret，包含了 Secret 的名称和 ARN 等信息</li>
+<li>权限策略中允许 <code>role1</code> 角色访问该 Secret，同时拒绝其他角色访问该 Secret</li>
+<li>添加 Secret 权限策略需要 2 个参数，一个是 Secret 名字，另一个是权限策略文档 <code>resourcePolicy</code></li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>今天我们讨论了在开发 AWS 应用时遇到的普遍问题，以及解决这一问题的主要方法。在这个过程中，我们还介绍了 AWS 角色的权限属性，包括权限策略和信任关系，以及如何使用这些属性来隔离资源。最后我们通过 Go 语言代码示例演示了如何创建 AWS 角色、Lambda 函数和 Secret，并设置权限策略。通过代码的方式，我们可以快速创建和设置 AWS 资源，保证资源和权限的安全性。</p>
+<p>关注我，一起学习最新的开发编程新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2024/10/03/use-aws-role-to-isolate-resources-and-privilege/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2024/10/03/use-aws-role-to-isolate-resources-and-privilege/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

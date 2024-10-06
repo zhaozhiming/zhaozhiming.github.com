@@ -134,6 +134,10 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
+		  <a href="/2024/10/03/use-aws-role-to-isolate-resources-and-privilege/">使用 AWS 角色隔离资源和权限</a>
+	    </li>
+	  
+	    <li class="post">
 		  <a href="/2024/09/21/Cursor-helped-me-get-up-to-speed-with-Go-in-just-one-day/">Cursor 让我一天上手 Go 语言</a>
 	    </li>
 	  
@@ -147,10 +151,6 @@
 	  
 	    <li class="post">
 		  <a href="/2024/07/15/modern-python-project-tools-config/">都 2024 年了，你还在用 pip 吗？</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/07/04/rag-knowledge-graphs/">高级 RAG 检索策略之知识图谱</a>
 	    </li>
 	  
     </ul>
@@ -170,7 +170,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">24</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">25</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -179,6 +179,33 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2024/05/24/embedded-table-rag/">高级 RAG 检索策略之内嵌表格</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2024-05-24T14:16:38.000Z" itemprop="datePublished">5月 24, 2024</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/llamaindex/">llamaindex</a> <a href="/tags/rag/">rag</a> <a href="/tags/embedded-table/">embedded-table</a> <a href="/tags/llama-parser/">llama-parser</a> <a href="/tags/gpt4o/">gpt4o</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2024/05/rag-embedded-table.jpeg" class="" width="400" height="300">
+
+<p>在 RAG（Retrieval Augmented Generation）应用中，最负有挑战性的问题之一是如何处理复杂文档的内容，比如在 PDF 文档中的图片、表格等，因为这些内容不像传统文本那样容易解析和检索。在本文中，我们将介绍几种关于内嵌表格的 RAG 方案，讲解其中解析和检索的技术细节，并通过代码示例让大家更好地理解其中的原理，同时对这些方案进行分析和对比，阐述它们的优缺点。</p>
+        
+          <p class="more-link">
+            <a href="2024/05/24/embedded-table-rag/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -416,33 +443,6 @@
         
           <p class="more-link">
             <a href="2024/03/19/auto-merging-rag/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2024/03/11/sentence-windows-rag/">高级 RAG 检索策略之句子窗口检索</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2024-03-11T01:45:46.000Z" itemprop="datePublished">3月 11, 2024</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/llamaindex/">llamaindex</a> <a href="/tags/rag/">rag</a> <a href="/tags/sentence-window/">sentence window</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2024/03/sentence-window.jpg" class="" width="400" height="300">
-
-<p>之前介绍过大语言模型（LLM）相关技术 RAG（Retrieval Augmented Generation）的内容，但随着 LLM 技术的发展，越来越多的高级 RAG 检索方法也随之被人发现，相对于普通的 RAG 检索，高级 RAG 通过更深化的技术细节、更复杂的搜索策略，提供出了更准确、更相关、更丰富的信息检索结果。今天我们就来介绍一下高级 RAG 检索策略其中的一种方法——句子窗口检索。</p>
-        
-          <p class="more-link">
-            <a href="2024/03/11/sentence-windows-rag/#more">Read More</a>
           </p>
         
       

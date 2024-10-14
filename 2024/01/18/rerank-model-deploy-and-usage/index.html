@@ -1,0 +1,302 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>Rerank 模型的部署及使用 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="介绍使用 TEI 部署 Rerank 模型以及使用LlamaIndex 进行 Rerank 检索"> <!-- TODO: truncate -->
+	<meta name="keywords" content="rerank, llamaindex, text-embedding-inherence">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">Rerank 模型的部署及使用</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2024-01-18T03:55:56.000Z" itemprop="datePublished">1月 18, 2024</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/llamaindex/">llamaindex</a> <a href="/tags/rerank/">rerank</a> <a href="/tags/text-embedding-inherence/">text-embedding-inherence</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2024/01/rag-rerank.png" class="" width="400" height="300">
+
+<p>Rerank 在 RAG（Retrieval-Augmented Generation）过程中扮演了一个非常重要的角色，普通的 RAG 可能会检索到大量的文档，但这些文档可能并不是所有的都跟问题相关，而 Rerank 可以对文档进行重新排序和筛选，让相关的文档排在前面，从而提高 RAG 的效果。本文将介绍使用 HuggingFace 的 Text Embedding Inherence 工具部署 Rerank 模型，以及演示如何在 LlamaIndex 的 RAG 中加入 Rerank 功能。</p>
+<span id="more"></span>
+
+<h2 id="Rerank-介绍"><a href="#Rerank-介绍" class="headerlink" title="Rerank 介绍"></a>Rerank 介绍</h2><p>RAG 是一种结合了信息检索和文本生成的语言模型技术。简单来说，当你向大语言模型（LLM）提出一个问题时，RAG 首先会在一个大型的文档集合中寻找相关信息，然后再基于这些信息生成回答。</p>
+<p>Rerank 的工作就像是一个智能的筛选器，当 RAG 从文档集合中检索到多个文档时，这些文档可能与你的问题相关度各不相同。有些文档可能非常贴切，而有些则可能只是稍微相关或者甚至是不相关的。这时，Rerank 的任务就是评估这些文档的相关性，然后对它们进行重新排序。它会把那些最有可能提供准确、相关回答的文档排在前面。这样，当 LLM 开始生成回答时，它会优先考虑这些排名靠前的、更加相关的文档，从而提高生成回答的准确性和质量。通俗来说，Rerank 就像是在图书馆里帮你从一堆书中挑出最相关的那几本，让你在寻找答案时更加高效和精准。</p>
+<img src="/images/post/2024/01/rerank-flow.png" class="" width="1000" height="600">
+
+<h2 id="Rerank-模型部署"><a href="#Rerank-模型部署" class="headerlink" title="Rerank 模型部署"></a>Rerank 模型部署</h2><p>目前可用的 Rerank 模型并不多，有 <a target="_blank" rel="noopener" href="https://cohere.com/">Cohere</a> 的线上模型，通过 API 的形式进行调用。开源的模型有智源的<a target="_blank" rel="noopener" href="https://huggingface.co/BAAI/bge-reranker-base">bge-reranker-base</a>、<a target="_blank" rel="noopener" href="https://huggingface.co/BAAI/bge-reranker-large">bge-reranker-large</a>。今天我们将使用 bge-reranker-large 模型来进行部署演示。</p>
+<h3 id="Text-Embedding-Inherence"><a href="#Text-Embedding-Inherence" class="headerlink" title="Text Embedding Inherence"></a>Text Embedding Inherence</h3><p>我们将使用 HuggingFace 推出的 Text Embedding Inherence（以下简称 TEI）工具来部署 Rerank 模型，TEI 是一个用于部署和提供开源文本嵌入和序列分类模型的工具，该工具主要是以部署 Embedding 模型为主，但是也支持 Rerank 和其他类型的模型的部署，同时它还支持部署兼容 OpenAI API 的 API 服务。</p>
+<p>我们先进行 TEI 的安装，安装方式有 2 种，一种是通过 Docker 方式，另外一种是通过源码安装的方式，可以同时支持 GPU 和 CPU 的机器部署。</p>
+<p>因为 Docker 安装需要有 GPU 的服务器，而一些云 GPU 服务器不方便使用 Docker，因此我们在 <strong>Mac M1</strong> 电脑上通过源码的方式来进行安装。</p>
+<p>首先需要在电脑上安装 Rust，建议安装 Rust 的最新版本 1.75.0，安装命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl --proto <span class="string">&#x27;=https&#x27;</span> --tlsv1.2 -sSf https://sh.rustup.rs | sh</span><br></pre></td></tr></table></figure>
+
+<p>然后下载 TEI 的 github 仓库，并安装相关依赖，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/huggingface/text-embeddings-inference.git</span><br><span class="line"><span class="built_in">cd</span> text-embeddings-inference</span><br><span class="line">cargo install --path router -F candle -F metal</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>其中 router 是 TEI 仓库里面的一个目录</li>
+<li>安装成功后，可以使用<code>text-embeddings-router --help</code>命令来查看工具的相关参数</li>
+</ul>
+<p>TEI 安装完成后，我们使用它来部署 Rerank 模型，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">text-embeddings-router --model-id BAAI/bge-reranker-large --revision refs/pr/4 --port 8080</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>--model-id</code>是指模型在 Huggingface 上的 ID，<code>revision</code>是相关的版本号</li>
+<li><code>--port</code>是指服务的端口号</li>
+<li>执行命令后，TEI 会从 Huggingface 上下载模型，下载到本地路径<code>~/.cache/huggingface/hub/models--BAAI--bge-reranker-large</code></li>
+</ul>
+<p>服务启动后，我们可以在浏览器访问地址<code>http://localhost:8080/docs</code>来查看服务的 API 文档：</p>
+<img src="/images/post/2024/01/tei-api.png" class="" width="1000" height="600">
+
+<p>在图中可以看到有 Rerank 的接口，我们尝试用 Curl 工具来调用该接口进行验证：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">curl -X <span class="string">&#x27;POST&#x27;</span> \</span><br><span class="line">  <span class="string">&#x27;http://localhost:8080/rerank&#x27;</span> \</span><br><span class="line">  -H <span class="string">&#x27;accept: application/json&#x27;</span> \</span><br><span class="line">  -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> \</span><br><span class="line">  -d <span class="string">&#x27;&#123;</span></span><br><span class="line"><span class="string">  &quot;query&quot;: &quot;What is Deep Learning?&quot;,</span></span><br><span class="line"><span class="string">  &quot;texts&quot;: [</span></span><br><span class="line"><span class="string">    &quot;Deep Learning is ...&quot;,</span></span><br><span class="line"><span class="string">    &quot;hello&quot;</span></span><br><span class="line"><span class="string">  ]</span></span><br><span class="line"><span class="string">&#125;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="string">&quot;index&quot;</span>:0,</span><br><span class="line">    <span class="string">&quot;score&quot;</span>:0.99729556</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="string">&quot;index&quot;</span>:1,</span><br><span class="line">    <span class="string">&quot;score&quot;</span>:0.00009387641</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>Rerank 的接口比较简单，只需要传问题<code>query</code>和相关的文档<code>texts</code>这 2 个参数即可，返回结果表示每个文档和问题的相似度分数，然后按照分数大小来进行排序，可以看到第一个文档与问题语义相近所以得分比较高，第二个文档和问题不太相关所以得分低。</p>
+<p>需要注意的是，因为该模型是 Rerank 模型，所以如果是调用其中的<code>embedding</code>接口会报模型不支持的错误。如果你想同时拥有 Rerank 和 Embedding 的功能，可以再使用 TEI 部署一个 Embedding 模型，只要端口号不冲突就可以了。</p>
+<p>TEI 也支持 Embedding 模型和序列分类模型的部署，其它模型的部署可以参考 TEI 的<a target="_blank" rel="noopener" href="https://github.com/huggingface/text-embeddings-inference">官方仓库</a>，这里就不再赘述。</p>
+<h2 id="LlamaIndex-使用-Rerank-功能"><a href="#LlamaIndex-使用-Rerank-功能" class="headerlink" title="LlamaIndex 使用 Rerank 功能"></a>LlamaIndex 使用 Rerank 功能</h2><p>我们先来看下 LlamaIndex 普通的 RAG 功能，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index <span class="keyword">import</span> ServiceContext, VectorStoreIndex, SimpleDirectoryReader</span><br><span class="line"></span><br><span class="line">documents = SimpleDirectoryReader(<span class="string">&quot;./data&quot;</span>).load_data()</span><br><span class="line">service_context = ServiceContext.from_defaults(llm=<span class="literal">None</span>)</span><br><span class="line">index = VectorStoreIndex.from_documents(documents, service_context=service_context)</span><br><span class="line">query_engine = index.as_query_engine()</span><br><span class="line"></span><br><span class="line">response = query_engine.query(<span class="string">&quot;健康饮食的好处是什么？&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;response: <span class="subst">&#123;response&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>data</code>是放我们测试文档的目录，测试文档内容待会会介绍</li>
+<li>LlamaIndex 默认使用 OpenAI 的 LLM，这样的话<code>response</code>是 LLM 生成的答案，这里我们将<code>llm</code>设置为<code>None</code>，<code>response</code>就只会显示传递给 LLM 的提示词模板</li>
+<li>LlamaIndex 默认使用 OpenAI 的 Embedding 来向量化文档，因此需要设置环境变量<code>OPENAI_API_KEY</code>为你的 OpenAI API Key</li>
+<li>其他部分就是 LlamaIndex 的一个普通 RAG 代码，加载目录文档，解析分块索引保存，最后进行查询</li>
+</ul>
+<p>我们再来看下测试文档内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ tree data</span><br><span class="line">data/</span><br><span class="line">├── rerank-A.txt</span><br><span class="line">├── rerank-B.txt</span><br><span class="line">└── rerank-C.txt</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">cat</span> rerank-A.txt</span><br><span class="line"><span class="comment">### 快餐的负面影响：健康与生活方式的隐忧</span></span><br><span class="line">快餐，一种在现代快节奏生活中极为普遍的饮食选择......</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">cat</span> rerank-B.txt</span><br><span class="line"><span class="comment">### 选择有机，选择健康：探索有机食品的无限好处</span></span><br><span class="line">在今天这个注重健康和可持续生活的时代......</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">cat</span> rerank-C.txt</span><br><span class="line"><span class="comment">### 健康饮食的益处：营养学视角的探讨</span></span><br><span class="line">摘要：健康饮食是维持和提升整体健康的关键......</span><br></pre></td></tr></table></figure>
+
+<p>这些测试文档都是和饮食相关的文档，我们执行下代码看下结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># response 显示结果</span></span><br><span class="line">LLM is explicitly disabled. Using MockLLM.</span><br><span class="line">response: Context information is below.</span><br><span class="line">---------------------</span><br><span class="line">file_path: data/rerank-C.txt</span><br><span class="line"></span><br><span class="line"><span class="comment">### 健康饮食的益处：营养学视角的探讨</span></span><br><span class="line">摘要：健康饮食是维持和提升整体健康的关键.....</span><br><span class="line"></span><br><span class="line">file_path: data/rerank-A.txt</span><br><span class="line"></span><br><span class="line"><span class="comment">### 快餐的负面影响：健康与生活方式的隐忧</span></span><br><span class="line">快餐，一种在现代快节奏生活中极为普遍的饮食选择......</span><br><span class="line">---------------------</span><br><span class="line">Given the context information and not prior knowledge, answer the query.</span><br><span class="line">Query: 健康饮食的好处是什么？</span><br><span class="line">Answer:</span><br></pre></td></tr></table></figure>
+
+<p>可以看到程序会检索出和问题相似度最高的 2 个文档<code>rerank-C.txt</code>和<code>rerank-A.txt</code>，但 A 文档似乎和问题关联性不大，我们可以使用 Rerank 来改进这一点。</p>
+<p>我们需要使用 LlamaIndex 的<code>Node PostProcessor</code>组件来调用 Rerank 功能，<code>Node Postprocessor</code> 的作用是在查询结果传递到查询流程的下一个阶段之前，修改或增强这些结果。因此我们先来定一个自定义的<code>Node PostProcessor</code>来调用我们刚才部署的 Rerank 接口，代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span>, <span class="type">Optional</span></span><br><span class="line"><span class="keyword">from</span> llama_index.bridge.pydantic <span class="keyword">import</span> Field, PrivateAttr</span><br><span class="line"><span class="keyword">from</span> llama_index.postprocessor.types <span class="keyword">import</span> BaseNodePostprocessor</span><br><span class="line"><span class="keyword">from</span> llama_index.schema <span class="keyword">import</span> NodeWithScore, QueryBundle</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CustomRerank</span>(<span class="title class_ inherited__">BaseNodePostprocessor</span>):</span><br><span class="line">    url: <span class="built_in">str</span> = Field(description=<span class="string">&quot;Rerank server url.&quot;</span>)</span><br><span class="line">    top_n: <span class="built_in">int</span> = Field(description=<span class="string">&quot;Top N nodes to return.&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self,</span></span><br><span class="line"><span class="params">        top_n: <span class="built_in">int</span>,</span></span><br><span class="line"><span class="params">        url: <span class="built_in">str</span>,</span></span><br><span class="line"><span class="params">    </span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__(url=url, top_n=top_n)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">rerank</span>(<span class="params">self, query, texts</span>):</span><br><span class="line">        url = <span class="string">f&quot;<span class="subst">&#123;self.url&#125;</span>/rerank&quot;</span></span><br><span class="line">        request_body = &#123;<span class="string">&quot;query&quot;</span>: query, <span class="string">&quot;texts&quot;</span>: texts, <span class="string">&quot;truncate&quot;</span>: <span class="literal">False</span>&#125;</span><br><span class="line">        response = requests.post(url, json=request_body)</span><br><span class="line">        <span class="keyword">if</span> response.status_code != <span class="number">200</span>:</span><br><span class="line">            <span class="keyword">raise</span> RuntimeError(<span class="string">f&quot;Failed to rerank documents, detail: <span class="subst">&#123;response&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> response.json()</span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">class_name</span>(<span class="params">cls</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;CustomerRerank&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_postprocess_nodes</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self,</span></span><br><span class="line"><span class="params">        nodes: <span class="type">List</span>[NodeWithScore],</span></span><br><span class="line"><span class="params">        query_bundle: <span class="type">Optional</span>[QueryBundle] = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">    </span>) -&gt; <span class="type">List</span>[NodeWithScore]:</span><br><span class="line">        <span class="keyword">if</span> query_bundle <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&quot;Missing query bundle in extra info.&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(nodes) == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> []</span><br><span class="line"></span><br><span class="line">        texts = [node.text <span class="keyword">for</span> node <span class="keyword">in</span> nodes]</span><br><span class="line">        results = <span class="variable language_">self</span>.rerank(</span><br><span class="line">            query=query_bundle.query_str,</span><br><span class="line">            texts=texts,</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        new_nodes = []</span><br><span class="line">        <span class="keyword">for</span> result <span class="keyword">in</span> results[<span class="number">0</span> : <span class="variable language_">self</span>.top_n]:</span><br><span class="line">            new_node_with_score = NodeWithScore(</span><br><span class="line">                node=nodes[<span class="built_in">int</span>(result[<span class="string">&quot;index&quot;</span>])].node,</span><br><span class="line">                score=result[<span class="string">&quot;score&quot;</span>],</span><br><span class="line">            )</span><br><span class="line">            new_nodes.append(new_node_with_score)</span><br><span class="line">        <span class="keyword">return</span> new_nodes</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们定义了一个<code>CustomRerank</code>类，继承自<code>BaseNodePostprocessor</code>，并实现了<code>_postprocess_nodes</code>方法</li>
+<li><code>CustomRerank</code>类有 2 个参数，<code>url</code>是我们刚才部署的 Rerank 服务地址，<code>top_n</code>是指返回的文档数量</li>
+<li>在<code>_postprocess_nodes</code>方法中，我们先将原始检索到的文档转化为文本列表，再和问题一起传递给 <code>rerank</code>方法</li>
+<li><code>rerank</code>方法会调用 Rerank 接口，这里要注意的是，TEI 中的 <code>texts</code>参数每个文档的长度不能超过 512 个字符，如果超过了会报 413 请求参数超过限制大小的错误，这时可以将<code>truncate</code>参数设置为<code>True</code>，接口会自动将过长的文档进行截断</li>
+<li>得到 Rerank 的结果后，我们根据<code>top_n</code>参数来截取前 N 个文档，然后返回重新排序后的文档列表</li>
+</ul>
+<p>我们再来看如何在 LlamaIndex 中使用<code>CustomRerank</code>，代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> custom_rerank <span class="keyword">import</span> CustomRerank</span><br><span class="line"></span><br><span class="line">......</span><br><span class="line">query_engine = index.as_query_engine(</span><br><span class="line">    node_postprocessors=[CustomRerank(url=<span class="string">&quot;http://localhost:8080&quot;</span>, top_n=<span class="number">1</span>)],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">response = query_engine.query(<span class="string">&quot;健康饮食的好处是什么？&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;response: <span class="subst">&#123;response&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们在<code>as_query_engine</code>方法中传递了<code>node_postprocessors</code>参数，这里我们将<code>CustomRerank</code>类传递进去</li>
+<li>在<code>CustomRerank</code>类中，我们设置 Rerank 的 API 地址和 top_n 参数，这里我们设置为 1，表示只返回一个文档</li>
+</ul>
+<p>修改完代码后，我们再次运行程序，可以看到结果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># response 显示结果</span></span><br><span class="line">LLM is explicitly disabled. Using MockLLM.</span><br><span class="line">response: Context information is below.</span><br><span class="line">---------------------</span><br><span class="line">file_path: data/rerank-C.txt</span><br><span class="line"></span><br><span class="line"><span class="comment">### 健康饮食的益处：营养学视角的探讨</span></span><br><span class="line">摘要：健康饮食是维持和提升整体健康的关键.....</span><br><span class="line"></span><br><span class="line">---------------------</span><br><span class="line">Given the context information and not prior knowledge, answer the query.</span><br><span class="line">Query: 健康饮食的好处是什么？</span><br><span class="line">Answer:</span><br></pre></td></tr></table></figure>
+
+<p>可以看到这次传递给 LLM 的文档只有<code>rerank-C.txt</code>，Rerank 只获取了最接近问题的一个文档，这样 LLM 生成的答案就更加准确了。我们可以在<code>CustomRerank</code>类打印原始检索的得分和经过 Rerank 后的得分，结果如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> node score: 0.8659382811170047</span><br><span class="line"><span class="built_in">source</span> node score: 0.8324490144594573</span><br><span class="line">----------------------</span><br><span class="line">rerank node score: 0.9941347</span><br><span class="line">rerank node score: 0.072374016</span><br></pre></td></tr></table></figure>
+
+<p>可以看到两者的得分是有差距的，这是因为原始检索和 Rerank 使用的模型不同，所以得到的分数也不同。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>今天我们介绍了 Rerank 模型的部署和使用，Rerank 模型可以帮助我们对检索到的文档进行重新排序，让相关的文档排在前面，并且过滤掉不相关的文档，从而提高 RAG 的效果。我们使用 HuggingFace 的 Text Embedding Inherence 工具来部署 Rerank 模型，同时演示了如何在 LlamaIndex 的 RAG 加入 Rerank 功能。希望本文对你有所帮助，如果有什么问题欢迎在评论区留言。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2024/01/18/rerank-model-deploy-and-usage/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2024/01/18/rerank-model-deploy-and-usage/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

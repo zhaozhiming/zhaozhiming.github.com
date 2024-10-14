@@ -1,0 +1,271 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>扒一扒 Chatgpt 背后的 web 开发技术（一） - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="扒一扒 Chatgpt 背后的 web 开发技术"> <!-- TODO: truncate -->
+	<meta name="keywords" content="chatgpt, sse">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">扒一扒 Chatgpt 背后的 web 开发技术（一）</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-04-07T13:52:40.000Z" itemprop="datePublished">4月 7, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/chatgpt/">chatgpt</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/04/chatgpt.png" class="" width="400" height="300">
+
+<p>ChatGPT 我就不多说了，最近一直都很火。在 ChatGPT 的页面上我们输入一个问题后，答案是以渐进式的输出展示出来的，为了实现实时通信和高效的数据传输，ChatGPT 选择了 SSE（Server-Sent Events） 技术。在本篇博客中，我们将详细介绍这一项重要技术。</p>
+<span id="more"></span>
+
+<h2 id="SSE-技术概述"><a href="#SSE-技术概述" class="headerlink" title="SSE 技术概述"></a>SSE 技术概述</h2><p>SSE 是一种基于 HTTP 的实时通信技术，允许服务器向客户端（如 Web 浏览器）实时推送消息。SSE 的基本原理是通过建立一个持久的 HTTP 连接，服务器可以主动将事件发送到客户端，而无需客户端重复发送请求。</p>
+<p>以下是 SSE 技术的一些主要特点：</p>
+<ul>
+<li>基于文本：SSE 使用纯文本格式传输数据，这使得数据的解析和处理变得相对简单。</li>
+<li>单向通信：与 Websockets 等双向通信技术相比，SSE 主要用于服务器向客户端的单向通信，减少了通信的复杂性。</li>
+<li>重连机制：在连接中断时，SSE 客户端会自动尝试重新连接服务器，从而确保实时数据的传输不会中断。</li>
+<li>事件标识：SSE 支持为不同类型的事件设置标识，使客户端能够根据事件类型进行相应的处理。</li>
+</ul>
+<h3 id="与-Websockets-的比较"><a href="#与-Websockets-的比较" class="headerlink" title="与 Websockets 的比较"></a>与 Websockets 的比较</h3><p>尽管 SSE 和 Websockets 都是实时通信技术，但它们在某些方面有所不同：</p>
+<ul>
+<li>通信方向：Websockets 支持双向实时通信，而 SSE 主要用于服务器向客户端的单向通信。</li>
+<li>协议：Websockets 使用独立的协议进行通信，而 SSE 则基于 HTTP 协议。</li>
+<li>数据格式：Websockets 支持传输二进制和文本数据，而 SSE 仅支持文本数据。</li>
+<li>根据项目需求和场景，开发者可以选择适合的实时通信技术。在 ChatGPT 中，我们主要关注服务器向客户端推送消息，因此选择了 SSE 作为实现实时通信的技术。</li>
+</ul>
+<h2 id="SSE-的代码示例"><a href="#SSE-的代码示例" class="headerlink" title="SSE 的代码示例"></a>SSE 的代码示例</h2><p>在 Nestjs 里面使用 SSE 作为后端接口的代码示例如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">MessageEvent</span>,  <span class="title class_">Sse</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@nestjs/common&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; interval, <span class="title class_">Observable</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;rxjs&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; map &#125; <span class="keyword">from</span> <span class="string">&#x27;rxjs/operators&#x27;</span>;</span><br><span class="line"></span><br><span class="line">@<span class="title class_">Sse</span>(<span class="string">&#x27;sse&#x27;</span>)</span><br><span class="line"><span class="title function_">sse</span>(): <span class="title class_">Observable</span>&lt;<span class="title class_">MessageEvent</span>&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">interval</span>(<span class="number">1000</span>).<span class="title function_">pipe</span>(<span class="title function_">map</span>(<span class="function">(<span class="params">_</span>) =&gt;</span> (&#123; <span class="attr">data</span>: &#123; <span class="attr">hello</span>: <span class="string">&#x27;world&#x27;</span> &#125; &#125;)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Nestjs 中已经内置了 SSE 的实现，只需要使用装饰符<code>Sse</code>即可，再通过<code>rxjs</code>的 Observable 对象返回流式数据。</p>
+<p>然后再看看客户端的代码示例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> eventSource = <span class="keyword">new</span> <span class="title class_">EventSource</span>(<span class="string">&#x27;/sse&#x27;</span>);</span><br><span class="line">eventSource.<span class="property">onmessage</span> = <span class="function">(<span class="params">&#123; data &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;New message&#x27;</span>, <span class="title class_">JSON</span>.<span class="title function_">parse</span>(data));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>通过创建一个<code>EventSource</code>对象来建立后端的 SSE 接口连接，并通过监听 message 事件来获取后端数据。</p>
+<p>更多详细代码请参考 <a target="_blank" rel="noopener" href="https://docs.nestjs.com/techniques/server-sent-events">这里</a>。</p>
+<h2 id="SSE-的局限性"><a href="#SSE-的局限性" class="headerlink" title="SSE 的局限性"></a>SSE 的局限性</h2><h3 id="只能使用-GET-请求"><a href="#只能使用-GET-请求" class="headerlink" title="只能使用 GET 请求"></a>只能使用 GET 请求</h3><p>SSE 是基于 HTTP GET 请求的，因此无法直接使用 POST、PUT 等其他请求，也就是说无法在请求中传递 body 类的参数。这是因为 SSE 的设计初衷是用于服务器向客户端发送实时事件和数据，而不是用于客户端向服务器发送数据。</p>
+<h3 id="无法在请求中传递-header"><a href="#无法在请求中传递-header" class="headerlink" title="无法在请求中传递 header"></a>无法在请求中传递 header</h3><p>由于浏览器的安全策略，SSE 请求无法直接携带自定义 HTTP 头部。这可能在某些情况下带来限制，例如在需要身份验证时传递令牌。</p>
+<p>虽然有以上局限性，但我们还是可以通过一些方法来解决这些问题。</p>
+<ul>
+<li>使用 URL 参数来传递数据，将所需的数据作为 URL 参数附加到 SSE 请求，适合传递一些简单的参数</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 客户端</span></span><br><span class="line"><span class="comment">// 这里的 uid 就是要传递参数</span></span><br><span class="line"><span class="keyword">const</span> eventSource = <span class="keyword">new</span> <span class="title class_">EventSource</span>(<span class="string">&#x27;/sse/uid&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 服务端</span></span><br><span class="line">@<span class="title class_">Sse</span>(<span class="string">&#x27;sse/:uid&#x27;</span>)</span><br><span class="line"><span class="title function_">sse</span>(<span class="title class_">Param</span>() params): <span class="title class_">Observable</span>&lt;<span class="title class_">MessageEvent</span>&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; uuid &#125; = params;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>npm 上有个<code>EventSource</code>的 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/event-source-polyfill">polyfill</a>， 使用它替换掉<code>EventSource</code>后就可以在请求中携带 header 了，像身份令牌这种重要信息，还是建议放到 header 中。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> es = <span class="keyword">new</span> <span class="title class_">EventSourcePolyfill</span>(<span class="string">&#x27;/sse&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">headers</span>: &#123;</span><br><span class="line">    <span class="string">&#x27;X-Custom-Header&#x27;</span>: <span class="string">&#x27;value&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="用-SSE-实现-ChatGPT"><a href="#用-SSE-实现-ChatGPT" class="headerlink" title="用 SSE 实现 ChatGPT"></a>用 SSE 实现 ChatGPT</h2><p>既然 SSE 有这些限制，那么 ChatGPT 是怎么做到将<code>prompt</code>传到后端，然后后端再通过 SSE 返回答案的呢？<br>可能有人会说通过 GET 请求的 <code>query</code>参数来传递<code>prompt</code>参数，比如<code>sse?question=xxx</code>，但是这样的话，如果<code>prompt</code>很大，比如一个几百上千字的<code>prompt</code>就会有问题了，一个是不安全，另一个是可能超过 URL 的长度限制。同样地，将<code>prompt</code>放到 <code>header</code>里也不太合适，毕竟是业务字段，不应该放到 header 里。 </p>
+<p>如果是局限在一个请求里面是去思考的话，可能确实无法做到，但如果是多个请求呢？我们可以通过多个请求来实现，比如先通过一个请求将<code>prompt</code>传到后端，后端返回一些参数给前端后，前端再通过 SSE 去后端请求答案，这样就可以避免上面的问题了。</p>
+<h3 id="见证奇迹的时刻"><a href="#见证奇迹的时刻" class="headerlink" title="见证奇迹的时刻"></a>见证奇迹的时刻</h3><p>我们可以先发送一个 POST 请求，将<code>prompt</code>放到请求的<code>body</code>里，后端接收到 POST 请求后，将<code>prompt</code>存到数据库里，并返回一个<code>id</code>给前端。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@<span class="title class_">Post</span>(<span class="string">&#x27;new&#x27;</span>)</span><br><span class="line"><span class="keyword">async</span> <span class="title function_">chat</span>(<span class="params">@Body() data: &#123; prompt &#125;</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; prompt &#125; = data;</span><br><span class="line">  <span class="keyword">const</span> id = <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="property">chatService</span>.<span class="title function_">createChat</span>(prompt);</span><br><span class="line">  <span class="keyword">return</span> &#123; id &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>前端接收到这个 id 参数后，将 id 放到 SSE 的请求里，再向后端发送请求。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> es = <span class="keyword">new</span> <span class="title class_">EventSourcePolyfill</span>(<span class="string">`/sse/<span class="subst">$&#123;id&#125;</span>`</span>, &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>可以看到这里将 id 参数作为 url 的<code>param</code>，这样后端就可以通过 sse 请求获取到这个 id 了，然后再通过<code>id</code>去数据库里取出<code>prompt</code>，然后再去调用 ChatGPT 的 API，最后将答案返回给前端。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@<span class="title class_">Sse</span>(<span class="string">&#x27;sse/:id&#x27;</span>)</span><br><span class="line"><span class="title function_">sse</span>(<span class="title class_">Param</span>() params): <span class="title class_">Observable</span>&lt;<span class="title class_">MessageEvent</span>&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; id &#125; = params;</span><br><span class="line">  <span class="keyword">const</span> prompt = <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="property">chatService</span>.<span class="title function_">getChat</span>(id);</span><br><span class="line">  <span class="keyword">const</span> answer = <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="property">chatService</span>.<span class="title function_">getAnswer</span>(prompt);</span><br><span class="line">  <span class="comment">// 这里的 answer 就是 ChatGPT 返回的答案，然后通过 sse 返回给前端</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>SSE 作为一种基于 HTTP 的实时通信技术，使得服务器能够主动将事件发送到客户端，而无需客户端重复发送请求。尽管 SSE 存在一定的局限性，在特定场景下，其简单、易用的特点使其成为实现单向实时数据传输的理想选择。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2023/04/07/chatgpt-technical-part-one/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2023/04/07/chatgpt-technical-part-one/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

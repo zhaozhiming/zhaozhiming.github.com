@@ -1,0 +1,294 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>Cursor 让我一天上手 Go 语言 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="介绍在使用 Cursor 开发新项目时的一些心得和体会"> <!-- TODO: truncate -->
+	<meta name="keywords" content="ai, cursor, go-lang">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">Cursor 让我一天上手 Go 语言</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2024-09-21T00:41:11.000Z" itemprop="datePublished">9月 21, 2024</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/ai/">ai</a> <a href="/tags/cursor/">cursor</a> <a href="/tags/go-lang/">go-lang</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2024/09/cursor-ai-ide.jpg" class="" width="400" height="300">
+
+<p>最近看到网上不少人在讨论 <a target="_blank" rel="noopener" href="https://www.cursor.com/">Cursor</a> 这款 AI 代码编辑器，我开始时还不以为然，因为在去年 Cursor 刚推出时我就试用了，当时并没有觉得特别惊艳，感觉和 Github 的 <a target="_blank" rel="noopener" href="https://github.com/features/copilot">Copilot</a> 差不多，甚至还不如 Copilot 好用。但最近我被要求去开发一个新项目，我就想在新项目里尝试使用 Cursor 来开发，看看它是否有网上说的那么强大。今天我将为大家讲述我在这个新项目中使用 Cursor 的真实经历，并分享一些我的使用心得和体会。</p>
+<span id="more"></span>
+
+<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>最近被要求去开发一个新项目，这个项目是另外一位同事用 Go 语言开发的，已经开发了一段时间，但开发进度比原计划落后比较大，所以希望增加开发人手，希望我的加入能够在项目的里程碑节点完成开发工作。但尴尬的是，我之前并没有真正地写过 Go 语言。</p>
+<img src="/images/post/2024/09/cursor-what.jpg" class="" width="600" height="400">
+
+<p>虽然我之前没有真正的写过 Go 语言，但或多或少看过一些 Go 语言的代码，而且我有其他语言的开发经验，我相信我可以很快上手 Go 语言，所以我决定接受这个挑战。</p>
+<h2 id="决定使用-Cursor"><a href="#决定使用-Cursor" class="headerlink" title="决定使用 Cursor"></a>决定使用 Cursor</h2><p>在决定加入这个项目的这段时间，我经常在网上看到关于 Cursor 的宣传，我开始时并没有太在意，因为我觉得我已经有了 Github 的 Copilot，而且我去年也试用过 Cursor，没有觉得特别惊艳。但很多人跟我说 Cursor 和以前非常不一样了，强大了很多，被多次洗脑后，我决定尝试在新项目中使用 Cursor。</p>
+<img src="/images/post/2024/09/cursor-strong.jpeg" class="" width="500" height="300">
+
+<h3 id="第一天的编码"><a href="#第一天的编码" class="headerlink" title="第一天的编码"></a>第一天的编码</h3><p>在使用 Cursor 之前，我看过一些关于 Cursor 的介绍，其中它的一个功能让我印象深刻，就是它在回答我们问题时可以基于整个代码库的代码来回答，而不是像 Copilot 那样只能基于当前文件的代码来回答。于是我使用 Cursor 开发新项目的第一件事，就是让它帮我介绍这个项目，然后它开始扫描项目的每个文件，给我了下面的回答：</p>
+<img src="/images/post/2024/09/cursor-chat-with-codebase.png" class="" width="1000" height="600">
+
+<p>这使我我了解到项目的基本信息：</p>
+<ul>
+<li>项目分为客户端和服务端，都是用 Go 语言开发的</li>
+<li>服务端使用了 <a target="_blank" rel="noopener" href="https://github.com/gin-gonic/gin">Gin</a> 开发框架，数据库使用的是 <a target="_blank" rel="noopener" href="https://www.postgresql.org/">PostgresSQL</a></li>
+<li>客户端使用了 <a target="_blank" rel="noopener" href="https://github.com/spf13/cobra">Cobra</a> 库，用于命令行工具的开发</li>
+</ul>
+<img src="/images/post/2024/09/cursor-wow.png" class="" width="600" height="400">
+
+<p>了解了项目的基本情况后，我开始尝试开发一个删除用户的小功能，首先我找到要修改的文件，然后在我要修改的地方按了一下回车，接着神奇地发现 Cursor 已经帮我补全了方法签名，并且 Cursor 知道这是我要添加的功能，然后我再按下 Tab 键，方法的实现代码就出现了，而且是根据项目的代码风格来的，这让我非常惊讶。</p>
+<img src="/images/post/2024/09/cursor-code-complete.png" class="" width="1000" height="600">
+
+<p>我怀疑是我在修改代码之前查看了其他关于删除用户的代码，或者是在检索代码片段时使用了一些关键字，让 Cursor 知道了我要添加的功能是什么。</p>
+<p>当然，你不可能所有事情都依赖 Cursor，在修改代码之前，你需要了解项目的基本结构、需要改动哪些文件、需求的业务逻辑等，然后再让 Cursor 帮你补全代码。当代码补全后，我们需要对代码进行检查，看看是否是我们想要的功能，如果有错误，我们需要对代码进行手动修改。</p>
+<p>于是我就用这种方式开始了我的 Go 语言开发之旅，找到修改代码的位置，然后让 Cursor 帮我补全代码，然后我再对代码进行检查，如果有问题则修改，没有问题则进行测试，一直重复这个过程，直到功能开发完成为止。</p>
+<p>这种方式能让我快速地使用 Go 语言开发功能，而且能够快速的学习 Go 语言，在开发过程中，如果对以前的代码或者生成的代码不清楚，我就随时和 Cursor 进行对话，让它帮我解答问题。</p>
+<img src="/images/post/2024/09/cursor-perfect.jpg" class="" width="600" height="400">
+
+<h3 id="短暂的快乐"><a href="#短暂的快乐" class="headerlink" title="短暂的快乐"></a>短暂的快乐</h3><p>愉快的时光总是短暂的，在我的频繁使用下很快就超过了 Cursor 的免费限制，当 Cursor 提示我无法再进行代码补全时，我开始考虑是否要充值。因为 Cursor 的价格整整是 Copilot 的 2 倍（Copilot 是 10 美元一个月，而 Cursor 是 20 美元一个月），而且我前段时间刚购买了一年的 Copilot，我真的需要两个 AI 代码编辑器吗？</p>
+<img src="/images/post/2024/09/cursor-choice.png" class="" width="400" height="600">
+
+<p>经过反复权衡和艰难抉择，我还是决定充值一个月的 Cursor 试试，因为短暂的使用让我感觉到了 Cursor 的强大，我相信它能帮我更快地完成这个项目。同时我也有点后悔购买了一年的 Copilot，应该按月购买，这样可以灵活更换到其他服务，虽然这样会贵一点，但至少不会浪费。</p>
+<p>如果让我重新选择的话，我会选择 Cursor，因为 Copilot 有的功能 Cursor 都有，而 Cursor 有的功能 Copilot 并没有，而且在整体使用体验上，我更喜欢 Cursor。</p>
+<h3 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h3><p>到目前为止，我已经使用了 Cursor 2 个星期了，项目进度进展顺利，Go 语言的基础也掌握的差不多了，现在我已经能独立开发一个完整且比较复杂的前后端功能。在这个过程中，我之所以能够快速掌握 Go 语言，我想有这么几个原因：</p>
+<ul>
+<li>我有过其他语言开发经验，这样阅读 Go 语言的代码并不会觉得特别困难</li>
+<li>项目之前的代码写的比较清晰规范，让人阅读起来比较容易</li>
+<li>Cursor 真的给我很大的帮助，不管是代码补全还是 AI 问答，都能让我快速地学习</li>
+</ul>
+<img src="/images/post/2024/09/cursor-happy-end.jpg" class="" width="600" height="400">
+
+<hr>
+<h2 id="使用心得"><a href="#使用心得" class="headerlink" title="使用心得"></a>使用心得</h2><p>这里介绍一下我在使用 Cursor 这段时间的一些心得和体会，因为我之前也使用过 Copilot，所以我会和 Copilot 进行一些对比。</p>
+<h3 id="速度快"><a href="#速度快" class="headerlink" title="速度快"></a>速度快</h3><p>Cursor 给我第一个直观的感受就是<strong>快</strong>，在代码补全方面基本上是秒出结果，而我在使用 Copilot 时，经常看到右下角的 Copilot 图标在转圈，需要让我等待。我认为速度是代码编辑器的一个关键因素，因为在编码过程中，我们希望工具能够高效响应，避免任何卡顿或延迟，以保持开发效率。</p>
+<h3 id="兼容-VSCode"><a href="#兼容-VSCode" class="headerlink" title="兼容 VSCode"></a>兼容 VSCode</h3><p>Cursor 兼容 <a target="_blank" rel="noopener" href="https://code.visualstudio.com/">VSCode</a>，可以导入 VSCode 的所有配置信息，包括快捷键设置、代码模板、插件等，因为我之前主要使用 VSCode 进行开发，所以 Cursor 能让我无缝切换到它上面。</p>
+<h3 id="每个项目有单独的对话历史"><a href="#每个项目有单独的对话历史" class="headerlink" title="每个项目有单独的对话历史"></a>每个项目有单独的对话历史</h3><p>在 Cursor 中与 AI 进行对话后，Cursor 会保存每一次对话记录，这样你可以随时查看之前的对话记录，而且这些对话记录是按照项目来保存的，这样不会将不同的项目的对话记录混在一起，非常方便。后面我看了一下 Copilot，发现 Copilot 也有这个功能，但我之前并没有发现。</p>
+<h3 id="代码补全在中间也可以补全"><a href="#代码补全在中间也可以补全" class="headerlink" title="代码补全在中间也可以补全"></a>代码补全在中间也可以补全</h3><p>在 Cursor 中，代码补全不仅可以在代码的末尾补全，还可以在代码的中间补全，而这一点 Copolit 就无能为力了，后者只能在代码的末尾补全。</p>
+<img src="/images/post/2024/09/cursor-middle-complete.png" class="" width="1000" height="600">
+
+<h3 id="可以设置系统提示词"><a href="#可以设置系统提示词" class="headerlink" title="可以设置系统提示词"></a>可以设置系统提示词</h3><p>Cursor 可以设置 AI 问答的系统提示词，比如像我们母语为中文的开发人员，我们可以让 AI 都用中文来回答问题，而这一点 Copilot 也是不支持的。</p>
+<img src="/images/post/2024/09/cursor-rule.png" class="" width="1000" height="600">
+
+<h3 id="随时随地和-AI-聊天"><a href="#随时随地和-AI-聊天" class="headerlink" title="随时随地和 AI 聊天"></a>随时随地和 AI 聊天</h3><p>Cursor 可以随时随地和 AI 进行对话，不管你是否有在编码，它主要通过以下几种方式进行对话：</p>
+<ul>
+<li>使用快捷键 CMD + L 随时开启对话（同样的快捷键也可以关闭对话），如果选中代码再按快捷键，选中的代码会作为问题的上下文</li>
+<li>使用快捷键 CMD + SHIFT + L 可以将选中的代码追加到当前对话中，并进行提问</li>
+<li>如果代码有报错或者警告信息，将鼠标移动到代码处，Cursor 会提示咨询 AI，这样可以将报错或警告信息作为问题的上下文，然后进行提问</li>
+</ul>
+<img src="/images/post/2024/09/cursor-fix-chat.png" class="" width="1000" height="600">
+
+<h3 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h3><p>在 VSCode 中有代码重构的功能，但操作起来比较复杂，而 Cursor 利用代码补全功能，可以很方便地进行重构。比如重命名一个变量，只需要简单的改名字，然后一路按 Tab 键就可以了，如果在补全过程中发现代码格式不对，按 Tab 键时还可以自动格式化代码。</p>
+<img src="/images/post/2024/09/cursor-refactor.png" class="" width="1000" height="600">
+
+<hr>
+<h2 id="并非无所不能"><a href="#并非无所不能" class="headerlink" title="并非无所不能"></a>并非无所不能</h2><p>Cursor 并非无所不能，也有很多东西它是做不到的。之前我尝试了一个比较复杂的问题，我将前端项目和后端项目一起放到 Cursor 中，然后在 AI 问答中上传了前端页面的图，<strong>咨询 AI 图中的某个按钮对应的后端 API 代码在哪个文件</strong>，基于整个代码库的方式进行提问。</p>
+<p>结果给 Cursor 不仅找不到对应的后端文件，还编造了一些后端文件。然后我降低了问题的难度，只让 Cursor 找出图片中按钮的前端代码，同样地，Cursor 也没有找到对应的前端文件，还是编造了一些前端文件。</p>
+<p>从目前情况看，Cursor 可能在<strong>图片解析方面还有问题，或者在大而复杂的问题上不够聪明</strong>，并不能像人类一样理解问题的意图，但我相信随着 AI 技术的发展，这些问题都会逐渐解决。</p>
+<h2 id="一些思考"><a href="#一些思考" class="headerlink" title="一些思考"></a>一些思考</h2><p>未来的编程趋势将显著受到 AI 技术的影响，随着 AI 技术的快速发展，越来越多的编程工具开始集成智能代码生成能力。AI 生成代码不仅能够加快开发速度，还能帮助开发者减少重复性劳动，使他们能够将更多时间投入到创新和复杂问题的解决中。但 AI 生成的代码可能存在逻辑错误、安全漏洞或不符合项目特定需求的问题，因此开发者需要对 AI 生成的代码进行仔细的审查和测试，确保其质量和可靠性。所以以后的编码过程可能是<strong>代码完全由 AI 生成，人类对生成的代码进行审查</strong>，然后让 AI 不断按照人类的要求进行修改，直到生成最终的代码。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在这篇文章中，我分享了我在使用 Cursor 开发新项目时的一些心得和体会，我认为 Cursor 是一个非常强大的 AI 代码编辑器，它可以帮助开发者快速地学习新技术和开发新项目，提高开发效率。虽然 Cursor 也有一些不足之处，但我相信随着 AI 技术的发展，这些问题都会逐渐解决。我希望未来的编程工具能够更加智能，让开发者能够更加高效地进行编程工作。</p>
+<p>关注我，一起学习各种人工智能和 GenAI 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2024/09/21/Cursor-helped-me-get-up-to-speed-with-Go-in-just-one-day/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2024/09/21/Cursor-helped-me-get-up-to-speed-with-Go-in-just-one-day/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

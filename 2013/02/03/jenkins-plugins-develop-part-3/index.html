@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>jenkins插件开发（三）-- 插件编写 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="jenkins插件开发（三）-- 插件编写"> <!-- TODO: truncate -->
+	<meta name="keywords" content="jenkins插件,开发">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">jenkins插件开发（三）-- 插件编写</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2013-02-03T12:18:00.000Z" itemprop="datePublished">2月 3, 2013</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/jenkins-plugins/">jenkins plugins</a>
+</div>
+    </div>
+	<div class="entry-content"><p>在上一篇 blog 中我们介绍了如何创建我们第一个 jenkins 插件，在这一篇 blog 继续介绍在开发我们的插件过程中需要注意的一些问题。</p>
+<span id="more"></span>
+
+<h3 id="扩展点选择"><a href="#扩展点选择" class="headerlink" title="扩展点选择"></a>扩展点选择</h3><p>Jenkings 插件是基于扩展点来实现的，比如基于 Builder 这个扩展点，那这个插件的功能就是一个构建插件，类似 ant-builder（使用 ant 来执行构建脚本）。Jenkins 插件的扩展点有很多，具体可以查询[这里][url1]。该网页列出了 Jenkins 所有的扩展点，点击每个扩展点下面 Implementations，会列出该扩展点对应的实现类。找到实现类的源码就可以知道具体怎么使用该扩展点了，大部分的代码在 github 上都可以找到。在前面创建的 HelloWorld 插件是一个基于 Builder 扩展点的插件，可以在 job 配置页面的 Build 中增加该插件，以后每次 Job 每次构建的时候就会去调用该插件了。<br>[url1]: <a target="_blank" rel="noopener" href="https://wiki.jenkins-ci.org/display/JENKINS/Extension+points#Extensionpoints-hudson.tasks.Notifier">https://wiki.jenkins-ci.org/display/JENKINS/Extension+points#Extensionpoints-hudson.tasks.Notifier</a></p>
+<h3 id="Action-介绍"><a href="#Action-介绍" class="headerlink" title="Action 介绍"></a>Action 介绍</h3><p>Action 是插件用来在 Job 或 Build 页面增加功能的一种主要方式，是 Jenkins 最常用的一个扩展点。从下图中可以看出什么是 Action，就是页面左边菜单栏的一个菜单项，还可以在右边的主页面显示相应的功能。</p>
+<img src="https://wiki.jenkins-ci.org/download/thumbnails/58001011/actions.png" class="">
+
+<p>每个继承了 Action 这个扩展点的插件都要实现 3 个方法，方法如下：</p>
+<figure class="highlight java"><figcaption><span>Action.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Action</span> <span class="keyword">extends</span> <span class="title class_">hudson</span>.model.ModelObject &#123;</span><br><span class="line">java.lang.String <span class="title function_">getIconFileName</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    java.lang.String <span class="title function_">getDisplayName</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    java.lang.String <span class="title function_">getUrlName</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个是菜单项图片，第二个是菜单名称，第三个是菜单链接。</p>
+<p>Action 分瞬时和持久 2 种，这里主要介绍的是瞬时的 Action。瞬时的 Action 可以随时废弃，让另外一个新的 Action 来取代，适合一些每次构建都要执行操作的插件，但不适合需要保存持久数据的插件。</p>
+<p>在 Jenkins 官网的插件开发指南中，推荐使用 Transient***ActionFactory 系列的继承点， 有 TransientViewActionFactory，TransientProjectActionFactory，TransientBuildActionFactory 等，使用该系列的继承点，只需要简单的覆写父类的 createFor 方法，就可以实现创建瞬时 Action 的目的，可以根据不同的需要创建 Job，Build，View 的 Action。</p>
+<p>更多内容可以参考<a target="_blank" rel="noopener" href="https://wiki.jenkins-ci.org/display/JENKINS/Action+and+its+family+of+subtypes">这里</a>。  </p>
+<h3 id="Jelly-页面"><a href="#Jelly-页面" class="headerlink" title="Jelly 页面"></a>Jelly 页面</h3><p>Jenkins 插件开发中涉及到页面的开发，比如 Job 的配置页面，相关插件需要加上相关的配置开关，配置参数时，就需要有一个配置页面来做相应的显示。插件开发中用到的页面是 Jelly 页面，在第一篇 blog 中介绍了 IDEA 中关于 jelly 的插件，使用该插件可以更加方便 Jelly 页面的编写。</p>
+<p>Jelly 页面的简单例子就不介绍了，官网上都有，这里简单介绍一下 Jelly 页面相关的一些标签。与 JSTL 类似，Jelly 也有自己的一些标签，如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">j:jelly</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:j</span>=<span class="string">&quot;jelly:core&quot;</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:st</span>=<span class="string">&quot;jelly:stapler&quot;</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:d</span>=<span class="string">&quot;jelly:define&quot;</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:l</span>=<span class="string">&quot;/lib/layout&quot;</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:t</span>=<span class="string">&quot;/lib/hudson&quot;</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:f</span>=<span class="string">&quot;/lib/form&quot;</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:i</span>=<span class="string">&quot;jelly:fmt&quot;</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:p</span>=<span class="string">&quot;/lib/hudson/project&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>比如想使用 jelly:core 标签，就可以在页面中直接使用 j:XX 来调用标签的相关功能，其他标签同样按照这个方式来使用。其中 jelly:core 是常用的功能，比如设置变量，循环，判断等功能。jelly:layout 是分层相关的标签，&#x2F;lib&#x2F;hudson 是 jenkins 相关的功能，比如设置 Job 页面图标，Build 页面图标等。更多标签相关的内容可以参考[这里][url2]。<br>[url2]: <a target="_blank" rel="noopener" href="https://jenkins-ci.org/maven-site/jenkins-core/jelly-taglib-ref.html">https://jenkins-ci.org/maven-site/jenkins-core/jelly-taglib-ref.html</a></p>
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><p>Jenkins 插件开发中还涉及到一类文件，就是配置文件。配置文件不仅可以在 Jelly 页面中使用，而且可以在 Java 文件中使用，不过在 Java 文件中使用的话需要先将配置文件编译成对应的 Java 文件。</p>
+<p><strong>如何在 Jelly 页面中使用配置文件？</strong>首先要在 Jelly 页面所在的文件夹中放置配置文件，比如 页面在这里 dir&#x2F;myAction.jelly，那么页面对应的配置文件就应该在 dir&#x2F;myAction.properties。注意，配置文件名字需要和页面名字相同，这样页面才可以找到对应的配置文件。比如有个 Jelly 页面如下：</p>
+<figure class="highlight html"><figcaption><span>demo.jelly</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?jelly escape-by-default=&#x27;true&#x27;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">j:jelly</span> <span class="attr">xmlns:j</span>=<span class="string">&quot;jelly:core&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">th</span>&gt;</span>$&#123;\%allBuildsColumnHeader&#125;<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">j:jelly</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>其对应的配置文件内容如下：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">allBuildsColumnHeader</span>=<span class="string">mean time to repair for all history</span></span><br></pre></td></tr></table></figure>
+
+<p>这样配置了以后，展示 Jelly 页面时就可以自动调用配置文件里面的内容了。</p>
+<p><strong>如何在 Java 文件中使用配置文件？</strong>一般插件所用的 Java 配置文件名称都叫做 Messages.properties，文件保存在 resources 目录下。比如我们的插件包结构是 jenkins.plugins.myplugin，那么 Messages.properties 文件就保存在 resources&#x2F;jenkins&#x2F;plugins&#x2F;myplugin&#x2F;目录下。</p>
+<p>如果 Java 文件中想要使用配置文件里面的值，需要先执行 mvn pacakge 命令，执行之后，以上面的例子为例，在 target 目录下会产生 generated-sources&#x2F;localizer&#x2F;jenkins&#x2F;plugins&#x2F;myplugin&#x2F;Messages.java 这个 Java 文件，如果配置文件里面有这样的一个配置项：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">allBuildsColumnHeader</span>=<span class="string">mean time to repair for all history</span></span><br></pre></td></tr></table></figure>
+
+<p>那么 Messages.java 里面就会产生这样的 2 个方法：</p>
+<figure class="highlight java"><figcaption><span>Message.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">/\*\*</span><br><span class="line">_ mean time to repair <span class="keyword">for</span> all history</span><br><span class="line">_</span><br><span class="line">\*/</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">allBuildsColumnHeader</span><span class="params">()</span> &#123;</span><br><span class="line"><span class="keyword">return</span> holder.format(<span class="string">&quot;allBuildsColumnHeader&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * mean time to repair for all history</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Localizable <span class="title function_">_allBuildsColumnHeader</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Localizable</span>(holder, <span class="string">&quot;allBuildsColumnHeader&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这样在 Java 文件中就可以直接调用这 2 个方法了，一般是调用第一个方法。</p>
+<p><strong>多语言配置。</strong>配置文件的文件名如果不带后缀就是内容是英语的配置文件，比如 Messages.properties。如果想让你的插件可以在不同的国家语言下都显示正常的话，就需要将你的配置文件复制多份，在名字后面加上不同的后缀，然后内容换上相关语言的内容。</p>
+<p>比如，以上面例子为例，中文的配置文件名称就是 Messages_zh_CN.properties，配置文件的页面也要换上相应的中文 ASCII 编码，这样就可以在中文系统环境下显示中文内容了。如何将中文转 ASCII 码？可以直接使用 Java Home 里面的 native2ascii 命令。</p>
+<h3 id="开发经验"><a href="#开发经验" class="headerlink" title="开发经验"></a>开发经验</h3><p>在开发 Jenkins 插件的过程中自己摸索了一些方法，在这里介绍一下，以免让其他同学走弯路。<br>首先是去到 Jenkins 的[官网 WIKI][url3]。这里介绍了如何创建你的插件工程，插件扩展点，插件编码和页面如何编写等，内容比较多，但你只需要关注你需要的内容就可以了。<br>[url3]: <a target="_blank" rel="noopener" href="https://wiki.jenkins-ci.org/display/JENKINS/Extend+Jenkins">https://wiki.jenkins-ci.org/display/JENKINS/Extend+Jenkins</a></p>
+<p>光看 Jenkins 的 WIKI 是不够的，有一些页面和类的用法上面没有直接给出，那肿么办呢？很简单：看源码。在 github 上 download 下 jenkins 的源码（[这里][url4]），在 IDE 里面打开 Jenkins 工程，比如想要查看某个 jelly 页面的用法，就可以在工程中搜索所有 jelly 页面，看看源码中的页面是怎么写的，我们再拿过来改一下就可以了。类和扩展点不知道如何写，也可以参照这个方法，通过源码了解其他扩展点子类是如何写的，然后再写出自己的插件。<br>[url4]: <a target="_blank" rel="noopener" href="https://github.com/jenkinsci/jenkins">https://github.com/jenkinsci/jenkins</a></p>
+<p>可能在 jenkins 的源码中还是找不到扩展点的用法，那怎么办呢？这个时候可能就需要去参考其他插件是如何写的了，幸运的是，大部分插件的代码现在都放在了 github 上，我们可以通过了解其他插件来写出自己的插件。</p>
+<hr>
+<ul>
+<li><a href="http://zhaozhiming.github.io/2013/01/31/jenkins-plugins-develop-part-1/">jenkins 插件开发（一）– 环境搭建</a></li>
+<li><a href="http://zhaozhiming.github.io/2013/02/02/jenkins-plugins-develop-part-2/">jenkins 插件开发（二）– HelloWorld</a></li>
+<li><a href="http://zhaozhiming.github.io/2013/02/04/jenkins-plugins-develop-part-4/">jenkins 插件开发（四）– 插件发布</a></li>
+</ul>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2013/02/03/jenkins-plugins-develop-part-3/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2013/02/03/jenkins-plugins-develop-part-3/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

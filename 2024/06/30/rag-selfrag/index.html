@@ -1,0 +1,397 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>高级 RAG 检索策略之 Self-RAG - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="介绍 Self-RAG 的实现原理以及具体实践"> <!-- TODO: truncate -->
+	<meta name="keywords" content="rag, llamaindex, selfrag">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">高级 RAG 检索策略之 Self-RAG</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2024-06-30T08:22:07.000Z" itemprop="datePublished">6月 30, 2024</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/llamaindex/">llamaindex</a> <a href="/tags/rag/">rag</a> <a href="/tags/selfrag/">selfrag</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2024/07/rag-selfrag.jpg" class="" width="400" height="300">
+
+<p>Self-RAG 是另外一种形式的 RAG（Retrieval Augmented Generation），它与其他 RAG 检索策略不同，它并不是在 RAG 流程上对某个模块进行增强， 而是在 RAG 不同的模块上进行优化改进，从而达到改进整体 RAG 流程的目的。如果你对 Self-RAG 比较陌生或者只是听说它的名字，那么今天请跟我一起来了解 Self-RAG 的实现原理，以及通过学习 Self-RAG 的代码实现来更好地理解其中的细节。</p>
+<span id="more"></span>
+
+<h2 id="Self-RAG-整体概览"><a href="#Self-RAG-整体概览" class="headerlink" title="Self-RAG 整体概览"></a>Self-RAG 整体概览</h2><p><a target="_blank" rel="noopener" href="https://selfrag.github.io/">Self-RAG</a> 是一种新的 RAG 方式，通过训练后的 LLM（大语言模型）进行检索、生成和评估等任务，以提高生成结果的准确性和质量。研究团队经过实验证明，Self-RAG 在开放领域问答、推理和事实验证任务中表现优异，效果要比商业模型 ChatGPT 好，同时也比开源模型 Llama2 使用普通 RAG 的效果更好，Self-RAG 的论文地址可以看<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2310.11511">这里</a>。</p>
+<p>Self-RAG 旨在解决普通 RAG 的几个问题：</p>
+<ul>
+<li>过度检索：普通 RAG 对输入问题始终进行相关知识检索，可能引入无用甚至偏离主题的内容，从而影响输出结果</li>
+<li>输出不准确：因为不能保证 LLM 始终是基于检索知识来回答问题，所以输出结果可能与检索到的知识不一致</li>
+</ul>
+<p>在后面的介绍中我们会慢慢了解为什么 Self-RAG 能解决这些问题。</p>
+<h3 id="Self-RAG-流程"><a href="#Self-RAG-流程" class="headerlink" title="Self-RAG 流程"></a>Self-RAG 流程</h3><p>为了更好地理解 Self-RAG，我们来看下它与普通 RAG 的区别，首先我们来看下普通 RAG 的流程图：</p>
+<img src="/images/post/2024/07/base-rag-flow.png" class="" width="1000" height="600">
+
+<ul>
+<li>这个流程图省略了文档入库的部分，主要展示检索和生成的过程</li>
+<li>每一次查询，普通 RAG 都会去检索相关文档，然后将<strong>所有的文档</strong>和问题一起输入到 LLM 中，然后生成结果</li>
+<li>生成结果的提示词需要添加所有的检索文档作为问题的上下文，一般会要求 LLM 优先根据上下文知识进行回答</li>
+</ul>
+<p>我们再来看下 Self-RAG 的流程图：</p>
+<img src="/images/post/2024/07/selfrag-flow.png" class="" width="1000" height="600">
+
+<ul>
+<li>Self-RAG 首先会使用 LLM 对问题进行首次结果生成（这里的 LLM 是经过特殊训练后的 LLM，后面会详细介绍），然后根据生成的结果可以直接判断是否需要检索，如果不需要检索，则直接返回结果</li>
+<li>如果需要检索，Self-RAG 会检索出相关文档，然后将<strong>每个文档</strong>和问题一起输入到 LLM 中，获取每个文档的生成结果，生成结果的提示词只用到了单个文档来作为问题的上下文</li>
+<li>然后对每个文档的生成结果进行评估，评选出得分最高的结果，最终返回这个结果</li>
+</ul>
+<h3 id="Self-RAG-与普通-RAG-的区别"><a href="#Self-RAG-与普通-RAG-的区别" class="headerlink" title="Self-RAG 与普通 RAG 的区别"></a>Self-RAG 与普通 RAG 的区别</h3><p>从以上 2 个流程图可以看出，Self-RAG 与普通 RAG 的区别主要有以下几点：</p>
+<ul>
+<li>普通 RAG 每次查询都需要检索，而 Self-RAG 可以根据生成的结果判断是否需要检索</li>
+<li>普通 RAG 将检索到的所有文档作为上下文，而 Self-RAG 只用到了单个文档作为上下文，但需要对每个文档进行结果生成</li>
+<li>Self-RAG 对生成结果有一个评估和挑选的过程，而普通 RAG 没有这个过程，因为普通 RAG 的生成结果只有一个</li>
+<li>普通 RAG 使用的是通用 LLM，而 Self-RAG 使用的是经过特殊训练后的 LLM</li>
+</ul>
+<h2 id="按需检索"><a href="#按需检索" class="headerlink" title="按需检索"></a>按需检索</h2><p>了解了 Self-RAG 的整体流程后，我们再来了解一下 Self-RAG 每个阶段的实现原理，首先是首次查询阶段。</p>
+<p>与普通的 RAG 不同，Self-RAG 使用的是经过训练的 LLM，这种 LLM 在文本生成的过程中，会输出一些特殊的 Token，这些 Token 叫 <strong>Reflection Token</strong>。在 RAG 流程中，Self-RAG 会使用 Reflection Token 来进行不同的操作。</p>
+<p>Self-RAG 开始使用 LLM 对问题进行生成时，会输出 <code>Retrieve</code> 类型的 Reflection Token，这种类型的 Token 的值有 3 种，分别是：</p>
+<ul>
+<li>Retrieval：表示需要检索</li>
+<li>No Retrieval：表示不需要检索</li>
+<li>Continue to Use Evidence: 表示模型可以继续使用先前检索到的证据</li>
+</ul>
+<p>我们来通过几个例子来看一下 Self-RAG 生成的 Reflection Token 是怎样的，首先我们提问一个不需要检索的问题，问题和输出结果示例如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Question: Write a essay of your best summer vacation.</span><br><span class="line">Answer: Sure![No Retrieval]As an AI, I don<span class="string">&#x27;t have personal experiences or memories, but I can write about the importance and significance of summer vacations for individuals and families.[No Retrieval]......</span></span><br></pre></td></tr></table></figure>
+
+<p>在返回结果中我们可以看到包含了<code>[No Retrieval]</code>关键字，表示这个问题不需要检索，可以直接返回结果。</p>
+<p>我们再问一个需要检索的问题，问题和输出结果示例如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Question: How did US statues get their names?</span><br><span class="line">Answer: A number of them.[Retrieval]&lt;paragraph&gt;[Irrelevant]Some were named <span class="keyword">for</span> the people <span class="built_in">who</span> originally sponsored them, some were named <span class="keyword">for</span> events or issues that they represented, and some were named <span class="keyword">for</span> mythological figures.[Utility:4]</span><br></pre></td></tr></table></figure>
+
+<p>在返回结果中我们可以看到包含了<code>[Retrieval]&lt;paragraph&gt;</code> 关键字，表示这个问题需要补充外部知识，即需要检索。</p>
+<p>当然，普通 RAG 也可以通过其他方式来实现按需检索，比如首先通过 LLM 确定查询问题是否需要检索，返回一个<code>yes/no</code>的结果，如果不需要检索，则再用 LLM 生成最终结果。这意味着，如果查询问题不需要检索，普通 RAG 需要调用 2 次 LLM，而 Self-RAG 只需要调用 1 次 LLM。</p>
+<img src="/images/post/2024/07/need-require-different.png" class="" width="1000" height="600">
+
+<p>可以看到在不需要检索这个分支上，Self-RAG 比普通 RAG 的效率更高。</p>
+<h2 id="检索与生成"><a href="#检索与生成" class="headerlink" title="检索与生成"></a>检索与生成</h2><p>当 Self-RAG 经过首次查询后，发现需要检索，那么就会使用检索器根据问题检索文档，在检索方面，Self-RAG 和普通 RAG 并没有什么不同，都是通过向量相似性来检索文档。当检索完文档后，会将每个文档和问题一起输入到 LLM 中，获取每个文档的生成结果。</p>
+<p>在第二次的生成结果中，Self-RAG 的 LLM 会生成 3 种类型的 Reflection Token，分别是：</p>
+<ul>
+<li>IsREL：检查检索到的文档是否为问题提供了有用的信息，它的值有<code>[Relevant]</code>和<code>[Irrelevant]</code>，表示文档的相关性</li>
+<li>IsSUP：检查检索到的文档是否都为生成的答案提供了支持，它的值有<code>[Fully supported]</code>，<code>[Partially supported]</code>，<code>[No support / Contradictory]</code>，表示支持的程度</li>
+<li>IsUSE：表示生成的答案是否对问题有帮助，它的值有<code>[Utility:5]</code>、<code>[Utility:4]</code>、<code>[Utility:3]</code>、<code>[Utility:2]</code>、<code>[Utility:1]</code>，表示答案的质量，数字越大表示质量越高</li>
+</ul>
+<img src="/images/post/2024/07/selfrag-second-generate.png" class="" width="400" height="600">
+
+<p>我们来看下 Self-RAG 在这个阶段的生成结果，问题和输出结果示例如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Question: What mysterious object did Loki use <span class="keyword">in</span> his attempt to conquer Earth?</span><br><span class="line">Answer1: [Relevant]The mysterious object that Loki used <span class="keyword">in</span> his attempt to conquer Earth was the Tesseract, <span class="built_in">which</span> is a powerful energy <span class="built_in">source</span> of unknown potential.[Fully supported][Utility:5]</span><br><span class="line">Answer2: [Relevant]Thanos used the Time Stone to dodge Loki<span class="string">&#x27;s attack.[No support / Contradictory][Utility:5]</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，在每个生成结果中，基本上都包含了以上 3 种 Reflection Token，这些 Token 会在后面的评估阶段进行使用。</p>
+<h3 id="优化生成效率"><a href="#优化生成效率" class="headerlink" title="优化生成效率"></a>优化生成效率</h3><p>在这个阶段因为需要使用 LLM 对每个文档生成结果，可能会有人觉得这个阶段的效率会比普通 RAG 低，但实际上可以使用并发的方式来进行结果生成，从而提高效率。</p>
+<img src="/images/post/2024/07/selfrag-concurrent-generate.png" class="" width="500" height="600">
+
+<p>上图中 Self-RAG 虽然需要调用 3 次 LLM，但通过并发的方式，执行时间和调用 1 次 LLM 的时间是一样的，所以在这个阶段 Self-RAG 的效率和普通 RAG 基本一致，虽然 Self-RAG 耗费的 token 会多一些。</p>
+<h2 id="评估与选择"><a href="#评估与选择" class="headerlink" title="评估与选择"></a>评估与选择</h2><p>当生成了每个文档的结果后，Self-RAG 会对每个文档的结果进行评估，评估的方式是通过上个阶段生成的 Reflection Token 来计算每个文档的得分，然后选择得分最高的文档作为最终结果。</p>
+<h3 id="评估参数-logprobs"><a href="#评估参数-logprobs" class="headerlink" title="评估参数 logprobs"></a>评估参数 logprobs</h3><p>在了解评估的方式之前，我们先来了解一下 Self-RAG 评估的一个重要参数<code>logprobs</code>，这个参数指的是对每个生成的 token（即单词或子词）的概率对数，这个参数是在生成结果时 LLM 输出的，通过这个参数可以计算每个 token 的得分。</p>
+<img src="/images/post/2024/07/general-workflow-for-prompt.png" class="" width="1000" height="600">
+
+<p>我们来看下 OpenAI API 返回的一个结果示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cmpl-6yE4TGqItUpYJ6xYcIzY6&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;object&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text_completion&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;created&quot;</span><span class="punctuation">:</span> <span class="number">1623073722</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="string">&quot;davinci&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;choices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot; I&#x27;m good, thanks!&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;index&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;logprobs&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;tokens&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot; I&#x27;m&quot;</span><span class="punctuation">,</span> <span class="string">&quot; good&quot;</span><span class="punctuation">,</span> <span class="string">&quot;,&quot;</span><span class="punctuation">,</span> <span class="string">&quot; thanks&quot;</span><span class="punctuation">,</span> <span class="string">&quot;!&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;token_logprobs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="number">-0.1</span><span class="punctuation">,</span> <span class="number">-0.05</span><span class="punctuation">,</span> <span class="number">-0.2</span><span class="punctuation">,</span> <span class="number">-0.3</span><span class="punctuation">,</span> <span class="number">-0.15</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;top_logprobs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot; I&#x27;m&quot;</span><span class="punctuation">:</span> <span class="number">-0.1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot; I am&quot;</span><span class="punctuation">:</span> <span class="number">-2.3</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot; I&quot;</span><span class="punctuation">:</span> <span class="number">-3.1</span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot; good&quot;</span><span class="punctuation">:</span> <span class="number">-0.05</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot; fine&quot;</span><span class="punctuation">:</span> <span class="number">-1.5</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot; great&quot;</span><span class="punctuation">:</span> <span class="number">-2.0</span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;,&quot;</span><span class="punctuation">:</span> <span class="number">-0.2</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;.&quot;</span><span class="punctuation">:</span> <span class="number">-2.5</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;!&quot;</span><span class="punctuation">:</span> <span class="number">-3.0</span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot; thanks&quot;</span><span class="punctuation">:</span> <span class="number">-0.3</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot; thank you&quot;</span><span class="punctuation">:</span> <span class="number">-1.8</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot; thank&quot;</span><span class="punctuation">:</span> <span class="number">-2.6</span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;!&quot;</span><span class="punctuation">:</span> <span class="number">-0.15</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;.&quot;</span><span class="punctuation">:</span> <span class="number">-1.9</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;?&quot;</span><span class="punctuation">:</span> <span class="number">-2.7</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;text_offset&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="number">5</span><span class="punctuation">,</span> <span class="number">9</span><span class="punctuation">,</span> <span class="number">14</span><span class="punctuation">,</span> <span class="number">15</span><span class="punctuation">,</span> <span class="number">21</span><span class="punctuation">]</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;finish_reason&quot;</span><span class="punctuation">:</span> <span class="string">&quot;length&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;usage&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;prompt_tokens&quot;</span><span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;completion_tokens&quot;</span><span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;total_tokens&quot;</span><span class="punctuation">:</span> <span class="number">10</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>在这个示例中，logprobs 参数的输出如下：</p>
+<ul>
+<li>tokens：生成的 token 列表 [“ I’m”, “ good”, “,”, “ thanks”, “!”]</li>
+<li>token_logprobs：每个生成的 token 的对数概率值 [-0.1, -0.05, -0.2, -0.3, -0.15]</li>
+<li>top_logprobs：每个生成的 token 的前几名候选 token 的对数概率值及其对应的 token，例如第一个 token<code> I’m</code>的前几名候选 token 及其对数概率值为<code>&#123;&quot; I’m&quot;: -0.1, &quot; I am&quot;: -2.3, &quot; I&quot;: -3.1&#125;</code></li>
+<li>text_offset：每个 token 在生成文本中的偏移量 [5, 9, 14, 15, 21]</li>
+</ul>
+<p>在 Self-RAG 中，评估功能使用<code>logprobs</code>参数来计算<code>IsREL</code>、<code>IsSUP</code>和<code>IsUSE</code>这 3 种 Reflection Token 的得分。比如输出中出现了<code>[Fully supported]</code>这个 token，那么说明 LLM 推理的时候计算出了<code>[Fully supported]</code>、<code>[Partially supported]</code>等可能的 token 输出的概率，但最后选择了<code>[Fully supported]</code>。因此，在评估这次输出的 <code>IsSUP</code> 的分数时，就可以基于 logprobs 中这些 tokens 的概率来计算。</p>
+<h3 id="评估公式"><a href="#评估公式" class="headerlink" title="评估公式"></a>评估公式</h3><p>了解了<code>logprobs</code>参数后，我们再来看下 Self-RAG 3 个评估指标的计算公式，首先是<code>IsREL</code>的计算公式：</p>
+<blockquote>
+<p>s(ISREL) &#x3D; p(ISREL &#x3D; RELEVANT) &#x2F; (p(ISREL &#x3D; RELEVANT) + p(ISREL &#x3D; IRRELEVANT))</p>
+</blockquote>
+<ul>
+<li>p(ISREL &#x3D; RELEVANT) 代表模型预测 ISREL 为 Relevant 的概率</li>
+<li>p(ISREL &#x3D; IRRELEVANT) 代表模型预测 ISREL 为 Irrelevant 的概率</li>
+</ul>
+<p>然后是<code>IsSUP</code>的计算公式：</p>
+<blockquote>
+<p>s(ISSUP) &#x3D; p(ISSUP &#x3D; FULLY) &#x2F; S + 0.5 * p(ISSUP &#x3D; PARTIALLY) &#x2F; S</p>
+</blockquote>
+<ul>
+<li>p(ISSUP &#x3D; FULLY) 代表模型预测 ISSUP 为 Fully Supported 的概率</li>
+<li>p(ISSUP &#x3D; PARTIALLY) 代表模型预测 ISSUP 为 Partially Supported 的概率</li>
+<li>S 代表三种可能值的概率之和： S &#x3D; ∑t∈{FULLY,PARTIALLY,NO} p(ISSUP &#x3D; t)</li>
+</ul>
+<p>最后是<code>IsUSE</code>的计算公式：</p>
+<blockquote>
+<p>s(ISUSE) &#x3D; (∑i wi * p(ISUSE &#x3D; i)) &#x2F; S</p>
+</blockquote>
+<ul>
+<li>wi 代表每个等级的权重，分别为：{-1, -0.5, 0, 0.5, 1}，对应 ISUSE&#x3D;{1, 2, 3, 4, 5}</li>
+<li>p(ISUSE &#x3D; i) 代表模型预测 ISUSE 为等级 i 的概率</li>
+<li>S 代表五种等级的概率之和：S &#x3D; ∑t∈{1,2,3,4,5} p(ISUSE &#x3D; t)</li>
+</ul>
+<p>可以看到这些计算公式都是基于 logprobs 参数来计算的，这样可以更好地评估每个文档的生成结果，从而选择得分最高的文档作为最终结果。</p>
+<h2 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h2><p>Self-RAG 需要训练的模型有 2 种，一种是评估模型（Critic），另一种是生成模型（Generator）。评估模型使用 GPT4 生成的数据作为训练语料，生成模型则是使用检索数据和评估模型的生成数据作为训练语料，两者都可以基于基础大模型进行训练。</p>
+<p>Self-RAG 研究团队分别基于 Llama2-7b 和 Llama2-13b 这 2 个模型进行训练，训练好的模型可以在 <a target="_blank" rel="noopener" href="https://huggingface.co/selfrag">Huggingface</a> 上进行下载，但官方的模型并没有明确区分是评估模型还是生成模型，也就是说这些模型可以同时用于评估和生成。</p>
+<p>我们来看下模型训练的数据，首先是评估模型的训练数据，下面是训练数据的截取片段：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;task&quot;</span><span class="punctuation">:</span> <span class="string">&quot;retrieval&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;instruction&quot;</span><span class="punctuation">:</span> <span class="string">&quot;When provided with instruction, please evaluate whether seeking additional information from external sources such as the web (e.g., Wikipedia) aids in producing a more comprehensive response. Respond with either [Retrieval] or [No Retrieval].&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Task instruction: Appraise the following website design. https://example.com\n&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="string">&quot;[Retrieval]&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>评估模型的每项训练数据都是一项任务，任务类型分别有<code>retrieval</code>、<code>groundness</code>、<code>utility</code> 和 <code>multi_retrieval</code>这 4 种任务</li>
+<li><code>retrieval</code>任务用来训练生成<code>IsREL</code>评估指标</li>
+<li><code>groudness</code> 任务用来训练生成<code>IsSUP</code>评估指标</li>
+<li><code>utility</code>任务用来训练生成<code>IsUSE</code>评估指标</li>
+<li><code>multi_retrieval</code>任务用来训练生成<code>Retrieve</code>类型的 Reflection Token，即是否需要检索</li>
+</ul>
+<p>通过训练数据可以看出，评估模型主要训练如何评估这 4 类任务，根据指令和输入数据，输出正确的评估结果。</p>
+<p>再来看生成模型的训练数据，下面是训练数据的截取片段：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;instruction&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Question: Write a text based on \&quot;rangers show some iron to tie the series\&quot;\nText: along with being talented , self-assured and highly paid , these experienced rangers are also considerate .\n\nQuestion: Write a text based on \&quot;union wo n&#x27;t dismantle blockage of gm canada headquarters\&quot;\nText: canadian auto workers officials friday refused to end a blockade of general motors canada headquarters despite an offer to potentially bring new car production to a complex where a truck plant is slated for closure .\n\nQuestion: Write a text based on \&quot;six azerbaijan opposition parliamentary candidates declare hunger strike\&quot;\nText:&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="string">&quot;[No Retrieval]six opposition candidates in the upcoming parliamentary elections in azerbaijan declared a hunger strike friday to pressure the government into ensuring fair polls .[Utility:5]&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;flan_v2_18667&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;dataset_name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;flan_v2&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>通过训练数据可以看出，生成模型主要训练如何生成带有 Reflection Token 的综合性结果。</p>
+<h2 id="LlamaIndex-Self-RAG-Pack"><a href="#LlamaIndex-Self-RAG-Pack" class="headerlink" title="LlamaIndex Self-RAG Pack"></a>LlamaIndex Self-RAG Pack</h2><p>目前已经有了一些开源的 Self-RAG 实现，比如在 <a target="_blank" rel="noopener" href="https://www.llamaindex.ai/">LlamaIndex</a> 的 <a target="_blank" rel="noopener" href="https://docs.llamaindex.ai/en/stable/community/llama_packs/">Llama Packs</a> 上就有人提供了 <a target="_blank" rel="noopener" href="https://llamahub.ai/l/llama-packs/llama-index-packs-self-rag?from=">Self-RAG 的实现</a>，下面我们来看下如何使用 LlamaIndex 的 Self-RAG Pack。</p>
+<blockquote>
+<p>Llama Packs 是一个社区驱动的预包装模块或模板集合，用于快速开始构建基于 LLM 的应用程序，如果把 LlamaIndex 比作 VsCode 的话，那么 Llama Packs 就是 VsCode 的插件。</p>
+</blockquote>
+<h3 id="使用介绍"><a href="#使用介绍" class="headerlink" title="使用介绍"></a>使用介绍</h3><p>首先我们需要下载 Self-RAG 模型， 这里我们下载量化版的 Self-RAG 模型，这样我们可以在没有 GPU 的机器上运行模型，下载命令如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip3 install -q huggingface-hub</span><br><span class="line">huggingface-cli download m4r1/selfrag_llama2_7b-GGUF selfrag_llama2_7b.q4_k_m.gguf --local-dir <span class="string">&quot;&lt;DIR_PATH&gt;&quot;</span> --local-dir-use-symlinks False</span><br></pre></td></tr></table></figure>
+
+<p>然后下载 LlamaIndex 的 Self-RAG Pack，下载命令如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">llamaindex-cli download-llamapack SelfRAGPack --download-dir ./self_rag_pack</span><br></pre></td></tr></table></figure>
+
+<p>下载完成后，我们可以看到下载的文件夹中包含了 Self-RAG Pack 的源码，我们可以通过以下代码来调用 Self-RAG Pack：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> self_rag_pack.llama_index.packs.self_rag.base <span class="keyword">import</span> SelfRAGQueryEngine</span><br><span class="line"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> VectorStoreIndex, SimpleDirectoryReader</span><br><span class="line"></span><br><span class="line">documents = SimpleDirectoryReader(<span class="string">&quot;./data&quot;</span>).load_data()</span><br><span class="line">index = VectorStoreIndex.from_documents(documents)</span><br><span class="line">retriever = index.as_retriever(similarity_top_k=<span class="number">10</span>)</span><br><span class="line">model_path = <span class="string">&quot;/your/selfrag-model-path/selfrag_llama2_7b.q4_k_m.gguf&quot;</span></span><br><span class="line">query_engine = SelfRAGQueryEngine(<span class="built_in">str</span>(model_path), retriever, verbose=<span class="literal">True</span>)</span><br><span class="line">response = query_engine.query(<span class="string">&quot;Who won best Director in the 1972 Academy Awards?&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><code>SelfRAGQueryEngine</code> 初始化需要模型路径和检索器，检索器可以使用普通 RAG 的检索器 <code>VectorStoreIndex</code>。</p>
+<h3 id="核心代码解读"><a href="#核心代码解读" class="headerlink" title="核心代码解读"></a>核心代码解读</h3><p>Self-RAG Pack 的核心代码在 <code>SelfRAGQueryEngine</code> 类中，这个类包含了 Self-RAG 的整个流程，首先我们看下 <code>custom_query</code> 方法：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">custom_query</span>(<span class="params">self, query_str: <span class="built_in">str</span></span>) -&gt; Response:</span><br><span class="line">    response = <span class="variable language_">self</span>.llm(prompt=_format_prompt(query_str), **_GENERATE_KWARGS)</span><br><span class="line">    answer = response[<span class="string">&quot;choices&quot;</span>][<span class="number">0</span>][<span class="string">&quot;text&quot;</span>]</span><br><span class="line">    source_nodes = []</span><br><span class="line"></span><br><span class="line">    ...... <span class="comment"># 省略检索部分代码</span></span><br><span class="line"></span><br><span class="line">    answer = _postprocess_answer(answer)</span><br><span class="line">    <span class="keyword">if</span> <span class="variable language_">self</span>.verbose:</span><br><span class="line">        print_text(<span class="string">f&quot;Final answer: <span class="subst">&#123;answer&#125;</span>\n&quot;</span>, color=<span class="string">&quot;green&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> Response(response=<span class="built_in">str</span>(answer), source_nodes=source_nodes)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过 LLM 进行首次查询，获取生成结果</li>
+<li>对生成结果进行判断，如果需要检索，则调用检索器进行检索，这部分代码后面介绍</li>
+<li>如果无需检索，则对结果进行后处理，然后返回结果，这里的后处理主要是去掉 Reflection Token</li>
+</ul>
+<p>再来看<code>custom_query</code>方法中的检索部分代码：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">custom_query</span>(<span class="params">self, query_str: <span class="built_in">str</span></span>) -&gt; Response:</span><br><span class="line">    ...... <span class="comment"># 省略已展示过的代码</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;[Retrieval]&quot;</span> <span class="keyword">in</span> answer:</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.verbose:</span><br><span class="line">            print_text(<span class="string">&quot;Retrieval required\n&quot;</span>, color=<span class="string">&quot;blue&quot;</span>)</span><br><span class="line">        documents = <span class="variable language_">self</span>.retriever.retrieve(query_str)</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.verbose:</span><br><span class="line">            print_text(<span class="string">f&quot;Received: <span class="subst">&#123;<span class="built_in">len</span>(documents)&#125;</span> documents\n&quot;</span>, color=<span class="string">&quot;blue&quot;</span>)</span><br><span class="line">        paragraphs = [</span><br><span class="line">            _format_prompt(query_str, document.node.text) <span class="keyword">for</span> document <span class="keyword">in</span> documents</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.verbose:</span><br><span class="line">            print_text(<span class="string">&quot;Start evaluation\n&quot;</span>, color=<span class="string">&quot;blue&quot;</span>)</span><br><span class="line"></span><br><span class="line">        critic_output = <span class="variable language_">self</span>._run_critic(paragraphs)</span><br><span class="line"></span><br><span class="line">        paragraphs_final_score = critic_output.paragraphs_final_score</span><br><span class="line">        llm_response_per_paragraph = critic_output.llm_response_per_paragraph</span><br><span class="line">        source_nodes = critic_output.source_nodes</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.verbose:</span><br><span class="line">            print_text(<span class="string">&quot;End evaluation\n&quot;</span>, color=<span class="string">&quot;blue&quot;</span>)</span><br><span class="line"></span><br><span class="line">        best_paragraph_id = <span class="built_in">max</span>(</span><br><span class="line">            paragraphs_final_score, key=paragraphs_final_score.get</span><br><span class="line">        )</span><br><span class="line">        answer = llm_response_per_paragraph[best_paragraph_id]</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.verbose:</span><br><span class="line">            print_text(<span class="string">f&quot;Selected the best answer: <span class="subst">&#123;answer&#125;</span>\n&quot;</span>, color=<span class="string">&quot;blue&quot;</span>)</span><br><span class="line">    ...... <span class="comment"># 省略已展示过的代码</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过判断生成结果中是否包含<code>[Retrieval]</code>来判断是否需要检索</li>
+<li>如果需要检索，则调用检索器进行检索，获取检索到的文档， 并将检索到的文档内容和问题一起构建成提示词列表<code>paragraphs</code></li>
+<li>执行<code>_run_critic</code>方法进行结果生成并评估，这个方法的代码后面介绍</li>
+<li>从<code>_run_critic</code>方法中得到每个文档的分数列表<code>paragraphs_final_score</code>，每个文档的生成结果列表<code>llm_response_per_paragraph</code>和文档列表<code>source_nodes</code></li>
+<li>在<code>paragraphs_final_score</code>中选择得分最高的文档作为最终结果，然后返回该结果</li>
+</ul>
+<p>接下来我们看下 <code>_run_critic</code> 方法的实现：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">_run_critic</span>(<span class="params">self, paragraphs: <span class="type">List</span>[<span class="built_in">str</span>]</span>) -&gt; CriticOutput:</span><br><span class="line">    paragraphs_final_score = &#123;&#125;</span><br><span class="line">    llm_response_text = &#123;&#125;</span><br><span class="line">    source_nodes = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> p_idx, paragraph <span class="keyword">in</span> <span class="built_in">enumerate</span>(paragraphs):</span><br><span class="line">        pred = <span class="variable language_">self</span>.llm(paragraph, **<span class="variable language_">self</span>.generate_kwargs)</span><br><span class="line">        <span class="comment"># Cache llm answer</span></span><br><span class="line">        llm_response_text[p_idx] = pred[<span class="string">&quot;choices&quot;</span>][<span class="number">0</span>][<span class="string">&quot;text&quot;</span>]</span><br><span class="line">        logprobs = pred[<span class="string">&quot;choices&quot;</span>][<span class="number">0</span>][<span class="string">&quot;logprobs&quot;</span>]</span><br><span class="line">        pred_log_probs = logprobs[<span class="string">&quot;top_logprobs&quot;</span>]</span><br><span class="line">        <span class="comment"># Compute isRel score, on the first predicted token</span></span><br><span class="line">        isRel_score = _relevance_score(pred_log_probs[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Compute isSup score</span></span><br><span class="line">        isSup_score = _is_supported_score(logprobs[<span class="string">&quot;tokens&quot;</span>], pred_log_probs)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Compute isUse score</span></span><br><span class="line">        isUse_score = _is_useful_score(logprobs[<span class="string">&quot;tokens&quot;</span>], pred_log_probs)</span><br><span class="line"></span><br><span class="line">        paragraphs_final_score[p_idx] = (</span><br><span class="line">            isRel_score + isSup_score + <span class="number">0.5</span> * isUse_score</span><br><span class="line">        )</span><br><span class="line">        <span class="comment"># Add the paragraph as source node with its relevance score</span></span><br><span class="line">        source_nodes.append(</span><br><span class="line">            NodeWithScore(</span><br><span class="line">                node=TextNode(text=paragraph, id_=p_idx),</span><br><span class="line">                score=isRel_score,</span><br><span class="line">            )</span><br><span class="line">        )</span><br><span class="line">        ...... <span class="comment"># 省略打印语句</span></span><br><span class="line">    <span class="keyword">return</span> CriticOutput(llm_response_text, paragraphs_final_score, source_nodes)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>初始化几个变量：每个文档的分数列表<code>paragraphs_final_score</code>，每个文档的生成结果列表<code>llm_response_per_paragraph</code>和文档列表<code>source_nodes</code></li>
+<li>遍历提示词列表<code>paragraphs</code>，每个提示词是问题加检索文档，将提示词发送给 LLM，获取生成结果，这里是串行地调用 LLM，如果换成并发的方式效率更高</li>
+<li>从 LLM 的生成结果中获取生成的文本和<code>logprobs</code>参数，将文本内容保存到<code>llm_response_text</code>中，将<code>logprobs</code>参数用来计算<code>IsREL</code>、<code>IsSUP</code>和<code>IsUSE</code>的得分</li>
+<li>分别计算<code>IsREL</code>、<code>IsSUP</code>和<code>IsUSE</code>的得分，然后通过这个计算公式计算出每个文档的最终得分：<code>final_score = IsREL + IsSUP + 0.5 * IsUSE</code>，并将结果保存到<code>paragraphs_final_score</code>中</li>
+<li>将每个文档转换为 <code>NodeWithScore</code> 对象保存到<code>source_nodes</code>中</li>
+<li>最后返回<code>CriticOutput</code>对象，包含了每个文档的生成结果、分数和文档列表</li>
+</ul>
+<p>关于更多 Self-RAG Pack 的代码实现，可以查看<a target="_blank" rel="noopener" href="https://github.com/run-llama/llama_index/blob/main/llama-index-packs/llama-index-packs-self-rag/llama_index/packs/self_rag/base.py">这里</a>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过今天的介绍，我们了解了 Self-RAG 的实现原理，以及通过 LlamaIndex 的 Self-RAG Pack 代码来学习 Self-RAG 的具体实现，让我们可以更好地理解 Self-RAG 的细节和流程。Self-RAG 主要通过自训练的 LLM 来为生成结果提供 Reflection Token，从而可以轻松实现按需检索和评估等功能，无需再次调用 LLM 或者使用其他第三方库，这样可以提高效率和准确性。希望通过今天的介绍大家可以更好地理解 Self-RAG，将来可以更好地应用 Self-RAG 到实际项目中。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2024/06/30/rag-selfrag/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2024/06/30/rag-selfrag/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

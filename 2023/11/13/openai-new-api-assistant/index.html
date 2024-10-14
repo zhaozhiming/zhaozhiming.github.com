@@ -1,0 +1,400 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>OpenAI Assistants API 使用指南 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="OpenAI Assistants API 使用指南"> <!-- TODO: truncate -->
+	<meta name="keywords" content="openai, chatgpt, api, assistant">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">OpenAI Assistants API 使用指南</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-11-13T05:48:56.000Z" itemprop="datePublished">11月 13, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/api/">api</a> <a href="/tags/chatgpt/">chatgpt</a> <a href="/tags/openai/">openai</a> <a href="/tags/assistant/">assistant</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/11/openai-api-assistant.png" class="" width="400" height="300">
+
+<p>上次我们<a href="https://zhaozhiming.github.io/2023/11/11/openai-new-api-introduct/">介绍了 OpenAI 的新版 API</a>，包括语音转文字、生成图片和图片识别等功能，这次 API 的更新还包含了一个重量级的功能，就是类似 GPTs 的 Assistant API，它不仅可以完成 GPTs 的所有功能，还能使用自定义的工具，可以说是比 GPTs 更加强大。今天我们就来介绍 Assistant API 的基本原理和使用方法，最后通过一些代码示例来展示它的强大功能。</p>
+<span id="more"></span>
+
+<h2 id="设计原理"><a href="#设计原理" class="headerlink" title="设计原理"></a>设计原理</h2><img src="/images/post/2023/11/openai-api-design.png" class="" width="1000" height="600">
+
+<p>上面是整理的 Assistant API 对象关系图，在图中我们可以看到如下关系：</p>
+<ul>
+<li>Assistant 对象是用来执行命令的对象，它有多个属性，其中包括 tools 和 file_ids，分别对应 Tool 对象和 File 对象。</li>
+<li>Thread 对象表示一个聊天会话，它是有状态的，就像 ChatGPT 网页上的每个历史记录，我们可以对历史记录进行重新对话，它包含了多个 Message 对象。</li>
+<li>Message 对象表示一条聊天消息，分不同角色的消息，包括 user、assistant 和 tool 等。</li>
+<li>Run 对象表示一次指令执行的过程，需要指定执行命令的对象 Assistant 和聊天会话 Thread，一个 Thread 可以创建多个 Run。</li>
+<li>Run Step 对象表示执行的步骤，一个 Run 包含多个 Run Step。</li>
+<li>Tool 对象表示执行命令时需要用到的工具，有代码解释器（Code Interpreter）、知识检索（Retrieval）和自定义工具（Function Calling）等。</li>
+<li>File 对象表示执行命令时所用到的文件，比如知识检索时上传的文档，它可以一开始在 Assistant 对象中指定，也可以聊天过程中在 Message 对象中指定。</li>
+</ul>
+<p>API 执行过程如下：</p>
+<ul>
+<li>创建 Assistant</li>
+<li>创建 Thread 和 Message，可以分开创建也可以一起创建</li>
+<li>创建 由 Assistant 和 Thread 组成的 Run，创建完 Run 后会自动执行 Thread 中的指令</li>
+<li>轮询 Run 状态，检查是否为 completed</li>
+<li>（可选）如果是调用自定义工具，需要提交工具的执行结果</li>
+<li>如果状态是 completed 则获取最终结果</li>
+</ul>
+<h2 id="Assistant"><a href="#Assistant" class="headerlink" title="Assistant"></a>Assistant</h2><p>首先我们需要创建一个 Assistant 对象，因为这个 API 是 beta 版本，如果是通过 curl 调用 API 的话，需要在 header 中加上<code>OpenAI-Beta: assistants=v1</code>，如果是使用 OpenAI 的 Python 或 Npm 包的话则不需要，这些包已经默认帮你添加了。示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> OpenAI</span><br><span class="line"></span><br><span class="line">client = OpenAI()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_assistants</span>(<span class="params">instructions, tools=[], file_ids=[]</span>):</span><br><span class="line">    assistant = client.beta.assistants.create(</span><br><span class="line">        name=<span class="string">&quot;Help assistant&quot;</span>,</span><br><span class="line">        instructions=instructions,</span><br><span class="line">        tools=tools,</span><br><span class="line">        model=<span class="string">&quot;gpt-3.5-turbo-1106&quot;</span>,</span><br><span class="line">        file_ids=file_ids,</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> assistant</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>因为是 beta 版本，model 参数需要用最新的模型，比如 gpt-3.5-turbo-1106 或者 gpt-4-1106-preview。</li>
+<li>name 是 Assistant 的名字。</li>
+<li>instructions 参数相当是 Chat API 中的 system message，即系统指令，一般用来让 LLM（大语言模型）扮演某种角色。</li>
+<li>tools 是指使用的工具，有代码解释器、知识检索和自定义工具等。</li>
+<li>file_ids 是指上传的文件，在每个 Assistant 中最多添加 <strong>20</strong> 个文件，每个文件最大 <strong>512M</strong>，整个组织的文件量不能超过 <strong>100G</strong>，文件的支持类型可以参考<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/assistants/tools/supported-files">这里</a>。</li>
+</ul>
+<p>上传文件的方法如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">create_file</span>(<span class="params">file_path</span>):</span><br><span class="line">    file = client.files.create(file=<span class="built_in">open</span>(file_path, <span class="string">&quot;rb&quot;</span>), purpose=<span class="string">&quot;assistants&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> file</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>目前上传文件有 2 种用途，一种是用于微调（fine turning），一种是用于 Assistant，因此在 Assistant 中上传的文件，purpose 要写 assistants。</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/assistants">Assistant</a> 和 <a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/files">File</a> 更多的 API 可以看官方的 API 文档。</p>
+<h2 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h2><p>接下来是创建一个 Thread，可以单独创建，也可以和 Message 一起创建，这里我们连同 Message 一起创建，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">create_thread</span>(<span class="params">prompt</span>):</span><br><span class="line">    thread = client.beta.threads.create(</span><br><span class="line">        messages=[</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>,</span><br><span class="line">                <span class="string">&quot;content&quot;</span>: prompt,</span><br><span class="line">                <span class="string">&quot;file_ids&quot;</span>: [file.<span class="built_in">id</span>],</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> thread</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在 Thread 中没有限制 Message 的数量，但一旦超过 token 限制，就会进行智能截断。</li>
+<li>prompt 是指用户输入的问题。</li>
+<li>file_ids 是指上传的文件，可以包含图片和文件，但目前 user 角色的消息还不支持图片。</li>
+</ul>
+<p>Thread 更多的 API 可以看<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/threads">官方的 API 文档</a>。</p>
+<h3 id="Run"><a href="#Run" class="headerlink" title="Run"></a>Run</h3><p>然后是创建 Run，创建 Run 时需要指定 Assistant 和 Thread，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">run_assistant</span>(<span class="params">thread, assistant</span>):</span><br><span class="line">    run = client.beta.threads.runs.create(</span><br><span class="line">        thread_id=thread.<span class="built_in">id</span>,</span><br><span class="line">        assistant_id=assistant.<span class="built_in">id</span>,</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> run</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在创建 Run 时，可以通过 model、instructions、tools 等参数来覆盖 Assistant 中的设置，但 file_ids 不能被覆盖。</li>
+</ul>
+<p>下面是 Run 的状态流转图：</p>
+<img src="/images/post/2023/11/openai-api-assistant-run-status.png" class="" width="1000" height="600">
+
+<ul>
+<li>当创建 Run 后，Run 会自动进入 queued 状态</li>
+<li>queued 状态后进入到 in_process 状态，表示 Run 正在执行</li>
+<li>根据执行结果，如果执行成功则进入 completed 状态，如果执行失败则进入 failed 状态</li>
+<li>在 in_process 状态下，可以通过 Run 的 cancel API 来取消执行，Run 会进入 cancelling 状态，然后进入 cancelled 状态</li>
+<li>在执行过程中如果用到了自定义工具，in_process 状态会进入 requireds_action 状态，表示需要提交工具的执行结果</li>
+<li>提交工具的执行结果后，Run 会再次进入 queued 状态</li>
+<li>如果迟迟没有提交工具的执行结果，超过了过期时间（一般是从创建 Run 时算起 10 分钟），Run 会进入 expired 状态</li>
+<li>当状态为 in_process 时，表示 Thread 被锁定，这意味着 Thread 不能添加新消息和创建新的 Run</li>
+</ul>
+<p>当创建完了 Run 后，我们需要根据 Run 的 ID 来获取 Run，查询其状态，这是一个重复的过程，下面是查询 Run 的方法：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">retrieve_run</span>(<span class="params">thread, run</span>):</span><br><span class="line">    run = client.beta.threads.runs.retrieve(thread_id=thread.<span class="built_in">id</span>, run_id=run.<span class="built_in">id</span>)</span><br><span class="line">    <span class="keyword">return</span> run</span><br></pre></td></tr></table></figure>
+
+<p>Run 更多的 API 可以看<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/runs">官方的 API 文档</a>。</p>
+<h3 id="Run-Steps"><a href="#Run-Steps" class="headerlink" title="Run Steps"></a>Run Steps</h3><p>当 Run 运行完成后，我们可以通过获取 Run 的步骤来查看执行的过程，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">list_run_steps</span>(<span class="params">thread, run</span>):</span><br><span class="line">    run_steps = client.beta.threads.runs.steps.<span class="built_in">list</span>(</span><br><span class="line">        thread_id=thread.<span class="built_in">id</span>,</span><br><span class="line">        run_id=run.<span class="built_in">id</span>,</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> run_steps</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>获取的 Run Steps 是按时间从早到晚进行排序的，即最早的 Run Step 在最前面，最晚的 Run Step 在最后面。</li>
+<li>Run Step 有两种类型，一种是 message_creation，表示创建消息，另一种是 tool_calls，表示执行工具，包括代码解释器、知识检索和自定义工具等。</li>
+<li>获取的结果包含分页的参数，可以通过 has_more 来判断是否有下一页的数据。</li>
+</ul>
+<p>Run Step 也有对应的状态，状态流转图如下所示：</p>
+<img src="/images/post/2023/11/openai-api-assistant-run-step-status.png" class="" width="1000" height="600">
+
+<p>Run Step 状态比 Run 的状态要简单一些，状态的流转条件跟 Run 的一样，这里就不再赘述了。</p>
+<h2 id="Message"><a href="#Message" class="headerlink" title="Message"></a>Message</h2><p>当 Run 运行完成后，我们还需要获取 message 的结果，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">list_messages</span>(<span class="params">thread</span>):</span><br><span class="line">    thread_messages = client.beta.threads.messages.<span class="built_in">list</span>(thread_id=thread.<span class="built_in">id</span>)</span><br><span class="line">    <span class="keyword">return</span> thread_messages</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>获取的 message 是按时间<strong>倒序</strong>排序的，即最新的 message 在最前面，最早的 message 在最后面。因此我们要获取 Run 的最终答案，只需要获取第一条 message 的结果即可。</li>
+<li>获取的结果包含分页的参数，可以通过 has_more 来判断是否有下一页的数据。</li>
+</ul>
+<p>Message 更多的 API 可以看<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/messages">官方的 API 文档</a>。</p>
+<h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><p>下面我们来通过几个示例来演示下 Assistant API 的具体功能。</p>
+<h3 id="代码解释器"><a href="#代码解释器" class="headerlink" title="代码解释器"></a>代码解释器</h3><p>我们使用代码解释器来解一道方程式，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">code_interpreter</span>():</span><br><span class="line">    assistant = create_assistants(</span><br><span class="line">        instructions=<span class="string">&quot;你是一个数学导师。写代码来回答数学问题。&quot;</span>,</span><br><span class="line">        tools=[&#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;code_interpreter&quot;</span>&#125;]</span><br><span class="line">    )</span><br><span class="line">    thread = create_thread(prompt=<span class="string">&quot;我需要计算这个方程式的解：`3x + 11 = 14`。你能帮我吗？&quot;</span>)</span><br><span class="line">    run = run_assistant(thread, assistant)</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        run = retrieve_run(thread=thread, run=run)</span><br><span class="line">        <span class="keyword">if</span> run.status == <span class="string">&quot;completed&quot;</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        sleep(<span class="number">1</span>)</span><br><span class="line">    messages = list_messages(thread)</span><br><span class="line">    <span class="built_in">print</span>(messages.data[<span class="number">0</span>].content[<span class="number">0</span>].text.value)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;messages: <span class="subst">&#123;messages.json()&#125;</span>&quot;</span>)</span><br><span class="line">    run_steps = list_run_steps(thread=thread, run=run)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;run_steps: <span class="subst">&#123;run_steps.json()&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们首先创建一个 Assistant，指定 instructions 为<code>你是一个数学导师。写代码来回答数学问题</code>。</li>
+<li>Assistant 中使用了代码解释器工具<code>&#123;&quot;type&quot;: &quot;code_interpreter&quot;&#125;</code>。</li>
+<li>然后创建一个 Thread，输入我们的问题，求解一道方程式。</li>
+<li>创建 Run，然后通过一个循环来查询 Run 的状态，直到状态为 completed 时退出循环。</li>
+<li>获取最终的结果，即第一条 message 的内容。</li>
+</ul>
+<p>运行结果如下：</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">方程式<span class="code">`3x + 11 = 14`</span>的解为 x = 1。</span><br></pre></td></tr></table></figure>
+
+<p>我们再来看这个 Run 中产生的所有 Messages 信息：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;msg_7cyjjNTgjXOtWlnLOFIeMKW4&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;object&quot;</span><span class="punctuation">:</span> <span class="string">&quot;thread.message&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;annotations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;value&quot;</span><span class="punctuation">:</span> <span class="string">&quot;方程式`3x + 11 = 14`的解为x = 1。&quot;</span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;msg_xVpdPAd4VOO6Ve5bJ5XoOoiw&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;object&quot;</span><span class="punctuation">:</span> <span class="string">&quot;thread.message&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;annotations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;value&quot;</span><span class="punctuation">:</span> <span class="string">&quot;我需要计算这个方程式的解：`3x + 11 = 14`。你能帮我吗？&quot;</span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;object&quot;</span><span class="punctuation">:</span> <span class="string">&quot;list&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;has_more&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>总共只有 2 条消息，一条是 user 输入的问题，另一条是 assistant 返回的结果，中间并没有工具的消息。我们再来看这个 Run 中的所有 Run Step 信息：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;object&quot;</span><span class="punctuation">:</span> <span class="string">&quot;thread.run.step&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;status&quot;</span><span class="punctuation">:</span> <span class="string">&quot;completed&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;step_details&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;message_creation&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;message_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;msg_7cyjjNTgjXOtWlnLOFIeMKW4&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;message_creation&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;message_creation&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;object&quot;</span><span class="punctuation">:</span> <span class="string">&quot;thread.run.step&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;status&quot;</span><span class="punctuation">:</span> <span class="string">&quot;completed&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;step_details&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;tool_calls&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;call_mTRfGO52jA6oPLLMACKr5HD5&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;code_interpreter&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="string">&quot;from sympy import symbols, Eq, solve\r\n\r\n# Define the variable\r\nx = symbols(&#x27;x&#x27;)\r\n\r\n# Define the equation\r\nequation = Eq(3*x + 11, 14)\r\n\r\n# Solve the equation\r\nsolution = solve(equation, x)\r\nsolution&quot;</span><span class="punctuation">,</span></span><br><span class="line">              <span class="attr">&quot;outputs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span> <span class="attr">&quot;logs&quot;</span><span class="punctuation">:</span> <span class="string">&quot;[1]&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;logs&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;code_interpreter&quot;</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tool_calls&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tool_calls&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;object&quot;</span><span class="punctuation">:</span> <span class="string">&quot;list&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;has_more&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>这个 Run 有 2 个步骤，一个是创建消息，另外一个是代码解释器的执行，其中代码解释器中执行过程中产生的 input 信息并不会显示到最终的结果中，只是 LLM 的一个思考过程，类似 LangChain 的 Agent 里面的 debug 信息。</p>
+<h3 id="知识检索"><a href="#知识检索" class="headerlink" title="知识检索"></a>知识检索</h3><p>下面我们再使用知识检索工具来演示一下功能，知识检索工具需要上传一个文件，文件通过 API 上传后，OpenAI 后端会自动分割文档、embedding、存储向量，并提供根据用户问题检索文档相关内容的功能，这些都是自动完成的，用户只需要上传文档即可。我们就随便找一个 pdf 文件来做演示，下面是腾讯云搜的产品文档：</p>
+<img src="/images/post/2023/11/openai-api-assistant-pdf.png" class="" width="1000" height="600">
+
+<p>下面是知识检索的示例代码：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">knownledge_retrieve</span>():</span><br><span class="line">    file = create_file(<span class="string">&quot;tengxunyun.pdf&quot;</span>)</span><br><span class="line">    assistant = create_assistants(</span><br><span class="line">        instructions=<span class="string">&quot;你是一个客户支持机器人，请用你的专业知识回答客户的问题。&quot;</span>,</span><br><span class="line">        tools=[&#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;retrieval&quot;</span>&#125;],</span><br><span class="line">        file_ids=[file.<span class="built_in">id</span>],</span><br><span class="line">    )</span><br><span class="line">    thread = create_thread(prompt=<span class="string">&quot;腾讯云云搜是什么&quot;</span>)</span><br><span class="line">    run = run_assistant(thread, assistant)</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        run = retrieve_run(thread=thread, run=run)</span><br><span class="line">        <span class="keyword">if</span> run.status == <span class="string">&quot;completed&quot;</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        sleep(<span class="number">1</span>)</span><br><span class="line">    messages = list_messages(thread)</span><br><span class="line">    <span class="built_in">print</span>(messages.data[<span class="number">0</span>].content[<span class="number">0</span>].text.value)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;messages: <span class="subst">&#123;messages.json()&#125;</span>&quot;</span>)</span><br><span class="line">    run_steps = list_run_steps(thread=thread, run=run)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;run_steps: <span class="subst">&#123;run_steps.json()&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这里我们更换了 Assistant 的 instructions，让它扮演一个客户支持机器人的角色。</li>
+<li>Assistant 中使用了检索工具<code>&#123;&quot;type&quot;: &quot;retrieval&quot;&#125;</code>。</li>
+<li>Assistant 中上传了上面的 pdf 文件。</li>
+<li>然后创建一个 Thread，输入我们的问题，问一个文档相关内容的问题。</li>
+<li>其他步骤与代码解释器一致。</li>
+</ul>
+<p>运行结果如下：</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">腾讯云云搜是腾讯云的一站式搜索托管服务平台，提供数据处理、检索串识别、搜索结果获取与排序，搜索数据运营等一整套搜索相关服务。</span><br><span class="line">该平台继承了腾讯 SOSO 在搜索引擎领域多年的技术财富，在搜索架构、海量数据存储和计算、智能排序、用户意图识别、搜索质量运营等方面有很深的技术沉淀。</span><br><span class="line">腾讯云云搜负责了腾讯主要产品的搜索业务，包括微信朋友圈、手机 QQ、腾讯视频、QQ 音乐、应用宝、腾讯地图、QQ 空间等。</span><br><span class="line">它提供数据处理、用户检索串智能识别、排序可定制、高级功能、运营支持等功能，以帮助开发者优化搜索服务，并提供丰富的运营数据查询功能，</span><br><span class="line">包括检索量、文档新增量、检索耗时、检索失败率、热榜等。开发者可以通过腾讯云云搜让自己的搜索更具个性化，更匹配应用的需求。【1†source】</span><br></pre></td></tr></table></figure>
+
+<p>可以看到答案确实是从文档中查找而来，内容基本一致，在结尾处还有一个引用<code>【1†source】</code>，这个是 Message 的注释内容，关于 Message 的注释功能这里不过多介绍，后面有机会再写文章说明，关于 Message 注释功能可以看<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/assistants/how-it-works/managing-threads-and-messages">这里</a>。</p>
+<p>我们再来看下知识检索的 Run Step 信息：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;message_creation&quot;</span></span><br><span class="line">      <span class="comment">// ......</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;object&quot;</span><span class="punctuation">:</span> <span class="string">&quot;thread.run.step&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;status&quot;</span><span class="punctuation">:</span> <span class="string">&quot;completed&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;step_details&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;tool_calls&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;call_19YklOZJq1HDP8WfmMydcVeq&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;retrieval&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;retrieval&quot;</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tool_calls&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;thread_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;thread_ejr0YGodJ2NmG7dFf1hZMPUL&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tool_calls&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>在检索工具的步骤中，只是返回了工具的类型，但检索的内容并没有放在步骤中，也就是说检索工具并没有产生内部推理过程的信息。</p>
+<h3 id="自定义工具"><a href="#自定义工具" class="headerlink" title="自定义工具"></a>自定义工具</h3><p>最后我们再来看下自定义工具的示例，我们沿用上一篇文章用到的查询天气工具<code>get_current_weather</code>，我们先定义工具集 tools：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">tools = [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;type&quot;</span>: <span class="string">&quot;function&quot;</span>,</span><br><span class="line">        <span class="string">&quot;function&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;name&quot;</span>: <span class="string">&quot;get_current_weather&quot;</span>,</span><br><span class="line">            <span class="string">&quot;description&quot;</span>: <span class="string">&quot;获取某个地方当前的天气情况&quot;</span>,</span><br><span class="line">            <span class="string">&quot;parameters&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;type&quot;</span>: <span class="string">&quot;object&quot;</span>,</span><br><span class="line">                <span class="string">&quot;properties&quot;</span>: &#123;</span><br><span class="line">                    <span class="string">&quot;location&quot;</span>: &#123;</span><br><span class="line">                        <span class="string">&quot;type&quot;</span>: <span class="string">&quot;string&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;description&quot;</span>: <span class="string">&quot;城市名，比如： 北京, 上海&quot;</span>,</span><br><span class="line">                    &#125;,</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">&quot;required&quot;</span>: [<span class="string">&quot;location&quot;</span>],</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>工具集只包含一个工具，定义了工具的方法和参数信息</li>
+</ul>
+<p>接着我们使用 Assistant API 来调用自定义工具，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_current_weather</span>(<span class="params">location</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Get the current weather in a given location&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;北京&quot;</span> <span class="keyword">in</span> location.lower():</span><br><span class="line">        <span class="keyword">return</span> json.dumps(&#123;<span class="string">&quot;location&quot;</span>: location, <span class="string">&quot;temperature&quot;</span>: <span class="string">&quot;10°&quot;</span>&#125;)</span><br><span class="line">    <span class="keyword">elif</span> <span class="string">&quot;上海&quot;</span> <span class="keyword">in</span> location.lower():</span><br><span class="line">        <span class="keyword">return</span> json.dumps(&#123;<span class="string">&quot;location&quot;</span>: location, <span class="string">&quot;temperature&quot;</span>: <span class="string">&quot;15°&quot;</span>&#125;)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> json.dumps(&#123;<span class="string">&quot;location&quot;</span>: location, <span class="string">&quot;temperature&quot;</span>: <span class="string">&quot;20°&quot;</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">function_calling</span>():</span><br><span class="line">    assistant = create_assistants(</span><br><span class="line">        instructions=<span class="string">&quot;你是一个天气机器人，使用提供的工具来回答问题。&quot;</span>,</span><br><span class="line">        tools=tools,</span><br><span class="line">    )</span><br><span class="line">    thread = create_thread(prompt=<span class="string">&quot;今天北京、上海和成都的天气怎么样？&quot;</span>)</span><br><span class="line">    available_functions = &#123;</span><br><span class="line">        <span class="string">&quot;get_current_weather&quot;</span>: get_current_weather,</span><br><span class="line">    &#125;</span><br><span class="line">    run = run_assistant(thread, assistant)</span><br><span class="line">    <span class="comment"># 下面是处理 Run 并提交工具的返回结果</span></span><br><span class="line">    <span class="comment"># 中间这部分代码在下面演示</span></span><br><span class="line">    messages = list_messages(thread)</span><br><span class="line">    <span class="built_in">print</span>(messages.data[<span class="number">0</span>].content[<span class="number">0</span>].text.value)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;messages: <span class="subst">&#123;messages&#125;</span>&quot;</span>)</span><br><span class="line">    run_steps = list_run_steps(thread=thread, run=run)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;run_steps: <span class="subst">&#123;run_steps&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>和之前 2 个示例不同的地方是，tools 参数用的是我们定义的一个工具集 tools</li>
+<li>定义了一个字典<code>available_functions </code>来做函数的动态调用</li>
+<li>为了演示方便，<code>get_current_weather</code>方法使用一些简单的逻辑来模拟天气查询的功能：</li>
+</ul>
+<p>下面是处理 Run 状态并提交工具返回结果的方法，代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    run = retrieve_run(thread=thread, run=run)</span><br><span class="line">    <span class="keyword">if</span> run.status == <span class="string">&quot;completed&quot;</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">if</span> run.status == <span class="string">&quot;requires_action&quot;</span>:</span><br><span class="line">        tool_calls = run.required_action.submit_tool_outputs.tool_calls</span><br><span class="line">        tool_infos = []</span><br><span class="line">        <span class="keyword">for</span> tool_call <span class="keyword">in</span> tool_calls:</span><br><span class="line">            function_name = tool_call.function.name</span><br><span class="line">            function_to_call = available_functions[function_name]</span><br><span class="line">            function_args = json.loads(tool_call.function.arguments)</span><br><span class="line">            function_response = function_to_call(</span><br><span class="line">                location=function_args.get(<span class="string">&quot;location&quot;</span>),</span><br><span class="line">            )</span><br><span class="line">            tool_infos.append(</span><br><span class="line">                &#123;<span class="string">&quot;call_id&quot;</span>: tool_call.<span class="built_in">id</span>, <span class="string">&quot;function_response&quot;</span>: function_response&#125;</span><br><span class="line">            )</span><br><span class="line">        submit_tool_outputs(thread=thread, run=run, tool_infos=tool_infos)</span><br><span class="line">    sleep(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>之前在介绍 Run 状态时说过，当 Assistant 中有自定义工具时，状态从 in_process 会进入 requires_action 状态，表示需要提交工具的执行结果</li>
+<li>在循环中判断 Run 状态是否为 requires_action，如果是则从 Run 中获取需要执行的工具信息 tool_calls，包括工具名称和参数</li>
+<li>在示例中会调用 3 次<code>get_current_weather</code>方法，因此我们新建了一个数组 tool_infos 来保存工具返回的结果</li>
+<li>执行完工具后，将工具返回结果保存到 tool_infos 数组中，同时将 tool_calls 中工具 id 也保存到里面，下面在提交工具结果时会用到</li>
+</ul>
+<p>拿到工具返回的结果后，我们通过 Run API 来提交这些结果：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">submit_tool_outputs</span>(<span class="params">thread, run, tool_infos</span>):</span><br><span class="line">    tool_outputs = []</span><br><span class="line">    <span class="keyword">for</span> tool_info <span class="keyword">in</span> tool_infos:</span><br><span class="line">        tool_outputs.append(</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">&quot;tool_call_id&quot;</span>: tool_info[<span class="string">&quot;call_id&quot;</span>],</span><br><span class="line">                <span class="string">&quot;output&quot;</span>: tool_info[<span class="string">&quot;function_response&quot;</span>],</span><br><span class="line">            &#125;</span><br><span class="line">        )</span><br><span class="line">    client.beta.threads.runs.submit_tool_outputs(</span><br><span class="line">        thread_id=thread.<span class="built_in">id</span>,</span><br><span class="line">        run_id=run.<span class="built_in">id</span>,</span><br><span class="line">        tool_outputs=tool_outputs,</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这里用到了 Run 提交工具结果的 API，其中 tool_outputs 参数是一个数组，数组中每个元素包含 tool_call_id 和 output 两个属性</li>
+<li>tool_call_id 的值是 tool_calls 中的 id，output 的值是工具的返回结果</li>
+<li>调用了多少个工具就要在 tool_outputs 添加多少个元素</li>
+</ul>
+<p>运行结果如下：</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">今天北京的温度是 10℃，上海的温度是 15℃，成都的温度是 20℃。</span><br></pre></td></tr></table></figure>
+
+<h2 id="改进计划"><a href="#改进计划" class="headerlink" title="改进计划"></a>改进计划</h2><p>在 Assistant API 的使用过程中，我们发现现在获取 Run 的状态都是通过轮询的方式，这可能会导致更多的 token 损耗和性能问题，OpenAI 官方介绍在未来会对这一机制进行改进，将其替换成通知模式，另外还有其他改进计划如下：</p>
+<ul>
+<li>支持流式输出模式（类似 Websocket 或者 SSE）</li>
+<li>支持通过共享对象状态更新通知来代替轮询</li>
+<li>支持 DALL-E 3 作为内置的工具</li>
+<li>支持用户上传图片文件</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上就是 Assistant API 的基本原理和功能介绍，和 GPTs 相比两者各有优势，GPTs 更适合没有编程经验的用户使用，而 Assistant API 则适合有开发经验的开发人员或团队使用，而且可以使用自定义工具来打造更为强大的功能，但也有一些缺点，就是无法使用 DALL-E 3 画图工具和上传图片（这也意味着无法做图片识别），这些功能相信在未来会逐步支持。如果文中有错误或者不足之处，还请在评论区留言。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2023/11/13/openai-new-api-assistant/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2023/11/13/openai-new-api-assistant/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

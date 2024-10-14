@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>location对象的页面跳转方法介绍 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="location对象的页面跳转方法介绍"> <!-- TODO: truncate -->
+	<meta name="keywords" content="location,页面跳转">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">location对象的页面跳转方法介绍</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2012-05-22T08:18:00.000Z" itemprop="datePublished">5月 22, 2012</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/javascript/">javascript</a>
+</div>
+    </div>
+	<div class="entry-content"><p>JavaScript中使用location对象可以通过很多种方式改变浏览器的位置。最常用的方法应该是下面几种：  </p>
+<span id="more"></span>  
+<figure class="highlight javascript"><figcaption><span>demo.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">　　location.<span class="property">href</span> = <span class="string">&quot;http://www.google.com&quot;</span>;</span><br><span class="line">　　<span class="variable language_">window</span>.<span class="property">location</span> = <span class="string">&quot;http://www.google.com&quot;</span>;</span><br><span class="line">　　location.<span class="title function_">assign</span>(<span class="string">&quot;http://www.google.com&quot;</span>);</span><br></pre></td></tr></table></figure>  
+<p>其实前面2种方式是调用第3种方式去实现的，这样就可以在浏览器中打开一个新的URL并在历史记录中生成一条记录，因此用户可以通过“后退”按钮回到前一个页面。如果想禁止这种后退行为，可以使用replace()方法。该方法只接受一个参数，即URL，然后会跳转到该URL，但不会在历史记录中生成记录。这样用户不能回到前一页了。  </p>
+<figure class="highlight javascript"><figcaption><span>demo.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">location.<span class="title function_">replace</span>(<span class="string">&quot;http://www.google.com&quot;</span>);</span><br></pre></td></tr></table></figure>  
+<p>关于页面跳转还有一个reload方法，作用是重新加载当前页面。如果调用该方法时不带参数，页面会以最有效的方式加载页面，也就是说，如果浏览器有该页面的缓存，则会从缓存里面加载该页面。如果不想从缓存中重新加载页面，需要传入true参数，即绕开浏览器缓存，强制从服务器去获取页面数据。  </p>
+<figure class="highlight javascript"><figcaption><span>demo.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">location.<span class="title function_">reload</span>(); <span class="comment">//相当浏览器的F5刷新，有可能从缓存中加载</span></span><br><span class="line">location.<span class="title function_">reload</span>(<span class="literal">true</span>); <span class="comment">//相当于Ctrl+F5，从服务器中加载</span></span><br></pre></td></tr></table></figure>  
+<p>下面列出location.reload()方法的具体解释：  </p>
+<blockquote><p>The reload() method of the Location object reloads the document that is currently displayed in the window of the Location object. When called with no arguments, or with the argument false, it uses the If-Modified-SinceHTTP header to determine whether the document has changed on the web server. If it has, it reloads the document from the server, and if not, it reloads the document from the cache. This is is the same action that occurs when the user clicks on Navigator’s Reload button.</p>
+</blockquote>  
+
+<p>location对象的reload方法会重新加载当前页面。当没有传入参数或传入false参数时，会用 If-Modified-SinceHTTP header 去判断页面在web服务器上是否有改变。如果改变了，则从服务器加载，如果没有改变，则从缓存中加载。这与用户点击导航栏刷新按钮的行为相同。  </p>
+<blockquote><p>When reload() is called with the argument true, then it will always bypass the cache and reload the document from the server, regardless of the last-modified time of the document. This is the same action that occurs when the user shift-clicks on Navigator’s Reload button.</p>
+</blockquote>  
+<p>当调用reload方法时传入参数true，会始终绕开缓存而从服务器上加载页面，不管页面有没有改变。这与用户按住shift并点击导航栏刷新按钮的行为相同。  </p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2012/05/22/javascript-location-object-redirect-methods/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2012/05/22/javascript-location-object-redirect-methods/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

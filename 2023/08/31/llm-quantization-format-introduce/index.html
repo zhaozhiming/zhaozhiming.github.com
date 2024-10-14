@@ -1,0 +1,265 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>AI 模型量化格式介绍 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="AI 模型量化格式介绍"> <!-- TODO: truncate -->
+	<meta name="keywords" content="llm, quantization, gptq, ggml, gguf">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">AI 模型量化格式介绍</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-08-31T07:50:19.000Z" itemprop="datePublished">8月 31, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/llm/">llm</a> <a href="/tags/quantization/">quantization</a> <a href="/tags/gptq/">gptq</a> <a href="/tags/ggml/">ggml</a> <a href="/tags/gguf/">gguf</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/08/quantization.jpeg" class="" width="300" height="400">
+
+<p>在 HuggingFace 上下载模型时，经常会看到模型的名称会带有<code>fp16</code>、<code>GPTQ</code>，<code>GGML</code>等字样，对不熟悉模型量化的同学来说，这些字样可能会让人摸不着头脑，我开始也是一头雾水，后来通过查阅资料，总算有了一些了解，本文将介绍一些常见的模型量化格式，因为我也不是机器学习专家，所以本文只是对这些格式进行简单的介绍，如果有错误的地方，欢迎指正。</p>
+<span id="more"></span>
+
+<h2 id="What-量化"><a href="#What-量化" class="headerlink" title="What 量化"></a>What 量化</h2><p>量化在 AI 模型中，特别是在深度学习模型中，通常指的是将模型中的参数（例如权重和偏置）从浮点数转换为低位宽度的整数，例如从 32 位的浮点数转换为 8 位整数。通俗地说，量化就像是把一本详细的、用高级词汇写的书简化为一个简短的摘要或儿童版故事。这个摘要或儿童版故事占用的空间更小，更容易传播，但可能会丢失一些原始书中的细节。</p>
+<h2 id="Why-量化"><a href="#Why-量化" class="headerlink" title="Why 量化"></a>Why 量化</h2><p>量化的目的主要有以下几点：</p>
+<ol>
+<li><strong>减少存储需求</strong>：量化后的模型大小会显著减小，这使得模型更容易部署在存储资源有限的设备上，如移动设备或嵌入式系统。</li>
+<li><strong>加速计算</strong>：整数运算通常比浮点运算更快，尤其在没有专门的浮点硬件支持的设备上。</li>
+<li><strong>减少能耗</strong>：在某些硬件上，整数运算消耗的能量更少。</li>
+</ol>
+<p>但是，量化也有一个缺点：它可能会导致模型的精度下降。因为你实际上是在用较低的精度来表示原始的浮点数，可能会损失一些信息，这意味着模型的能力会变差。为了平衡这种精度损失，研究者们开发了各种量化策略和技术，如动态量化、权重共享等，可以在尽量少降低模型能力的情况下，尽可能多地降低模型所需的损耗。打个比方，如果我们一个模型的完整能力是 100，模型大小和推理所需内存也是 100，我们将这个模型量化后，模型的能力可能会降低到 <strong>90</strong>，但模型大小和推理所需内存可能会降低到 <strong>50</strong>，这个就是量化的目的。</p>
+<h2 id="FP16-INT8-INT4"><a href="#FP16-INT8-INT4" class="headerlink" title="FP16&#x2F;INT8&#x2F;INT4"></a>FP16&#x2F;INT8&#x2F;INT4</h2><p>HuggingFace 上模型名称如果没有特别标识，比如<code>Llama-2-7b-chat</code>、<code>chatglm2-6b</code>，那么说明这些模型一般是全精度的(FP32，但也有些是半精度 FP16)，而如果模型名称中带有<code>fp16</code>、<code>int8</code>、<code>int4</code>等字样，比如<code>Llama-2-7B-fp16</code>、<code>chatglm-6b-int8</code>、<code>chatglm2-6b-int4</code>，那么说明这些模型是量化后的模型，其中<code>fp16</code>、<code>int8</code>、<code>int4</code>字样表示模型的量化精度。</p>
+<p>量化精度从高到低排列顺序是：<code>fp16</code>&gt;<code>int8</code>&gt;<code>int4</code>，量化的精度越低，模型的大小和推理所需的显存就越小，但模型的能力也会越差。</p>
+<p>以<code>ChatGLM2-6B</code>为例，该模型全精度版本(FP32)的大小为 12G，推理所需用到的显存为 12~13G，而量化后的 INT4 版本模型大小为 3.7G，推理所需显存为 5G，可以看到量化后的模型大小和显存需求都大大减小了。</p>
+<p>FP32 和 FP16 精度的模型需要在 GPU 服务器上运行，而 INT8 和 INT4 精度的模型可以在 CPU 上运行。</p>
+<h2 id="GPTQ"><a href="#GPTQ" class="headerlink" title="GPTQ"></a>GPTQ</h2><p><a target="_blank" rel="noopener" href="https://github.com/IST-DASLab/gptq">GPTQ</a> 是一种模型量化的方法，可以将语言模型量化成 INT8、INT4、INT3 甚至 INT2 的精度而不会出现较大的性能损失，在 HuggingFace 上如果看到模型名称带有<code>GPTQ</code>字样的，比如<code>Llama-2-13B-chat-GPTQ</code>，说明这些模型是经过 GPTQ 量化的。以<code>Llama-2-13B-chat</code>为例，该模型全精度版本的大小为 26G，使用 GPTQ 进行量化成 INT4 精度后的模型大小为 7.26G。</p>
+<p>如果你用的是开源模型<code>LLama</code>，可以使用<a target="_blank" rel="noopener" href="https://github.com/qwopqwop200/GPTQ-for-LLaMa">GPTQ-for-LLaMA</a>这个库来进行 GPTQ 量化，它可以将相关的<code>Llama</code>模型量化成 INT4 精度的模型。</p>
+<p>但现在更流行的一个 GPTQ 量化工具是<a target="_blank" rel="noopener" href="https://github.com/PanQiWei/AutoGPTQ">AutoGPTQ</a>，它可以量化任何 Transformer 模型而不仅仅是<code>Llama</code>，现在 Huggingface 已经将 AutoGPTQ 集成到了 Transformers 中，具体的使用方法可以参考<a target="_blank" rel="noopener" href="https://huggingface.co/blog/zh/gptq-integration">这里</a>。</p>
+<h2 id="GGML"><a href="#GGML" class="headerlink" title="GGML"></a>GGML</h2><p>讲 GGML 之前要先说下<a target="_blank" rel="noopener" href="https://github.com/ggerganov/llama.cpp">llama-cpp</a>这个项目，它是开发者 Georgi Gerganov 基于 Llama 模型手撸的纯 C&#x2F;C++ 版本，它最大的优势是可以在 CPU 上快速地进行推理而不需要 GPU。然后作者将该项目中模型量化的部分提取出来做成了一个模型量化工具：<a target="_blank" rel="noopener" href="https://github.com/ggerganov/ggml">GGML</a>，项目名称中的<code>GG</code>其实就是作者的名字首字母。</p>
+<p>在 HuggingFace 上，如果看到模型名称带有<code>GGML</code>字样的，比如<code>Llama-2-13B-chat-GGML</code>，说明这些模型是经过 GGML 量化的。有些 GGML 模型的名字除了带有<code>GGML</code>字样外，还带有<code>q4</code>、<code>q4_0</code>、<code>q5</code>等，比如<code>Chinese-Llama-2-7b-ggml-q4</code>，这里面的<code>q4</code>其实指的是 GGML 的量化方法，从<code>q4_0</code>开始往后扩展，有<code>q4_0</code>、<code>q4_1</code>、<code>q5_0</code>、<code>q5_1</code>和<code>q8_0</code>，在<a target="_blank" rel="noopener" href="https://github.com/ggerganov/llama.cpp#quantization">这里</a>可以看到各种方法量化后的数据。</p>
+<h3 id="GGUF"><a href="#GGUF" class="headerlink" title="GGUF"></a>GGUF</h3><p>最近在 HuggingFace 上的模型还发现了一些带有<code>GGUF</code>字样的模型，比如<code>Llama-2-13B-chat-GGUF</code>，<code>GGUF</code>其实是 GGML 团队增加的一个新功能，GGUF 与 GGML 相比，GGUF 可以在模型中添加额外的信息，而原来的 GGML 模型是不可以的，同时 GGUF 被设计成可扩展，这样以后有新功能就可以添加到模型中，而不会破坏与旧模型的兼容性。</p>
+<p>但这个功能是<code>Breaking Change</code>，也就是说 GGML 新版本以后量化出来的模型都是 GGUF 格式的，这意味着旧的 GGML 格式以后会慢慢被 GGUF 格式取代，而且也不能将老的 GGML 格式直接转成 GGUF 格式。</p>
+<p>关于 GGUF 更多的信息可以参考<a target="_blank" rel="noopener" href="https://github.com/ggerganov/llama.cpp/pull/2398#issuecomment-1682837610">这里</a>。</p>
+<h2 id="GPTQ-vs-GGML"><a href="#GPTQ-vs-GGML" class="headerlink" title="GPTQ vs GGML"></a>GPTQ vs GGML</h2><p>GPTQ 和 GGML 是现在模型量化的两种主要方式，但他们之间有什么区别呢？我们又应该选择哪种量化方式呢？</p>
+<p>两者有以下几点异同：</p>
+<ul>
+<li>GPTQ 在 <strong>GPU</strong> 上运行较快，而 GGML 在 <strong>CPU</strong> 上运行较快</li>
+<li>同等精度的量化模型，GGML 的模型要比 GPTQ 的稍微大一些，但是两者的推理性能基本一致</li>
+<li>两者都可以量化 HuggingFace 上的 Transformer 模型</li>
+</ul>
+<p>因此，如果你的模型是在 GPU 上运行，那么建议使用 GPTQ 进行量化，如果你的模型是在 CPU 上运行，那么建议使用 GGML 进行量化。</p>
+<img src="/images/post/2023/08/ggml-vs-gptq.png" class="" width="1000" height="600">
+
+<h3 id="Groupsize"><a href="#Groupsize" class="headerlink" title="Groupsize"></a>Groupsize</h3><p>在 HuggingFace 上，不管是什么格式的量化模型，模型名称中还经常出现一些<code>32g</code>、<code>128g</code>字样，比如<code>pygmalion-13b-4bit-128g</code>，这些又是表示什么意思呢？</p>
+<p><code>128g</code>中的<code>g</code>其实表示的是 groupsize 的意思，在量化技术中，权重可能会被分成大小为 groupsize 的组，并对每组应用特定的量化策略，这样的策略可能有助于提高量化的效果或保持模型的性能。</p>
+<p>groupsize 的值有：1024、128、32，GPTQ 默认的 groupsize 值是 1024。如果 groupsize 没有值，那么 groupsize 就为<code>-1</code>（ 注意不是 <code>0</code>）。groupsize 会影响模型的准确性和推理显存大小，groupsize 根据同等精度模型准确性和推理显存从高到底的排列顺序是：<code>32</code> &gt; <code>128</code> &gt; <code>1024</code> &gt; <code>None(-1)</code>，也就是说 <code>None(-1)</code> 是准确性和显存占用最低的，而 <code>32</code> 是最高的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文总结了 HuggingFace 上模型的常见量化格式，量化技术是 AI 模型部署的重要技术，它可以大大减小模型的大小和推理所需的显存。想要让大语言模型真正地走进普通人的生活，在每个人的手机上能运行起来，做到真正意义上的“普及”，那么量化技术以后肯定是必不可少的，因此掌握一些量化技术是非常有必要的。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.reddit.com/r/LocalLLaMA/comments/15triq2/gguf_is_going_to_make_llamacpp_much_better_and/">GGUF is going to make llama.cpp much better and it’s almost ready</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.reddit.com/r/LocalLLaMA/comments/12rtg82/what_is_group_size_128_and_why_do_30b_models_give/">What is group size 128 and why do 30b models give the option to leave it out?</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ZKdMbQq5T30">Understanding: AI Model Quantization, GGML vs GPTQ!</a></li>
+</ul>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2023/08/31/llm-quantization-format-introduce/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2023/08/31/llm-quantization-format-introduce/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

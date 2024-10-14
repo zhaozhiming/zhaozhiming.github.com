@@ -1,0 +1,301 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>使用 Llama3 打造开发团队的私有 Copilot - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="介绍如何部署 Llama3 作为团队私有 Copilot，提高团队的开发效率"> <!-- TODO: truncate -->
+	<meta name="keywords" content="llama3, copilot, vscode, ollama">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">使用 Llama3 打造开发团队的私有 Copilot</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2024-05-04T13:08:41.000Z" itemprop="datePublished">5月 4, 2024</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/llama3/">llama3</a> <a href="/tags/copilot/">copilot</a> <a href="/tags/vscode/">vscode</a> <a href="/tags/ollama/">ollama</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2024/05/llama3-copilot.jpeg" class="" width="400" height="300">
+
+<p>相信很多开发人员都使用过 Github Copilot，这种崭新的开发方式可以帮助开发人员极大地提高开发效率，并且也正在逐渐改变开发人员的编程习惯。自从 Meta 开放了最新的开源 LLM（大语言模型） Llama3，业内的各种开发工具和开发框架都在积极地集成 Llama3，以便于使用这个迄今为止功能最强大的开源大模型。今天我们来介绍如何使用 Llama3 构建一个团队专属的私有化 Copilot，不仅可以提高团队的开发效率，还可以保护团队的代码隐私。</p>
+<span id="more"></span>
+
+<h2 id="编程助手-Copilot"><a href="#编程助手-Copilot" class="headerlink" title="编程助手 Copilot"></a>编程助手 Copilot</h2><p>Copilot 是一种人工智能代码辅助工具，最早由 GitHub 和 OpenAI 共同开发，后面有其他产商也推出了类似的产品。Copilot 能够通过自然语言处理和机器学习技术自动生成高质量代码片段和上下文信息，相比于以前的自动补全工具，Copilot 的代码更加详细和智能，比如自动补全工具只能补全一两行的代码片段，但 Copilot 可以生成整个函数的代码，甚至是整个类，从而减轻程序员的工作量并节省时间和精力。除了代码生成外，Copilot 还是支持 AI 问答、代码解释、语言转换、生成单元测试等功能。目前 Copilot 的使用存在以下几种形式。</p>
+<h3 id="线上服务"><a href="#线上服务" class="headerlink" title="线上服务"></a>线上服务</h3><img src="/images/post/2024/05/copilot-online.png" class="" width="600" height="400">
+
+<p>第一种是线上服务，比如 <a target="_blank" rel="noopener" href="https://github.com/features/copilot">GitHub Copilot</a>，这种服务用户一般只需安装 IDE 插件即可使用，无需关心模型的部署，优点是可以使用线上性能强大的模型，尤其是 Github Copilot，通过 GitHub 上的代码作为模型训练数据，使得生成的代码质量更高，缺点是无法保护代码隐私，因为你要使用 Copilot 服务，你的代码就会被上传到服务端。</p>
+<p>除了 GitHub Copilot 外，其他类似的产品还有：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://codeium.com/">Codeium</a>：一家致力于为开发者提供更智能高效的编程体验的人工智能公司，支持 VSCode、Jetbrains 等 40 多种的 IDE，个人使用完全免费</li>
+<li><a target="_blank" rel="noopener" href="https://codegeex.cn/en-US">CodeGeeX</a>：清华大学开发的代码辅助工具，支持多种语言，免费使用，使用了自研的模型</li>
+<li><a target="_blank" rel="noopener" href="https://aws.amazon.com/codewhisperer/">CodeWhisperer</a>：AWS 推出的代码辅助工具，免费使用，特点是具有安全扫描功能</li>
+<li><a target="_blank" rel="noopener" href="https://tongyi.aliyun.com/lingma/">通义灵码</a>：阿里云推出的代码辅助工具，使用阿里研发的 Qwen 大模型，支持多种语言，免费使用</li>
+</ul>
+<h3 id="本地服务"><a href="#本地服务" class="headerlink" title="本地服务"></a>本地服务</h3><img src="/images/post/2024/05/copilot-local.png" class="" width="600" height="400">
+
+<p>第二种是本地服务，这种方式需要在本地部署 LLM，然后通过 IDE 插件调用本地 LLM 的 API 服务。部署本地 LLM 的工具比较多，常用的有<a target="_blank" rel="noopener" href="https://ollama.com/">Ollama</a>、<a target="_blank" rel="noopener" href="https://localai.io/">LocalAI</a> 等，这些工具支持在 CPU 的机器上运行 LLM，这种方式的优点是无需联网即可使用，并且可以很好地保护代码隐私，缺点是需要每个开发人员都需要安装本地 LLM。</p>
+<h3 id="私有化服务"><a href="#私有化服务" class="headerlink" title="私有化服务"></a>私有化服务</h3><img src="/images/post/2024/05/copilot-team.png" class="" width="600" height="400">
+
+<p>私有化服务也是一种本地服务，但与本地服务不同的是，开发人员无需安装本地 LLM，而是通过开发团队统一来部署 LLM 服务，然后开发人员通过 IDE 插件调用团队内部的 LLM 服务。这种方式的优点是可以保护代码隐私，同时也可以提高团队的开发效率，这也是我们今天要介绍的 Copilot 使用方式。</p>
+<h2 id="Llama3-部署"><a href="#Llama3-部署" class="headerlink" title="Llama3 部署"></a>Llama3 部署</h2><p>我们要使用 Llama3 来打造团队的私有 Copilot，首先需要部署 Llama3 ，这里我们使用 <a target="_blank" rel="noopener" href="https://github.com/vllm-project/vllm">vllm</a>来部署 Llama3。vllm 是一个高效、易用的库，用于 LLM 的推理和提供服务，它可以部署兼容 OpenAI API 的服务。相比同类产品，vllm 的主要特点是吞<strong>吐率高、延迟低、速度快</strong>。</p>
+<p>首先下载 Llama3 的模型，Llama3 可以在 HuggingFace 上进行下载，但在下载之前需要先提交申请，申请后大约等待一段时间即可审批通过，接着使用 HuggingFace 的 CLI 命令进行下载，我们要下载<a target="_blank" rel="noopener" href="https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct">Meta-Llama-3-8B-Instruct</a>这个模型，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">huggingface-cli download meta-llama/Meta-Llama-3-8B-Instruct --token YOUR_HF_TOKEN</span><br></pre></td></tr></table></figure>
+
+<p>然后安装 vllm，vllm 可以通过 pip 安装，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda create -n vllm python=3.9 -y</span><br><span class="line">conda activate vllm</span><br><span class="line">pip install vllm</span><br></pre></td></tr></table></figure>
+
+<p>安装完成后，我们使用 vllm 的命令来启动兼容 OpenAI 的 API 服务，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python -m vllm.entrypoints.openai.api_server \</span><br><span class="line">--model meta-llama/Meta-Llama-3-8B-Instruct \</span><br><span class="line">--gpu-memory-utilization 0.85</span><br></pre></td></tr></table></figure>
+
+<p><code>gpu-memory-utilization</code>是 GPU 内存的使用率，这里设置为 0.85，表示服务启动后会占用 85%的 GPU 内存。</p>
+<p>启动服务后，服务地址是<code>http://localhost:8000</code>，我们可以通过 curl 命令来验证 API 服务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:8000/v1/chat/completions \</span><br><span class="line">  -H <span class="string">&quot;Content-Type: application/json&quot;</span> \</span><br><span class="line">  -d <span class="string">&#x27;&#123;</span></span><br><span class="line"><span class="string">    &quot;model&quot;: &quot;meta-llama/Meta-Llama-3-8B-Instruct&quot;,</span></span><br><span class="line"><span class="string">    &quot;messages&quot;: [</span></span><br><span class="line"><span class="string">      &#123;</span></span><br><span class="line"><span class="string">        &quot;role&quot;: &quot;user&quot;,</span></span><br><span class="line"><span class="string">        &quot;content&quot;: &quot;Hello!&quot;</span></span><br><span class="line"><span class="string">      &#125;</span></span><br><span class="line"><span class="string">    ]</span></span><br><span class="line"><span class="string">  &#125;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;id&quot;</span>: <span class="string">&quot;cmpl-01cb80c24d4a4e32992b6328fbf09794&quot;</span>,</span><br><span class="line">  <span class="string">&quot;created&quot;</span>: 1714901485,</span><br><span class="line">  <span class="string">&quot;model&quot;</span>: <span class="string">&quot;meta-llama/Meta-Llama-3-8B-Instruct&quot;</span>,</span><br><span class="line">  <span class="string">&quot;object&quot;</span>: <span class="string">&quot;chat.completion&quot;</span>,</span><br><span class="line">  <span class="string">&quot;choices&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;finish_reason&quot;</span>: <span class="string">&quot;stop&quot;</span>,</span><br><span class="line">      <span class="string">&quot;logprobs&quot;</span>: null,</span><br><span class="line">      <span class="string">&quot;index&quot;</span>: 0,</span><br><span class="line">      <span class="string">&quot;message&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;content&quot;</span>: <span class="string">&quot;Hello! It&#x27;s nice to meet you. Is there something I can help you with, or would you like to chat?&quot;</span>,</span><br><span class="line">        <span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;usage&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;prompt_tokens&quot;</span>: 13,</span><br><span class="line">    <span class="string">&quot;completion_tokens&quot;</span>: 26,</span><br><span class="line">    <span class="string">&quot;total_tokens&quot;</span>: 39</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="IDE-插件-Continue"><a href="#IDE-插件-Continue" class="headerlink" title="IDE 插件 Continue"></a>IDE 插件 Continue</h2><p>部署完服务端后，我们再来安装客户端。<a target="_blank" rel="noopener" href="https://www.continue.dev/">Continue</a> 是一个帮助开发人员轻松创建自己的模块化人工智能软件开发系统的 IDE 插件，它支持 VSCode 和 JetBrains 等 IDE，支持一般 Copilot 的功能，包括代码生成、代码解释、AI 问答等。</p>
+<h3 id="插件安装"><a href="#插件安装" class="headerlink" title="插件安装"></a>插件安装</h3><p>我们以 VSCode 为例介绍 Continue 插件的安装，首先进去 VSCode 的插件商店搜索 Continue 插件，然后点击安装即可：</p>
+<img src="/images/post/2024/05/continue-install.png" class="" width="1000" height="600">
+
+<h3 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h3><p>然后修改 Continue 的配置，使用快捷键打开插件配置文件：cmd&#x2F;ctrl + shift + P，输入 Continue config, 选择<code>Open config.json</code>：</p>
+<img src="/images/post/2024/05/continue-config.png" class="" width="800" height="300">
+
+<p>然后修改配置文件，Continue 默认使用 Ollama 来做本地 LLM 部署，但如果我们已经部署好了 LLM 服务，就可以将原来配置文件中的<code>models</code>和<code>tabAutocompleteModel</code>的配置修改为我们自己的 LLM 服务，如下所示：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;models&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;llama3-8b&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="string">&quot;meta-llama/Meta-Llama-3-8B-Instruct&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;apiBase&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://your-llama3-api-host:8000/v1&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;provider&quot;</span><span class="punctuation">:</span> <span class="string">&quot;openai&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;apiKey&quot;</span><span class="punctuation">:</span> <span class="string">&quot;empty&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span></span><br><span class="line"><span class="attr">&quot;tabAutocompleteModel&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Tab Autocomplete Model&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="string">&quot;meta-llama/Meta-Llama-3-8B-Instruct&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;apiBase&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://your-llama3-api-host:8000/v1&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;provider&quot;</span><span class="punctuation">:</span> <span class="string">&quot;openai&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;apiKey&quot;</span><span class="punctuation">:</span> <span class="string">&quot;empty&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>LLM 配置信息中填写<code>provider</code>为<code>openai</code>，这里利用了 OpenAI 的配置格式</li>
+<li>在<code>apiBase</code>中填写我们部署的 LLM 服务地址，这里是<code>http://your-llama3-api-host:8000/v1</code>，注意要加上最后的<code>v1</code>路径</li>
+<li><code>model</code>填写我们下载的 Llama3 模型，这里是<code>meta-llama/Meta-Llama-3-8B-Instruct</code></li>
+<li><code>apiKey</code>属性可以随便填</li>
+<li><code>title</code>属性是显示在插件中的模型名称</li>
+<li><code>models</code>属性是指在 AI 问答和代码生成功能中可以使用的模型</li>
+<li><code>tabAutocompleteModel</code>属性是指在代码补全功能中使用的模型</li>
+</ul>
+<p>然后我们在 Continue 插件中选择模型<code>llama3-8b</code>，这样就可以开始使用 Llama3 了：</p>
+<img src="/images/post/2024/05/continue-select.png" class="" width="400" height="300">
+
+<h3 id="使用介绍"><a href="#使用介绍" class="headerlink" title="使用介绍"></a>使用介绍</h3><p>我们先看下 AI 问答功能， 输入问题后 LLM 生成回答：</p>
+<img src="/images/post/2024/05/continue-usage1.png" class="" width="600" height="400">
+
+<p>再看看代码生成功能，选中代码后后按住 cmd&#x2F;ctrl + I 键会弹出输入框，我们在输入框中让 LLM 帮我们完成这个方法：</p>
+<img src="/images/post/2024/05/continue-usage2.png" class="" width="600" height="400">
+
+<img src="/images/post/2024/05/continue-usage3.png" class="" width="600" height="400">
+
+<p>接着看解释代码，选中代码后后按住 cmd&#x2F;ctrl + L 键会将选中的代码复制到问答框中，输入问题后 LLM 根据代码进行回答：</p>
+<img src="/images/post/2024/05/continue-usage4.png" class="" width="600" height="400">
+
+<p>生成单元测试，也属于代码生成功能，与之前操作相同：</p>
+<img src="/images/post/2024/05/continue-usage6.png" class="" width="600" height="400">
+
+<img src="/images/post/2024/05/continue-usage5.png" class="" width="600" height="400">
+
+<p>关于Continue插件的更多使用方法，可以参考<a target="_blank" rel="noopener" href="https://docs.continue.dev/">官方文档</a>。</p>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>如果在使用的过程中发现 Llama3 的输出一直没有结束，可以在配置文件中添加<code>completionOptions</code>配置信息来修复这个问题：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;llama3-8b&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="string">&quot;meta-llama/Meta-Llama-3-8B-Instruct&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;apiBase&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://your-llama3-api-host:8000/v1&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;provider&quot;</span><span class="punctuation">:</span> <span class="string">&quot;openai&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;apiKey&quot;</span><span class="punctuation">:</span> <span class="string">&quot;empty&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;completionOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;stop&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;&lt;|eot_id|&gt;&quot;</span><span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>另外除了 Llama3 之外，还有其他的开源 LLM 也可以用来作为代码辅助工具，比如<a target="_blank" rel="noopener" href="https://huggingface.co/Qwen/CodeQwen1.5-7B-Chat">CodeQwen1.5-7B-Chat</a>就是一个不错的选择。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>使用开源 LLM 作为团队的代码辅助工具，可以提高团队的开发效率，同时也可以保护团队的代码隐私，虽然目前开源的 LLM 相比 Github Copilot 等公司的线上 LLM 还有一些差距，但是随着开源 LLM 的不断发展，相信两者的差距以后会越来越小。以上就是今天介绍的内容，希望对大家有所帮助。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2024/05/04/use-llama3-to-build-develop-team-copilot/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2024/05/04/use-llama3-to-build-develop-team-copilot/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

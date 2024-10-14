@@ -1,0 +1,267 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>微信公众账号开发part2——用户消息接收 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="微信公众账号开发part2——用户消息接收"> <!-- TODO: truncate -->
+	<meta name="keywords" content="wechat,java">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">微信公众账号开发part2——用户消息接收</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2015-02-04T08:03:00.000Z" itemprop="datePublished">2月 4, 2015</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/java/">java</a> <a href="/tags/wechat/">wechat</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2015-2/wechat_part2.jpg" class="">  
+<p>上一篇写了如何通过微信开发者认证，今天来讲下如何接收用户的消息，我们以接收用户的订阅消息为例。  </p>
+<span id="more"></span>  
+<h2 id="微信用户消息格式"><a href="#微信用户消息格式" class="headerlink" title="微信用户消息格式"></a>微信用户消息格式</h2><p>在开发者文档的<a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/wiki/2/5baf56ce4947d35003b86a9805634b1e.html">接收事件推送</a>文档中，说明了用户订阅消息的请求实体，内容如下:  </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xml</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">ToUserName</span>&gt;</span>&lt;![CDATA[toUser]]&gt;<span class="tag">&lt;/<span class="name">ToUserName</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">FromUserName</span>&gt;</span>&lt;![CDATA[FromUser]]&gt;<span class="tag">&lt;/<span class="name">FromUserName</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">CreateTime</span>&gt;</span>123456789<span class="tag">&lt;/<span class="name">CreateTime</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">MsgType</span>&gt;</span>&lt;![CDATA[event]]&gt;<span class="tag">&lt;/<span class="name">MsgType</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">Event</span>&gt;</span>&lt;![CDATA[subscribe]]&gt;<span class="tag">&lt;/<span class="name">Event</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xml</span>&gt;</span></span><br></pre></td></tr></table></figure> 
+<ul>
+<li>ToUserName: 开发者微信号</li>
+<li>FromUserName: 用户微信账号的OpenID</li>
+<li>CreateTime: 消息发送时间，秒数</li>
+<li>MsgType: 消息类型，事件消息为event</li>
+<li>Event: 事件类型，订阅消息为subscribe</li>
+</ul>
+<h2 id="消息真实性验证"><a href="#消息真实性验证" class="headerlink" title="消息真实性验证"></a>消息真实性验证</h2><blockquote><p>每次开发者接收用户消息的时候，微信也都会带上前面三个参数（signature、timestamp、nonce）访问开发者设置的URL，开发者依然通过对签名的效验判断此条消息的真实性。效验方式与首次提交验证申请一致。</p>
+<footer><strong>微信公众平台开发者文档</strong><cite><a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/wiki/4/2ccadaef44fe1e4b0322355c2312bfa8.html">验证消息真实性</a></cite></footer></blockquote>
+<p>所以每个订阅消息的http请求都会带有（signature、timestamp、nonce）这3个参数和上面的xml请求实体，服务端可以选择是否校验消息的真实性，建议校验，这样会比较安全。  </p>
+<h2 id="接收消息后的响应内容"><a href="#接收消息后的响应内容" class="headerlink" title="接收消息后的响应内容"></a>接收消息后的响应内容</h2><p>了解了消息请求的入参后，还需要知道我们处理请求后，需要返回什么样的内容给用户，这个在开发者文档里面好像没有提及，参考各方资料后知道需要返回一段xml内容，格式如下:  </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xml</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Content</span>&gt;</span>感谢您关注我的公众账号[愉快]<span class="tag">&lt;/<span class="name">Content</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">CreateTime</span>&gt;</span>1423022113<span class="tag">&lt;/<span class="name">CreateTime</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">FromUserName</span>&gt;</span>zzm<span class="tag">&lt;/<span class="name">FromUserName</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">FuncFlag</span>&gt;</span>0<span class="tag">&lt;/<span class="name">FuncFlag</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">MsgType</span>&gt;</span>text<span class="tag">&lt;/<span class="name">MsgType</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ToUserName</span>&gt;</span>zzm<span class="tag">&lt;/<span class="name">ToUserName</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xml</span>&gt;</span></span><br></pre></td></tr></table></figure> 
+<ul>
+<li>ToUserName: <code>用户微信账号的OpenID</code></li>
+<li>FromUserName: <code>开发者微信号</code></li>
+<li>CreateTime: 消息发送时间，秒数</li>
+<li>FuncFlag: 这个暂时不知道是什么，默认值为0</li>
+<li>MsgType: 消息类型，文档消息可以为text和其他，这里我们以最简单的text文本消息为例</li>
+<li>Content: 返回给订阅用户的消息内容，可以加表情</li>
+</ul>
+<p>PS: ToUserName和FromUserName这2个参数和请求的xml实体要相反，这个也比较好理解，用户发了条消息过来，你要发个消息回去，ToUserName就变成了用户，FromUserName变成了你自己的公众账号了。  </p>
+<h2 id="服务端开发"><a href="#服务端开发" class="headerlink" title="服务端开发"></a>服务端开发</h2><ul>
+<li>了解了http请求的入参和出参，我们可以来开发我们的API了，<code>talk is cheap, show me code</code>。</li>
+</ul>
+<figure class="highlight java"><figcaption><span>MainController.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这里我们定义跟之前认证api相同的url，但方法是POST</span></span><br><span class="line"><span class="meta">@RequestMapping(value = &quot;/index&quot;, method = RequestMethod.POST)</span></span><br><span class="line">   <span class="keyword">public</span></span><br><span class="line">   <span class="meta">@ResponseBody</span></span><br><span class="line">   <span class="comment">//3个校验消息真实性的参数，还有一个request实体body，里面是xml文本</span></span><br><span class="line">   ResponseEntity&lt;String&gt; <span class="title function_">receive</span><span class="params">(<span class="meta">@RequestParam(&quot;signature&quot;)</span> String signature,</span></span><br><span class="line"><span class="params">                                  <span class="meta">@RequestParam(&quot;timestamp&quot;)</span> String timestamp,</span></span><br><span class="line"><span class="params">                                  <span class="meta">@RequestParam(&quot;nonce&quot;)</span> String nonce,</span></span><br><span class="line"><span class="params">                                  <span class="meta">@RequestBody</span> String body)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">       log.info(<span class="string">&quot;receive message start&quot;</span>);</span><br><span class="line">       log.info(String.format(<span class="string">&quot;signature:%s, timestamp:%s, nonce:%s&quot;</span>, signature, timestamp, nonce));</span><br><span class="line"></span><br><span class="line">       <span class="comment">//先校验消息的真实性，如果校验失败，则返回400</span></span><br><span class="line">       <span class="keyword">if</span> (!wechatAuth(signature, timestamp, nonce)) &#123;</span><br><span class="line">           log.info(<span class="string">&quot;wechat auth failed&quot;</span>);</span><br><span class="line">           <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ResponseEntity</span>&lt;String&gt;(<span class="string">&quot;wechat auth failed.&quot;</span>, HttpStatus.BAD_REQUEST);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       log.info(String.format(<span class="string">&quot;body:%s&quot;</span>, body));</span><br><span class="line">       <span class="comment">//我们定义了一个util来解析xml，将其转换为一个object</span></span><br><span class="line">       <span class="type">TextMessage</span> <span class="variable">requestMessage</span> <span class="operator">=</span> XmlUtil.toTextMessage(body);</span><br><span class="line">       log.info(String.format(<span class="string">&quot;requestMessage:%s&quot;</span>, requestMessage));</span><br><span class="line"></span><br><span class="line">       <span class="type">TextMessage</span> <span class="variable">textMessage</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">       <span class="type">String</span> <span class="variable">msgType</span> <span class="operator">=</span> requestMessage.getMsgType();</span><br><span class="line">       <span class="type">String</span> <span class="variable">toUserName</span> <span class="operator">=</span> requestMessage.getToUserName();</span><br><span class="line">       <span class="type">String</span> <span class="variable">fromUserName</span> <span class="operator">=</span> requestMessage.getFromUserName();</span><br><span class="line">       <span class="comment">//判断消息类型，如果是event，且事件类型为subscribe，则新建一个文本消息</span></span><br><span class="line">       <span class="keyword">if</span> (MessageType.event.name().equals(msgType)) &#123;</span><br><span class="line">           <span class="keyword">if</span> (EventType.subscribe.name().equals(requestMessage.getEvent())) &#123;</span><br><span class="line">               <span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> <span class="string">&quot;感谢您关注我的公众账号[愉快]&quot;</span>;</span><br><span class="line">               textMessage = <span class="keyword">new</span> <span class="title class_">TextMessage</span>(toUserName, fromUserName,</span><br><span class="line">                       MessageType.text.name(), message, TimeUtil.currentSeconds());</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">//将文本消息转换为xml文本</span></span><br><span class="line">       <span class="type">String</span> <span class="variable">responseMessage</span> <span class="operator">=</span> XmlUtil.toXml(textMessage);</span><br><span class="line">       <span class="type">HttpHeaders</span> <span class="variable">responseHeaders</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HttpHeaders</span>();</span><br><span class="line">       <span class="comment">//设置返回实体的编码，不设置的话可能会变成乱码</span></span><br><span class="line">       responseHeaders.add(<span class="string">&quot;Content-Type&quot;</span>, <span class="string">&quot;text/html; charset=utf-8&quot;</span>);</span><br><span class="line">       log.info(String.format(<span class="string">&quot;response message: %s&quot;</span>, responseMessage));</span><br><span class="line">       log.info(<span class="string">&quot;receive message finish&quot;</span>);</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ResponseEntity</span>&lt;String&gt;(responseMessage, responseHeaders, HttpStatus.OK);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure> 
+<ul>
+<li>这里使用java原生的JAXB来解析xml。</li>
+</ul>
+<figure class="highlight java"><figcaption><span>XmlUtil.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.zzm.wechat.model.TextMessage;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.io.IOUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.xml.bind.JAXBContext;</span><br><span class="line"><span class="keyword">import</span> javax.xml.bind.Marshaller;</span><br><span class="line"><span class="keyword">import</span> javax.xml.bind.Unmarshaller;</span><br><span class="line"><span class="keyword">import</span> java.io.StringReader;</span><br><span class="line"><span class="keyword">import</span> java.io.StringWriter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">XmlUtil</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">toXml</span><span class="params">(TextMessage textMessage)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="keyword">if</span> (textMessage == <span class="literal">null</span>) <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="type">JAXBContext</span> <span class="variable">context</span> <span class="operator">=</span> JAXBContext.newInstance(TextMessage.class);</span><br><span class="line">        <span class="type">Marshaller</span> <span class="variable">m</span> <span class="operator">=</span> context.createMarshaller();</span><br><span class="line">        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, <span class="literal">true</span>);</span><br><span class="line">        m.setProperty(Marshaller.JAXB_FRAGMENT, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">        <span class="type">StringWriter</span> <span class="variable">sw</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringWriter</span>();</span><br><span class="line">        m.marshal(textMessage, sw);</span><br><span class="line">        <span class="keyword">return</span> sw.toString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> TextMessage <span class="title function_">toTextMessage</span><span class="params">(String xml)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">JAXBContext</span> <span class="variable">jaxbContext</span> <span class="operator">=</span> JAXBContext.newInstance(TextMessage.class);</span><br><span class="line">        <span class="type">Unmarshaller</span> <span class="variable">jaxbUnmarshaller</span> <span class="operator">=</span> jaxbContext.createUnmarshaller();</span><br><span class="line">        <span class="type">StringReader</span> <span class="variable">reader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringReader</span>(xml);</span><br><span class="line">        <span class="type">TextMessage</span> <span class="variable">textMessage</span> <span class="operator">=</span> (TextMessage) jaxbUnmarshaller.unmarshal(reader);</span><br><span class="line">        IOUtils.closeQuietly(reader);</span><br><span class="line">        <span class="keyword">return</span> textMessage;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 
+<ul>
+<li>定义消息的model类，这里需要用到xml的一些annotation。</li>
+</ul>
+<figure class="highlight java"><figcaption><span>XmlUtil.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.xml.bind.annotation.XmlElement;</span><br><span class="line"><span class="keyword">import</span> javax.xml.bind.annotation.XmlRootElement;</span><br><span class="line"></span><br><span class="line"><span class="comment">//定义命名空间，如果不写的话，xml会以类名开头: &lt;TextMessage&gt;...&lt;/TextMessage&gt;，写了就会以xml开头: &lt;xml&gt;...&lt;/xml&gt;</span></span><br><span class="line"><span class="meta">@XmlRootElement(name = &quot;xml&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TextMessage</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String fromUserName;</span><br><span class="line">    <span class="keyword">private</span> String toUserName;</span><br><span class="line">    <span class="keyword">private</span> String msgType;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">funcFlag</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> String content;</span><br><span class="line">    <span class="keyword">private</span> String event;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">long</span> createTime;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">TextMessage</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">TextMessage</span><span class="params">(String fromUserName, String toUserName, String msgType, String content, <span class="type">long</span> createTime)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.fromUserName = fromUserName;</span><br><span class="line">        <span class="built_in">this</span>.toUserName = toUserName;</span><br><span class="line">        <span class="built_in">this</span>.msgType = msgType;</span><br><span class="line">        <span class="built_in">this</span>.content = content;</span><br><span class="line">        <span class="built_in">this</span>.createTime = createTime;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getToUserName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> toUserName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//定义xml子项的名称，不写这个annotation的话，转换后的xml是: &lt;toUserName&gt;xxx&lt;/toUserName&gt;，首字母变小写了，会导致消息传输错误</span></span><br><span class="line">    <span class="meta">@XmlElement(name = &quot;ToUserName&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setToUserName</span><span class="params">(String toUserName)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.toUserName = toUserName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//other setter and getter</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 
+
+<ul>
+<li><p>方法写完以后，同样的打包，部署SAE。  </p>
+</li>
+<li><p>打开手机，关注你的公众账号后，就可以看到服务端传过来的消息内容了。</p>
+</li>
+</ul>
+<img src="/images/post/2015-2/wechat_subscribe.png" class="">  
+<p>我的公众账号是<code>赵芝明的公账号</code>，有兴趣的也可以加一下，以后这个公共账号的功能肯定会慢慢丰富的。  </p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2015/02/04/wechat-public-account-dev-part-2/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2015/02/04/wechat-public-account-dev-part-2/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

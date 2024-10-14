@@ -1,0 +1,269 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>研发面试官的面试指南（二） - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="研发面试官的面试指南（二）"> <!-- TODO: truncate -->
+	<meta name="keywords" content="interview">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">研发面试官的面试指南（二）</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2017-09-23T11:33:00.000Z" itemprop="datePublished">9月 23, 2017</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/interview/">interview</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2017/09/interview2.png" class="" width="400" height="300">  
+<p>除了面试流程，研发面试最关键的还是技术面试环节，这个环节要确认应聘者的技术基本功是否扎实，以及技术的深度和广度，与公司部门的技术栈是否匹配等等。  </p>
+<span id="more"></span>  
+
+<h2 id="技能考察"><a href="#技能考察" class="headerlink" title="技能考察"></a>技能考察</h2><p>面试过程中除了通过项目了解应聘者外，还需要通过一些技术问题来了解应聘者的真实能力。  </p>
+<h3 id="技术基础"><a href="#技术基础" class="headerlink" title="技术基础"></a>技术基础</h3><p>这里以前端岗位为例，技术基础就是JS、CSS和HTML。这方面的问题网上都有很多人做过总结，所以尽量不要问一些烂大街的问题，可以结合平时工作遇到的问题来进行提问，或者内部团队专门设计一些巧妙的面试问题来考验应聘者。  </p>
+<p>技术问题可以结合公司的技术栈提问，比如公司用的<code>React</code>和<code>Nodejs</code>，就可以问一些这方面相关的问题。  </p>
+<h3 id="手写代码"><a href="#手写代码" class="headerlink" title="手写代码"></a>手写代码</h3><p>很多人讨厌 Google 公司的“白板面试”环节，我觉得讨厌的原因主要是要让应聘者手写二叉树查询算法这种太过困难的任务，在很多实际项目开发中很少涉及到复杂算法，更不要说手写了。<br>但是我觉得考察应聘者手写代码的能力还是有必要的，特别是没有笔试环节的情况下。可以出一道简单的编程题目，让应聘者通过编写实际代码或者伪代码来解答，主要考察的是编程思路，代码编写规范等。<br>有些应聘者在自己的项目上说的头头是道，但是一旦要实际写代码却困难重重，这个时候就要质疑应聘者的实际能力了，如果是天天和代码打交道的人是不会写不出代码的。  </p>
+<h3 id="项目管理（可选）"><a href="#项目管理（可选）" class="headerlink" title="项目管理（可选）"></a>项目管理（可选）</h3><p>如果面试的岗位需要带团队做项目，就可以提问一些项目管理相关的问题。可以从以下方面了解：  </p>
+<ul>
+<li>如何把控项目进度</li>
+<li>如何保证项目质量</li>
+<li>如何汇报项目进展</li>
+<li>如何让新人快速融入团队</li>
+<li>等等</li>
+</ul>
+<h3 id="代码质量"><a href="#代码质量" class="headerlink" title="代码质量"></a>代码质量</h3><p>优秀的研发人员对代码是有要求甚至是有洁癖的，可以从以下方面了解：  </p>
+<ul>
+<li>有没有做过code review？有的话是怎么做的？一般会对哪些代码提出建议？</li>
+<li>最不能忍受的代码是什么样的？</li>
+<li>项目中有没有做自动化代码检查？（比如前端的话是否有用Lint类的工具）</li>
+<li>有没有写过单元测试？平时单元测试用的框架是什么？好的单元测试一般是什么样的？</li>
+<li>等等</li>
+</ul>
+<h3 id="过程控制"><a href="#过程控制" class="headerlink" title="过程控制"></a>过程控制</h3><p>效率高的研发人员会对软件开发的流程有一定的了解和关注，并且有自己的一套方法方式，可以从以下方面了解：  </p>
+<ul>
+<li>什么是持续集成和持续部署？持续集成用的哪些工具？</li>
+<li>平时项目中的持续集成一般会做一些什么事情？</li>
+<li>对敏捷开发是否了解？平时的开发流程是怎么样的？</li>
+<li>拿到开发任务后有没有对任务进行拆解？有的话是如何拆分任务的？</li>
+<li>等等</li>
+</ul>
+<h3 id="学习和分享"><a href="#学习和分享" class="headerlink" title="学习和分享"></a>学习和分享</h3><p>爱分享的研发人员一般能力不会差，可以从以下方面了解：  </p>
+<ul>
+<li>最近了解到的最新技术是哪些？</li>
+<li>平时是通过什么渠道了解技术资讯的？</li>
+<li>是否经常写博客？</li>
+<li>是否参与开源项目？</li>
+<li>等等</li>
+</ul>
+<h3 id="其他方面"><a href="#其他方面" class="headerlink" title="其他方面"></a>其他方面</h3><p>最后可以从其他方面了解应聘者的综合能力，可以从以下方面了解：  </p>
+<ul>
+<li>感兴趣的技术方向（看是否与公司部门的技术方向匹配）</li>
+<li>文档能力（具备良好的文档编写能力绝对是加分项）</li>
+<li>沟通能力（是主动沟通还是被动沟通）</li>
+<li>抗压能力（面对压力时如何应对）</li>
+<li>等等</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>仅凭一次面试就想真正了解一个人是很难的，但通过以上方面可以把握一些正确的选人方向，后面再继续讨论面试过程应该注意的一些事项，以及如何提高面试的效率，敬请期待。  </p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2017/09/23/some-tips-of-employers-interview-part2/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2017/09/23/some-tips-of-employers-interview-part2/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

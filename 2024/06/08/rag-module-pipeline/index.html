@@ -1,0 +1,407 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>高级 RAG 检索策略之流程与模块化 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="介绍在 LlamaIndex 中使用查询流水线实现RAG模块化和流程化的方法"> <!-- TODO: truncate -->
+	<meta name="keywords" content="rag, llamaindex, pipeline, module">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">高级 RAG 检索策略之流程与模块化</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2024-06-08T12:54:26.000Z" itemprop="datePublished">6月 8, 2024</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/llamaindex/">llamaindex</a> <a href="/tags/rag/">rag</a> <a href="/tags/pipeline/">pipeline</a> <a href="/tags/module/">module</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2024/06/rag-module-flow.jpg" class="" width="400" height="300">
+
+<p>我们介绍了很多关于高级 RAG（Retrieval Augmented Generation）的检索策略，每一种策略就像是机器中的零部件，我们可以通过对这些零部件进行不同的组合，来实现不同的 RAG 功能，从而满足不同的需求。今天我们就来介绍高级 RAG 检索中一些常见的 RAG 模块，以及如何通过流程的方式来组合这些模块，实现高级 RAG 检索功能。</p>
+<span id="more"></span>
+
+<h2 id="RAG-模块化"><a href="#RAG-模块化" class="headerlink" title="RAG 模块化"></a>RAG 模块化</h2><p>模块化 RAG 提出了一种高度可扩展的范例，将 RAG 系统分为模块类型、模块和操作符的三层结构。每个模块类型代表 RAG 系统中的一个核心流程，包含多个功能模块。每个功能模块又包含多个特定的操作符。整个 RAG 系统变成了多个模块和相应操作符的排列组合，形成了我们所说的 RAG 流程。在流程中，每种模块类型可以选择不同的功能模块，并且在每个功能模块中可以选择一个或多个操作符。</p>
+<img src="/images/post/2024/06/rag-module-intro.jpg" class="" width="1000" height="600">
+
+<h2 id="RAG-流程"><a href="#RAG-流程" class="headerlink" title="RAG 流程"></a>RAG 流程</h2><p>RAG 流程是指在 RAG 系统中，从输入查询到输出生成文本的整个工作流程。这个流程通常涉及多个模块和操作符的协同工作，包括但不限于检索器、生成器以及可能的预处理和后处理模块。RAG 流程的设计旨在使得 LLM（大语言模型）能够在生成文本时利用外部知识库或文档集，从而提高回答的准确性和相关性。</p>
+<p>RAG 推理阶段的流程一般分为以下几种模式：</p>
+<ul>
+<li>Sequential: 线性流程，包括高级和简单的 RAG 范式</li>
+<li>Conditional: 基于查询的关键词或语义选择不同的 RAG 路径</li>
+<li>Branching: 包括多个并行分支，分为预检索和后检索的分支结构</li>
+<li>Loop: 包括迭代、递归和自适应检索等多种循环结构</li>
+</ul>
+<p>下图是 Loop 模式的 RAG 流程图：</p>
+<img src="/images/post/2024/06/loop-rag-flow.jpeg" class="" width="1000" height="600">
+
+<p>后面我们主要以 Sequential 模式为例，介绍如何通过模块化和流水线的方式来实现高级 RAG 检索功能。</p>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><p><a target="_blank" rel="noopener" href="https://www.llamaindex.ai/">LlamaIndex</a>的查询流水线（Query Pipeline）功能提供了一种模块化的方式来组合 RAG 检索策略。我们可以通过定义不同的模块，然后将这些模块按照一定的顺序组合起来，形成一个完整的查询流水线。下面我们通过一个从简单到复杂的示例来演示如何使用 LlamaIndex 的查询流水线功能实现高级 RAG 检索。</p>
+<h3 id="普通-RAG"><a href="#普通-RAG" class="headerlink" title="普通 RAG"></a>普通 RAG</h3><p>首先我们定义一个普通 RAG 的流水线，这个流水线包含了 3 个模块，分别是：输入、检索和输出。其中输入模块用于接收用户输入的查询，检索模块用于从知识库中检索相关文档，输出模块用于根据检索结果生成回答。</p>
+<img src="/images/post/2024/06/rag-flow-base.png" class="" width="1000" height="600">
+
+<p>在定义查询流水线之前，我们先将我们的测试文档索引入库，这里的测试文档还是用维基百科上的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Avenger">复仇者联盟</a>电影剧情，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> llama_index.llms.openai <span class="keyword">import</span> OpenAI</span><br><span class="line"><span class="keyword">from</span> llama_index.embeddings.openai <span class="keyword">import</span> OpenAIEmbedding</span><br><span class="line"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> (</span><br><span class="line">    Settings,</span><br><span class="line">    SimpleDirectoryReader,</span><br><span class="line">    StorageContext,</span><br><span class="line">    VectorStoreIndex,</span><br><span class="line">    load_index_from_storage,</span><br><span class="line">)</span><br><span class="line"><span class="keyword">from</span> llama_index.core.node_parser <span class="keyword">import</span> SentenceSplitter</span><br><span class="line"></span><br><span class="line">documents = SimpleDirectoryReader(<span class="string">&quot;./data&quot;</span>).load_data()</span><br><span class="line">node_parser = SentenceSplitter()</span><br><span class="line">llm = OpenAI(model=<span class="string">&quot;gpt-3.5-turbo&quot;</span>)</span><br><span class="line">embed_model = OpenAIEmbedding(model=<span class="string">&quot;text-embedding-3-small&quot;</span>)</span><br><span class="line">Settings.llm = llm</span><br><span class="line">Settings.embed_model = embed_model</span><br><span class="line">Settings.node_parser = node_parser</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">&quot;storage&quot;</span>):</span><br><span class="line">    index = VectorStoreIndex.from_documents(documents)</span><br><span class="line">    index.set_index_id(<span class="string">&quot;avengers&quot;</span>)</span><br><span class="line">    index.storage_context.persist(<span class="string">&quot;./storage&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    store_context = StorageContext.from_defaults(persist_dir=<span class="string">&quot;./storage&quot;</span>)</span><br><span class="line">    index = load_index_from_storage(</span><br><span class="line">        storage_context=store_context, index_id=<span class="string">&quot;avengers&quot;</span></span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>首先我们通过<code>SimpleDirectoryReader</code>读取<code>./data</code>目录下的文档</li>
+<li>然后我们定义了一个<code>SentenceSplitter</code>用于将文档进行分割</li>
+<li>接着我们使用<code>OpenAI</code>的 LLM 和 Embedding 模型来生成文本和向量，并将他们添加到<code>Settings</code>中</li>
+<li>最后我们将文档索引入库，并将索引保存到<code>./storage</code>目录下，以便后续使用</li>
+</ul>
+<p>接下来我们定义一个普通的 RAG 流水线，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.query_pipeline <span class="keyword">import</span> QueryPipeline, InputComponent</span><br><span class="line"><span class="keyword">from</span> llama_index.core.response_synthesizers.simple_summarize <span class="keyword">import</span> SimpleSummarize</span><br><span class="line"></span><br><span class="line">retriever =  index.as_retriever()</span><br><span class="line">p = QueryPipeline(verbose=<span class="literal">True</span>)</span><br><span class="line">p.add_modules(</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;input&quot;</span>: InputComponent(),</span><br><span class="line">        <span class="string">&quot;retriever&quot;</span>: retriever,</span><br><span class="line">        <span class="string">&quot;output&quot;</span>: SimpleSummarize(),</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">p.add_link(<span class="string">&quot;input&quot;</span>, <span class="string">&quot;retriever&quot;</span>)</span><br><span class="line">p.add_link(<span class="string">&quot;input&quot;</span>, <span class="string">&quot;output&quot;</span>, dest_key=<span class="string">&quot;query_str&quot;</span>)</span><br><span class="line">p.add_link(<span class="string">&quot;retriever&quot;</span>, <span class="string">&quot;output&quot;</span>, dest_key=<span class="string">&quot;nodes&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们创建了一个普通检索器<code>retriever</code>，用于从知识库中检索相关文档</li>
+<li>然后创建了一个<code>QueryPipeline</code>对象，这是查询流水线的主体，设置 verbose 参数为 True 用于输出详细信息</li>
+<li>通过<code>QueryPipeline</code>的<code>add_modules</code>方法添加了 3 个模块：<code>input</code>、<code>retriever</code>和<code>output</code></li>
+<li><code>input</code>模块的实现类是<code>InputComponent</code>，这是查询流水线常用的输入组件，<code>retriever</code>模块是我们定义的检索器，<code>output</code>模块的实现类是<code>SimpleSummarize</code>，这是可以将问题和检索结果进行简单总结的输出组件</li>
+<li>接着我们添加模块间的连接关系，<code>add_link</code>方法用于连接模块之间的关系，第一个参数是源模块，第二个参数是目标模块</li>
+<li><code>dest_key</code>参数用于指定目标模块的输入参数，因为<code>output</code>模块有 2 个参数，分别是问题和检索结果，所以我们需要指定<code>dest_key</code>参数，当目标模块只有一个参数时则不需要指定</li>
+<li>在<code>add_link</code>方法中，与<code>dest_key</code>参数对应的是<code>src_key</code>参数，当源模块有多个参数时，我们需要指定<code>src_key</code>参数，反之则不需要。</li>
+</ul>
+<p>查询流水线添加模块和连接关系的方式除了<code>add_modules</code>和<code>add_link</code>方法外，还可以通过<code>add_chain</code>方法添加，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p = QueryPipeline(verbose=<span class="literal">True</span>)</span><br><span class="line">p.add_chain([InputComponent(), retriever])</span><br></pre></td></tr></table></figure>
+
+<p>这种方式可以一次性添加模块与连接关系，但这种方式只能添加单参数的模块，如果模块有多个参数则需要使用<code>add_modules</code>和<code>add_link</code>方法。</p>
+<p>接下来我们再来运行查询流水线，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">question = <span class="string">&quot;Which two members of the Avengers created Ultron?&quot;</span></span><br><span class="line">output = p.run(<span class="built_in">input</span>=question)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">str</span>(output))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结果显示</span></span><br><span class="line">&gt; Running module <span class="built_in">input</span> <span class="keyword">with</span> <span class="built_in">input</span>:</span><br><span class="line"><span class="built_in">input</span>: Which two members of the Avengers created Ultron?</span><br><span class="line"></span><br><span class="line">&gt; Running module retriever <span class="keyword">with</span> <span class="built_in">input</span>:</span><br><span class="line"><span class="built_in">input</span>: Which two members of the Avengers created Ultron?</span><br><span class="line"></span><br><span class="line">&gt; Running module output <span class="keyword">with</span> <span class="built_in">input</span>:</span><br><span class="line">query_str: Which two members of the Avengers created Ultron?</span><br><span class="line">nodes: [NodeWithScore(node=TextNode(id_=<span class="string">&#x27;53d32f3a-a2d5-47b1-aa8f-a9679e83e0b0&#x27;</span>, embedding=<span class="literal">None</span>, metadata=&#123;<span class="string">&#x27;file_path&#x27;</span>: <span class="string">&#x27;/data/Avengers:Age-of-Ul...</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Bruce Banner and Tony Stark.</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用查询流水线的<code>run</code>方法运行查询流水线，传入问题作为输入参数</li>
+<li>在显示结果中可以看到查询流水线的调试信息，查询流水线首先运行了<code>input</code>模块，然后运行了<code>retriever</code>模块，最后运行了<code>output</code>模块，调试信息还打印了每个模块的输入参数，最后输出了问题的答案</li>
+</ul>
+<h3 id="增加-reranker-模块"><a href="#增加-reranker-模块" class="headerlink" title="增加 reranker 模块"></a>增加 reranker 模块</h3><p>接下来我们在普通 RAG 的基础上增加一个 reranker 模块，用于对检索结果进行重新排序。</p>
+<img src="/images/post/2024/06/rag-flow-rerank.png" class="" width="1000" height="600">
+
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="addition">+from llama_index.postprocessor.cohere_rerank import CohereRerank</span></span><br><span class="line"></span><br><span class="line"><span class="addition">+reranker = CohereRerank()</span></span><br><span class="line">p = QueryPipeline(verbose=True)</span><br><span class="line">p.add_modules(</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;input&quot;: InputComponent(),</span><br><span class="line">        &quot;retriever&quot;: retriever,</span><br><span class="line"><span class="addition">+        &quot;reranker&quot;: reranker,</span></span><br><span class="line">        &quot;output&quot;: SimpleSummarize(),</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">p.add_link(&quot;input&quot;, &quot;retriever&quot;)</span><br><span class="line"><span class="addition">+p.add_link(&quot;input&quot;, &quot;reranker&quot;, dest_key=&quot;query_str&quot;)</span></span><br><span class="line"><span class="addition">+p.add_link(&quot;retriever&quot;, &quot;reranker&quot;, dest_key=&quot;nodes&quot;)</span></span><br><span class="line">p.add_link(&quot;input&quot;, &quot;output&quot;, dest_key=&quot;query_str&quot;)</span><br><span class="line"><span class="deletion">-p.add_link(&quot;retriever&quot;, &quot;output&quot;, dest_key=&quot;nodes&quot;)</span></span><br><span class="line"><span class="addition">+p.add_link(&quot;reranker&quot;, &quot;output&quot;, dest_key=&quot;nodes&quot;)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这里我们使用了<a target="_blank" rel="noopener" href="https://cohere.com/">Cohere</a>公司的 rerank 功能，在 LlamaIndex 中提供了<code>CohereRerank</code>类用于实现 Cohere 的 rerank 功能</li>
+<li>要使用<code>CohererRerank</code>类，需要先在 Cohere 官网上注册账号并获取 API KEY，并在环境变量中设置<code>COHERE_API_KEY</code>的值：<code>export COHERE_API_KEY=your-cohere-api-key</code></li>
+<li>然后我们在查询流水线中添加一个<code>reranker</code>模块，并将其添加到<code>retriever</code>模块和<code>output</code>模块之间，用于对检索结果进行重新排序</li>
+<li>我们去除原来从<code>retriever</code>模块到<code>output</code>模块的连接关系，增加了<code>retriever</code>模块到<code>reranker</code>模块和<code>reranker</code>模块到<code>output</code>模块的连接关系</li>
+<li><code>reranker</code>模块同样需要 2 个参数，分别是问题和检索结果，这样<code>reranker</code>模块才可以根据问题对检索结果进行重新排序，所以我们需要指定<code>dest_key</code>参数</li>
+</ul>
+<p>查询流水线的运行方法除了<code>run</code>方法外，还有<code>run_with_intermeation</code>方法，这个方法可以获取流水线的中间结果，我们将<code>retriever</code>和<code>rerank</code>模块的中间结果打印出来进行对比，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">output, intermediates = p.run_with_intermediates(<span class="built_in">input</span>=question)</span><br><span class="line">retriever_output = intermediates[<span class="string">&quot;retriever&quot;</span>].outputs[<span class="string">&quot;output&quot;</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;retriever output:&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> node <span class="keyword">in</span> retriever_output:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;node id: <span class="subst">&#123;node.node_id&#125;</span>, node score: <span class="subst">&#123;node.score&#125;</span>&quot;</span>)</span><br><span class="line">reranker_output = intermediates[<span class="string">&quot;reranker&quot;</span>].outputs[<span class="string">&quot;nodes&quot;</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;\nreranker output:&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> node <span class="keyword">in</span> reranker_output:</span><br><span class="line">      <span class="built_in">print</span>(<span class="string">f&quot;node id: <span class="subst">&#123;node.node_id&#125;</span>, node score: <span class="subst">&#123;node.score&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">retriever output:</span><br><span class="line">node <span class="built_in">id</span>: 53d32f3a-a2d5-47b1-aa8f-a9679e83e0b0, node score: <span class="number">0.6608391314791646</span></span><br><span class="line">node <span class="built_in">id</span>: dea3844b-789f-46de-a415-df1ef14dda18, node score: <span class="number">0.5313643379538727</span></span><br><span class="line"></span><br><span class="line">reranker output:</span><br><span class="line">node <span class="built_in">id</span>: 53d32f3a-a2d5-47b1-aa8f-a9679e83e0b0, node score: <span class="number">0.9588471</span></span><br><span class="line">node <span class="built_in">id</span>: dea3844b-789f-46de-a415-df1ef14dda18, node score: <span class="number">0.5837967</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>执行<code>run_with_intermediates</code>方法后返回结果是一个元组，包含了输出结果和中间结果</li>
+<li>要获取某个模块的中间结果，可以通过<code>intermediates</code>变量加上模块 key 进行获取，比如<code>intermediates[&quot;retriever&quot;]</code>是获取检索模块的中间结果</li>
+<li>每个中间结果都有 2 个参数，分别是<code>inputs</code>和<code>outputs</code>，<code>inputs</code>表示模块的输入参数，<code>outputs</code>表示模块的输出参数</li>
+<li><code>inputs</code>和<code>outputs</code>参数类型是字典，比如<code>reranker</code>模块的<code>outputs</code>参数中包含了<code>nodes</code>属性，我们可以这样来获取<code>nodes</code>属性的值：<code>intermediates[&quot;reranker&quot;].outputs[&quot;nodes&quot;]</code></li>
+</ul>
+<h3 id="增加-query-rewrite-模块"><a href="#增加-query-rewrite-模块" class="headerlink" title="增加 query rewrite 模块"></a>增加 query rewrite 模块</h3><p>之前我们在查询流水线中加入了 reranker 模块，相当是对检索结果的<code>后处理</code>操作，现在我们再加入一个 query rewrite 模块，用于对查询问题进行<code>预处理</code>操作。</p>
+<img src="/images/post/2024/06/rag-flow-query-rewrite.png" class="" width="1000" height="600">
+
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="addition">+query_rewriter = HydeComponent()</span></span><br><span class="line">p = QueryPipeline(verbose=True)</span><br><span class="line">p.add_modules(</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;input&quot;: InputComponent(),</span><br><span class="line"><span class="addition">+        &quot;query_rewriter&quot;: query_rewriter,</span></span><br><span class="line">        &quot;retriever&quot;: retriever,</span><br><span class="line">        &quot;reranker&quot;: reranker,</span><br><span class="line">        &quot;output&quot;: SimpleSummarize(),</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="deletion">-p.add_link(&quot;input&quot;, &quot;retriever&quot;)</span></span><br><span class="line"><span class="addition">+p.add_link(&quot;input&quot;, &quot;query_rewriter&quot;)</span></span><br><span class="line"><span class="addition">+p.add_link(&quot;query_rewriter&quot;, &quot;retriever&quot;)</span></span><br><span class="line">p.add_link(&quot;input&quot;, &quot;reranker&quot;, dest_key=&quot;query_str&quot;)</span><br><span class="line">p.add_link(&quot;retriever&quot;, &quot;reranker&quot;, dest_key=&quot;nodes&quot;)</span><br><span class="line">p.add_link(&quot;input&quot;, &quot;output&quot;, dest_key=&quot;query_str&quot;)</span><br><span class="line">p.add_link(&quot;reranker&quot;, &quot;output&quot;, dest_key=&quot;nodes&quot;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这里我们定义了一个<code>HydeComponent</code>类用于实现查询重写的功能，使用的是 HyDE（假设性文档向量）查询重写策略，它会根据查询问题生成一个假设性回答，然后使用这个假设性回答去检索文档，从而提高检索的准确性</li>
+<li><code>HydeComponent</code>是一个自定义的查询流水线组件，后面我们再详细介绍它的实现</li>
+<li>我们在原有的查询流水线上增加了一个<code>query_rewriter</code>模块，放在<code>input</code>模块和<code>retriever</code>模块之间，用于对查询问题进行预处理</li>
+<li>我们去除原来从<code>input</code>模块到<code>retriever</code>模块的连接关系，增加了<code>input</code>模块到<code>query_rewriter</code>模块和<code>query_rewriter</code>模块到<code>retriever</code>模块的连接关系</li>
+<li><code>query_rewriter</code>模块只有一个参数，所以不需要指定<code>dest_key</code>参数</li>
+</ul>
+<p>LlamaIndex 的查询流水线提供了自定义组件的功能，我们可以通过继承<code>CustomQueryComponent</code>类来实现自定义组件，下面我们来实现<code>HydeComponent</code>类，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.query_pipeline <span class="keyword">import</span> CustomQueryComponent</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Dict</span>, <span class="type">Any</span></span><br><span class="line"><span class="keyword">from</span> llama_index.core.indices.query.query_transform <span class="keyword">import</span> HyDEQueryTransform</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HydeComponent</span>(<span class="title class_ inherited__">CustomQueryComponent</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;HyDE query rewrite component.&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_validate_component_inputs</span>(<span class="params">self, <span class="built_in">input</span>: <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]</span>) -&gt; <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Validate component inputs during run_component.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">assert</span> <span class="string">&quot;input&quot;</span> <span class="keyword">in</span> <span class="built_in">input</span>, <span class="string">&quot;input is required&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">input</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_input_keys</span>(<span class="params">self</span>) -&gt; <span class="built_in">set</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Input keys dict.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&quot;input&quot;</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_output_keys</span>(<span class="params">self</span>) -&gt; <span class="built_in">set</span>:</span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&quot;output&quot;</span>&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_run_component</span>(<span class="params">self, **kwargs</span>) -&gt; <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Run the component.&quot;&quot;&quot;</span></span><br><span class="line">        hyde = HyDEQueryTransform(include_original=<span class="literal">True</span>)</span><br><span class="line">        query_bundle = hyde(kwargs[<span class="string">&quot;input&quot;</span>])</span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&quot;output&quot;</span>: query_bundle.embedding_strs[<span class="number">0</span>]&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>HydeComponent</code>类中的<code>_validate_component_inputs</code>方法用于验证组件的输入参数，必须实现这个方法，否则会抛出异常</li>
+<li><code>_input_keys</code>和<code>_output_keys</code>属性分别用于定义组件的输入和输出 key 值</li>
+<li><code>_run_component</code>方法用于实现组件的具体功能，这里我们使用<code>HyDEQueryTransform</code>类实现了 HyDE 查询重写功能，将查询问题转换为假设性回答，并返回这个假设性回答</li>
+</ul>
+<p>关于查询重写的更多策略，可以参考我之前的<a href="https://zhaozhiming.github.io/2024/05/13/query-rewrite-rag/">这篇文章</a>。</p>
+<h3 id="替换-output-模块"><a href="#替换-output-模块" class="headerlink" title="替换 output 模块"></a>替换 output 模块</h3><p>在之前的查询流水线中，我们使用的是简单的总结输出组件，现在我们将其替换为树形总结组件，用来提高最终的输出结果。</p>
+<blockquote>
+<p><strong>树形总结</strong>组件以自底向上的方式递归地合并文本块并对其进行总结（即从叶子到根构建一棵树）。<br>具体地说，在每个递归步骤中：</p>
+<ol>
+<li>我们重新打包文本块，使得每个块填充大语言模型的上下文窗口</li>
+<li>如果只有一个块，我们给出最终响应</li>
+<li>否则，我们总结每个块，并递归地总结这些摘要</li>
+</ol>
+</blockquote>
+<img src="/images/post/2024/06/rag-flow-tree-summarize.png" class="" width="1000" height="600">
+
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="addition">+from llama_index.core.response_synthesizers.tree_summarize import TreeSummarize</span></span><br><span class="line"></span><br><span class="line">p = QueryPipeline(verbose=True)</span><br><span class="line">p.add_modules(</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;input&quot;: InputComponent(),</span><br><span class="line">        &quot;query_rewriter&quot;: query_rewriter,</span><br><span class="line">        &quot;retriever&quot;: retriever,</span><br><span class="line">        &quot;reranker&quot;: reranker,</span><br><span class="line"><span class="deletion">-        &quot;output&quot;: SimpleSummarize(),</span></span><br><span class="line"><span class="addition">+        &quot;output&quot;: TreeSummarize(),</span></span><br><span class="line">    &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>替换<code>output</code>模块的组件比较简单，只需要将原来的<code>SimpleSummarize</code>替换为<code>TreeSummarize</code>即可</li>
+<li><code>TreeSummarize</code>组件的结构和<code>SimpleSummarize</code>组件类似，因此这里我们不需要修改其他模块的连接关系</li>
+</ul>
+<p>查询流水线实际上是一个 DAG（有向无环图），每个模块是图中的一个节点，模块之间的连接关系是图中的边，我们可以通过代码来展示这个图形结构，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyvis.network <span class="keyword">import</span> Network</span><br><span class="line"></span><br><span class="line">net = Network(notebook=<span class="literal">True</span>, cdn_resources=<span class="string">&quot;in_line&quot;</span>, directed=<span class="literal">True</span>)</span><br><span class="line">net.from_nx(p.clean_dag)</span><br><span class="line">net.write_html(<span class="string">&quot;output/pipeline_dag.html&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们使用<code>pyvis</code>库来绘制查询流水线的图形结构</li>
+<li><code>Network</code>类用于创建一个网络对象，<code>notebook=True</code>表示在 Jupyter Notebook 中显示，<code>cdn_resources=&quot;in_line&quot;</code>表示使用内联资源，<code>directed=True</code>表示有向图</li>
+<li><code>from_nx</code>方法用于将查询流水线的 DAG 结构转换为网络对象</li>
+<li><code>write_html</code>方法用于将网络对象保存为 HTML 文件，这样我们就可以在浏览器中查看查询流水线的图形结构</li>
+</ul>
+<p>保存后的查询流水线图形结构如下：</p>
+<img src="/images/post/2024/06/pipeline-dag.png" class="" width="1000" height="600">
+
+<h3 id="使用句子窗口检索"><a href="#使用句子窗口检索" class="headerlink" title="使用句子窗口检索"></a>使用句子窗口检索</h3><p>在之前的查询流水线中，<code>retriever</code>模块使用的是普通的检索策略，现在我们将其替换为句子窗口检索策略，用于提高检索的准确性。</p>
+<blockquote>
+<p>句子窗口检索的原理：首先在文档切分时，将文档以句子为单位进行切分，同时进行 Embedding 并保存数据库。然后在检索时，通过问题检索到相关的句子，但并不只是将检索到的句子作为检索结果，而是将该句子前面和后面的句子一起作为检索结果，包含的句子数量可以通过参数来进行设置，最后将检索结果再一起提交给 LLM 来生成答案。</p>
+</blockquote>
+<img src="/images/post/2024/06/rag-flow-sentence-window.png" class="" width="1000" height="600">
+
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="addition">+from llama_index.core.node_parser import SentenceWindowNodeParser</span></span><br><span class="line"><span class="addition">+from llama_index.core.indices.postprocessor import MetadataReplacementPostProcessor</span></span><br><span class="line"></span><br><span class="line"><span class="deletion">-node_parser = SentenceSplitter()</span></span><br><span class="line"><span class="addition">+node_parser = SentenceWindowNodeParser.from_defaults(</span></span><br><span class="line"><span class="addition">+    window_size=3,</span></span><br><span class="line"><span class="addition">+    window_metadata_key=&quot;window&quot;,</span></span><br><span class="line"><span class="addition">+    original_text_metadata_key=&quot;original_text&quot;,</span></span><br><span class="line"><span class="addition">+)</span></span><br><span class="line"></span><br><span class="line"><span class="addition">+meta_replacer = MetadataReplacementPostProcessor(target_metadata_key=&quot;window&quot;)</span></span><br><span class="line">p = QueryPipeline(verbose=True)</span><br><span class="line">p.add_modules(</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;input&quot;: InputComponent(),</span><br><span class="line">        &quot;query_rewriter&quot;: query_rewriter,</span><br><span class="line">        &quot;retriever&quot;: retriever,</span><br><span class="line"><span class="addition">+        &quot;meta_replacer&quot;: meta_replacer,</span></span><br><span class="line">        &quot;reranker&quot;: reranker,</span><br><span class="line">        &quot;output&quot;: TreeSummarize(),</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line">p.add_link(&quot;input&quot;, &quot;query_rewriter&quot;)</span><br><span class="line">p.add_link(&quot;query_rewriter&quot;, &quot;retriever&quot;)</span><br><span class="line"><span class="addition">+p.add_link(&quot;retriever&quot;, &quot;meta_replacer&quot;)</span></span><br><span class="line">p.add_link(&quot;input&quot;, &quot;reranker&quot;, dest_key=&quot;query_str&quot;)</span><br><span class="line"><span class="deletion">-p.add_link(&quot;retriever&quot;, &quot;reranker&quot;, dest_key=&quot;nodes&quot;)</span></span><br><span class="line"><span class="addition">+p.add_link(&quot;meta_replacer&quot;, &quot;reranker&quot;, dest_key=&quot;nodes&quot;)</span></span><br><span class="line">p.add_link(&quot;input&quot;, &quot;output&quot;, dest_key=&quot;query_str&quot;)</span><br><span class="line">p.add_link(&quot;reranker&quot;, &quot;output&quot;, dest_key=&quot;nodes&quot;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>句子窗口检索首先需要调整文档的入库策略，以前是用<code>SentenceSplitter</code>来切分文档，现在我们使用<code>SentenceWindowNodeParser</code>来切分文档，窗口大小为 3，原始文本的 key 为<code>original_text</code>，窗口文本的 key 为<code>window</code></li>
+<li>句子窗口检索的原理是在检索出结果后，将检索到的节点文本替换成窗口文本，所以这里需要增加一个<code>meta_replacer</code>模块，用来替换检索结果中的节点文本</li>
+<li><code>meta_replacer</code>模块的实现类是<code>MetadataReplacementPostProcessor</code>，输入参数是检索结果<code>nodes</code>，输出结果是替换了节点文本的检索结果<code>nodes</code></li>
+<li>我们将<code>meta_replacer</code>模块放在<code>retriever</code>模块和<code>reranker</code>模块之间，先对检索结果进行元数据替换处理，然后再进行 rerank 操作，因此这里修改了这 3 个模块的连接关系</li>
+</ul>
+<p>我们可以打印出<code>retriever</code>模块和<code>meta_replacer</code>模块的中间结果，来对比检索结果的变化，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">output, intermediates = p.run_with_intermediates(<span class="built_in">input</span>=question)</span><br><span class="line">retriever_output = intermediates[<span class="string">&quot;retriever&quot;</span>].outputs[<span class="string">&quot;output&quot;</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;retriever output:&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> node <span class="keyword">in</span> retriever_output:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;node: <span class="subst">&#123;node.text&#125;</span>\n&quot;</span>)</span><br><span class="line">meta_replacer_output = intermediates[<span class="string">&quot;meta_replacer&quot;</span>].outputs[<span class="string">&quot;nodes&quot;</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;meta_replacer output:&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> node <span class="keyword">in</span> meta_replacer_output:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;node: <span class="subst">&#123;node.text&#125;</span>\n&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">retriever output:</span><br><span class="line">node: In the Eastern European country of Sokovia, the Avengers—Tony Stark, Thor, Bruce Banner, Steve Rogers, Natasha Romanoff, <span class="keyword">and</span> Clint Barton—raid a Hydra facility commanded by Baron Wolfgang von Strucker, who has experimented on humans using the scepter previously wielded by Loki.</span><br><span class="line"></span><br><span class="line">node: They meet two of Strucke<span class="string">r&#x27;s test subjects—twins Pietro (who has superhuman speed) and Wanda Maximoff (who has telepathic and telekinetic abilities)—and apprehend Strucker, while Stark retrieves Loki&#x27;</span>s scepter.</span><br><span class="line"></span><br><span class="line">meta_replacer output:</span><br><span class="line">node: <span class="keyword">and</span> attacks the Avengers at their headquarters.  Escaping <span class="keyword">with</span> the scepter, Ultron uses the resources <span class="keyword">in</span> Strucke<span class="string">r&#x27;s Sokovia base to upgrade his rudimentary body and build an army of robot drones.  Having killed Strucker, he recruits the Maximoffs, who hold Stark responsible for their parents&#x27;</span> deaths by his company<span class="string">&#x27;s weapons, and goes to the base of arms dealer Ulysses Klaue in Johannesburg to get vibranium.  The Avengers attack Ultron and the Maximoffs, but Wanda subdues them with haunting visions, causing Banner to turn into the Hulk and rampage until Stark stops him with his anti-Hulk armor. [a]</span></span><br><span class="line"><span class="string">A worldwide backlash over the resulting destruction, and the fears Wanda&#x27;</span>s hallucinations incited, send the team into hiding at Barton<span class="string">&#x27;s farmhouse.  Thor departs to consult with Dr.  Erik Selvig on the apocalyptic future he saw in his hallucination, while Nick Fury arrives and encourages the team to form a plan to stop Ultron.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">node: In the Eastern European country of Sokovia, the Avengers—Tony Stark, Thor, Bruce Banner, Steve Rogers, Natasha Romanoff, and Clint Barton—raid a Hydra facility commanded by Baron Wolfgang von Strucker, who has experimented on humans using the scepter previously wielded by Loki.  They meet two of Strucker&#x27;</span>s test subjects—twins Pietro (who has superhuman speed) <span class="keyword">and</span> Wanda Maximoff (who has telepathic <span class="keyword">and</span> telekinetic abilities)—<span class="keyword">and</span> apprehend Strucker, <span class="keyword">while</span> Stark retrieves Loki<span class="string">&#x27;s scepter.</span></span><br><span class="line"><span class="string">Stark and Banner discover an artificial intelligence within the scepter&#x27;</span>s gem, <span class="keyword">and</span> secretly decide to use it to complete Stark<span class="string">&#x27;s &quot;Ultron&quot; global defense program.  The unexpectedly sentient Ultron, believing he must eradicate humanity to save Earth, eliminates Stark&#x27;</span>s A.I.</span><br></pre></td></tr></table></figure>
+
+<p>从结果中我们可以看出，原来的<code>retreiver</code>模块输出的只是简单的一句话，而<code>meta_replacer</code>模块输出的是多个句子，包含了检索节点的前后节点的文本，这样可以让 LLM 生成更准确的答案。</p>
+<p>关于句子窗口检索的更多细节，可以参考我之前的<a href="https://zhaozhiming.github.io/2024/03/11/sentence-windows-rag/">这篇文章</a>。</p>
+<h3 id="增加评估模块"><a href="#增加评估模块" class="headerlink" title="增加评估模块"></a>增加评估模块</h3><p>最后我们再为查询流水线增加一个评估模块，用于评估查询流水线，这里我们使用<a target="_blank" rel="noopener" href="https://docs.ragas.io/">Ragas</a>来实现评估模块。</p>
+<blockquote>
+<p>Ragas 是一个评估 RAG 应用的框架，拥有很多详细的评估指标。</p>
+</blockquote>
+<img src="/images/post/2024/06/rag-flow-evaluation.png" class="" width="1000" height="600">
+
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="addition">+evaluator = RagasComponent()</span></span><br><span class="line">p = QueryPipeline(verbose=True)</span><br><span class="line">p.add_modules(</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;input&quot;: InputComponent(),</span><br><span class="line">        &quot;query_rewriter&quot;: query_rewriter,</span><br><span class="line">        &quot;retriever&quot;: retriever,</span><br><span class="line">        &quot;meta_replacer&quot;: meta_replacer,</span><br><span class="line">        &quot;reranker&quot;: reranker,</span><br><span class="line">        &quot;output&quot;: TreeSummarize(),</span><br><span class="line"><span class="addition">+        &quot;evaluator&quot;: evaluator,</span></span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line"><span class="deletion">-p.add_link(&quot;input&quot;, &quot;query_rewriter&quot;)</span></span><br><span class="line"><span class="addition">+p.add_link(&quot;input&quot;, &quot;query_rewriter&quot;, src_key=&quot;input&quot;)</span></span><br><span class="line">p.add_link(&quot;query_rewriter&quot;, &quot;retriever&quot;)</span><br><span class="line">p.add_link(&quot;retriever&quot;, &quot;meta_replacer&quot;)</span><br><span class="line"><span class="deletion">-p.add_link(&quot;input&quot;, &quot;reranker&quot;, dest_key=&quot;query_str&quot;)</span></span><br><span class="line"><span class="addition">+p.add_link(&quot;input&quot;, &quot;reranker&quot;, src_key=&quot;input&quot;, dest_key=&quot;query_str&quot;)</span></span><br><span class="line">p.add_link(&quot;meta_replacer&quot;, &quot;reranker&quot;, dest_key=&quot;nodes&quot;)</span><br><span class="line"><span class="deletion">-p.add_link(&quot;input&quot;, &quot;output&quot;, dest_key=&quot;query_str&quot;)</span></span><br><span class="line"><span class="addition">+p.add_link(&quot;input&quot;, &quot;output&quot;, src_key=&quot;input&quot;, dest_key=&quot;query_str&quot;)</span></span><br><span class="line">p.add_link(&quot;reranker&quot;, &quot;output&quot;, dest_key=&quot;nodes&quot;)</span><br><span class="line"><span class="addition">+p.add_link(&quot;input&quot;, &quot;evaluator&quot;, src_key=&quot;input&quot;, dest_key=&quot;question&quot;)</span></span><br><span class="line"><span class="addition">+p.add_link(&quot;input&quot;, &quot;evaluator&quot;, src_key=&quot;ground_truth&quot;, dest_key=&quot;ground_truth&quot;)</span></span><br><span class="line"><span class="addition">+p.add_link(&quot;reranker&quot;, &quot;evaluator&quot;, dest_key=&quot;nodes&quot;)</span></span><br><span class="line"><span class="addition">+p.add_link(&quot;output&quot;, &quot;evaluator&quot;, dest_key=&quot;answer&quot;)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>RagasComponent</code>也是一个自定义的查询流水线组件，后面我们再详细介绍它的实现</li>
+<li>在查询流水线中增加了一个<code>evaluator</code>模块，用于评估查询流水线</li>
+<li>我们将<code>evaluator</code>模块放到<code>output</code>模块之后，用于评估输出结果</li>
+<li><code>evaluator</code>模块有 4 个输入参数，分别是问题、真实答案、检索结果和生成答案，其中问题和真实答案通过<code>input</code>模块传入，检索结果通过<code>reranker</code>模块传入，生成答案通过<code>output</code>模块传入</li>
+<li>因为<code>input</code>模块现在有 2 个参数，分别是问题<code>input</code>和真实答案<code>ground_truth</code>，所以我们在添加<code>input</code>模块的相关连接关系时，需要指定<code>src_key</code>参数</li>
+</ul>
+<p>我们再来看下<code>RagasComponent</code>的实现，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ragas.metrics <span class="keyword">import</span> faithfulness, answer_relevancy, context_precision, context_recall</span><br><span class="line"><span class="keyword">from</span> ragas <span class="keyword">import</span> evaluate</span><br><span class="line"><span class="keyword">from</span> datasets <span class="keyword">import</span> Dataset</span><br><span class="line"><span class="keyword">from</span> llama_index.core.query_pipeline <span class="keyword">import</span> CustomQueryComponent</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Dict</span>, <span class="type">Any</span></span><br><span class="line"></span><br><span class="line">metrics = [faithfulness, answer_relevancy, context_precision, context_recall]</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RagasComponent</span>(<span class="title class_ inherited__">CustomQueryComponent</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Ragas evalution component.&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_validate_component_inputs</span>(<span class="params">self, <span class="built_in">input</span>: <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]</span>) -&gt; <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Validate component inputs during run_component.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">input</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_input_keys</span>(<span class="params">self</span>) -&gt; <span class="built_in">set</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Input keys dict.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&quot;question&quot;</span>, <span class="string">&quot;nodes&quot;</span>, <span class="string">&quot;answer&quot;</span>, <span class="string">&quot;ground_truth&quot;</span>, &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_output_keys</span>(<span class="params">self</span>) -&gt; <span class="built_in">set</span>:</span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&quot;answer&quot;</span>, <span class="string">&quot;source_nodes&quot;</span>, <span class="string">&quot;evaluation&quot;</span>&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_run_component</span>(<span class="params">self, **kwargs</span>) -&gt; <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Run the component.&quot;&quot;&quot;</span></span><br><span class="line">        question, ground_truth, nodes, answer = kwargs.values()</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">&quot;question&quot;</span>: [question],</span><br><span class="line">            <span class="string">&quot;contexts&quot;</span>: [[n.get_content() <span class="keyword">for</span> n <span class="keyword">in</span> nodes]],</span><br><span class="line">            <span class="string">&quot;answer&quot;</span>: [<span class="built_in">str</span>(answer)],</span><br><span class="line">            <span class="string">&quot;ground_truth&quot;</span>: [ground_truth],</span><br><span class="line">        &#125;</span><br><span class="line">        dataset = Dataset.from_dict(data)</span><br><span class="line">        evalution = evaluate(dataset, metrics)</span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&quot;answer&quot;</span>: <span class="built_in">str</span>(answer), <span class="string">&quot;source_nodes&quot;</span>: nodes, <span class="string">&quot;evaluation&quot;</span>: evalution&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>和之前的自定义组件一样，<code>RagasComponent</code>类需要实现<code>_validate_component_inputs</code>、<code>_input_keys</code>、<code>_output_keys</code>和<code>_run_component</code>方法</li>
+<li>组件的输入参数是问题、真实答案、检索结果和生成答案，输出参数是生成答案、检索结果和评估结果</li>
+<li>在<code>_run_component</code>方法中，我们将输入参数重新封装成一个可供 Ragas 评估的<code>Dataset</code>对象</li>
+<li>评估指标我们使用的分别是：<code>faithfulness</code>（评估<code>Question</code>和<code>Context</code>的一致性），<code>answer_relevancy</code>（评估<code>Answer</code>和<code>Question</code>的一致性），<code>context_precision</code>（评估<code>Ground Truth</code>在<code>Context</code>中是否排名靠前），<code>context_recall</code>（评估<code>Ground Truth</code>和<code>Context</code>的一致性）</li>
+<li>我们再调用<code>evaluate</code>方法对<code>Dataset</code>对象进行评估，得到评估结果</li>
+<li>最后将生成答案、检索结果和评估结果一起返回</li>
+</ul>
+<p>最后我们来运行下查询流水线，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">question = <span class="string">&quot;Which two members of the Avengers created Ultron?&quot;</span></span><br><span class="line">ground_truth = <span class="string">&quot;Tony Stark (Iron Man) and Bruce Banner (The Hulk).&quot;</span></span><br><span class="line">output = p.run(<span class="built_in">input</span>=question, ground_truth=ground_truth)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;answer: <span class="subst">&#123;output[<span class="string">&#x27;answer&#x27;</span>]&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;evaluation: <span class="subst">&#123;output[<span class="string">&#x27;evaluation&#x27;</span>]&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">answer: Tony Stark <span class="keyword">and</span> Bruce Banner</span><br><span class="line">evaluation: &#123;<span class="string">&#x27;faithfulness&#x27;</span>: <span class="number">1.0000</span>, <span class="string">&#x27;answer_relevancy&#x27;</span>: <span class="number">0.8793</span>, <span class="string">&#x27;context_precision&#x27;</span>: <span class="number">1.0000</span>, <span class="string">&#x27;context_recall&#x27;</span>: <span class="number">1.0000</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>运行查询流水线时，我们需要传入问题和真实答案作为输入参数</li>
+<li>在输出结果中，我们可以看到生成的答案，以及评估结果 4 个评估指标的值</li>
+</ul>
+<p>关于 RAG 的更多评估工具，可以参考我之前的<a href="https://zhaozhiming.github.io/2024/04/22/llamaindex-and-evaluation-tools/">这篇文章</a>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过上面的示例，我们可以看到如何通过模块化和流程的方式来实现高级 RAG 检索功能，我们可以根据具体的需求，自定义不同的模块，然后将这些模块按照一定的顺序组合起来，形成一个完整的查询流水线。在 RAG 应用中，我们还可以定义多个查询流水线，用于不同的场景，比如问答、对话、推荐等，这样可以更好地满足不同的需求。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+<h2 id="引用参考"><a href="#引用参考" class="headerlink" title="引用参考"></a>引用参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@yufan1602/modular-rag-and-rag-flow-part-%E2%85%B0-e69b32dc13a3">Modular RAG and RAG Flow: Part Ⅰ</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@yufan1602/modular-rag-and-rag-flow-part-ii-77b62bf8a5d3">Modular RAG and RAG Flow: Part II</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.llamaindex.ai/en/stable/examples/pipeline/query_pipeline/">An Introduction to LlamaIndex Query Pipelines</a></li>
+</ul>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2024/06/08/rag-module-pipeline/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2024/06/08/rag-module-pipeline/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>Ceph认证原理 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="Ceph认证原理"> <!-- TODO: truncate -->
+	<meta name="keywords" content="ceph,auth">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">Ceph认证原理</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2014-09-13T01:11:00.000Z" itemprop="datePublished">9月 13, 2014</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/ceph/">ceph</a> <a href="/tags/auth/">auth</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2014-9/rados-arch.png" class="">  
+<p>为识别用户和防范攻击，ceph提供了cephx来进行用户和后台进程认证。  </p>
+<span id="more"></span>
+
+<h2 id="原理介绍"><a href="#原理介绍" class="headerlink" title="原理介绍"></a>原理介绍</h2><p>Cephx使用共享密钥的方式进行认证，意思是客户端和monitor集群都有一份客户端的密钥。它提供了一个相互认证的机制，集群确定用户拥有密钥，而用户确定集群拥有密钥的备份。  </p>
+<p>Ceph不提供统一的认证接口给对象存储，所以客户端必须直接跟OSD交互。为了保护数据，ceph提供了cephx认证系统，用来对用户在客户端的操作进行认证。Cephx认证协议与<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Kerberos_(protocol)">Kerberos</a>相类似。  </p>
+<p>用户调用客户端连接monitor。跟Kerberos不同，每个monitor都可以进行认证，所以没有单点和性能瓶颈的问题。Monitor返回一个类似Kerberos的数据结构，包含了一个session key来访问ceph服务。Session key是通过加密用户自己的密钥来生成的，所以只有该用户能请求monitor服务。然后客户端使用session key向monitor发起请求，monitor于是提供给客户端一个ticket来使客户端和OSD进行认证。Monitor和OSD共享密钥，所以客户端可以使用Monitor提供的ticket来和OSD进行交互。跟Kerberos一样，cephx的ticket会过期，所以攻击者不能使用过期的ticket或session key来做不正当的事情。这种认证形式将阻止攻击者通过修改用户已泄露信息的方式，或者伪造消息进行通讯访问的方式来进行攻击，只要用户的密钥不要在失效前泄露就没有什么问题。  </p>
+<p>使用cephx时，管理员需要先创建user。在下面的图表中，client.admin用户调用<code>ceph auth get-or-create-key</code>的命令来生成用户名和密钥，ceph的auth子系统来生成用户名和密钥，保存一份密钥在monitor并将用户的密钥传回给client.admin用户。这使得客户端和monitor共享了一份密钥。  </p>
+<img src="/images/post/2014-9/rados-auth-1.png" class="">  
+<p>为了能通过monitor的认证，客户端将用户名传给monitor，然后monitor产生一个session key并且通过密钥将其加密，并使之与用户名关联。然后monitor将加密session key回传给客户端，客户端再通过共享密钥进行解密，从而获取到seesion key。session key标示当前用户的当前回话。然后客户端再发起请求要求一个代表用户会话密钥的ticket，monitor产生ticket并通过用户密钥进行加密，并将其回传给客户端。客户端对ticket进行解密，以后客户端向OSD或MDS发起请求时，就用它来对请求进行签名。</p>
+<img src="/images/post/2014-9/rados-auth-2.png" class="">  
+<p>cephx协议验证客户端和Ceph服务器之间的通信。在初始化认证之后，在客户端和服务器间的每一条信息，都会使用ticket进行签名，这样monitor，OSD和MDS服务就可以使用他们的共享密钥进行验证。</p>
+<img src="/images/post/2014-9/rados-auth-3.png" class="">  
+<p>认证提供的保护是在ceph客户端和服务器之间。认证不能超过客户端，比如用户从一台远程服务器上访问cpeh客户端，ceph的认证就不能适用于远程主机和客户端了。  </p>
+<h2 id="生成存储集群的keyring"><a href="#生成存储集群的keyring" class="headerlink" title="生成存储集群的keyring"></a>生成存储集群的keyring</h2><ul>
+<li>生成client.admin的key</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph auth get-or-create client.admin mon <span class="string">&#x27;allow *&#x27;</span> mds <span class="string">&#x27;allow *&#x27;</span> osd <span class="string">&#x27;allow *&#x27;</span> -o /etc/ceph/ceph.client.admin.keyring</span><br></pre></td></tr></table></figure>   
+<p><code>注意：这个操作会覆盖原有的ceph.client.admin.keyring文件，请谨慎操作。</code></p>
+<ul>
+<li>创建monitor的keyring</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph-authtool --create-keyring /tmp/ceph.mon.keyring --gen-key -n mon. --<span class="built_in">cap</span> mon <span class="string">&#x27;allow *&#x27;</span></span><br></pre></td></tr></table></figure>   
+<ul>
+<li>复制monitor的keyring文件到每个monitor的data目录</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> /tmp/ceph.mon.keyring /var/lib/ceph/mon/ceph-a/keyring</span><br></pre></td></tr></table></figure>   
+<ul>
+<li>为每个OSD产生keyring，id是OSD的编号</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph auth get-or-create osd.&#123;<span class="variable">$id</span>&#125; mon <span class="string">&#x27;allow rwx&#x27;</span> osd <span class="string">&#x27;allow *&#x27;</span> -o /var/lib/ceph/osd/ceph-&#123;<span class="variable">$id</span>&#125;/keyring</span><br></pre></td></tr></table></figure>   
+<ul>
+<li>为每个MDS产生keyring，id是MDS编号</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ceph auth get-or-create mds.&#123;<span class="variable">$id</span>&#125; mon <span class="string">&#x27;allow rwx&#x27;</span> osd <span class="string">&#x27;allow *&#x27;</span> mds <span class="string">&#x27;allow *&#x27;</span> -o /var/lib/ceph/mds/ceph-&#123;<span class="variable">$id</span>&#125;/keyring</span><br></pre></td></tr></table></figure>   
+<ul>
+<li>在ceph.conf的global中增加认证开关</li>
+</ul>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">auth</span> <span class="string">cluster required = cephx</span></span><br><span class="line"><span class="attr">auth</span> <span class="string">service required = cephx</span></span><br><span class="line"><span class="attr">auth</span> <span class="string">client required = cephx</span></span><br></pre></td></tr></table></figure>   
+<ul>
+<li>重启存储服务</li>
+</ul>
+<h2 id="认证配置"><a href="#认证配置" class="headerlink" title="认证配置"></a>认证配置</h2><ul>
+<li>auth cluster required：[cephx | none]:如果打开，表示存储集群（mon,osd,mds）相互之间需要通过keyring认证。</li>
+<li>auth service required：[cephx | none]:如果打开，表示客户端（比如gateway）到存储集群（mon,osd,mds）需要通过keyring认证。</li>
+<li>auth client required：[cephx | none]:如果打开，表示存储集群（mon,osd,mds）到客户端（比如gateway）需要通过keyring认证。</li>
+</ul>
+<h2 id="Rados-gateway创建keyring"><a href="#Rados-gateway创建keyring" class="headerlink" title="Rados gateway创建keyring"></a>Rados gateway创建keyring</h2><p>需要使用一台管理节点的机器来生成keyring文件，管理节点是使用ceph-deploy才有的机器，我理解没有管理节点的话，使用mon或osd的机器可以创建keyring。  </p>
+<ul>
+<li>创建文件并增加权限</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ceph-authtool --create-keyring /etc/ceph/ceph.client.radosgw.keyring</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chmod</span> +r /etc/ceph/ceph.client.radosgw.keyring</span><br></pre></td></tr></table></figure>   
+<ul>
+<li>使用ceph-authtool在keyring文件中生成随机密码</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ceph-authtool /etc/ceph/ceph.client.radosgw.keyring -n client.radosgw.gateway --gen-key</span><br></pre></td></tr></table></figure>   
+<ul>
+<li>在keyring中增加存储集群的操作权限；</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ceph-authtool -n client.radosgw.gateway --<span class="built_in">cap</span> osd <span class="string">&#x27;allow rwx&#x27;</span> --<span class="built_in">cap</span> mon <span class="string">&#x27;allow rwx&#x27;</span> /etc/ceph/ceph.client.radosgw.keyring</span><br></pre></td></tr></table></figure>   
+<ul>
+<li>将gateway的key添加到存储集群（-k不知道是什么参数）</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ceph -k /etc/ceph/ceph.client.admin.keyring auth add client.radosgw.gateway -i /etc/ceph/ceph.client.radosgw.keyring</span><br></pre></td></tr></table></figure>   
+<ul>
+<li>将生成的keyring文件上传到gateway的机器</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> scp /etc/ceph/ceph.client.radosgw.keyring  ceph@&#123;hostname&#125;:/home/ceph</span><br><span class="line">ssh &#123;hostname&#125;</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">mv</span> ceph.client.radosgw.keyring /etc/ceph/ceph.client.radosgw.keyring</span><br></pre></td></tr></table></figure>   
+<ul>
+<li>在ceph.conf中配置gateway的keyring文件路径</li>
+</ul>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">[client.radosgw.&#123;instance-name&#125;]</span></span><br><span class="line"><span class="attr">host</span> = <span class="string">&#123;host-name&#125;</span></span><br><span class="line"><span class="attr">keyring</span> = <span class="string">/etc/ceph/ceph.client.radosgw.keyring</span></span><br><span class="line"><span class="attr">rgw</span> <span class="string">socket path = /var/run/ceph/ceph.radosgw.&#123;instance-name&#125;.fastcgi.sock</span></span><br><span class="line"><span class="attr">log</span> <span class="string">file = /var/log/ceph/client.radosgw.&#123;instance-name&#125;.log</span></span><br></pre></td></tr></table></figure>   
+
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2014/09/13/ceph-authentication-theory/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2014/09/13/ceph-authentication-theory/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

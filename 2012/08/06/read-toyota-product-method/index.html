@@ -1,0 +1,264 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>读《丰田生产方式》——联系敏捷开发的思考 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="&lt;p&gt;平时工作和同事讨论敏捷，曾多次听到丰田的精益思想，说是很多敏捷的想法都是从丰田的精益思想中得来的，后来在Kent Beck的《解析极限编程》里看到有这样一本书是讲丰田的精益思想的，找来看了一下，发现书中讲的一些思想或者实践和敏捷开发很相似，下面我就讲讲我对于丰田生产方式和敏捷开发的一些联系。  &lt;/p&gt;
+&lt;span id=&#34;more&#34;&gt;&lt;/span&gt;  
+&lt;h2 id=&#34;一、逆向思维，由生产的最后一道工序为起点，从后往前推进。&#34;&gt;&lt;a href=&#34;#一、逆向思维，由生产的最后一道工序为起点，从后往前推进。&#34; class=&#34;headerlink&#34; title=&#34;一、逆向思维，由生产的最后一道工序为起点，从后往前推进。&#34;&gt;&lt;/a&gt;一、逆向思维，由生产的最后一道工序为起点，从后往前推进。&lt;/h2&gt;&lt;p&gt;丰田生产方式的两大支柱是准时化和自动化。准时化（Just In Time）是指通过流水作业装配一辆汽车的过程中，所需零部件在需要的时刻，以需要的数量，不多不少的送到生产线的旁边。如何达到这种不多不少的状态呢？丰田的做法是由生产的最后一道工序为起点，从后往前推进。这样以最后要生产的汽车数量，就可以推测所需的零部件各是多少，从而达到降低浪费的目的。  &lt;/p&gt;
+&lt;p&gt;在敏捷开发中，我们如何做到准时化？从相关的敏捷实践来看，测试驱动开发（TDD）就是达到这一目的的过程。先从原始需求上面得到一个个的Story，Story规定了需求的入口和出口，然后再驱动出测试案例，最后由测试案例驱动出产品代码，这样就能保证产品代码的功能是包括了原始需求所要求的功能，但又避免产生过渡设计。这个也是减少浪费的一种过程。  &lt;/p&gt;
+&lt;h2 id=&#34;二、每个工人都有一根警报线，在生产过程中发现产品有问题，随时拉线让整个生产线停止，等待解决问题后再恢复生产。&#34;&gt;&lt;a href=&#34;#二、每个工人都有一根警报线，在生产过程中发现产品有问题，随时拉线让整个生产线停止，等待解决问题后再恢复生产。&#34; class=&#34;headerlink&#34; title=&#34;二、每个工人都有一根警报线，在生产过程中发现产品有问题，随时拉线让整个生产线停止，等待解决问题后再恢复生产。&#34;&gt;&lt;/a&gt;二、每个工人都有一根警报线，在生产过程中发现产品有问题，随时拉线让整个生产线停止，等待解决问题后再恢复生产。&lt;/h2&gt;&lt;p&gt;丰田生产方式的另外一个支柱是自动化。丰田使用了很多自动化机器，但自动化的标准不是简单的去使用机器，而是实现人的自动化。丰田几乎所有的机器设备都装有自动停止装置，平时机器自动运转的时候用不到人，如果生产过程中发现问题，人会去停止机器，然后修复问题，重新启动机器。如果在生产过程中发现问题没有及时停止生产，那就可能生产出大量的残次品，这些残次品无法装配到汽车上，是一种很大的浪费。  &lt;/p&gt;
+&lt;p&gt;在敏捷开发中，持续集成体现的就是这种自动化思想。在持续集成的过程中，一旦发现问题（比如单元测试跑失败了），服务器就会马上停止构建，并通知相关的开发人员进行问题修复，等问题修复完成后，再重新进行构建。这样每当问题出现，我们就可以以最小的代价找到问题的根源，然后修复它。如果等问题遗留到后面的测试阶段或者生产阶段，再去找问题的根源，所需的代价就要大的多得多。  &lt;/p&gt;
+&lt;p&gt;光有持续集成的服务器还不行，服务器不会自己去编译、测试、部署，所有这些行为都需要人去开发出相应的脚本，然后在服务器上运行，这就是所谓的“人的自动化”。开发人员应该将所有可以自动化的东西都做成自动化，让单元测试自动化，集成测试自动化，部署自动化，总之一个目的，减少浪费，这也是丰田生产一直追求的目标之一。  &lt;/p&gt;
+&lt;h2 id=&#34;三、看板&#34;&gt;&lt;a href=&#34;#三、看板&#34; class=&#34;headerlink&#34; title=&#34;三、看板&#34;&gt;&lt;/a&gt;三、看板&lt;/h2&gt;&lt;p&gt;看板在丰田生产中是一种工具，在生产中起到一个传递情报和指令的作用。  &lt;/p&gt;
+&lt;p&gt;敏捷开发很好的运用了看板。有过敏捷开发经验的同学应该知道，敏捷中的看板就是整天摆在你跟前的那块白板，白板上将开发过程分成好几个阶段，每个阶段上面贴着该阶段下的开发任务，通过白板可以随时了解项目的进展。  &lt;/p&gt;
+&lt;h2 id=&#34;其他思想和实践&#34;&gt;&lt;a href=&#34;#其他思想和实践&#34; class=&#34;headerlink&#34; title=&#34;其他思想和实践&#34;&gt;&lt;/a&gt;其他思想和实践&lt;/h2&gt;&lt;p&gt;除了和敏捷开发有这些联系外，丰田生产方式还有一些思想和实践适合软件开发。  &lt;/p&gt;
+&lt;h4 id=&#34;一人掌握多种技能，每个人都是多面手。&#34;&gt;&lt;a href=&#34;#一人掌握多种技能，每个人都是多面手。&#34; class=&#34;headerlink&#34; title=&#34;一人掌握多种技能，每个人都是多面手。&#34;&gt;&lt;/a&gt;一人掌握多种技能，每个人都是多面手。&lt;/h4&gt;&lt;p&gt;由于历史和文化的原因，美国的的制度是，车工始终是车工，焊工永远是焊工；日本的制度是，工人既能操作车床，也能开钻床，而且能焊接，能够学会和掌握多种技能。  &lt;/p&gt;
+&lt;p&gt;两种制度孰优孰劣很难确定，但个人认为，在软件开发高速发展的今天，开发人员应该要有更高的要求。开发人员所掌握的技能不仅仅是会编写产品代码，还要会写单元测试，会部署，会搭建环境等等。比如在缺少测试人员的情况下，开发人员可以自己测试，依靠开发的编程技能可以写出更好的测试代码。要能够快速学会和掌握多种技能。  &lt;/p&gt;
+&lt;h4 id=&#34;反复问5个为什么&#34;&gt;&lt;a href=&#34;#反复问5个为什么&#34; class=&#34;headerlink&#34; title=&#34;反复问5个为什么&#34;&gt;&lt;/a&gt;反复问5个为什么&lt;/h4&gt;&lt;p&gt;比如一台机器不转动了，你就要问：  &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;为什么机器停了？——“因为超负荷，保险丝断了。”&lt;/li&gt;
+&lt;li&gt;“为什么超负荷了呢？”——“因为轴承部分的润滑不够。”&lt;/li&gt;
+&lt;li&gt;“为什么润滑不够？”——“因为润滑泵吸不上油来。”&lt;/li&gt;
+&lt;li&gt;“为什么吸不上油来呢？”——“因为油泵轴磨损，松动了。”&lt;/li&gt;
+&lt;li&gt;“为什么磨损了呢？”——因为没有安装过滤器，混进了铁屑。”&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;通过问5个为什么就可以知道需要安装过滤器了。如果问题问的不彻底，可能是加上润滑油，或者换上油泵轴了事，这样等过了一段时间后问题还是会出现。丰田生产方式可以说是丰田人反复问5个为什么才创造出来的。  &lt;/p&gt;
+&lt;p&gt;####拥抱小团队，不要大块头&lt;br&gt;团队合作高于一切，由于合作或其他种种原因，人少的团队反而容易取胜。小船容易转舵，大船步履阑珊，小团队的灵活性更强，这也符合敏捷开发的原则——要做到简洁。  &lt;/p&gt;
+"> <!-- TODO: truncate -->
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">读《丰田生产方式》——联系敏捷开发的思考</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2012-08-06T02:16:00.000Z" itemprop="datePublished">8月 6, 2012</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/agile/">agile</a> <a href="/tags/lean/">lean</a> <a href="/tags/kanban/">kanban</a>
+</div>
+    </div>
+	<div class="entry-content"><p>平时工作和同事讨论敏捷，曾多次听到丰田的精益思想，说是很多敏捷的想法都是从丰田的精益思想中得来的，后来在Kent Beck的《解析极限编程》里看到有这样一本书是讲丰田的精益思想的，找来看了一下，发现书中讲的一些思想或者实践和敏捷开发很相似，下面我就讲讲我对于丰田生产方式和敏捷开发的一些联系。  </p>
+<span id="more"></span>  
+<h2 id="一、逆向思维，由生产的最后一道工序为起点，从后往前推进。"><a href="#一、逆向思维，由生产的最后一道工序为起点，从后往前推进。" class="headerlink" title="一、逆向思维，由生产的最后一道工序为起点，从后往前推进。"></a>一、逆向思维，由生产的最后一道工序为起点，从后往前推进。</h2><p>丰田生产方式的两大支柱是准时化和自动化。准时化（Just In Time）是指通过流水作业装配一辆汽车的过程中，所需零部件在需要的时刻，以需要的数量，不多不少的送到生产线的旁边。如何达到这种不多不少的状态呢？丰田的做法是由生产的最后一道工序为起点，从后往前推进。这样以最后要生产的汽车数量，就可以推测所需的零部件各是多少，从而达到降低浪费的目的。  </p>
+<p>在敏捷开发中，我们如何做到准时化？从相关的敏捷实践来看，测试驱动开发（TDD）就是达到这一目的的过程。先从原始需求上面得到一个个的Story，Story规定了需求的入口和出口，然后再驱动出测试案例，最后由测试案例驱动出产品代码，这样就能保证产品代码的功能是包括了原始需求所要求的功能，但又避免产生过渡设计。这个也是减少浪费的一种过程。  </p>
+<h2 id="二、每个工人都有一根警报线，在生产过程中发现产品有问题，随时拉线让整个生产线停止，等待解决问题后再恢复生产。"><a href="#二、每个工人都有一根警报线，在生产过程中发现产品有问题，随时拉线让整个生产线停止，等待解决问题后再恢复生产。" class="headerlink" title="二、每个工人都有一根警报线，在生产过程中发现产品有问题，随时拉线让整个生产线停止，等待解决问题后再恢复生产。"></a>二、每个工人都有一根警报线，在生产过程中发现产品有问题，随时拉线让整个生产线停止，等待解决问题后再恢复生产。</h2><p>丰田生产方式的另外一个支柱是自动化。丰田使用了很多自动化机器，但自动化的标准不是简单的去使用机器，而是实现人的自动化。丰田几乎所有的机器设备都装有自动停止装置，平时机器自动运转的时候用不到人，如果生产过程中发现问题，人会去停止机器，然后修复问题，重新启动机器。如果在生产过程中发现问题没有及时停止生产，那就可能生产出大量的残次品，这些残次品无法装配到汽车上，是一种很大的浪费。  </p>
+<p>在敏捷开发中，持续集成体现的就是这种自动化思想。在持续集成的过程中，一旦发现问题（比如单元测试跑失败了），服务器就会马上停止构建，并通知相关的开发人员进行问题修复，等问题修复完成后，再重新进行构建。这样每当问题出现，我们就可以以最小的代价找到问题的根源，然后修复它。如果等问题遗留到后面的测试阶段或者生产阶段，再去找问题的根源，所需的代价就要大的多得多。  </p>
+<p>光有持续集成的服务器还不行，服务器不会自己去编译、测试、部署，所有这些行为都需要人去开发出相应的脚本，然后在服务器上运行，这就是所谓的“人的自动化”。开发人员应该将所有可以自动化的东西都做成自动化，让单元测试自动化，集成测试自动化，部署自动化，总之一个目的，减少浪费，这也是丰田生产一直追求的目标之一。  </p>
+<h2 id="三、看板"><a href="#三、看板" class="headerlink" title="三、看板"></a>三、看板</h2><p>看板在丰田生产中是一种工具，在生产中起到一个传递情报和指令的作用。  </p>
+<p>敏捷开发很好的运用了看板。有过敏捷开发经验的同学应该知道，敏捷中的看板就是整天摆在你跟前的那块白板，白板上将开发过程分成好几个阶段，每个阶段上面贴着该阶段下的开发任务，通过白板可以随时了解项目的进展。  </p>
+<h2 id="其他思想和实践"><a href="#其他思想和实践" class="headerlink" title="其他思想和实践"></a>其他思想和实践</h2><p>除了和敏捷开发有这些联系外，丰田生产方式还有一些思想和实践适合软件开发。  </p>
+<h4 id="一人掌握多种技能，每个人都是多面手。"><a href="#一人掌握多种技能，每个人都是多面手。" class="headerlink" title="一人掌握多种技能，每个人都是多面手。"></a>一人掌握多种技能，每个人都是多面手。</h4><p>由于历史和文化的原因，美国的的制度是，车工始终是车工，焊工永远是焊工；日本的制度是，工人既能操作车床，也能开钻床，而且能焊接，能够学会和掌握多种技能。  </p>
+<p>两种制度孰优孰劣很难确定，但个人认为，在软件开发高速发展的今天，开发人员应该要有更高的要求。开发人员所掌握的技能不仅仅是会编写产品代码，还要会写单元测试，会部署，会搭建环境等等。比如在缺少测试人员的情况下，开发人员可以自己测试，依靠开发的编程技能可以写出更好的测试代码。要能够快速学会和掌握多种技能。  </p>
+<h4 id="反复问5个为什么"><a href="#反复问5个为什么" class="headerlink" title="反复问5个为什么"></a>反复问5个为什么</h4><p>比如一台机器不转动了，你就要问：  </p>
+<ol>
+<li>为什么机器停了？——“因为超负荷，保险丝断了。”</li>
+<li>“为什么超负荷了呢？”——“因为轴承部分的润滑不够。”</li>
+<li>“为什么润滑不够？”——“因为润滑泵吸不上油来。”</li>
+<li>“为什么吸不上油来呢？”——“因为油泵轴磨损，松动了。”</li>
+<li>“为什么磨损了呢？”——因为没有安装过滤器，混进了铁屑。”</li>
+</ol>
+<p>通过问5个为什么就可以知道需要安装过滤器了。如果问题问的不彻底，可能是加上润滑油，或者换上油泵轴了事，这样等过了一段时间后问题还是会出现。丰田生产方式可以说是丰田人反复问5个为什么才创造出来的。  </p>
+<p>####拥抱小团队，不要大块头<br>团队合作高于一切，由于合作或其他种种原因，人少的团队反而容易取胜。小船容易转舵，大船步履阑珊，小团队的灵活性更强，这也符合敏捷开发的原则——要做到简洁。  </p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2012/08/06/read-toyota-product-method/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2012/08/06/read-toyota-product-method/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

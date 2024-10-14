@@ -1,0 +1,293 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>新版V2Ray安装及部署 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="新版V2Ray安装及部署"> <!-- TODO: truncate -->
+	<meta name="keywords" content="V2Ray,gfw">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">新版V2Ray安装及部署</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-08-08T06:30:19.000Z" itemprop="datePublished">8月 8, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/V2Ray/">V2Ray</a> <a href="/tags/gfw/">gfw</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/08/cross-wall.jpg" class="" width="400" height="300">
+
+<p>年初在 Azure 的网站上看到免费试用的宣传，宣传内容包括新建账号送 200 美元，可以免费试用 12 个月等等优惠活动，于是便在上面创建了一台 VPS 并搭建好了梯子，白嫖了一段时间后，最近发现 Azure 服务器突然开始收费，每个月要收 10 美元，要花这个钱我还不如去其他云厂商买服务器，上网查了一下说是可能免费额度的金额用完了，或者是创建的 VPS 中使用的其他配件不符合免费计划的要求。总之为了以后不再被收费，我便将 Azure 上的相关组件全部删除了。重新在其他云厂商上购买了一台服务器，重新搭建了梯子，但发现新建的梯子无法使用，于是便开始了一番折腾。</p>
+<span id="more"></span>
+
+<h2 id="购买服务器"><a href="#购买服务器" class="headerlink" title="购买服务器"></a>购买服务器</h2><p>这里推荐<a target="_blank" rel="noopener" href="https://aws.amazon.com/cn/lightsail/">AWS Lightsail</a>，它是一种虚拟私有服务器 (VPS) 解决方案，旨在为那些需要简单、预先配置好的计算资源的用户提供简单、快速、经济实惠的方式。LightSail 设计得非常简单，对于那些刚接触云计算或不需要所有 AWS 的高级功能的用户来说非常适用。</p>
+<p>Lightsail 使用也很简单，它的管理界面非常简洁，比 AWS 其他类型的服务器界面要清爽很多，只有几个选项，可以快速创建实例和进行实例管理，非常适合新手使用。</p>
+<p>进入创建实例界面后，选择以下实例配置：</p>
+<ul>
+<li>选择实例位置：有美国、东京、首尔、伦敦、巴黎等实例位置；</li>
+<li>选择平台：有 Linux 和 Windows 两种平台，一般选择 Linux；</li>
+<li>选择实例镜像：可以通过应用来选择，比如 WordPress、LAMP 等，也可以通过操作系统来选择，比如 AWS 内置的 Linux 操作系统，Ubuntu、CentOS 等；</li>
+<li>选择实例计划：最低的配置是 3.5 美元&#x2F;月，前 3 个月还免费，如果只是用来搭梯子，选择最低配置即可。</li>
+</ul>
+<p>选择完后进行服务器创建，等个 1-2 分钟就创建完成了。可以使用页面上的<code>使用SSH连接</code>按钮来连接服务器，进入后将自己电脑上的公钥复制到服务器上，然后就可以使用<code>ssh ubuntu@服务器ip</code>来连接服务器了。</p>
+<img src="/images/post/2023/08/aws-ssh.png" class="" width="1000" height="800">
+
+<p><strong>注意 Lightsail 的服务器无法通过 ping 命令来测试是否能够连接，因为服务器上禁止了 ICMP 协议，所以只能通过 ssh 命令来连接。</strong></p>
+<p>在<code>联网</code>的 Tab 页中可以看到服务器的公网 IP 地址，这个地址会在重启后发生变化，如果你不想这个地址发生变化，可以添加<code>静态IP</code>，这样重启后 IP 地址就不会发生变化了，这个服务在 Lightsail 中是免费的。</p>
+<img src="/images/post/2023/08/aws-ip.png" class="" width="1000" height="800">
+
+<p>如果你想搭建的梯子在客户端上可以访问，建议将 TCP 和 UDP 的端口都设置成可以访问。</p>
+<img src="/images/post/2023/08/aws-rule.png" class="" width="1000" height="800">
+
+<p>当然你也可以选择其他的云厂商，比如国内的阿里云、腾讯云等，或者国外的 Google Cloud、DigitalOcean 等，为了更好地科学上网，我的建议是<strong>不要把所有鸡蛋都放在同一个篮子里</strong>，即在不同的云厂商上购买服务器，保证自己同时有 2-3 台 VPS，这样即使有一台服务器被封，还有其他的服务器可以使用。</p>
+<h2 id="安装-V2Ray"><a href="#安装-V2Ray" class="headerlink" title="安装 V2Ray"></a>安装 V2Ray</h2><p>之前安装 V2Ray 都是通过<a target="_blank" rel="noopener" href="https://github.com/233boy/v2ray">这个仓库</a>的脚本进行一键安装。</p>
+<p>执行如下面命令（注意要用 root 用户执行）：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash &lt;(curl -s -L https://git.io/v2ray.sh)</span><br></pre></td></tr></table></figure>
+
+<p>安装完后验证是否安装成功，显示<code>running</code>即表示正常：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl status v2ray</span><br></pre></td></tr></table></figure>
+
+<h3 id="获取-vmess-url"><a href="#获取-vmess-url" class="headerlink" title="获取 vmess url"></a>获取 vmess url</h3><p>通过命令<code>v2ray url</code>获取到 vmess 地址(新版的会在安装完成后立即显示该地址），这个地址可以在客户端进行导入。</p>
+<p>以 Mac 的客户端<a target="_blank" rel="noopener" href="https://github.com/Cenmrev/V2RayX">V2RayX</a>为例，在菜单中选择<code>config</code>并点击其中的<code>import</code>按钮选择<code>import from other links...</code>，将 vmess 地址粘贴在里面即可。</p>
+<h2 id="解决新版-V2Ray-无法使用的问题"><a href="#解决新版-V2Ray-无法使用的问题" class="headerlink" title="解决新版 V2Ray 无法使用的问题"></a>解决新版 V2Ray 无法使用的问题</h2><p>按照以上的方法安装完 V2Ray 后，会发现客户端无法使用，通过网上搜索发现是我们使用的 V2Ray 安装脚本升级了 V2Ray 的内核版本，导致一些老的客户端无法使用，解决办法有以下几种：</p>
+<ul>
+<li>服务端使用安装脚本的老版本进行安装，安装命令如下：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/233boy/v2ray/archive/old.tar.gz -O v2ray-old.tar.gz;tar -zxvf v2ray-old.tar.gz;<span class="built_in">cd</span> v2ray-old;<span class="built_in">chmod</span> +x i*;./i* <span class="built_in">local</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>服务端还是使用安装脚本的新版安装，但安装完后将服务端的 V2Ray 版本降级到旧版本，执行命令<code>v2ray update core 4.45.2</code>即可降级。</li>
+<li>升级客户端版本（这一点对于一些很久没更新的客户端来说比较困难）</li>
+</ul>
+<p>更多的信息可以参考这个<a target="_blank" rel="noopener" href="https://github.com/233boy/v2ray/issues/1101">Issue</a>。</p>
+<h2 id="修改-V2Ray-协议"><a href="#修改-V2Ray-协议" class="headerlink" title="修改 V2Ray 协议"></a>修改 V2Ray 协议</h2><p>为了你的梯子活得更加长久，建议修改 V2Ray 的协议，V2Ray 的默认协议是 tcp，我之前也是默认使用这个协议，但发现 Lightsail 的服务器隔几天就无法访问了，只有重启服务更换 IP 才恢复正常。<br>后面我将协议改成了 ws，就再也没有出现过这个问题了，所以建议大家也将协议改成其他协议。<br>V2Ray 修改协议非常简单，只需要执行<code>v2ray</code>命令，然后选择<code>2. 修改 V2Ray 配置</code>，再选择<code>2. 修改 V2Ray 传输协议</code>，最后选择<code>3. WebSocket</code>即可。</p>
+<h2 id="添加-CloudFlare-WARP"><a href="#添加-CloudFlare-WARP" class="headerlink" title="添加 CloudFlare WARP"></a>添加 CloudFlare WARP</h2><p>如果你经常访问 ChatGPT 的话，会发现你的 VPS 用着用着就访问不了 ChatGPT 了，这是因为 ChatGPT 的服务器会检测你的 ip，如果是 VPS 的 ip 就会禁止访问，这时候就需要使用 CloudFlare WARP 来解决这个问题。</p>
+<h3 id="安装仓库-GPG-key"><a href="#安装仓库-GPG-key" class="headerlink" title="安装仓库 GPG key"></a>安装仓库 GPG key</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://pkg.cloudflareclient.com/pubkey.gpg | gpg --<span class="built_in">yes</span> --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加-CloudFlare-WARP-客户端源"><a href="#添加-CloudFlare-WARP-客户端源" class="headerlink" title="添加 CloudFlare WARP 客户端源"></a>添加 CloudFlare WARP 客户端源</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;deb [arch=amd64 signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ bullseye main&#x27;</span> | <span class="built_in">tee</span> /etc/apt/sources.list.d/cloudflare-client.list</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装-CloudFlare-WARP-客户端"><a href="#安装-CloudFlare-WARP-客户端" class="headerlink" title="安装 CloudFlare WARP 客户端"></a>安装 CloudFlare WARP 客户端</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt -y install cloudflare-warp</span><br><span class="line"><span class="comment"># 查看状态</span></span><br><span class="line">systemctl status warp-svc</span><br><span class="line"><span class="comment"># 注册客户端</span></span><br><span class="line">warp-cli register</span><br><span class="line"><span class="comment"># 设置 WARP 为代理模式(很重要，否则您将无法远程连接 VPS)</span></span><br><span class="line">warp-cli set-mode proxy</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动连接"><a href="#启动连接" class="headerlink" title="启动连接"></a>启动连接</h3><p>WARP 将启动 socks5 本机代理 127.0.0.1:40000。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">warp-cli connect</span><br><span class="line"><span class="comment"># 保持连接</span></span><br><span class="line">warp-cli enable-always-on</span><br><span class="line"><span class="comment"># 查看设置</span></span><br><span class="line">warp-cli settings</span><br><span class="line"><span class="comment"># 查看连接是否成功</span></span><br><span class="line">warp-cli warp-stats</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置-V2Ray"><a href="#配置-V2Ray" class="headerlink" title="配置 V2Ray"></a>配置 V2Ray</h3><p>修改 V2Ray 的配置文件<code>/etc/v2ray/config.json</code></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  ...<span class="punctuation">,</span></span><br><span class="line">   <span class="attr">&quot;outbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    ...<span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;tag&quot;</span><span class="punctuation">:</span> <span class="string">&quot;warp&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;socks&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;servers&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">          <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;address&quot;</span><span class="punctuation">:</span> <span class="string">&quot;127.0.0.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">40000</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;users&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">]</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">    ...</span><br><span class="line">   <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">   <span class="attr">&quot;routing&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">     <span class="attr">&quot;rules&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;field&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;domain&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">              <span class="string">&quot;openai.com&quot;</span><span class="punctuation">,</span></span><br><span class="line">              <span class="string">&quot;ai.com&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;outboundTag&quot;</span><span class="punctuation">:</span> <span class="string">&quot;warp&quot;</span></span><br><span class="line">       <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">   <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  ...</span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>主要更改内容：</p>
+<ul>
+<li>outbounds 增加一个 warp 出口</li>
+<li>routing 规则增加 openai 规则；</li>
+</ul>
+<p>最后重启 V2Ray 就可以了，再访问 ChatGPT 发现可以正常访问了。</p>
+<h2 id="V2Ray-客户端"><a href="#V2Ray-客户端" class="headerlink" title="V2Ray 客户端"></a>V2Ray 客户端</h2><p>V2Ray 客户端有很多，这里只介绍几个常用的。</p>
+<ul>
+<li>Mac 客户端：<a target="_blank" rel="noopener" href="https://github.com/Cenmrev/V2RayX">V2RayX</a></li>
+<li>Android 客户端: <a target="_blank" rel="noopener" href="https://github.com/2dust/v2rayNG">V2RayNG</a></li>
+</ul>
+<p>更多客户端详可以看<a target="_blank" rel="noopener" href="https://www.v2ray.com/en/awesome/tools.html">这里</a>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>经过一番折腾，终于搭建好了自己的梯子，现在可以愉快的科学上网，也可以正常访问 ChatGPT 了，如果你也想搭建自己的梯子，可以参考本文的方法，如果你有更好的方法，欢迎在评论区留言。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2023/08/08/v2ray-install-and-deploy/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2023/08/08/v2ray-install-and-deploy/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

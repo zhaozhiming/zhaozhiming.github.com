@@ -1,0 +1,267 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>Notion API 使用介绍 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="Notion API 使用介绍"> <!-- TODO: truncate -->
+	<meta name="keywords" content="notion api">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">Notion API 使用介绍</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-08-09T02:01:23.000Z" itemprop="datePublished">8月 9, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/notion-api/">notion api</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/08/notion-api.png" class="" width="400" height="300">
+
+<p>最近在开发一个小工具，需要使用数据库来保存数据，但又不想自己费力气去部署一个数据库，想如果有一个<strong>免费</strong>、<strong>联网</strong>、<strong>私有</strong>的数据库就好了，于是想到了自己日常使用的笔记本工具 Notion，它提供了数据库的功能，可以进行数据的存储和管理，同时 Notion 提供了 API 接口，可以方便的进行数据的读取和保存，今天就介绍一下 Notion 及其 API 的使用。</p>
+<span id="more"></span>
+
+<h2 id="概念介绍"><a href="#概念介绍" class="headerlink" title="概念介绍"></a>概念介绍</h2><h3 id="Notion"><a href="#Notion" class="headerlink" title="Notion"></a>Notion</h3><p><a target="_blank" rel="noopener" href="https://www.notion.so/">Notion</a>是一个笔记本工具，但它的功能远不止于此，它更像是一个多功能的组织和协作平台。用户可以在其中创建文档、笔记、任务列表、数据库、看板等，同时也可以为内容设置提醒、创建日程、制定计划。Notion 的强大之处在于它的模块化设计：用户可以自由地拖放和自定义“块”（例如文本块、待办事项块、图片块、链接块等），以创建出完全满足个人或团队需求的页面。</p>
+<h3 id="Notion-API"><a href="#Notion-API" class="headerlink" title="Notion API"></a>Notion API</h3><p>通过 Notion 的公共 API，开发人员可以以编程方式与 Notion 工作空间进行交互，帮助他们处理页面、数据库、用户、评论和查询工作空间内容。</p>
+<p>想要使用 Notion API，首先要创建一个<code>集成</code>，<code>集成</code>是程序连接到 Notion 工作空间的<code>钥匙</code>，你也可以理解成普通 API 产品的<code>API KEY</code>，这样你的工作空间才能安全的被你的程序访问。</p>
+<img src="/images/post/2023/08/notion-integration.jpeg" class="" width="1000" height="600">
+
+<h2 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h2><p>在开始使用 Notion API 之前，需要先准备好以下内容。</p>
+<h3 id="新建集成"><a href="#新建集成" class="headerlink" title="新建集成"></a>新建集成</h3><p>Notion 新建<code>集成</code>非常简单，在<a target="_blank" rel="noopener" href="https://www.notion.so/my-integrations">这个页面</a>点击<code>Create new integration</code>按钮，然后选择工作空间，再输入<code>集成</code>的名称，点击<code>Submit</code>按钮即可。</p>
+<p>创建完成后点击<code>View integration</code>，可以查看<code>集成</code>的 Secret，这是调用 Notion API 的凭证，需要保存好，不要泄露给他人。</p>
+<h3 id="新建数据库"><a href="#新建数据库" class="headerlink" title="新建数据库"></a>新建数据库</h3><p>打开 Notion 客户端，在自己的工作空间下，随便进入一个页面，然后按<code>/</code>键，输入<code>database</code>，选择<code>Database Inline</code>选项进行数据库创建。</p>
+<h3 id="数据库连接集成"><a href="#数据库连接集成" class="headerlink" title="数据库连接集成"></a>数据库连接集成</h3><p>数据库创建完成后，进入数据库的全屏页面，点击右上角的<code>Share</code>按钮，再点击<code>Copy Link</code>按钮，这时复制到粘贴板的 url 格式如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.notion.so/969dd2141ae54d73a28cb76730f3793a?v=...</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>969dd2141ae54d73a28cb76730f3793a</code>这一部分就是数据库的<code>ID</code>，这个也需要保存好，后面调用 Notion API 将用到。</p>
+<h2 id="调用-API"><a href="#调用-API" class="headerlink" title="调用 API"></a>调用 API</h2><p>前期准备完成后，我们就开始来调用 Notion API 了。 Notion API 提供了 Restful API 和 JS SDK 两种调用方式。</p>
+<h3 id="读取数据"><a href="#读取数据" class="headerlink" title="读取数据"></a>读取数据</h3><p>我们先看如何通过 API 获取 Notion 数据库中的数据，我们使用 Restful API 的方式来获取数据，示例代码如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST <span class="string">&#x27;https://api.notion.com/v1/databases/969dd2141ae54d73a28cb76730f3793a/query&#x27;</span> \</span><br><span class="line">  -H <span class="string">&#x27;Authorization: Bearer &#x27;</span><span class="string">&quot;<span class="variable">$NOTION_API_KEY</span>&quot;</span><span class="string">&#x27;&#x27;</span> \</span><br><span class="line">  -H <span class="string">&#x27;Notion-Version: 2022-06-28&#x27;</span> \</span><br><span class="line">  -H <span class="string">&quot;Content-Type: application/json&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在 url 中我们需要传入数据库的 ID，即<code>database</code>后面那一部分</li>
+<li>请求方法不是<code>GET</code>，而是<code>POST</code></li>
+<li>在 header 中要传入认证头：<code>Authorization: Bearer $NOTION_API_KEY</code>，<code>NOTION_API_KEY</code>是我们前面创建的集成的 Secret，需要替换成自己的</li>
+<li>在 header 中要传入<code>Notion-Version</code>，这个是 API 的版本，目前最新的是<code>2022-06-28</code>，更多版本信息可以查看<a target="_blank" rel="noopener" href="https://developers.notion.com/reference/changes-by-version">这里</a></li>
+</ul>
+<p>在请求参数中还可以添加 body 参数，对查询结果进行过滤，排序等操作，具体可以查看<a target="_blank" rel="noopener" href="https://developers.notion.com/reference/post-database-query">这里</a>。</p>
+<p>返回的结果信息如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;object&quot;</span><span class="punctuation">:</span> <span class="string">&quot;list&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;results&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;title&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;title&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span><span class="punctuation">,</span></span><br><span class="line">              <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;数据库内容&quot;</span></span><br><span class="line">              <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">          <span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;foo&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;N%3FWZ&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;rich_text&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;rich_text&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">              <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span><span class="punctuation">,</span></span><br><span class="line">              <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;FOO&quot;</span></span><br><span class="line">              <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">          <span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;has_more&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里假设数据库是有 2 个字段，一个是每个数据库都会有的<code>title</code>字段，它的值存放在<code>properties.title.title.text.content</code>中，可以看到这个字段的类型是<code>type</code>，是 Notion 数据库中的一个特殊字段。另外一个字段是<code>foo</code>，它的值存放在<code>properties.foo.rich_text.text.content</code>中，可以看到这个字段的类型是<code>rich_text</code>，是一个普通文本类型字段。</p>
+<p>另外还有一个<code>has_more</code>字段，用来表示是否有更多的数据，查询数据的 API 默认是每次获取 100 条数据，如果有更多数据这个字段的值就会显示为<code>true</code>，需要通过其他方法来获取剩余的数据。</p>
+<p>了解了返回结果的数据结构后，我们就知道如何通过程序来获取数据库数据了。</p>
+<h3 id="保存数据"><a href="#保存数据" class="headerlink" title="保存数据"></a>保存数据</h3><p>再来看如何通过 API 保存数据到 Notion 数据库中，我们使用 JS SDK 的方式来保存数据，示例代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Client</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@notionhq/client&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> authKey = <span class="string">&#x27;Notion API Key&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> databaseId = <span class="string">&#x27;Database ID&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> notion = <span class="keyword">new</span> <span class="title class_">Client</span>(&#123; <span class="attr">auth</span>: authKey &#125;);</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">addItem</span>(<span class="params">&#123; title, foo &#125;</span>) &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> response = <span class="keyword">await</span> notion.<span class="property">pages</span>.<span class="title function_">create</span>(&#123;</span><br><span class="line">      <span class="attr">parent</span>: &#123; <span class="attr">database_id</span>: databaseId &#125;,</span><br><span class="line">      <span class="attr">properties</span>: &#123;</span><br><span class="line">        <span class="attr">title</span>: &#123;</span><br><span class="line">          <span class="attr">title</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">              <span class="attr">text</span>: &#123;</span><br><span class="line">                <span class="attr">content</span>: title,</span><br><span class="line">              &#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">          ],</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">foo</span>: &#123;</span><br><span class="line">          <span class="attr">rich_text</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">              <span class="attr">text</span>: &#123;</span><br><span class="line">                <span class="attr">content</span>: foo,</span><br><span class="line">              &#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">          ],</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(response);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Success! Entry added.&#x27;</span>);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(error.<span class="property">body</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">addItem</span>(&#123; <span class="attr">title</span>: <span class="string">&#x27;标题&#x27;</span>, <span class="attr">foo</span>: <span class="string">&#x27;Foo&#x27;</span> &#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>authKey 是我们前面创建的集成的 Secret，需要替换成自己的</li>
+<li>databaseId 是我们前面创建的数据库的 ID，也需要替换成自己的</li>
+<li><code>notion.pages.create</code>方法用来创建数据库一条新的记录，<code>parent</code>参数指定了页面的父级，这里是数据库</li>
+<li><code>properties</code>参数指定了记录的属性，这里是<code>title</code>和<code>foo</code>，它们的值分别是<code>title</code>和<code>foo</code>参数传入的值。数据结构跟我们之前读取数据的时候返回的数据结构是一样的。</li>
+</ul>
+<p>调用完方法后可以去 Notion 客户端查看该数据库，检查是否保存成功。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>今天我们介绍了 Notion API 的使用，通过 API 我们可以读取和保存 Notion 数据库中的数据，这样就可以通过程序来操作 Notion 数据库了，可以实现很多有意思的功能，比如通过 API 将 RSS 订阅的文章保存到 Notion 数据库中，或者通过 API 将 Notion 数据库中的数据同步到其他平台等等。对比平时要部署数据库来说，这种方式更加简单方便，而且 Notion 数据库的可视化编辑功能也非常强大，可以很方便的对数据进行编辑和管理。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2023/08/09/notion-api-usage/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2023/08/09/notion-api-usage/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

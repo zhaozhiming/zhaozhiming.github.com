@@ -1,0 +1,317 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>如何在 Rinkeby 网络赚取以太币及代币 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="如何在 Rinkeby 网络赚取以太币及代币"> <!-- TODO: truncate -->
+	<meta name="keywords" content="eth,rinkeby,token">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">如何在 Rinkeby 网络赚取以太币及代币</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2018-04-18T14:41:00.000Z" itemprop="datePublished">4月 18, 2018</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/token/">token</a> <a href="/tags/eth/">eth</a> <a href="/tags/rinkeby/">rinkeby</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2018/04/earn_eth.jpg" class="" width="400" height="300">
+
+<p>在开发以太坊应用时最苦恼的事情莫过于手头账户上没有以太币（以下简称 eth），没有 money 什么事情都干不了，好在以太坊提供了几个测试网络，在测试网络上开发约等同于真实环境的主网络，最重要的是测试网络的 eth<strong>不要钱！不要钱！不要钱！</strong>但刚接触以太坊开发的同学可能还不清楚如何操作，下面就来介绍一下在 Rinkeby 测试网络的赚钱大法。</p>
+<span id="more"></span>
+
+<h2 id="MetaMask-钱包"><a href="#MetaMask-钱包" class="headerlink" title="MetaMask 钱包"></a>MetaMask 钱包</h2><p>首先你需要有一个以太坊钱钱包，这样你才能拥有自己以太坊账号，才能查看自己账号里面是否有金额进账。</p>
+<p>最简单的方式是使用 <a target="_blank" rel="noopener" href="https://metamask.io/">MetaMask</a> 这款轻量级钱包，它以浏览器插件的形式提供功能，现在支持的浏览器包括 Chrome、Firefox、Opera。</p>
+<p>安装完插件后你就可以在浏览器插件中进行账户创建、查看余额等一系列操作，以及后面介绍的赚取代币，都可以通过这个钱包应用来完成。</p>
+<h3 id="如何使用-MetaMask-钱包"><a href="#如何使用-MetaMask-钱包" class="headerlink" title="如何使用 MetaMask 钱包"></a>如何使用 MetaMask 钱包</h3><p>网上有很多关于 MetaMask 钱包的使用说明，这里就不多介绍了，可以参考以下链接：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.94eth.com/tutorial/metamask">metamask 简明教程</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bitansuo.com/articles/metamask-%E6%95%99%E7%A8%8B/">METAMASK 以太坊轻钱包（浏览器插件）使用教程</a></li>
+<li><a target="_blank" rel="noopener" href="http://8btc.com/thread-76137-1-1.html">以太坊轻钱包 MetaMask 详细图文教程</a></li>
+</ul>
+<p>最重要的一点是通过 MetaMask 切换网络，如下图所示，<code>Main Ethereum Network</code>是主网络，<code>Rinkeby Test Network</code>是测试网络，我们选择后者。</p>
+<img src="/images/post/2018/04/metamask_network.png" class="" width="300" height="400">
+
+<h2 id="赚取以太币"><a href="#赚取以太币" class="headerlink" title="赚取以太币"></a>赚取以太币</h2><p>Rinkeby 网络的 eth 赚取非常简单，不需要你额外花费一分钱，只要你能上网和访问 Twitter 或者 Google 或者 Facebook 即可获取 eth。</p>
+<p>那要如何操作呢？首先你要登陆到这个网站：<a target="_blank" rel="noopener" href="https://faucet.rinkeby.io/">faucet.rinkeby.io</a>，这是一个免费发放 eth 的网站，但它只作用在 Rinkeby 网络上。</p>
+<h3 id="发布你的账户地址"><a href="#发布你的账户地址" class="headerlink" title="发布你的账户地址"></a>发布你的账户地址</h3><p>具体方法就是通过以下 3 种方式：</p>
+<ul>
+<li>使用 <a target="_blank" rel="noopener" href="https://twitter.com/">Twitter</a> 发表一个推文，推文的内容是你的以太坊账号地址（可以通过 MetaMask 创建），然后将该推文的链接复制下来，粘贴到上面那个网址的输入框中就可以了。</li>
+<li>使用 <a target="_blank" rel="noopener" href="https://plus.google.com/">Google Plus</a> 发布一条公共消息，消息的内容同样为你的账号地址，然后把消息的网址链接复制下来粘贴到上面那个网址。</li>
+<li>跟上面一样，只不过是换成用 <a target="_blank" rel="noopener" href="https://www.facebook.com/">Facebook</a> 来发布公共消息，但因笔者比较少用 Facebook，还不知道怎么获取 Facebook 的消息地址，所以没怎么用这种方式。</li>
+</ul>
+<h3 id="选择获取的-eth-数量"><a href="#选择获取的-eth-数量" class="headerlink" title="选择获取的 eth 数量"></a>选择获取的 eth 数量</h3><p>把网址链接粘贴到网站上去后，就可以选择获取多少 eth 了，从下图我们可以看到有 3 种选择：</p>
+<img src="/images/post/2018/04/fauce_eth.png" class="" width="400" height="300">
+
+<ul>
+<li>获取 3 个 eth，间隔时间 8 小时，也就是说你必须等到 8 小时之后才能再次获取 eth。</li>
+<li>获取 7.5 个 eth，间隔时间 1 天。</li>
+<li>获取 18.75 个 eth，间隔时间 3 天。</li>
+</ul>
+<p>当你选择了其中一种之后，差不多等 10~20 秒，你再查看你 MetaMask 的账号你就会发现你的 eth 变多了。</p>
+<p>如果你没有钱包应用也可以直接通过这个网址查看你的账号金额，上面还有你的交易记录等信息。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://rinkeby.etherscan.io/address/42位账号地址</span><br></pre></td></tr></table></figure>
+
+<h3 id="赚钱-Tip"><a href="#赚钱-Tip" class="headerlink" title="赚钱 Tip"></a>赚钱 Tip</h3><p>Rinkeby Faucet 网站限制你获取 eth 的规则是根据你的 twitter 账号或者 Google Plus 账号来判断的，也就是说你如果有 2 个 twitter 账号的话，你可以同时使用这 2 个 twitter 账号来为同一个以太坊账号获取 eth，而不会受到间隔时间的限制。</p>
+<h2 id="赚取代币"><a href="#赚取代币" class="headerlink" title="赚取代币"></a>赚取代币</h2><p>以太坊代币（以下简称 token) 其实也是一种智能合约，通过合约地址可以在 Rinkeby 网站上查看 token 的信息，包括总发币量，交易记录等。</p>
+<p>大部分以太坊代币都是基于 ERC20 的标准，也就是都实现了 ERC20 的接口，比如获取账户金额，转账等。</p>
+<p>那要如何获取 token 呢？</p>
+<h3 id="找到-token-的智能合约地址"><a href="#找到-token-的智能合约地址" class="headerlink" title="找到 token 的智能合约地址"></a>找到 token 的智能合约地址</h3><p>跟主网络的 <a target="_blank" rel="noopener" href="https://etherscan.io/">etherscan.io</a> 网站一样，Rinkeby 网络也提供了一个类似的网站，方便大家进行信息查询，这个网站就是刚刚提到的 <a target="_blank" rel="noopener" href="https://rinkeby.etherscan.io/">rinkeby.etherscan.io</a>。</p>
+<p>在这个网站上面我们可以查询已经部署到测试网络的 token，找到 token 后就可以查看其合约地址了。</p>
+<ul>
+<li>在网站上点击<code>Token</code>下拉框，并选择<code>ERC20 Token Search</code></li>
+</ul>
+<img src="/images/post/2018/04/token_search.png" class="" width="400" height="200">
+
+<ul>
+<li>在输入框中输入要查询的 token 名称，在下拉表格中选择</li>
+</ul>
+<img src="/images/post/2018/04/token_result.png" class="" width="400" height="250">
+
+<ul>
+<li>进入 token 详情页面后就可以查询到 token 的合约地址了</li>
+</ul>
+<img src="/images/post/2018/04/token_contract.png" class="" width="400" height="200">
+
+
+<h3 id="在-MetaMask-添加代币"><a href="#在-MetaMask-添加代币" class="headerlink" title="在 MetaMask 添加代币"></a>在 MetaMask 添加代币</h3><p>在 MetaMask 的默认账户上是没有显示任何 token 的，如果想查看自己账户上某种 token 的情况，需要自己添加，操作步骤如下：</p>
+<ul>
+<li>选择<code>TOKENS</code>标签，然后点击<code>ADD TOKEN</code>按钮</li>
+</ul>
+<img src="/images/post/2018/04/add_token1.png" class="" width="400" height="300">
+
+<ul>
+<li>在添加 token 页面输入 token 的合约地址，输入完成后 token 的名称会自动显示在<code>Token Symbol</code>中，最后点击添加按钮</li>
+</ul>
+<img src="/images/post/2018/04/add_token2.png" class="" width="400" height="400">
+
+<ul>
+<li>添加完成后在账户页面下方会显示新增的 token 种类</li>
+</ul>
+<img src="/images/post/2018/04/add_token3.png" class="" width="400" height="200">
+
+<h3 id="使用-eth-购买-token"><a href="#使用-eth-购买-token" class="headerlink" title="使用 eth 购买 token"></a>使用 eth 购买 token</h3><p>之前免费获取到的 eth 就可以用来购买 token 了，具体步骤如下：</p>
+<ul>
+<li>点击账号上的<code>SEND</code>按钮</li>
+</ul>
+<img src="/images/post/2018/04/token_transfer1.png" class="" width="400" height="300">
+
+<ul>
+<li>输入 token 的智能合约地址和花费的 eth 数量，点击<code>NEXT</code></li>
+</ul>
+<img src="/images/post/2018/04/token_transfer2.png" class="" width="400" height="400">
+
+<ul>
+<li>确认交易信息，确认没问题点击<code>SUBMIT</code></li>
+</ul>
+<img src="/images/post/2018/04/token_transfer3.png" class="" width="400" height="600">
+
+<ul>
+<li>交易成功后，等个大概 10 秒钟，再次查看 token 的金额，会发现你的 token 数量已经增加了</li>
+</ul>
+<img src="/images/post/2018/04/token_transfer4.png" class="" width="400" height="200">
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Rinkeby 试网络是一个非常有用的测试环境，在上面获取到 eth 和 token 之后，你就有资源进行各种测试开发工作了。需要注意一点的是测试网络的 token 比较乱，比如说比较出名的 token<code>EOS</code> 就有 10 几种，但这个不影响测试开发工作，只需随便选择其中一种就可以了。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2018/04/18/how-to-earn-eth-and-token-in-rinkeby/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2018/04/18/how-to-earn-eth-and-token-in-rinkeby/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

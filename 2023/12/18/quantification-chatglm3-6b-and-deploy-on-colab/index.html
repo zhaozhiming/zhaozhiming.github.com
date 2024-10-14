@@ -1,0 +1,327 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>在 CPU 服务器上部署 ChatGLM3-6B 模型 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="了解如何在 Colab 上进行 ChatGLM3-6B 的 GGML 量化以及部署"> <!-- TODO: truncate -->
+	<meta name="keywords" content="chatglm, quantification, ggml, colab">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">在 CPU 服务器上部署 ChatGLM3-6B 模型</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-12-18T07:04:11.000Z" itemprop="datePublished">12月 18, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/chatglm/">chatglm</a> <a href="/tags/ggml/">ggml</a> <a href="/tags/quantification/">quantification</a> <a href="/tags/colab/">colab</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/12/colab-chatglm-ggml.png" class="" width="400" height="300">
+
+<p>大语言模型（LLM）的量化技术可以大大降低 LLM 部署所需的计算资源，模型量化后可以将 LLM 的显存使用量降低数倍，甚至可以将 LLM 转换为完全无需显存的模型，这对于 LLM 的推广使用来说是非常有吸引力的。本文将介绍如何量化 ChatGLM3-6B 模型的 GGML 版本，并介绍如何在 Colab 的 CPU 服务器部上署量化后的模型，让大家在了解如何量化模型的同时也熟悉 Colab 的操作。</p>
+<span id="more"></span>
+
+<h2 id="术语介绍"><a href="#术语介绍" class="headerlink" title="术语介绍"></a>术语介绍</h2><p>在开始实际操作之前，我们需要了解这次操作中涉及到的工具和术语的含义，这样才能更好的理解后面的内容。</p>
+<h3 id="Colab"><a href="#Colab" class="headerlink" title="Colab"></a>Colab</h3><p><a target="_blank" rel="noopener" href="https://colab.research.google.com/">Colab</a> 是由 Google 提供的一种免费的云端 Jupyter 笔记本服务。它允许用户在云端运行和共享 Python 代码，而无需进行任何设置或配置。它的一个最大的优势是可以免费试用 Google 的服务器，免费用户可以使用 CPU 服务器和 T4 GPU 服务器，而付费用户可以使用 TPU 服务器和 A100、V100 等 GPU 服务器。</p>
+<h3 id="ChatGLM3-6B"><a href="#ChatGLM3-6B" class="headerlink" title="ChatGLM3-6B"></a>ChatGLM3-6B</h3><p>ChatGLM3-6B 是智源研究院（智谱 AI）和清华大学知识工程实验室联合开发的最新一代对话预训练模型。这个模型在保留了前两代模型的流畅对话和低部署门槛等优秀特性的基础上，引入了工具调用、代码解释器等新功能。更多细节可以参考我之前的文章 <a href="https://zhaozhiming.github.io/2023/10/31/chatglm3-deploy/">ChatGLM3-6B 部署指南</a>、<a href="https://zhaozhiming.github.io/2023/11/01/chatglm3-feature-interpretation/">ChatGLM3-6B 功能原理解析</a>。</p>
+<h3 id="GGML"><a href="#GGML" class="headerlink" title="GGML"></a>GGML</h3><p><a target="_blank" rel="noopener" href="https://github.com/ggerganov/ggml">GGML</a> 是一个 LLM 量化的工具库，也是量化文件的一种格式，量化的 LLM 不仅在容量上大幅降低（ChatGLM3-6B 从 12G 降低到 3.5G），而且可以直接在纯 CPU 的服务器上运行。更多的 LLM 量化格式可以参考我之前的文章 <a href="https://zhaozhiming.github.io/2023/08/31/llm-quantization-format-introduce/">AI 模型量化格式介绍</a>。</p>
+<h2 id="chatglm-cpp-介绍"><a href="#chatglm-cpp-介绍" class="headerlink" title="chatglm.cpp 介绍"></a>chatglm.cpp 介绍</h2><p>我们将使用<a target="_blank" rel="noopener" href="https://github.com/li-plus/chatglm.cpp">chatglm.cpp</a>这个工具来进行模型量化，它是基于<a target="_blank" rel="noopener" href="https://github.com/ggerganov/ggml">GGML</a>库实现的量化工具，除了可以量化 ChatGLM 系列的 LLM 外，还支持其他比如 BaiChuan、CodeGeeX、InternLM 等 LLM 的量化。</p>
+<p>chatglm.cpp 除了提供量化功能外，还提供了多种运行量化模型的方式，包括源码编译运行、Python 代码运行、 Web 服务和 API 服务等，这些运行方式可以让我们在不同的场景下使用量化后的模型。</p>
+<h2 id="量化-ChatGLM3-6B-模型"><a href="#量化-ChatGLM3-6B-模型" class="headerlink" title="量化 ChatGLM3-6B 模型"></a>量化 ChatGLM3-6B 模型</h2><p>首先我们在 Colab 上新建一个 Jupyter 笔记本，然后将笔记本连接上一个运行时服务器，量化时因为需要用到比较大的内存（大概 15G），而 Colab 给免费用户提供的服务器内存只有 12G，所以我们需要使用付费用户的服务器。所幸 Colab 的付费价格并不高，可以选择 9.99 美元 100 个计算单元的计费模式，也可以选择每月 9.99 美元的 Pro 模式。升级为付费模式后，我们就选择大内存服务器了。这里我们选择大内存的 <strong>CPU</strong> 服务器，本文的所有操作都只需在 CPU 服务器上运行，所以选择 CPU 服务器即可。</p>
+<img src="/images/post/2023/12/colab-runtime-type.png" class="" width="600" height="400">
+
+<p>然后就可以在 Jupyter 笔记本中编写代码了，我们先下载 ChatGLM3-6B 的模型，在 Colab 上下载 Huggingface 的资源非常快，基本几分钟就可以下载完成。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://huggingface.co/THUDM/chatglm3-6b</span><br></pre></td></tr></table></figure>
+
+<p>下载后的模型会保存在<code>/content</code>这个路径下，然后再下载 chatglm.cpp 项目的代码，在使用<code>git clone</code>命令时需要加上<code>--recursive</code>参数来保证下载的代码中包含子模块。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --recursive https://github.com/li-plus/chatglm.cpp.git</span><br></pre></td></tr></table></figure>
+
+<p>下载后的 chatglm.cpp 同样会保存在<code>/content</code>路径下，接着我们需要安装一些项目所需的依赖，这里我们使用<code>pip</code>来安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 -m pip install -U pip</span><br><span class="line">python3 -m pip install torch tabulate tqdm transformers accelerate sentencepiece</span><br></pre></td></tr></table></figure>
+
+<p>然后就可以执行我们的量化命令了，这里我们使用<code>covert.py</code>脚本来进行量化，执行命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 chatglm.cpp/chatglm_cpp/convert.py -i /content/chatglm3-6b -t q4_0 -o chatglm-ggml.bin</span><br></pre></td></tr></table></figure>
+
+<p>这里我们使用<code>q4_0</code>这个量化类型来进行量化，其他的量化类型可以参考 chatglm.cpp 的文档，量化完成后会在<code>/content</code>路径下生成一个<code>chatglm-ggml.bin</code>文件，这个文件就是量化后的模型文件。</p>
+<p>可以看到量化后的模型文件大小为 3.5G，而原来的模型文件大小为 12G，因为我们是<code>q4_0</code>的量化方式，因此量化后的模型大小约为原模型大小的 1&#x2F;4，大大降低了模型的容量。</p>
+<h3 id="保存量化模型到-Google-Drive"><a href="#保存量化模型到-Google-Drive" class="headerlink" title="保存量化模型到 Google Drive"></a>保存量化模型到 Google Drive</h3><p>我们可以将量化模型保存到 Google Drive，这样以后如果重启服务器就无需再执行以上步骤，直接从 Google Drive 读取量化模型即可。</p>
+<p>首先我们需要在笔记本中挂载 Google Drive，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from google.colab import drive</span><br><span class="line">drive.mount(<span class="string">&#x27;/content/gdrive&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>执行命令后会弹出 Google Drive 的授权页面，选择<code>允许</code>即可，挂载成功后，我们就可以看到 Google Drive 的挂载目录<code>/content/gdrive/MyDrive</code>，然后将量化后的模型文件保存到 Google Drive 中，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> chatglm-ggml.bin /content/gdrive/MyDrive/chatglm-ggml.bin</span><br></pre></td></tr></table></figure>
+
+<p>以后如果重启服务器，我们只要挂载 Google Drive，然后就可以直接引用其中的模型文件了。</p>
+<h3 id="上传量化模型到-Huggingface"><a href="#上传量化模型到-Huggingface" class="headerlink" title="上传量化模型到 Huggingface"></a>上传量化模型到 Huggingface</h3><p>我们也可以将量化模型上传到 Huggingface，这样可以方便在其他服务器上进行部署。上传文件到 Huggingface 需要新建一个模型仓库，然后通过以下代码进行文件上传：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> huggingface_hub <span class="keyword">import</span> login, HfApi</span><br><span class="line">login()</span><br><span class="line"></span><br><span class="line">api = HfApi()</span><br><span class="line">api.upload_file(</span><br><span class="line">    path_or_fileobj=<span class="string">&quot;/content/chatglm-ggml.bin&quot;</span>,</span><br><span class="line">    path_in_repo=<span class="string">&quot;chatglm-ggml.bin&quot;</span>,</span><br><span class="line">    repo_id=<span class="string">&quot;username/chatglm3-6b-ggml&quot;</span>,</span><br><span class="line">    repo_type=<span class="string">&quot;model&quot;</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>path_or_fileobj</code>参数是量化模型的本地路径</li>
+<li><code>path_in_repo</code>参数是上传到 Huggingface 仓库中的路径</li>
+<li><code>repo_id</code>参数是 Huggingface 仓库的 ID，格式为<code>username/repo-name</code></li>
+<li><code>repo_type</code>参数是 Huggingface 仓库的类型，这里是<code>model</code></li>
+</ul>
+<p>注意在代码执行过程中需要我们输入 Huggingface 账户的 Access Token，这个 Token 需要是有<code>写入</code>权限的 Token，不能是<code>只读</code>的 Token。</p>
+<h3 id="GGUF"><a href="#GGUF" class="headerlink" title="GGUF"></a>GGUF</h3><p>了解过 GGML 量化的朋友可能会问，chatglm.cpp 支持 GGUF 格式吗？因为据 GGML 的官方介绍，以后的量化格式会慢慢从 GGML 过渡为 GGUF 格式，因为 GGUF 格式能更保存模型更多的额外信息，但 chatglm.cpp 因为 ChatGLM 模型架构的关系，目前<a target="_blank" rel="noopener" href="https://github.com/li-plus/chatglm.cpp/issues/135#issuecomment-1752027324">还不支持 GGUF 格式</a>。</p>
+<h2 id="源码编译运行量化模型"><a href="#源码编译运行量化模型" class="headerlink" title="源码编译运行量化模型"></a>源码编译运行量化模型</h2><p>我们得到量化的模型后，可以运行模型来验证一下模型是否正常，chatglm.cpp 提供了多种运行模型的方式，这里我们先介绍源码编译运行的方式。</p>
+<p>首先编译 chatglm.cpp 的运行命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> chatglm.cpp &amp;&amp; cmake -B build &amp;&amp; cmake --build build -j --config Release</span><br></pre></td></tr></table></figure>
+
+<p>编译完成后在 chatglm.cpp 目录下会生成一个<code>build</code>目录，编译完成后的命令就放在这个目录下，然后我们就可以运行模型了，运行命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">chatglm.cpp/build/bin/main -m chatglm-ggml.bin -p <span class="string">&quot;你好&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 结果显示</span></span><br><span class="line">你好！我是人工智能助手 ChatGLM3-6B，很高兴见到你，欢迎问我任何问题。</span><br></pre></td></tr></table></figure>
+
+<p>上面的命令中，<code>-m</code>参数带上量化模型的地址，<code>-p</code>参数是输入的提示词，然后我们可以看到 LLM 的输出结果，跟运行原模型的结果是一样的。我们还可以通过<code>-i</code>参数来发起交互式对话，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">./build/bin/main -m chatglm-ggml.bin -i</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结果显示</span></span><br><span class="line">Welcome to ChatGLM.cpp! Ask whatever you want. Type <span class="string">&#x27;clear&#x27;</span> to clear context. Type <span class="string">&#x27;stop&#x27;</span> to <span class="built_in">exit</span>.</span><br><span class="line"></span><br><span class="line">Prompt   &gt; 你好</span><br><span class="line">ChatGLM3 &gt; 你好！我是人工智能助手 ChatGLM3-6B，很高兴见到你，欢迎问我任何问题。</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-Python-包"><a href="#使用-Python-包" class="headerlink" title="使用 Python 包"></a>使用 Python 包</h2><p>chatglm.cpp 还提供了 Python 包，使用该工具包我们也可以运行量化后的模型，首先安装 Python 依赖包，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -U chatglm-cpp</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码执行"><a href="#代码执行" class="headerlink" title="代码执行"></a>代码执行</h3><p>安装完 Python 包，我们就可以使用 Python 代码来运行量化模型了：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> chatglm_cpp</span><br><span class="line"></span><br><span class="line">pipeline = chatglm_cpp.Pipeline(<span class="string">&quot;../chatglm-ggml.bin&quot;</span>)</span><br><span class="line">pipeline.chat([chatglm_cpp.ChatMessage(role=<span class="string">&quot;user&quot;</span>, content=<span class="string">&quot;你好&quot;</span>)])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结果显示</span></span><br><span class="line">ChatMessage(role=<span class="string">&quot;assistant&quot;</span>, content=<span class="string">&quot;你好！我是人工智能助手 ChatGLM-6B，很高兴见到你，欢迎问我任何问题。&quot;</span>, tool_calls=[])</span><br></pre></td></tr></table></figure>
+
+<p>可以看到跟源码编译运行的结果是一样的。</p>
+<h3 id="命令行执行"><a href="#命令行执行" class="headerlink" title="命令行执行"></a>命令行执行</h3><p>也可以使用 Python 脚本运行量化模型，脚本文件在 chatglm.cpp 项目下的 examples 目录中，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">python examples/cli_demo.py -m chatglm-ggml.bin -p 你好</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结果显示</span></span><br><span class="line">你好！我是人工智能助手 ChatGLM3-6B，很高兴见到你，欢迎问我任何问题。</span><br></pre></td></tr></table></figure>
+
+<h2 id="部署-Web-服务"><a href="#部署-Web-服务" class="headerlink" title="部署 Web 服务"></a>部署 Web 服务</h2><p>我们可以将量化后的模型部署为 Web 服务，这样就可以在浏览器中来调用模型，这里我们使用 chatglm.cpp 提供的 Web 服务脚本来部署模型。</p>
+<h3 id="Gradio"><a href="#Gradio" class="headerlink" title="Gradio"></a>Gradio</h3><p>首先安装 Gradio 依赖，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m pip install gradio</span><br></pre></td></tr></table></figure>
+
+<p>再修改 Web 服务脚本 <code>examples/web_demo.py</code>，将<code>Share</code>属性改为<code>True</code>，这样可以在服务器外访问 Web 服务，然后再启动 Web 服务，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python3 chatglm.cpp/examples/web_demo.py -m chatglm-ggml.bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结果显示</span></span><br><span class="line">Running on <span class="built_in">local</span> URL:  http://127.0.0.1:7860</span><br><span class="line">Running on public URL: https://41db812a8754cd8ab3.gradio.live</span><br></pre></td></tr></table></figure>
+
+<p>浏览器访问<code>public URL</code>的显示结果：</p>
+<img src="/images/post/2023/12/colab-chatglmcpp-gradio.png" class="" width="1000" height="600">
+
+<h3 id="Streamlit"><a href="#Streamlit" class="headerlink" title="Streamlit"></a>Streamlit</h3><p>ChatGLM3-6B 除了提供 Gradio 的 Web 服务外，还提供了一个综合各种工具的 Streamlit Web 服务，我们再来部署该服务。首先安装 Streamlit 依赖，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 -m pip install streamlit jupyter_client ipython ipykernel</span><br><span class="line">ipython kernel install --name chatglm3-demo --user</span><br></pre></td></tr></table></figure>
+
+<p>再修改综合服务的脚本 <code>examples/chatglm3_demo.py</code>，将模型的地址改为量化模型的地址，改动如下：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="deletion">-MODEL_PATH = Path(__file__).resolve().parent.parent / &quot;chatglm3-ggml.bin&quot;</span></span><br><span class="line"><span class="addition">+MODEL_PATH = &quot;/content/chatglm-ggml.bin&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们还需要将 Colab 服务器中的 Web 服务代理到公网，需要安装 CloudFlare 的反向代理，这样我们才可以在服务器外访问该 Web 服务，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64</span><br><span class="line"><span class="built_in">chmod</span> +x cloudflared-linux-amd64</span><br></pre></td></tr></table></figure>
+
+<p>最后启动 Streamlit Web 服务和代理服务，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启动 Stratmlit Web 服务</span></span><br><span class="line">streamlit run chatglm.cpp/examples/chatglm3_demo.py &amp;&gt;/content/logs.txt &amp;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动代理服务</span></span><br><span class="line">grep -o <span class="string">&#x27;https://.*\.trycloudflare.com&#x27;</span> nohup.out | <span class="built_in">head</span> -n 1 | xargs -I &#123;&#125; <span class="built_in">echo</span> <span class="string">&quot;Your tunnel url &#123;&#125;&quot;</span></span><br><span class="line"><span class="built_in">nohup</span> /content/cloudflared-linux-amd64 tunnel --url http://localhost:8501 &amp;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结果显示</span></span><br><span class="line">Your tunnel url https://incorporated-attend-totally-humidity.trycloudflare.com</span><br><span class="line"><span class="built_in">nohup</span>: appending output to <span class="string">&#x27;nohup.out&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>浏览器访问<code>tunnel url</code>的显示结果：</p>
+<img src="/images/post/2023/12/colab-chatglmcpp-streamlit1.png" class="" width="1000" height="600">
+
+<img src="/images/post/2023/12/colab-chatglmcpp-streamlit2.png" class="" width="1000" height="600">
+
+<h2 id="部署-API-服务"><a href="#部署-API-服务" class="headerlink" title="部署 API 服务"></a>部署 API 服务</h2><p>我们还可以将量化后的模型部署为 API 服务，chatglm.cpp 的 Python 包提供了启动 API 服务的功能，该 API 适配 OpenAI API。</p>
+<p>首先是安装 chatglm.cpp 的 API 包，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -U <span class="string">&#x27;chatglm-cpp[api]&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后启动 API 服务，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MODEL=./chatglm-ggml.bin uvicorn chatglm_cpp.openai_api:app --host 127.0.0.1 --port 8000</span><br></pre></td></tr></table></figure>
+
+<p>MODEL 环境变量是量化模型的地址，然后我们使用<code>curl</code>命令来验证一下 API 服务是否正常，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">curl http://127.0.0.1:8000/v1/chat/completions -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> -d <span class="string">&#x27;&#123;&quot;messages&quot;: [&#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;你好&quot;&#125;]&#125;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 返回结果</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;id&quot;</span>:<span class="string">&quot;chatcmpl&quot;</span>,</span><br><span class="line">  <span class="string">&quot;model&quot;</span>:<span class="string">&quot;default-model&quot;</span>,</span><br><span class="line">  <span class="string">&quot;object&quot;</span>:<span class="string">&quot;chat.completion&quot;</span>,</span><br><span class="line">  <span class="string">&quot;created&quot;</span>:1703052225,</span><br><span class="line">  <span class="string">&quot;choices&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;index&quot;</span>:0,</span><br><span class="line">      <span class="string">&quot;message&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;role&quot;</span>:<span class="string">&quot;assistant&quot;</span>,</span><br><span class="line">        <span class="string">&quot;content&quot;</span>:<span class="string">&quot;你好！我是人工能助手 ChatGLM3-6B，很高兴见到你，欢迎问任何问题。&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">&quot;finish_reason&quot;</span>:<span class="string">&quot;stop&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;usage&quot;</span>:&#123;</span><br><span class="line">    <span class="string">&quot;prompt_tokens&quot;</span>:8,</span><br><span class="line">    <span class="string">&quot;completion_tokens&quot;</span>:29,</span><br><span class="line">    <span class="string">&quot;total_tokens&quot;</span>:37</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到 API 返回结果的数据结构跟 OpenAI API 的数据结构是一样的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文介绍了如何在 Colab 上使用 chatglm.cpp 对 ChatGLM3-6B 模型进行 GGML 版本的量化，并介绍了多种部署方式来运行量化后的模型，这些运行方式可以让我们在不同的场景下使用量化模型，而且全程是在 CPU 服务器上运行的，无需任何 GPU 显卡。希望本文对大家部署 LLM 或打造私有化 LLM 应用有所帮助，文中的 Colab 脚本见<a target="_blank" rel="noopener" href="https://colab.research.google.com/drive/1j__5w9vMVyO5X8xFgCi8cUl231G1G55c?usp=sharing">这里</a>，如果文中有什么错误或不足之处，欢迎在评论区指出。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2023/12/18/quantification-chatglm3-6b-and-deploy-on-colab/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2023/12/18/quantification-chatglm3-6b-and-deploy-on-colab/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

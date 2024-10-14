@@ -1,0 +1,274 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>在JavaScript中进行文件处理，第四部分：对象URLs - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="&lt;p&gt;&lt;strong&gt;译注：原文是《JavaScript高级程序设计》的作者Nicholas Zakas写的，本翻译纯属为自己学习而做，仅供参考。原文链接：&lt;a href=&#34;http://www.nczonline.net/blog/2012/05/31/working-with-files-in-javascript-part-4-object-urls&#34;&gt;这里&lt;/a&gt;&lt;/strong&gt;  &lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;学习到这里，你已经了解在传统方式中如何使用文件，你可以上传文件到服务端，可以从磁盘上读取文件，这些都是最常见的文件处理方式。但是，有一种全新的文件处理方式可以简化这些常见的任务，这就是使用对象URLs。  &lt;/p&gt;
+&lt;span id=&#34;more&#34;&gt;&lt;/span&gt;
+&lt;h2 id=&#34;什么是对象URL？&#34;&gt;&lt;a href=&#34;#什么是对象URL？&#34; class=&#34;headerlink&#34; title=&#34;什么是对象URL？&#34;&gt;&lt;/a&gt;什么是对象URL？&lt;/h2&gt;&lt;p&gt;对象URLs是磁盘上的文件地址。比如说，你想要将用户系统的一个图像文件显示到web页面，服务端无需要知道这个文件，所以也不需要上传它。如果你只是想要加载文件到页面，你可以像之前的帖子说的一样，获取一个File对象引用，将数据读取为一个数据URI，然后将数据URI分配到一个&lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt;元素。但想一想这里面的浪费，图像已经在磁盘上存在，为什么还要将图像读取为另外一种形式呢？如果你创建一个对象URL，你可以将其分配给&lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt;，这样就可以直接访问本地文件。  &lt;/p&gt;
+&lt;h2 id=&#34;它如何工作？&#34;&gt;&lt;a href=&#34;#它如何工作？&#34; class=&#34;headerlink&#34; title=&#34;它如何工作？&#34;&gt;&lt;/a&gt;它如何工作？&lt;/h2&gt;&lt;p&gt;File API*[1]*定义了一个全局对象叫URL，它有2个方法。第一个是createObjectURL()，接受一个File对象作为参数，返回一个对象URL，作用是告诉浏览器创建并且管理一个本地文件的URL。第二个方法是revokeObjectURL()，作用是告诉浏览器去销毁作为参数传入的URL，有效的释放内存。当然，一旦web页面被卸载了，则所有对象URLs都会被注销，当不再需要它们的时候，这是释放它们内存的一个好机会。    &lt;/p&gt;
+&lt;p&gt;File API对URL对象的支持不像其他部分那么好，在我写这篇文章的时候，IE10和Firefox9+支持一个全局URL对象。Chrome支持它的webkitURL形式，Safari和Opera不支持。  &lt;/p&gt;
+&lt;h2 id=&#34;例子&#34;&gt;&lt;a href=&#34;#例子&#34; class=&#34;headerlink&#34; title=&#34;例子&#34;&gt;&lt;/a&gt;例子&lt;/h2&gt;&lt;p&gt;如果你没有读取图片文件的数据，你怎么显示这个图片呢？假设你已经提供给用户文件选择的方式，并且现在有这个文件对象的引用并赋给了一个变量file。你可以如下使用：  &lt;/p&gt;
+&lt;figure class=&#34;highlight javascript&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;10&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;variable constant_&#34;&gt;URL&lt;/span&gt; = &lt;span class=&#34;variable language_&#34;&gt;window&lt;/span&gt;.&lt;span class=&#34;property&#34;&gt;URL&lt;/span&gt; || &lt;span class=&#34;variable language_&#34;&gt;window&lt;/span&gt;.&lt;span class=&#34;property&#34;&gt;webkitURL&lt;/span&gt;, imageUrl, image; &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;if&lt;/span&gt; (&lt;span class=&#34;variable constant_&#34;&gt;URL&lt;/span&gt;) &amp;#123; &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;　　imageUrl = &lt;span class=&#34;variable constant_&#34;&gt;URL&lt;/span&gt;.&lt;span class=&#34;title function_&#34;&gt;createObjectURL&lt;/span&gt;(file); &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;　　image = &lt;span class=&#34;variable language_&#34;&gt;document&lt;/span&gt;.&lt;span class=&#34;title function_&#34;&gt;createElement&lt;/span&gt;(&lt;span class=&#34;string&#34;&gt;&amp;quot;img&amp;quot;&lt;/span&gt;); &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;　　image.&lt;span class=&#34;property&#34;&gt;onload&lt;/span&gt; = &lt;span class=&#34;keyword&#34;&gt;function&lt;/span&gt;(&lt;span class=&#34;params&#34;&gt;&lt;/span&gt;) &amp;#123; &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;　　　　&lt;span class=&#34;variable constant_&#34;&gt;URL&lt;/span&gt;.&lt;span class=&#34;title function_&#34;&gt;revokeObjectURL&lt;/span&gt;(imageUrl); &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;　　&amp;#125;; &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;　　image.&lt;span class=&#34;property&#34;&gt;src&lt;/span&gt; = imageUrl; &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;　　&lt;span class=&#34;variable language_&#34;&gt;document&lt;/span&gt;.&lt;span class=&#34;property&#34;&gt;body&lt;/span&gt;.&lt;span class=&#34;title function_&#34;&gt;appendChild&lt;/span&gt;(image); &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;  
+&lt;p&gt;这个例子创建了一个本地URL变量，标准化浏览器的实现（即无论是何种浏览器都可以得到）。如果URL存在，程序将创建一个文件对象URL并将其存储在变量imageUrl，然后创建一个新的&lt;img&gt;元素，将imageUrl传入该元素的onloade事件处理方法，该方法将注销对象URL（一分钟内）。然后，src属性被分配了一个对象URL并将元素添加到页面。  &lt;/p&gt;
+&lt;p&gt;当图片加载的时候为什么要注销对象URL呢？在图片加载完之后，该URL就不再需要了，除非你想要在另外一个元素里面复用它。在这个例子中，图片被加载到一个单独的元素中，并且一旦图片完成加载，该URL就不再起任何作用，这是释放任何与其关联的内存的绝佳时刻。  &lt;/p&gt;
+&lt;h2 id=&#34;安全和注意事项&#34;&gt;&lt;a href=&#34;#安全和注意事项&#34; class=&#34;headerlink&#34; title=&#34;安全和注意事项&#34;&gt;&lt;/a&gt;安全和注意事项&lt;/h2&gt;&lt;p&gt;乍一看，这种能力有点恐怖。实际上你是通过一个URL直接从用户机器上加载一个文件，这种方式当然存在安全隐患。URL本身其实不是一个大的安全问题，因为URL是通过浏览器动态分配的，在其他电脑上不会起作用。那跨网点会怎么样呢？  &lt;/p&gt;
+&lt;p&gt;File API 不允许在不同网点使用对象URLs。当一个对象URL被创建，它就紧跟着执行JavaScript脚本的页面网点，所以你不能跨&lt;a href=&#34;http://www.wrox.com和p2p.wrox.com两个不同网点使用同一个对象url(会发生错误).但是,如果两个页面都是来自www.wrox.com,比如其中一个页面嵌套在另外一个页面的iframe里,这样就可以共享对象urls./&#34;&gt;www.wrox.com和p2p.wrox.com两个不同网点使用同一个对象URL（会发生错误）。但是，如果两个页面都是来自www.wrox.com，比如其中一个页面嵌套在另外一个页面的iframe里，这样就可以共享对象URLs。&lt;/a&gt;  &lt;/p&gt;
+&lt;p&gt;对象URLs只存在于文档创建它们的时候。当文档被卸载，所有对象URLs都会被注销。所以，在客户端存储对象URLs以便以后使用是没有意义的，它们在页面卸载之后就没有用了。  &lt;/p&gt;
+&lt;p&gt;你可以在浏览器中任何一个发起get请求的地方使用对象URLs，其中包括图片，脚本，web worker，样式表，音频，视频。浏览器执行post请求时使用不了对象URL。  &lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;下集预告&#34;&gt;&lt;a href=&#34;#下集预告&#34; class=&#34;headerlink&#34; title=&#34;下集预告&#34;&gt;&lt;/a&gt;下集预告&lt;/h4&gt;&lt;p&gt;创建直接链接到本地文件的URL是一种很强的能力。对比读取一个本地文件到JavaScript然后在页面上显示，你可以简单地创建一个URL并在页面指定它，后者大大简化了本地文件在页面中的使用情况。尽管如此，JavaScript处理文件有趣的地方才刚刚开始。在下一篇blog，你将学习到一些有趣的方式来处理文件数据。  &lt;/p&gt;
+&lt;h4 id=&#34;相关链接&#34;&gt;&lt;a href=&#34;#相关链接&#34; class=&#34;headerlink&#34; title=&#34;相关链接&#34;&gt;&lt;/a&gt;相关链接&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.w3.org/TR/FileAPI/&#34;&gt;File API&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://zhaozhiming.github.io/2012/07/08/working-with-files-in-javascript-part-1/&#34;&gt;在JavaScript中进行文件处理，第一部分：基础&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://zhaozhiming.github.io/2012/07/16/working-with-files-in-javascript-part-2/&#34;&gt;在JavaScript中进行文件处理，第二部分：文件读取&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://zhaozhiming.github.io/2012/07/23/working-with-files-in-javascript-part-3/&#34;&gt;在JavaScript中进行文件处理，第三部分：处理事件和错误&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://zhaozhiming.github.io/2012/08/01/working-with-files-in-javascript-part-5/&#34;&gt;在JavaScript中进行文件处理，第五部分：Blobs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+"> <!-- TODO: truncate -->
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">在JavaScript中进行文件处理，第四部分：对象URLs</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2012-07-30T14:17:00.000Z" itemprop="datePublished">7月 30, 2012</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/javascript/">javascript</a>
+</div>
+    </div>
+	<div class="entry-content"><p><strong>译注：原文是《JavaScript高级程序设计》的作者Nicholas Zakas写的，本翻译纯属为自己学习而做，仅供参考。原文链接：<a target="_blank" rel="noopener" href="http://www.nczonline.net/blog/2012/05/31/working-with-files-in-javascript-part-4-object-urls">这里</a></strong>  </p>
+<hr>
+<p>学习到这里，你已经了解在传统方式中如何使用文件，你可以上传文件到服务端，可以从磁盘上读取文件，这些都是最常见的文件处理方式。但是，有一种全新的文件处理方式可以简化这些常见的任务，这就是使用对象URLs。  </p>
+<span id="more"></span>
+<h2 id="什么是对象URL？"><a href="#什么是对象URL？" class="headerlink" title="什么是对象URL？"></a>什么是对象URL？</h2><p>对象URLs是磁盘上的文件地址。比如说，你想要将用户系统的一个图像文件显示到web页面，服务端无需要知道这个文件，所以也不需要上传它。如果你只是想要加载文件到页面，你可以像之前的帖子说的一样，获取一个File对象引用，将数据读取为一个数据URI，然后将数据URI分配到一个<code>&lt;img&gt;</code>元素。但想一想这里面的浪费，图像已经在磁盘上存在，为什么还要将图像读取为另外一种形式呢？如果你创建一个对象URL，你可以将其分配给<code>&lt;img&gt;</code>，这样就可以直接访问本地文件。  </p>
+<h2 id="它如何工作？"><a href="#它如何工作？" class="headerlink" title="它如何工作？"></a>它如何工作？</h2><p>File API*[1]*定义了一个全局对象叫URL，它有2个方法。第一个是createObjectURL()，接受一个File对象作为参数，返回一个对象URL，作用是告诉浏览器创建并且管理一个本地文件的URL。第二个方法是revokeObjectURL()，作用是告诉浏览器去销毁作为参数传入的URL，有效的释放内存。当然，一旦web页面被卸载了，则所有对象URLs都会被注销，当不再需要它们的时候，这是释放它们内存的一个好机会。    </p>
+<p>File API对URL对象的支持不像其他部分那么好，在我写这篇文章的时候，IE10和Firefox9+支持一个全局URL对象。Chrome支持它的webkitURL形式，Safari和Opera不支持。  </p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>如果你没有读取图片文件的数据，你怎么显示这个图片呢？假设你已经提供给用户文件选择的方式，并且现在有这个文件对象的引用并赋给了一个变量file。你可以如下使用：  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="variable constant_">URL</span> = <span class="variable language_">window</span>.<span class="property">URL</span> || <span class="variable language_">window</span>.<span class="property">webkitURL</span>, imageUrl, image; </span><br><span class="line"><span class="keyword">if</span> (<span class="variable constant_">URL</span>) &#123; </span><br><span class="line">　　imageUrl = <span class="variable constant_">URL</span>.<span class="title function_">createObjectURL</span>(file); </span><br><span class="line">　　image = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&quot;img&quot;</span>); </span><br><span class="line">　　image.<span class="property">onload</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123; </span><br><span class="line">　　　　<span class="variable constant_">URL</span>.<span class="title function_">revokeObjectURL</span>(imageUrl); </span><br><span class="line">　　&#125;; </span><br><span class="line">　　image.<span class="property">src</span> = imageUrl; </span><br><span class="line">　　<span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">appendChild</span>(image); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>  
+<p>这个例子创建了一个本地URL变量，标准化浏览器的实现（即无论是何种浏览器都可以得到）。如果URL存在，程序将创建一个文件对象URL并将其存储在变量imageUrl，然后创建一个新的<img>元素，将imageUrl传入该元素的onloade事件处理方法，该方法将注销对象URL（一分钟内）。然后，src属性被分配了一个对象URL并将元素添加到页面。  </p>
+<p>当图片加载的时候为什么要注销对象URL呢？在图片加载完之后，该URL就不再需要了，除非你想要在另外一个元素里面复用它。在这个例子中，图片被加载到一个单独的元素中，并且一旦图片完成加载，该URL就不再起任何作用，这是释放任何与其关联的内存的绝佳时刻。  </p>
+<h2 id="安全和注意事项"><a href="#安全和注意事项" class="headerlink" title="安全和注意事项"></a>安全和注意事项</h2><p>乍一看，这种能力有点恐怖。实际上你是通过一个URL直接从用户机器上加载一个文件，这种方式当然存在安全隐患。URL本身其实不是一个大的安全问题，因为URL是通过浏览器动态分配的，在其他电脑上不会起作用。那跨网点会怎么样呢？  </p>
+<p>File API 不允许在不同网点使用对象URLs。当一个对象URL被创建，它就紧跟着执行JavaScript脚本的页面网点，所以你不能跨<a target="_blank" rel="noopener" href="http://www.wrox.com和p2p.wrox.com两个不同网点使用同一个对象url(会发生错误).但是,如果两个页面都是来自www.wrox.com,比如其中一个页面嵌套在另外一个页面的iframe里,这样就可以共享对象urls./">www.wrox.com和p2p.wrox.com两个不同网点使用同一个对象URL（会发生错误）。但是，如果两个页面都是来自www.wrox.com，比如其中一个页面嵌套在另外一个页面的iframe里，这样就可以共享对象URLs。</a>  </p>
+<p>对象URLs只存在于文档创建它们的时候。当文档被卸载，所有对象URLs都会被注销。所以，在客户端存储对象URLs以便以后使用是没有意义的，它们在页面卸载之后就没有用了。  </p>
+<p>你可以在浏览器中任何一个发起get请求的地方使用对象URLs，其中包括图片，脚本，web worker，样式表，音频，视频。浏览器执行post请求时使用不了对象URL。  </p>
+<hr>
+<h4 id="下集预告"><a href="#下集预告" class="headerlink" title="下集预告"></a>下集预告</h4><p>创建直接链接到本地文件的URL是一种很强的能力。对比读取一个本地文件到JavaScript然后在页面上显示，你可以简单地创建一个URL并在页面指定它，后者大大简化了本地文件在页面中的使用情况。尽管如此，JavaScript处理文件有趣的地方才刚刚开始。在下一篇blog，你将学习到一些有趣的方式来处理文件数据。  </p>
+<h4 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h4><ul>
+<li><a target="_blank" rel="noopener" href="http://www.w3.org/TR/FileAPI/">File API</a></li>
+</ul>
+<hr>
+<ul>
+<li><a href="http://zhaozhiming.github.io/2012/07/08/working-with-files-in-javascript-part-1/">在JavaScript中进行文件处理，第一部分：基础</a></li>
+<li><a href="http://zhaozhiming.github.io/2012/07/16/working-with-files-in-javascript-part-2/">在JavaScript中进行文件处理，第二部分：文件读取</a></li>
+<li><a href="http://zhaozhiming.github.io/2012/07/23/working-with-files-in-javascript-part-3/">在JavaScript中进行文件处理，第三部分：处理事件和错误</a></li>
+<li><a href="http://zhaozhiming.github.io/2012/08/01/working-with-files-in-javascript-part-5/">在JavaScript中进行文件处理，第五部分：Blobs</a></li>
+</ul>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2012/07/30/working-with-files-in-javascript-part-4/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2012/07/30/working-with-files-in-javascript-part-4/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

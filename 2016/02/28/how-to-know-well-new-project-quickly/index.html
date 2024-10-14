@@ -1,0 +1,249 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>如何快速熟悉新系统 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="如何快速熟悉新系统"> <!-- TODO: truncate -->
+	<meta name="keywords" content="project">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">如何快速熟悉新系统</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2016-02-28T09:05:00.000Z" itemprop="datePublished">2月 28, 2016</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/project/">project</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2016/02/new_guy.jpg" class="">  
+<p>很多工程师都会遇到这样一种情况：被指派到另外一个项目参与开发工作，这个项目已经开发了一段时间了，代码还比较多，作为一个项目的新人，要如何尽快地熟悉项目融入团队呢？  </p>
+<span id="more"></span>  
+
+<h2 id="对系统进行测试"><a href="#对系统进行测试" class="headerlink" title="对系统进行测试"></a>对系统进行测试</h2><p>作为一名新系统的小白，首先当然是要熟悉系统的功能，还有操作流程。  </p>
+<ul>
+<li>如果有相关的系统说明文档（帮助手册）的话先阅读这些资料，了解系统是如何工作的，有哪些功能点。  </li>
+<li>了解了系统如何操作以后，对系统的各个功能点进行功能测试，通过手动操作来加深对系统的了解，并帮助系统找到bug。  </li>
+<li>发现bug后将bug记录起来，比如github（gitlab）上项目里的issue区域，并提醒其他开发人员关注这些问题。</li>
+</ul>
+<h2 id="尝试修复bug"><a href="#尝试修复bug" class="headerlink" title="尝试修复bug"></a>尝试修复bug</h2><p>操作了一段时间系统后，可能你对系统功能已经有了一个大概的了解，但实际的代码可能还了解不多，这个时候你可以通过修复一些小bug来达到了解系统的目的。</p>
+<ul>
+<li>首先找到bug对应的页面或者文件，设置断点，运行程序，查看是什么原因导致发生bug。</li>
+<li>搞清楚bug发生的原因后，动手修复这个bug。</li>
+<li>修复bug后，如果有测试案例要保证不破坏其他测试案例，如果有测试案例失败了，这可能表示你修复的代码破坏了其他正常的功能。</li>
+<li>对其他相关模块进行测试，保证没有其他副作用。</li>
+<li>如果可以的话，让其他资深的开发人员给你review一下代码，看看你有没有改出问题，或者是有没有其他更好的解决方案。</li>
+</ul>
+<h2 id="为系统添加测试案例"><a href="#为系统添加测试案例" class="headerlink" title="为系统添加测试案例"></a>为系统添加测试案例</h2><p>除了修复bug，还可以为系统添加测试案例。这里的测试案例是指单元测试、集成测试或者一些自动化测试。  </p>
+<ul>
+<li>如果是写单元测试的话，要先读懂对应的功能代码，知道功能代码的逻辑是怎样的，有多少个分支需要写多少个测试案例才能覆盖完整。然后编写测试案例，并保证测试案例运行通过。</li>
+<li>如果是集成测试或者自动化测试，先了解要测试的功能的流程是怎样的，是要读取数据库数据做校验，还是可以直接在页面上面校验等。然后编写测试案例，因为自动化测试可能由于网络延迟等原因会让你的测试有时成功有时失败，请记住要避免这种情况，确保测试是百分之百运行成功的。</li>
+</ul>
+<h2 id="对代码进行重构"><a href="#对代码进行重构" class="headerlink" title="对代码进行重构"></a>对代码进行重构</h2><p>有时候系统开发久了，就会不知不觉产生一些烂代码，如果没有及时修复，整个系统可能就会慢慢腐烂，然后崩溃，最后维护都维护不了只能重做。所以如果你有一些代码重构的经验的话，可以在熟悉系统的过程中，通过代码重构的方式了解系统的代码。  </p>
+<ul>
+<li>要重构代码，就要先熟悉你要改动的那一块代码，读懂它们并确保你做的重构不会影响到其他功能。  </li>
+<li>如果要重构的代码之前有单元测试那是最好的，你可以边重构边运行测试，只要不破坏测试就可以了，但如果没有单元测试的话，你最好是先加上单元测试，以保证你的重构不会破坏原来的功能。</li>
+<li>这里的重构不是指哪种伤筋动骨的大改动，而是一些代码上的小修改，以让你的代码更具可读性和可维护性，比如变量名或方法名的重命名，相同代码的提取，长方法的分解等。</li>
+</ul>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2016/02/28/how-to-know-well-new-project-quickly/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2016/02/28/how-to-know-well-new-project-quickly/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

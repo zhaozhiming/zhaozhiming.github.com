@@ -1,0 +1,245 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>jenkins插件开发（二）-- HelloWorld - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="jenkins插件开发（二）-- HelloWorld"> <!-- TODO: truncate -->
+	<meta name="keywords" content="jenkins插件,开发">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">jenkins插件开发（二）-- HelloWorld</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2013-02-02T10:35:00.000Z" itemprop="datePublished">2月 2, 2013</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/jenkins-plugins/">jenkins plugins</a>
+</div>
+    </div>
+	<div class="entry-content"><p>在上一篇 blog 中我们讲了如何搭建 jenkins 插件的开发环境，接下来介绍如何开发我们的插件。</p>
+<span id="more"></span>
+
+<h3 id="创建-HelloWorld-插件"><a href="#创建-HelloWorld-插件" class="headerlink" title="创建 HelloWorld 插件"></a>创建 HelloWorld 插件</h3><p>学习每门新语言的时候，我们都会写一个 HelloWorld 程序，这里介绍的是如何创建一个 Jenkins 的 HelloWorld 插件。</p>
+<h5 id="1、首先修改-Maven-的配置，将-Maven-的连接库修改为-jenkins-plugins-的资源库，方便相关-pom-组件从-jenkins-上下载，修改的是-USERPROFILE-m2-settings-xml-文件。"><a href="#1、首先修改-Maven-的配置，将-Maven-的连接库修改为-jenkins-plugins-的资源库，方便相关-pom-组件从-jenkins-上下载，修改的是-USERPROFILE-m2-settings-xml-文件。" class="headerlink" title="1、首先修改 Maven 的配置，将 Maven 的连接库修改为 jenkins plugins 的资源库，方便相关 pom 组件从 jenkins 上下载，修改的是 %USERPROFILE%&#x2F;.m2&#x2F;settings.xml 文件。"></a>1、首先修改 Maven 的配置，将 Maven 的连接库修改为 jenkins plugins 的资源库，方便相关 pom 组件从 jenkins 上下载，修改的是 %USERPROFILE%&#x2F;.m2&#x2F;settings.xml 文件。</h5><figure class="highlight xml"><figcaption><span>settings.xml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">settings</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">pluginGroups</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">pluginGroup</span>&gt;</span>org.jenkins-ci.tools<span class="tag">&lt;/<span class="name">pluginGroup</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">pluginGroups</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">profiles</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- Give access to Jenkins plugins --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">profile</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">id</span>&gt;</span>jenkins<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">activation</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">activeByDefault</span>&gt;</span>true<span class="tag">&lt;/<span class="name">activeByDefault</span>&gt;</span> <span class="comment">&lt;!-- change this to false, if you don&#x27;t like to have it on per default --&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">repositories</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">id</span>&gt;</span>repo.jenkins-ci.org<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://repo.jenkins-ci.org/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">pluginRepositories</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">pluginRepository</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">id</span>&gt;</span>repo.jenkins-ci.org<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://repo.jenkins-ci.org/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">pluginRepository</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">pluginRepositories</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">profile</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mirrors</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">id</span>&gt;</span>repo.jenkins-ci.org<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://repo.jenkins-ci.org/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>m.g.o-public<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">mirrors</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">settings</span>&gt;</span></span><br></pre></td></tr></table></figure>   
+<h5 id="2、打开CMD，进入一个想要放插件工程的目录，执行以下命令。"><a href="#2、打开CMD，进入一个想要放插件工程的目录，执行以下命令。" class="headerlink" title="2、打开CMD，进入一个想要放插件工程的目录，执行以下命令。"></a>2、打开CMD，进入一个想要放插件工程的目录，执行以下命令。</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn -U org.jenkins-ci.tools:maven-hpi-plugin:create -DgroupId=&#123;your.gound.id&#125; -DartifactId=&#123;your.plugin.id&#125;</span><br></pre></td></tr></table></figure>
+
+<p>命令中的 your.groud.id 和 your.plugin.id 填你插件的具体对应的值。</p>
+<p>your.group.id 会形成你的包结构，比如 your.group.id&#x3D;abc.def.ghi，那工程下的 src&#x2F;main&#x2F;java 目录下会产生 abc.def.ghi 这样的目录。</p>
+<p>执行完命令后，该目录下会产生一个名称是{your.plugin.id}的目录，这个目录工程就是我们的 HelloWorld 插件工程。</p>
+<h5 id="3、插件打包"><a href="#3、插件打包" class="headerlink" title="3、插件打包"></a>3、插件打包</h5><p>创建好工程之后，执行下面的命令可以在 target 子目录下产生一个 hpi 文件，该文件就是我们的插件文件，可以直接上传到 jenkins 的服务器。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn package</span><br></pre></td></tr></table></figure>
+
+<h5 id="4、启动本地服务"><a href="#4、启动本地服务" class="headerlink" title="4、启动本地服务"></a>4、启动本地服务</h5><p>在第三步产生的 hpi 文件要上传到一个部署好的 jenkins 服务器才可以看到效果，我们也可以通过以下命令启动一个包含插件的本地 jenkins 服务。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn hpi:run</span><br></pre></td></tr></table></figure>
+
+<p>执行完命令之后，在浏览器打开 localhost:8080，就可以访问本地的 Jenkins 服务了，这里默认用的是 jetty6 的 web 容器。</p>
+<h5 id="5、运行-HelloWorld-插件"><a href="#5、运行-HelloWorld-插件" class="headerlink" title="5、运行 HelloWorld 插件"></a>5、运行 HelloWorld 插件</h5><p>在 Job 的配置页面，其中的构建子项中 Add Build Step 按钮，点击后下拉框中会有一个 Say Hello World 的选项，这个就是我们的 HelloWorld 插件，选中后保存配置，进行 Job 构建，在构建日志中就可以看到插件的打印日志。</p>
+<p>这里介绍的是新建一个插件，对已有插件进行扩展不在本次讨论范围内，更多信息可以参考<a target="_blank" rel="noopener" href="https://wiki.jenkins-ci.org/display/JENKINS/Plugin+tutorial">这里</a>。</p>
+<hr>
+<ul>
+<li><a href="http://zhaozhiming.github.io/2013/01/31/jenkins-plugins-develop-part-1/">jenkins 插件开发（一）– 环境搭建</a></li>
+<li><a href="http://zhaozhiming.github.io/2013/02/03/jenkins-plugins-develop-part-3/">jenkins 插件开发（三）– 插件编写</a></li>
+<li><a href="http://zhaozhiming.github.io/2013/02/04/jenkins-plugins-develop-part-4/">jenkins 插件开发（四）– 插件发布</a></li>
+</ul>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2013/02/02/jenkins-plugins-develop-part-2/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2013/02/02/jenkins-plugins-develop-part-2/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

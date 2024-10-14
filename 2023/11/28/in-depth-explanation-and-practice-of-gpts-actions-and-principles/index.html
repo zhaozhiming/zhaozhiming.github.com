@@ -1,0 +1,441 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>GPTs Action 使用指南 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="了解如何配置 GPTs Action 以及 API 认证"> <!-- TODO: truncate -->
+	<meta name="keywords" content="openai, chatgpt, gpts, action">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">GPTs Action 使用指南</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-11-28T08:37:40.000Z" itemprop="datePublished">11月 28, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/chatgpt/">chatgpt</a> <a href="/tags/openai/">openai</a> <a href="/tags/gpts/">gpts</a> <a href="/tags/action/">action</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/11/gpts-action.png" class="" width="400" height="300">
+
+<p>OpenAI 在首届开发者大会上发布了 GPTs 功能，它提供了一种简单易用的方式来帮助用户定制属于自己的 GPT，可以使用网页浏览、生成图片和代码解释器等功能来丰富自己的专属 GPT，但 GPTs 中还有一个更加强大的功能——Action，通过 Action 可以连接外部的 API 服务来完成更加复杂的功能，比如查询数据库、发送邮件等，类似于 OpenAI 的 Assistant API 中自定义工具功能。今天我们会在本地搭建 API 服务，让 GPT Action 集成本地服务，通过这种演示方式来帮助大家更加深入地了解 GPT Action 的使用。</p>
+<span id="more"></span>
+
+<h2 id="什么是-GPT-Action"><a href="#什么是-GPT-Action" class="headerlink" title="什么是 GPT Action"></a>什么是 GPT Action</h2><p>GPTs 是 OpenAI 最新推出的一种定制化的 ChatGPT 版本，允许用户根据特定需求创建个性化的 ChatGPT 模型。这些模型可以用于日常生活中的特定任务、工作或家庭使用，并且用户可以在不需要编程知识的情况下轻松构建自己的 GPT。截止到目前为止，已经有超过 30000 个 GPT 被创建，如果想要寻找自己需要的 GPT，可以在一些非官方的 GPTs 收集网站上进行查找，比如<a target="_blank" rel="noopener" href="https://www.gptshunter.com/">GPTsHunter</a>，<a target="_blank" rel="noopener" href="https://allgpts.co/">AllGPTs</a>等，OpenAI 也会在后续推出自己的官方 GPTs 商店。</p>
+<p>GPT Action 为 GPT 提供了一种集成外部数据或与真实世界进行交互的能力，你可以通过 Action 提供一个或多个 API 给 GPT 来定义自定义操作，比如将 GPT 连接到数据库、电子邮件中，或将其用作购物助手等，为开发人员提供更大的模型控制权和 API 调用方式，因此使用 Action 需要一些编程知识。</p>
+<p>在 GPT 配置界面下方，我们可以看到<code>Create new action</code>的按钮，点击这个按钮后我们就可以看到 Action 的创建页面。</p>
+<img src="/images/post/2023/11/gpts-action-create.png" class="" width="1000" height="600">
+
+<ul>
+<li>在创建页面中，我们选择了 OpenAI 提供的 Weather 示例模板，可以看到有 4 个部分。</li>
+<li>Schema 部分会展示这个 Weather 服务的 API 信息，API 信息是按照 OpenAPI（注意是 API，不是 AI）规范来进行展示的，这部分我们后面会详细介绍。</li>
+<li>Available Actions 部分是指接口信息，是从 Schema 中提取的内容。</li>
+<li>Authentication 部分是指 API 的认证策略，总共有 3 种，安全级别从低到高依次是无认证、API Key 和 OAuth。</li>
+<li>Privacy policy 是隐私策略，如果你使用的是自己搭建的 API 服务，就需要这样的一份声明来告诉用户你是否会保存他们的数据，如果保存了会怎么处理等，这也是保护你避免法律纠纷的一种方式。</li>
+</ul>
+<h2 id="配置-Schema"><a href="#配置-Schema" class="headerlink" title="配置 Schema"></a>配置 Schema</h2><p>Schema 是 Action 的核心，它用来描述 API 服务信息，Action 构造器根据 Schema 信息生成可用的 Action，比如 API 服务有 getItem 和 createItem 两个接口，那么 Action 构造器就会生成 getItem 和 createItem 两个 Action，用户可以在 GPT 中使用这两个 Action 来调用 API 服务。</p>
+<h3 id="OpenAPI"><a href="#OpenAPI" class="headerlink" title="OpenAPI"></a>OpenAPI</h3><p>Schema 按照 OpenAPI 规范来进行描述，OpenAPI 也被称为 OpenAPI Specification（OAS），是一种用于定义 RESTful API（Representational State Transfer Application Programming Interface）的开放标准。它帮助开发者定义 API 的各个方面，包括请求、响应、端点（URLs）、方法和认证方式。这个标准最初由 Swagger 提出，并在 2015 年由 SmartBear Software 捐赠给了 OpenAPI Initiative（OAI），一个由 Linux Foundation 支持的项目。随着技术的发展，OpenAPI 标准不断更新，以支持更广泛的用例和改进功能。最新版本的 OpenAPI 规范（截至 2022 年 1 月）是 3.1 版，它带来了对 JSON Schema 的完全兼容性、新的链接功能，以及更多的扩展和改进。</p>
+<h3 id="Schema-结构"><a href="#Schema-结构" class="headerlink" title="Schema 结构"></a>Schema 结构</h3><p>我们可以通过 OpenAI 官方提供的 Pet Store 示例来了解一下 Schema 的结构，它是一个宠物相关的 API 服务，包含了获取宠物列表、创建宠物、获取宠物信息等接口，下面是它的 Schema 前面部分的信息。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">openapi:</span> <span class="string">&#x27;3.0.0&#x27;</span></span><br><span class="line"><span class="attr">info:</span></span><br><span class="line">  <span class="attr">version:</span> <span class="number">1.0</span><span class="number">.0</span></span><br><span class="line">  <span class="attr">title:</span> <span class="string">Swagger</span> <span class="string">Petstore</span></span><br><span class="line">  <span class="attr">license:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">MIT</span></span><br><span class="line"><span class="attr">servers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">url:</span> <span class="string">https://petstore.swagger.io/v1</span></span><br><span class="line"><span class="attr">paths:</span></span><br><span class="line">  <span class="comment"># 具体信息后面会介绍</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Schema 支持 2 种格式，一种是 JSON，一种是 YAML，这里使用的是 YAML 格式</li>
+<li>Schema 开头是定义 OpenAPI 的版本，这里是 3.0.0</li>
+<li>info 是描述 API 服务的基本信息，包括标题、协议和版本号等</li>
+<li>servers 是 API 服务的地址，示例中是一个假地址</li>
+<li>paths 是 API 服务的接口信息，这里定义了 3 个接口，分别是获取宠物列表、创建宠物和获取宠物信息</li>
+</ul>
+<p>下面是具体的接口信息，我们先看一下创建宠物的接口信息，为了让大家更好的理解，笔者对接口信息进行了一些小调整：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">paths:</span></span><br><span class="line">  <span class="string">/pets:</span></span><br><span class="line">    <span class="attr">post:</span></span><br><span class="line">      <span class="attr">summary:</span> <span class="string">Create</span> <span class="string">a</span> <span class="string">pet</span></span><br><span class="line">      <span class="attr">operationId:</span> <span class="string">createPets</span></span><br><span class="line">      <span class="attr">x-openai-isConsequential:</span> <span class="literal">false</span></span><br><span class="line">      <span class="attr">responses:</span></span><br><span class="line">        <span class="attr">&#x27;201&#x27;:</span></span><br><span class="line">          <span class="attr">description:</span> <span class="literal">Null</span> <span class="string">response</span></span><br><span class="line">        <span class="attr">default:</span></span><br><span class="line">          <span class="attr">description:</span> <span class="string">unexpected</span> <span class="string">error</span></span><br><span class="line">          <span class="attr">content:</span></span><br><span class="line">            <span class="attr">application/json:</span></span><br><span class="line">              <span class="attr">schema:</span></span><br><span class="line">                <span class="string">$ref:</span> <span class="string">&#x27;#/components/schemas/Error&#x27;</span></span><br><span class="line"><span class="attr">components:</span></span><br><span class="line">  <span class="attr">schemas:</span></span><br><span class="line">    <span class="attr">Error:</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">object</span></span><br><span class="line">      <span class="attr">required:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">code</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">message</span></span><br><span class="line">      <span class="attr">properties:</span></span><br><span class="line">        <span class="attr">code:</span></span><br><span class="line">          <span class="attr">type:</span> <span class="string">integer</span></span><br><span class="line">          <span class="attr">format:</span> <span class="string">int32</span></span><br><span class="line">        <span class="attr">message:</span></span><br><span class="line">          <span class="attr">type:</span> <span class="string">string</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>创建宠物的接口路径是<code>/pets</code>，请求方式是<code>post</code>。</li>
+<li>summary 是接口的简介，operationId 是后面<code>Available Action</code>显示的 Action 名称。</li>
+<li>x-openai-isConsequential 是一个 OpenAI 自定义的属性，如果为 true，表示每次调用这个接口都需要用户在页面上点击<code>同意</code>，如果为 false，则表示允许用户在第一次确认时可以点击<code>总是同意</code>，这样以后就不用每次发起请求都要点击<code>同意</code>了，GPT 的确认页面如下图所示。</li>
+<li>responses 是接口的响应信息，这里定义了 2 个响应，一个是 201，一个是 default，201 表示成功，default 表示失败，失败的具体信息指向了下面的 components 中的 Error 信息。</li>
+<li>components 是接口的组件信息，这里定义了 Error 信息，Error 信息是一个对象，包含了 code 和 message 两个属性，code 是一个整数，message 是一个字符串。</li>
+</ul>
+<img src="/images/post/2023/11/gpts-action-allow.png" class="" width="600" height="400">
+
+<p>我们再来看下获取宠物信息的接口信息：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">paths:</span></span><br><span class="line">  <span class="string">/pets/&#123;petId&#125;:</span></span><br><span class="line">    <span class="attr">get:</span></span><br><span class="line">      <span class="attr">summary:</span> <span class="string">Info</span> <span class="string">for</span> <span class="string">a</span> <span class="string">specific</span> <span class="string">pet</span></span><br><span class="line">      <span class="attr">operationId:</span> <span class="string">showPetById</span></span><br><span class="line">      <span class="attr">x-openai-isConsequential:</span> <span class="literal">false</span></span><br><span class="line">      <span class="attr">parameters:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">petId</span></span><br><span class="line">          <span class="attr">in:</span> <span class="string">path</span></span><br><span class="line">          <span class="attr">required:</span> <span class="literal">true</span></span><br><span class="line">          <span class="attr">description:</span> <span class="string">The</span> <span class="string">id</span> <span class="string">of</span> <span class="string">the</span> <span class="string">pet</span> <span class="string">to</span> <span class="string">retrieve</span></span><br><span class="line">          <span class="attr">schema:</span></span><br><span class="line">            <span class="attr">type:</span> <span class="string">string</span></span><br><span class="line">      <span class="attr">responses:</span></span><br><span class="line">        <span class="attr">&#x27;200&#x27;:</span></span><br><span class="line">          <span class="attr">description:</span> <span class="string">Expected</span> <span class="string">response</span> <span class="string">to</span> <span class="string">a</span> <span class="string">valid</span> <span class="string">request</span></span><br><span class="line">          <span class="attr">content:</span></span><br><span class="line">            <span class="attr">application/json:</span></span><br><span class="line">              <span class="attr">schema:</span></span><br><span class="line">                <span class="string">$ref:</span> <span class="string">&#x27;#/components/schemas/Pet&#x27;</span></span><br><span class="line">        <span class="attr">default:</span></span><br><span class="line">          <span class="attr">description:</span> <span class="string">unexpected</span> <span class="string">error</span></span><br><span class="line">          <span class="attr">content:</span></span><br><span class="line">            <span class="attr">application/json:</span></span><br><span class="line">              <span class="attr">schema:</span></span><br><span class="line">                <span class="string">$ref:</span> <span class="string">&#x27;#/components/schemas/Error&#x27;</span></span><br><span class="line"><span class="attr">components:</span></span><br><span class="line">  <span class="attr">schemas:</span></span><br><span class="line">    <span class="attr">Pet:</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">object</span></span><br><span class="line">      <span class="attr">required:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">id</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">name</span></span><br><span class="line">      <span class="attr">properties:</span></span><br><span class="line">        <span class="attr">id:</span></span><br><span class="line">          <span class="attr">type:</span> <span class="string">integer</span></span><br><span class="line">          <span class="attr">format:</span> <span class="string">int64</span></span><br><span class="line">        <span class="attr">name:</span></span><br><span class="line">          <span class="attr">type:</span> <span class="string">string</span></span><br><span class="line">        <span class="attr">tag:</span></span><br><span class="line">          <span class="attr">type:</span> <span class="string">string</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>获取宠物信息的接口路径是<code>/pets/&#123;petId&#125;</code>，请求方式是<code>get</code>。</li>
+<li>parameters 是接口的请求参数，这里定义了一个参数，参数名称是 petId，类型是 path，表示这个参数是在路径中的，如果是参数在其他地方，比如 query、body 或者 header 等，就需要修改 in 的值，required 表示这个参数是必须的，description 是参数的描述，schema 是参数的类型，这里是字符串。</li>
+<li>responses 是接口的响应信息，成功的具体信息指向了下面的 components 中的 Pet 信息，错误的信息指向了上面定义的 Error 信息。</li>
+<li>components 是接口的组件信息，这里定义了 Pet 信息，Pet 信息是一个对象，包含了 id、name 和 tag 三个属性，id 是一个整数，name 和 tag 是字符串。</li>
+</ul>
+<p>获取宠物列表的接口信息就不再罗列了，内容和前 2 个接口差不多，这里只说一下它的响应信息，它的响应信息是一个数组，数组中的每个元素都是一个 Pet 对象，Pet 对象的定义在 components 中。</p>
+<p>如果觉得自己写 Schema 太麻烦，可以使用 ChatGPT 来帮你生成，简单告诉 ChatGPT 你有哪些接口以及接口参数、接口返回值的类型，它就会帮你生成 Schema，然后你再根据自己的需求来修改就可以了。现在也有一些 GPT 来帮助我们生成 Action 的 Schema，比如<a target="_blank" rel="noopener" href="https://chat.openai.com/g/g-HOVaIcTmj">OpenAPI Helper</a>、<a target="_blank" rel="noopener" href="https://chat.openai.com/g/g-gQ0FMGHmb">OpenAPI GPT</a>等。</p>
+<p>如果 Schema 信息有错误，在 Schema 输入框下方会有红色的错误提示，如果没有错误，则在下方的<code>Available actions</code>会显示接口信息列表。</p>
+<img src="/images/post/2023/11/gpts-action-available-actions.png" class="" width="600" height="400">
+
+<h2 id="Authentication"><a href="#Authentication" class="headerlink" title="Authentication"></a>Authentication</h2><p>Action 中的认证部分用来表示 API 服务的认证方式，目前支持 3 种认证方式，分别是无认证、API Key 和 Oauth，下面我们来详细了解一下这 3 种认证方式。</p>
+<h3 id="无认证"><a href="#无认证" class="headerlink" title="无认证"></a>无认证</h3><p>无认证是指 API 服务不需要认证，任何人都可以调用 API 服务中的所有接口，虽然在 Action 中集成比较方便，但这也意味着其他人可以随意调用你的 API 服务来获取你服务器上的信息，这种方式在互联网上是非常不安全的，所以不管你的 GPT 是公开的还是给自己用的，都不建议使用这种方式。</p>
+<h3 id="API-Key"><a href="#API-Key" class="headerlink" title="API Key"></a>API Key</h3><p>API Key 是相对简单的一种 API 认证方式，它是通过在请求中添加一个 API Key 来进行认证的，API Key 一般是一个字符串，可以在请求的 header 中添加，OpenAI 提供了 3 种 API Key 类型，分别是 Basic、Bearer 和 自定义 header。</p>
+<p>为了演示 API Key 的使用方式，我们在本地搭建一个 API 服务，然后在 GPT Action 中集成这个服务，这个 API 服务是一个简单的商品管理服务，可以用来查询商品和创建商品，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI, Depends</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Item</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    name: <span class="built_in">str</span></span><br><span class="line">    description: <span class="type">Optional</span>[<span class="built_in">str</span>] = <span class="literal">None</span></span><br><span class="line">    price: <span class="built_in">float</span></span><br><span class="line">    tax: <span class="type">Optional</span>[<span class="built_in">float</span>] = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/items/&#123;item_id&#125;&quot;</span>, dependencies=[Depends(<span class="params">get_basic_api_key</span>)]</span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">read_item</span>(<span class="params">item_id: <span class="built_in">int</span>, db=Depends(<span class="params">get_db</span>)</span>):</span><br><span class="line">    db_item = <span class="keyword">await</span> get_item_by_id(db, item_id)</span><br><span class="line">    <span class="keyword">if</span> db_item <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">raise</span> HTTPException(status_code=<span class="number">404</span>, detail=<span class="string">&quot;Item not found&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> db_item</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.post(<span class="params"><span class="string">&quot;/items/&quot;</span>, dependencies=[Depends(<span class="params">get_basic_api_key</span>)]</span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">create_item</span>(<span class="params">item: Item, db=Depends(<span class="params">get_db</span>)</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">await</span> save_item(db, item)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>API 服务使用 Python 的<a target="_blank" rel="noopener" href="https://fastapi.tiangolo.com/">FastAPI</a>框架来进行搭建</li>
+<li>服务提供了 2 个接口，分别是查询商品和创建商品</li>
+<li>本地使用命令<code>uvicorn main:app</code> 来启动服务</li>
+<li>在接口的定义中，我们使用了<code>Depends(get_basic_api_key)</code>来进行认证，这个函数会从请求的 header 中获取 Basic 形式的 API Key 并进行认证，后面会详细介绍。</li>
+<li>读取和保存数据通过数据库进行，这里使用了一个<code>Depends(get_db)</code>来获取数据库连接</li>
+<li>商品的属性有 name、descrition、price、tax，在数据库中为每个商品自动添加一个自增长的 id 作为主键，name 和 price 字段必填，其他字段选填</li>
+</ul>
+<p>在本地启动好服务后，我们生成关于这个 API 服务的 Schema，示例如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">openapi:</span> <span class="number">3.0</span><span class="number">.1</span></span><br><span class="line"><span class="attr">info:</span></span><br><span class="line">  <span class="attr">title:</span> <span class="string">Item</span> <span class="string">Management</span> <span class="string">API</span></span><br><span class="line">  <span class="attr">version:</span> <span class="number">1.0</span><span class="number">.0</span></span><br><span class="line">  <span class="attr">description:</span> <span class="string">API</span> <span class="string">for</span> <span class="string">managing</span> <span class="string">items.</span></span><br><span class="line"><span class="attr">servers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">url:</span> <span class="string">http://localhost:8000</span></span><br><span class="line"><span class="attr">paths:</span></span><br><span class="line">  <span class="string">/items/&#123;item_id&#125;:</span></span><br><span class="line">    <span class="attr">get:</span></span><br><span class="line">    <span class="comment"># 这里省略其他信息</span></span><br><span class="line">  <span class="string">/items/:</span></span><br><span class="line">    <span class="attr">post:</span></span><br><span class="line">    <span class="comment"># 这里省略其他信息</span></span><br><span class="line"><span class="attr">components:</span></span><br><span class="line">  <span class="comment"># 这里省略其他信息</span></span><br></pre></td></tr></table></figure>
+
+<p>当我们将这个 Schema 放到 Action 的 Schema 输入框中，会看到 Schema 的报错提示，报错信息是 servers 中的 url 不能填写<code>http://localhost:8000</code>这个本地路径，因为 OpenAI 无法访问你本地的这个服务，即使你将<code>localhost</code>换成 ip 地址也不行，url 中的地址最好是使用 https 协议和域名的形式。</p>
+<p>为了解决这个问题，我们可以使用 <a target="_blank" rel="noopener" href="https://ngrok.com/">Ngrok</a> 这个代理服务，它可以将本地的服务映射到一个公网地址上，这样 OpenAI 就可以访问到我们本地的服务了。Ngrok 的安装可以参考官网的<a target="_blank" rel="noopener" href="https://ngrok.com/download">安装指导</a>，安装完成后需要在 Ngrok 上注册一个账号，然后在<a target="_blank" rel="noopener" href="https://dashboard.ngrok.com/get-started/your-authtoken">控制台</a>中获取 authtoken，然后使用命令<code>ngrok config add-authtoken &lt;your_auth_token&gt;</code>在本地添加你的 authtoken 到 Ngrok 的配置中。</p>
+<p>我们使用命令<code>ngrok http 8000</code>来启动 Ngrok，运行后终端界面如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ngrok                                                                                                                                                                                                                     (Ctrl+C to quit)</span><br><span class="line"></span><br><span class="line">Introducing Pay-as-you-go pricing: https://ngrok.com/r/payg</span><br><span class="line"></span><br><span class="line">Session Status                online</span><br><span class="line">Account                       your name (Plan: Free)</span><br><span class="line">Version                       3.4.0</span><br><span class="line">Region                        Asia Pacific (ap)</span><br><span class="line">Latency                       170ms</span><br><span class="line">Web Interface                 http://127.0.0.1:4041</span><br><span class="line">Forwarding                    https://8bb0-140-210-194-131.ngrok-free.app -&gt; http://localhost:8000</span><br><span class="line"></span><br><span class="line">Connections                   ttl     opn     rt1     rt5     p50     p90</span><br><span class="line">                              21      0       0.21    0.05    0.02    0.10</span><br></pre></td></tr></table></figure>
+
+<p>可以看到 Ngrok 将本地服务映射成一个公网地址<code>https://8bb0-140-210-194-131.ngrok-free.app</code>，我们可以使用这个地址来访问本地的服务，然后将这个地址填写到 Action 的 Schema 中，这样就可以解决这个问题了。我们首次在浏览器中访问这个网址时，会出现下面这个警告页面：</p>
+<img src="/images/post/2023/11/gpts-action-ngrok-warning.png" class="" width="1000" height="600">
+
+<p>这个页面是 Ngrok 基于安全的考虑需要用户在首次访问代理地址时进行确认，但这种情况会导致 GPT Action 在调用我们的 API 服务时调用不到具体的 API 接口，而是返回这个页面，因此建议是在 Ngrok 的控制台中添加一个<a target="_blank" rel="noopener" href="https://dashboard.ngrok.com/cloud-edge/edges">Edge</a>，新增的<code>Edge</code>会创建一个固定的域名，而且首次访问这个域名时也不会出现上面的那个警告。然后将启动命令修改为：<code>ngrok tunnel --label edge=your_edge_id http://localhost:8000</code>就可以了，最终 Action 的 Schema 如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">openapi:</span> <span class="number">3.0</span><span class="number">.1</span></span><br><span class="line"><span class="attr">info:</span></span><br><span class="line">  <span class="attr">title:</span> <span class="string">Item</span> <span class="string">Management</span> <span class="string">API</span></span><br><span class="line">  <span class="attr">version:</span> <span class="number">1.0</span><span class="number">.0</span></span><br><span class="line">  <span class="attr">description:</span> <span class="string">API</span> <span class="string">for</span> <span class="string">managing</span> <span class="string">items.</span></span><br><span class="line"><span class="attr">servers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">url:</span> <span class="string">https://your-ngrok-edge-domain.ngrok-free.app</span></span><br><span class="line"><span class="attr">paths:</span></span><br><span class="line">  <span class="string">/items/&#123;item_id&#125;:</span></span><br><span class="line">    <span class="attr">get:</span></span><br><span class="line">    <span class="comment"># 这里省略其他信息</span></span><br><span class="line">  <span class="string">/items/:</span></span><br><span class="line">    <span class="attr">post:</span></span><br><span class="line">    <span class="comment"># 这里省略其他信息</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Basic-认证"><a href="#Basic-认证" class="headerlink" title="Basic 认证"></a>Basic 认证</h4><p>API Key 的第一种方式是 Basic 认证，它通过在请求的 header 中添加一个 Authorization 字段来进行认证，这个字段的值是 Basic 字符串加上一个空格再加上 API Key，比如：<code>Authorization: Basic api-key-base64</code>，按照<a target="_blank" rel="noopener" href="https://swagger.io/docs/specification/authentication/basic-authentication/">Basic 认证的规范</a>，Basic 认证中的 API Key 需要进行 Base64 编码，所以在 Action 填写 API Key 时建议将 API Key 进行<strong>Base64 编码</strong>后再填入，而在服务端需要对 API Key 进行 <strong>Base64 解码</strong>。我们在之前的代码中使用了<code>Depends(get_basic_api_key)</code>来进行 API Key Basic 认证，这个函数的实现如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> HTTPException, status, Request</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_basic_api_key</span>(<span class="params">request: Request</span>):</span><br><span class="line">    authorization: <span class="built_in">str</span> = request.headers.get(<span class="string">&quot;Authorization&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> authorization:</span><br><span class="line">        <span class="keyword">raise</span> HTTPException(</span><br><span class="line">            status_code=status.HTTP_401_UNAUTHORIZED,</span><br><span class="line">            detail=<span class="string">&quot;Authorization header is missing&quot;</span>,</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    prefix = <span class="string">&quot;Basic&quot;</span></span><br><span class="line">    <span class="keyword">if</span> authorization.startswith(prefix):</span><br><span class="line">        base64_api_key = authorization[<span class="built_in">len</span>(prefix) :].strip()</span><br><span class="line">        api_key = base64.b64decode(base64_api_key).decode(<span class="string">&quot;utf-8&quot;</span>).strip()</span><br><span class="line">        token = read_token()</span><br><span class="line">        <span class="keyword">if</span> api_key == token:</span><br><span class="line">            <span class="keyword">return</span> api_key</span><br><span class="line">    <span class="keyword">raise</span> HTTPException(</span><br><span class="line">        status_code=status.HTTP_401_UNAUTHORIZED, detail=<span class="string">&quot;Invalid API Key&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在方法中我们获取了<code>Authorization</code>头，然后对这个头进行了解析，分离了其中的前缀<code>Basic</code>和 API Key。</li>
+<li>对 API Key 进行了 Base64 解码，然后和本地保存的 API Key 进行比较，如果相同则认证通过，否则认证失败。</li>
+<li>本地的 API Key 保存在本地的一个文件中，这里使用了一个<code>read_token</code>方法来读取这个文件。</li>
+</ul>
+<p>API 服务的数据保存在本地的 Sqlite 数据库中，我们预先在数据库中存入 2 条数据，内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sqlite&gt; <span class="keyword">select</span> * from items;</span><br><span class="line">1|ChatGPT|OpenAI LLM|20.0|</span><br><span class="line">2|LLAMA|Opensource LLM|0.1|</span><br></pre></td></tr></table></figure>
+
+<p>回到 GPT 的 Action 页面，我们在 Authentication 中 Authentication Type 选择<code>APIKey</code>，输入经过 <strong>Base64 编码</strong>的 API Key，Auth Type 选择 Basic，然后点击保存按钮来保存认证配置，最后保存 GPT 即可。</p>
+<img src="/images/post/2023/11/gpts-action-basic.png" class="" width="600" height="400">
+
+<p>保存了之后我们开始试用我们的 GPT，下面是演示示例：</p>
+<img src="/images/post/2023/11/gpts-action-read-item.png" class="" width="1000" height="600">
+
+<p>可以看到我们的 GPT 成功调用了我们本地的 API 服务，获取到了我们本地数据库中的数据。</p>
+<h4 id="Bearer-认证"><a href="#Bearer-认证" class="headerlink" title="Bearer 认证"></a>Bearer 认证</h4><p>Bearer 认证原理和 Basic 认证类似，不同的地方是在 API Key 的输入框中只需要输入原始的 API Key，无需进行 Base64 加密，下面是 Bearer 认证的示例代码：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_bearer_api_key</span>(<span class="params">request: Request</span>):</span><br><span class="line">    authorization: <span class="built_in">str</span> = request.headers.get(<span class="string">&quot;Authorization&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> authorization:</span><br><span class="line">        <span class="keyword">raise</span> HTTPException(</span><br><span class="line">            status_code=status.HTTP_401_UNAUTHORIZED,</span><br><span class="line">            detail=<span class="string">&quot;Authorization header is missing&quot;</span>,</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    prefix = <span class="string">&quot;Bearer&quot;</span></span><br><span class="line">    <span class="keyword">if</span> authorization.startswith(prefix):</span><br><span class="line">        api_key = authorization[<span class="built_in">len</span>(prefix) :].strip()</span><br><span class="line">        token = read_token()</span><br><span class="line">        <span class="keyword">if</span> api_key == token:</span><br><span class="line">            <span class="keyword">return</span> api_key</span><br><span class="line">    <span class="keyword">raise</span> HTTPException(</span><br><span class="line">        status_code=status.HTTP_401_UNAUTHORIZED, detail=<span class="string">&quot;Invalid API Key&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/items/&#123;item_id&#125;&quot;</span>, dependencies=[Depends(<span class="params">get_bearer_api_key</span>)]</span>)</span></span><br><span class="line"><span class="comment"># 省略其他代码</span></span><br><span class="line"><span class="meta">@app.post(<span class="params"><span class="string">&quot;/items/&quot;</span>, dependencies=[Depends(<span class="params">get_bearer_api_key</span>)]</span>)</span></span><br><span class="line"><span class="comment"># 省略其他代码</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在 Bearer 认证方法中我们使用了类似的逻辑来判断 API Key 是否正确，不同的地方是我们不需要对 API Key 进行 Base64 解码。</li>
+<li>修改 Depends 方法为<code>Depends(get_bearer_api_key)</code>。</li>
+</ul>
+<p>在 GPT Action 的配置页面中，我们在 Authentication 中 Authentication Type 选择<code>APIKey</code>，输入<strong>原始</strong>的 API Key，Auth Type 选择 Bearer，然后点击保存按钮来保存认证配置和 GPT。</p>
+<img src="/images/post/2023/11/gpts-action-bearer.png" class="" width="600" height="400">
+
+<p>保存了之后我们再试用我们的 GPT，结果和 Basic 的一致，这里就不再展示了。</p>
+<h4 id="自定义-Header"><a href="#自定义-Header" class="headerlink" title="自定义 Header"></a>自定义 Header</h4><p>自定义 Header 是指在请求的 Header 中添加一个自定义的字段来进行认证，这个字段的名称可以自定义，下面是自定义 Header 认证的示例代码：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_custom_api_key</span>(<span class="params">request: Request</span>):</span><br><span class="line">    api_key = request.headers.get(<span class="string">&quot;api-key&quot;</span>)</span><br><span class="line">    token = read_token()</span><br><span class="line">    <span class="keyword">if</span> api_key == token:</span><br><span class="line">        <span class="keyword">return</span> api_key</span><br><span class="line">    <span class="keyword">raise</span> HTTPException(</span><br><span class="line">        status_code=status.HTTP_401_UNAUTHORIZED, detail=<span class="string">&quot;Invalid API Key&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/items/&#123;item_id&#125;&quot;</span>, dependencies=[Depends(<span class="params">get_custom_api_key</span>)]</span>)</span></span><br><span class="line"><span class="comment"># 省略其他代码</span></span><br><span class="line"><span class="meta">@app.post(<span class="params"><span class="string">&quot;/items/&quot;</span>, dependencies=[Depends(<span class="params">get_custom_api_key</span>)]</span>)</span></span><br><span class="line"><span class="comment"># 省略其他代码</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在方法中我们通过<code>api-key</code>这个 header 来获取 API Key，然后和本地保存的 API Key 进行比较，如果相同则认证通过，否则认证失败。</li>
+</ul>
+<p>在 GPT Action 的配置页面中，我们在 Authentication 中 Authentication Type 选择<code>APIKey</code>，输入的 API Key，Auth Type 选择 Custom，输入自定义 Header 的名称，这里我们输入<code>api-key</code>，然后点击保存按钮来保存认证配置和 GPT。</p>
+<img src="/images/post/2023/11/gpts-action-custom-header.png" class="" width="600" height="400">
+
+<p>我们通过创建商品的接口来演示下 GPT 的功能，下面是演示示例：</p>
+<img src="/images/post/2023/11/gpts-action-create-item.png" class="" width="1000" height="600">
+
+<p>在 ChatGPT 界面上显示是成功创建了，我们再去本地数据库中查询下是否有新增的记录：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sqlite<span class="operator">&gt;</span> <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> items;</span><br><span class="line"><span class="number">1</span><span class="operator">|</span>ChatGPT<span class="operator">|</span>OpenAI LLM<span class="operator">|</span><span class="number">20.0</span><span class="operator">|</span></span><br><span class="line"><span class="number">2</span><span class="operator">|</span>LLAMA<span class="operator">|</span>Opensource LLM<span class="operator">|</span><span class="number">0.1</span><span class="operator">|</span></span><br><span class="line"><span class="number">3</span><span class="operator">|</span>Claude<span class="operator">|</span>Anthropic LLM<span class="operator">|</span><span class="number">20.0</span><span class="operator">|</span><span class="number">1.0</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到我们的 GPT 成功调用了我们本地的 API 服务，创建了一条新的记录。</p>
+<h3 id="OAuth"><a href="#OAuth" class="headerlink" title="OAuth"></a>OAuth</h3><p>Action 的第三种认证方式是 OAuth，目前是 OAuth2.0 是使用最广泛的版本，它是一种开放标准的授权协议，它允许用户提供一个令牌，而不是用户名和密码来访问他们存储在特定服务提供商上的数据。这种协议主要用于授权第三方应用访问用户在某个网站上的信息，而无需将用户名和密码直接暴露给第三方应用，使用最多的地方就是一些网站或者 APP 的第三方登录，比如微信登录、支付宝登录等。它相比 API Key 要稍微复杂一些，但也相对更加安全。</p>
+<p>OAuth2.0 有 4 种授权模式，分别是：授权码（authorization-code）、隐藏式（implicit）、密码式（password）、客户端凭证（client credentials），GPT 目前使用的是授权码模式。要知道如何配置 Action 中的 OAuth 认证，我们首先需要了解 OAuth 的基本原理，下面是 GPT 进行 OAuth 认证的过程：</p>
+<img src="/images/post/2023/11/gpts-action-oauth-principle.png" class="" width="1000" height="600">
+
+<ul>
+<li>图中有 4 个角色，分别是用户、GPT、授权服务和资源服务，其中资源服务就是我们刚才搭建的 API 服务（端口 8000），而授权服务是我们待会要搭建的另外一个服务（端口 5000）。</li>
+<li>用户首先向 GPT 发起资源请求，比如要查询 id 为 1 的商品，GPT 会先向授权服务发起一个授权请求，请求参数包括 Client ID、授权的范围和回调地址等。</li>
+<li>GPT 会引导用户到授权服务的同意授权页面，用户在页面上确认是否同意授权。</li>
+<li>用户确认授权后，授权服务会根据请求参数生成一个授权码，然后将授权码通过回调地址返回给 GPT。</li>
+<li>GPT 拿到授权码后再次向授权服务器发起请求，请求参数包括授权码、Client ID 和 Client Secret 等。</li>
+<li>授权服务根据请求参数生成一个访问令牌，然后将访问令牌返回给 GPT。</li>
+<li>GPT 拿到访问令牌后，就可以向资源服务发起资源请求了，资源服务会根据访问令牌来判断是否有权限访问资源，如果有权限则返回资源，否则返回错误信息。</li>
+</ul>
+<p>网上有很多关于 OAuth 的介绍，大家可以自行搜索来加深对 OAuth 的理解。</p>
+<h4 id="搭建本地授权服务"><a href="#搭建本地授权服务" class="headerlink" title="搭建本地授权服务"></a>搭建本地授权服务</h4><p>大概了解 OAuth 的原理后，我们尝试在本地搭建一个授权服务，这里我们使用了一个开源的<a target="_blank" rel="noopener" href="https://github.com/authlib/example-oauth2-server">OAuth 授权服务示例</a>来搭建服务，搭建过程如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载源码</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/authlib/example-oauth2-server</span><br><span class="line"><span class="built_in">cd</span> example-oauth2-server</span><br><span class="line"><span class="comment"># 安装依赖</span></span><br><span class="line">pip install -r requirements.txt</span><br><span class="line"><span class="comment"># 设置环境变量</span></span><br><span class="line"><span class="built_in">export</span> AUTHLIB_INSECURE_TRANSPORT=1</span><br><span class="line"><span class="comment"># 启动服务</span></span><br><span class="line">flask run</span><br></pre></td></tr></table></figure>
+
+<p>服务启动后，我们可以在浏览器中访问<code>http://localhost:5000</code>来使用授权服务，示例中提供了简单的前端页面，我们可以在页面上进行登录、创建客户、查看客户信息和同意授权等操作。</p>
+<p>首先我们需要在授权服务上创建一个客户（Client），创建客户的页面如下：</p>
+<img src="/images/post/2023/11/gpts-action-oauth-create-client.png" class="" width="400" height="200">
+
+<ul>
+<li>Client Name 是客户的名称，这里我们可以随意输入一个名字</li>
+<li>Client URI 现在可以先随便输入一个可以访问的网址，后面会修改</li>
+<li>Allowed Scope 是请求授权的范围，这里我们随便写个 profile</li>
+<li>Redirect URIs 同 Client URI，先输入一个网址，后面会修改</li>
+<li>Allowed Grant Types 指刚才介绍 OAuth 的授权模式，值可以填 4 种模式中的一个或多个，这里我们填 <code>anthorization_code</code>即可</li>
+<li>Allowed Response Types 指授权响应类型，这里我们填 code</li>
+<li>Token Endpoint Auth Method 是指交换 token 的方式，有 client_secret_basic、client_secret_post、none 3 种，这里我们选择 client_secret_basic</li>
+</ul>
+<p>填写完成后点击 Submit 按钮进行创建，然后在页面上可以看到 Client 的列表信息，包括 Client 的 ID，Secret 等信息，这 2 个信息后面在 Action 的 OAuth 配置中需要用到，如下图所示：</p>
+<img src="/images/post/2023/11/gpts-action-oauth-client.png" class="" width="600" height="400">
+
+<p>这些数据也保存在本地的 Sqlite 数据库，数据库文件是<code>instance/db.sqlite</code>，我们可以查询下数据库看是否已经新增了数据：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sqlite&gt; <span class="keyword">select</span> * from oauth2_client;</span><br><span class="line">1|1|XPVhMb97NIqVWxZ8gfVuexPq|l9paXIvK8xqYaE3DlaFnH77DvgueYyeICe3ffNKto2ceqIQV|1701049722|0|&#123;<span class="string">&quot;client_name&quot;</span>:<span class="string">&quot;Foo&quot;</span>,<span class="string">&quot;client_uri&quot;</span>:<span class="string">&quot;https://authlib.org/&quot;</span>,<span class="string">&quot;grant_types&quot;</span>:[<span class="string">&quot;authorization_code&quot;</span>],<span class="string">&quot;redirect_uris&quot;</span>:[<span class="string">&quot;https://authlib.org/&quot;</span>],<span class="string">&quot;response_types&quot;</span>:[<span class="string">&quot;code&quot;</span>],<span class="string">&quot;scope&quot;</span>:<span class="string">&quot;profile&quot;</span>,<span class="string">&quot;token_endpoint_auth_method&quot;</span>:<span class="string">&quot;client_secret_basic&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到数据已经添加到数据库了，<strong>后续我们还需要对这条记录进行修改</strong>。</p>
+<p>接下来我们再看一下授权服务主要的 2 个 API 接口，可以在<code>website/routes.py</code>下查看：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 授权接口</span></span><br><span class="line"><span class="meta">@bp.route(<span class="params"><span class="string">&quot;/oauth/authorize&quot;</span>, methods=[<span class="string">&quot;GET&quot;</span>, <span class="string">&quot;POST&quot;</span>]</span>)</span></span><br><span class="line"><span class="comment"># 获取 token 接口</span></span><br><span class="line"><span class="meta">@bp.route(<span class="params"><span class="string">&quot;/oauth/token&quot;</span>, methods=[<span class="string">&quot;POST&quot;</span>]</span>)</span></span><br></pre></td></tr></table></figure>
+
+<p>这里我们不需要了解接口的具体实现，只需要知道授权服务有这 2 个接口即可，这是后面我们要填入 Action 中的参数。</p>
+<p>和原来的 API 服务一样，想要让 Action 访问到本地的授权服务，我们同样需要使用 Ngrok 来对授权服务进行代理，如果是 Ngrok 的免费用户，一个地区只能启动一个代理，如果想同时启动 2 个本地代理，需要在 Ngrok 命令后面加上地区参数，我们原来的代理地区是<code>Asia Pacific (ap)</code>，通过这个命令<code>ngrok http 5000 --region us</code>就可以启动另外一个代理，表示地区是美国，启动后终端信息如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ngrok                                                                                                                                                                                                                     (Ctrl+C to quit)</span><br><span class="line"></span><br><span class="line">Build better APIs with ngrok. Early access: ngrok.com/early-access</span><br><span class="line"></span><br><span class="line">Session Status                online</span><br><span class="line">Account                       your name (Plan: Free)</span><br><span class="line">Version                       3.4.0</span><br><span class="line">Region                        United States (us)</span><br><span class="line">Latency                       237ms</span><br><span class="line">Web Interface                 http://127.0.0.1:4041</span><br><span class="line">Forwarding                    https://your-ngrok-proxy.ngrok-free.app -&gt; http://localhost:5000</span><br><span class="line"></span><br><span class="line">Connections                   ttl     opn     rt1     rt5     p50     p90</span><br><span class="line">                              0       0       0.00    0.00    0.00    0.00</span><br></pre></td></tr></table></figure>
+
+<p>和 API 服务的代理不同的地方是，授权服务的 Ngrok 代理不需要再开启 Edge，因为这个服务的授权同意页面是在本地运行，我们可以操作这个页面。这样我们 2 个本地服务都通过 Ngrok 进行了代理，在 Action 中可以对我们的服务进行访问了。</p>
+<h4 id="OAuth-配置"><a href="#OAuth-配置" class="headerlink" title="OAuth 配置"></a>OAuth 配置</h4><p>现在我们已经得到了 Action OAuth 配置的所有信息，下面我们回到 GPT Action 的认证配置页面，然后选择 OAuth，配置页面如下图所示：</p>
+<img src="/images/post/2023/11/gpts-action-oauth-config.png" class="" width="600" height="400">
+
+<ul>
+<li>Client ID 和 Client Secret 填写之前创建 Client 时授权服务提供的 Client 信息</li>
+<li>Authorization URL 和 Token URL 填写授权服务的 Ngrok 代理地址和接口名称，接口名称分别是<code>/oauth/authorize</code>和<code>/oauth/token</code></li>
+<li>Scope 我们和原来保持一致，填写 profile</li>
+<li>Token Exchange Method 也跟我们创建 Client 时保持一致，选择<code>Basic authorization header</code></li>
+</ul>
+<p>配置完成后保存认证信息和 GPT，然后重新进入 GPT 的编辑页面，在 Configure 页面中我们可以看到 Actions 下面出现了一个 Callback URL：</p>
+<img src="/images/post/2023/11/gpts-action-oauth-callback.png" class="" width="600" height="400">
+
+<p>这个地址是 OAuth 认证独有的参数，是 GPT 访问授权服务接口后的回调地址，我们需要将这个地址更新到本地数据库的 Client 中去，更新 SQL 语句如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sqlite<span class="operator">&gt;</span> <span class="keyword">UPDATE</span> oauth2_client</span><br><span class="line"><span class="keyword">SET</span> client_metadata<span class="operator">=</span>json_set(client_metadata, <span class="string">&#x27;$.client_uri&#x27;</span>, <span class="string">&#x27;https://chat.openai.com/aip/g-xxxx/oauth/callback&#x27;</span>, <span class="string">&#x27;$.redirect_uris&#x27;</span>, <span class="built_in">json_array</span>(<span class="string">&#x27;https://chat.openai.com/aip/g-xxxx/oauth/callback&#x27;</span>))</span><br><span class="line"><span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这样 GPT 在用户授权后，授权服务就会将授权码返回给 GPT 的这个回调地址，GPT 再通过这个授权码来获取访问令牌，也就是 GPT 会调用授权服务的<code>/oauth/token</code>接口，这个接口会根据授权码来生成访问令牌，我们需要修改下这个接口，在其生成访问令牌后将令牌保存到本地，以便 API 服务可以拿到令牌信息并进行校验。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@bp.route(<span class="params"><span class="string">&quot;/oauth/token&quot;</span>, methods=[<span class="string">&quot;POST&quot;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">issue_token</span>():</span><br><span class="line">    response = authorization.create_token_response()</span><br><span class="line">    response_data = response.get_data(as_text=<span class="literal">True</span>)</span><br><span class="line">    json_data = json.loads(response_data)</span><br><span class="line">    access_token = json_data.get(<span class="string">&quot;access_token&quot;</span>, <span class="literal">None</span>)</span><br><span class="line">    <span class="keyword">if</span> access_token <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        save_token_to_file(access_token)</span><br><span class="line">    <span class="keyword">return</span> response</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>create_token_response 方法会生成访问令牌并返回一个 Flask 的 Response</li>
+<li>获取 Response 中的 access_token 并将其保存到本地</li>
+</ul>
+<p>GPT 拿到令牌后，后面往 API 服务发送请求时，都会将访问令牌以 Bearer 认证的方式添加到请求中，即在 Header 中增加：<code>Authorization: Bearer &#123;access_token&#125;</code>，因此我们需要将 API 服务的接口改成 Bearer 认证的方式：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/items/&#123;item_id&#125;&quot;</span>, dependencies=[Depends(<span class="params">get_bearer_api_key</span>)]</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.post(<span class="params"><span class="string">&quot;/items/&quot;</span>, dependencies=[Depends(<span class="params">get_bearer_api_key</span>)]</span>)</span></span><br></pre></td></tr></table></figure>
+
+<p>修改完这些后，我们就可以在 GPT 中测试我们的 OAuth 认证了，下面是笔者本地的演示视频：</p>
+<video width="720" height="480" controls>
+  <source src="/images/post/2023/11/gpts-action-oauth.mp4" type="video/mp4">
+</video>
+
+<ul>
+<li>我们首次让 GPT 查询商品时，它给出了一个签名链接</li>
+<li>我们点击签名链接后，会跳转到本地的授权服务页面进行授权同意确认</li>
+<li>我们确认同意后授权服务会跳转到 GPT 的回调地址，可以看到 GPT 上方会出现一个绿色的授权成功的提示</li>
+<li>但 GPT 这里有个问题，就是在跳转回 GPT 页面后，GPT 不会继续回答问题，我们需要重新再问一遍问题</li>
+<li>再次提问同样的问题，GPT 调用 API 服务获取信息，最终我们得到了想要的答案</li>
+</ul>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+<li>在 GPT Action 的创建过程中，可以在 Preview 页面对未发布的 GPT 进行调试，虽然比较方便，但一些地址的跳转会有问题，比如 OAuth 认证的回调地址会跳转失败，所以建议是将 GPT 发布后在正式的 GPT 页面中进行测试。</li>
+<li>如果在正式页面中发现 Action 调用出现问题，再回到 Preview 页面进行调试，这样可以看到一些 debug 信息。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上就是 GPT Action 的配置方法，我们通过了搭建本地服务来验证了 Action 的各种认证机制，在实践的过程中也了解了 Action 的工作原理，借助于 Action 外接 API 服务的能力，我们可以将 GPT 应用到更多的场景中，可以定制更多强大的功能，希望本文可以帮助大家更好的使用 GPT Action，打造出更加强大的 GPT。文章中的所有代码都在<a target="_blank" rel="noopener" href="https://github.com/zhaozhiming/gpts-action">这个仓库</a>，如果大家对文章有什么问题，可以在评论区留言一起讨论。</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://community.openai.com/t/privacy-policy-urls-for-gpt-actions/502751/7">GPTs Action 隐私协议</a></li>
+<li><a target="_blank" rel="noopener" href="https://swagger.io/docs/specification/about/">OpenAPI 规范</a></li>
+<li><a target="_blank" rel="noopener" href="https://platform.openai.com/docs/actions">OpenAI Action</a></li>
+</ul>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2023/11/28/in-depth-explanation-and-practice-of-gpts-actions-and-principles/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2023/11/28/in-depth-explanation-and-practice-of-gpts-actions-and-principles/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>在JavaScript中进行文件处理，第五部分：Blobs - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="&lt;p&gt;&lt;strong&gt;译注：原文是《JavaScript高级程序设计》的作者Nicholas Zakas写的，本翻译纯属为自己学习而做，仅供参考。原文链接：&lt;a href=&#34;http://www.nczonline.net/blog/2012/05/31/working-with-files-in-javascript-part-5-Blobs&#34;&gt;这里&lt;/a&gt;&lt;/strong&gt;  &lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;到目前为止，这个系列的帖子集中在和这些文件交互——用户指定的文件和通过File对象访问的文件。File对象实际上是Blob的一个特殊版本，表示一块块的二进制数据。Blob对象继承了File对象的size和type属性。  &lt;/p&gt;
+&lt;span id=&#34;more&#34;&gt;&lt;/span&gt;  
+&lt;p&gt;在大部分情况下，Blobs和Files可以用在同一个地方。例如，你可以使用一个FileReader从一个Blob中读取数据，并且你可以在一个Blob中使用URL.createObjectURL()方法来创建一个对象URL。  &lt;/p&gt;
+&lt;h2 id=&#34;slice&#34;&gt;&lt;a href=&#34;#slice&#34; class=&#34;headerlink&#34; title=&#34;slice&#34;&gt;&lt;/a&gt;slice&lt;/h2&gt;&lt;p&gt;使用Blobs的一件有趣的事情是可以基于另外一个Blob的小部分来创建一个新的Blob。由于每个Blob代表的是数据的内存地址，而不是数据本身，所以你可以快速创建一个指向其他Blob子部分数据的Blob对象。这可以通过使用slice()方法来做到。  &lt;/p&gt;
+&lt;p&gt;你可能对类似slice()的方法比较熟悉，可以用来处理字符串和数组，还有Blob。这个方法接收3个参数：起始字节的下标，结束字节的下标，还有一个可选且适用于Blob的MIME类型。如果MIME类型没有指定，新的Blob跟原始的BLob对象有相同的MIME类型。  &lt;/p&gt;
+&lt;p&gt;浏览器对slice()的支持还不是很普遍，只有Firefox通过mozSlice()和webkitSlice()来支持它（其他浏览器现在都不支持）。这里有一个例子：    &lt;/p&gt;
+&lt;figure class=&#34;highlight javascript&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;10&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;title function_&#34;&gt;sliceBlob&lt;/span&gt;(&lt;span class=&#34;params&#34;&gt;blob, start, end, type&lt;/span&gt;) &amp;#123; &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;　　type = type || blob.&lt;span class=&#34;property&#34;&gt;type&lt;/span&gt;; &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;　　&lt;span class=&#34;keyword&#34;&gt;if&lt;/span&gt; (blob.&lt;span class=&#34;property&#34;&gt;mozSlice&lt;/span&gt;) &amp;#123; &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;　　　　&lt;span class=&#34;keyword&#34;&gt;return&lt;/span&gt; blob.&lt;span class=&#34;title function_&#34;&gt;mozSlice&lt;/span&gt;(start, end, type); &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;　　&amp;#125; &lt;span class=&#34;keyword&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;if&lt;/span&gt; (blob.&lt;span class=&#34;property&#34;&gt;webkitSlice&lt;/span&gt;) &amp;#123; &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;　　　　&lt;span class=&#34;keyword&#34;&gt;return&lt;/span&gt; blob.&lt;span class=&#34;title function_&#34;&gt;webkitSlice&lt;/span&gt;(start, end type); &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;　　&amp;#125; &lt;span class=&#34;keyword&#34;&gt;else&lt;/span&gt; &amp;#123; &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;　　　　&lt;span class=&#34;keyword&#34;&gt;throw&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;Error&lt;/span&gt;(&lt;span class=&#34;string&#34;&gt;&amp;quot;This doesn&amp;#x27;t work!&amp;quot;&lt;/span&gt;); &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;　　&amp;#125; &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;  
+&lt;p&gt;比如，你可以使用这个函数将一个大文件拆分成一块块然后进行上传。每一个新产生的Blob都和原始的文件互不相干，即使每个blob的数据有重叠的部分。网络相册的工程师们使用blob分割来读取照片的可交换图片文件信息，这些照片是正在上传*[1]*的而不是已经上传到了服务器。当文件被选择的时候，上传文件和从照片中读取可交换图片文件信息，这2个动作在网络相册上传页面是同时开始的。这就允许在文件上传的时候，可以同时预览已经上传的部分数据的图像。  &lt;/p&gt;
+&lt;h2 id=&#34;创建Blobs的老方法&#34;&gt;&lt;a href=&#34;#创建Blobs的老方法&#34; class=&#34;headerlink&#34; title=&#34;创建Blobs的老方法&#34;&gt;&lt;/a&gt;创建Blobs的老方法&lt;/h2&gt;&lt;p&gt;ile对象在浏览器中开始出现后不久，开发人员意识到Blob对象是如此强大，以致想不通过用户交互就可以直接创建它们。毕竟，任何数据都可以放在Blob里面，而不一定要绑定一个文件。浏览器可以快速的创建BlobBuilder，这个对象类型的唯一目的就是将数据封装在一个Blob对象里面。这是一个非标准类型并且已经在Firefox（像MozBlobBuilder），IE10（像MSBlobBuilder）和Chrome（像WebKitBlobBuilder）中实现。  &lt;/p&gt;
+&lt;p&gt;BlobBuilder通过创建一个实例，然后调用append()方法紧跟一个字符串、ArrayBuffer或者Blob来工作。一旦这些数据都被添加之后，你可以调用getBlob()并传递一个可选的MIME类型参数来使用Blob。这有个例子：  &lt;/p&gt;
+&lt;figure class=&#34;highlight javascript&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;var&lt;/span&gt; builder = &lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;BlobBuilder&lt;/span&gt;(); &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;builder.&lt;span class=&#34;title function_&#34;&gt;append&lt;/span&gt;(&lt;span class=&#34;string&#34;&gt;&amp;quot;Hello world!&amp;quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;var&lt;/span&gt; blob = builder.&lt;span class=&#34;title function_&#34;&gt;getBlob&lt;/span&gt;(&lt;span class=&#34;string&#34;&gt;&amp;quot;text/plain&amp;quot;&lt;/span&gt;); &lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;  
+&lt;p&gt;为数据的任意片段创建URLs的能力是非常强大的，允许你在浏览器中动态的创建链接到文件的对象。例如，你可以使用一个Blob来创建一个web worker，而不需要为web worker指定文件。这项技术写在Web Workers*[2]*的基础里：  &lt;/p&gt;
+&lt;figure class=&#34;highlight javascript&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;14&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;comment&#34;&gt;// Prefixed in Webkit, Chrome 12, and FF6: window.WebKitBlobBuilder, window.MozBlobBuilder &lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;var&lt;/span&gt; bb = &lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;BlobBuilder&lt;/span&gt;(); &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;bb.&lt;span class=&#34;title function_&#34;&gt;append&lt;/span&gt;(&lt;span class=&#34;string&#34;&gt;&amp;quot;onmessage = function(e) &amp;#123; &lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;string&#34;&gt;　　postMessage(&amp;#x27;msg from worker&amp;#x27;); &lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;string&#34;&gt;&amp;#125;&amp;quot;&lt;/span&gt;); &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;comment&#34;&gt;// Obtain a blob URL reference to our worker &amp;#x27;file&amp;#x27;. &lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;comment&#34;&gt;// Note: window.webkitURL.createObjectURL() in Chrome 10+. &lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;var&lt;/span&gt; blobURL = &lt;span class=&#34;variable language_&#34;&gt;window&lt;/span&gt;.&lt;span class=&#34;property&#34;&gt;URL&lt;/span&gt;.&lt;span class=&#34;title function_&#34;&gt;createObjectURL&lt;/span&gt;(bb.&lt;span class=&#34;title function_&#34;&gt;getBlob&lt;/span&gt;()); &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;var&lt;/span&gt; worker = &lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;Worker&lt;/span&gt;(blobURL); &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;worker.&lt;span class=&#34;property&#34;&gt;onmessage&lt;/span&gt; = &lt;span class=&#34;keyword&#34;&gt;function&lt;/span&gt;(&lt;span class=&#34;params&#34;&gt;e&lt;/span&gt;) &amp;#123; &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;　　&lt;span class=&#34;comment&#34;&gt;// e.data == &amp;#x27;msg from worker&amp;#x27; &lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#125;; &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;worker.&lt;span class=&#34;title function_&#34;&gt;postMessage&lt;/span&gt;(); &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;comment&#34;&gt;// Start the worker.&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;这段代码创建了一个简单的脚本，然后创建一个对象URL。将对象URL赋予一个web worker来代替一个脚本URL。  &lt;/p&gt;
+&lt;p&gt;你可以任意次调用append()来创建Blob的内容。  &lt;/p&gt;
+&lt;h2 id=&#34;创建Blobs的新方式&#34;&gt;&lt;a href=&#34;#创建Blobs的新方式&#34; class=&#34;headerlink&#34; title=&#34;创建Blobs的新方式&#34;&gt;&lt;/a&gt;创建Blobs的新方式&lt;/h2&gt;&lt;p&gt;因为开发人员一直呼吁可以有一种方式来直接创建Blob对象，然后浏览器出现了BlobBuilder，它决定添加一个Blob构造器。这个构造器现在是规范的一部分，将是未来创建Blob对象的一种方式。  &lt;/p&gt;
+&lt;p&gt;这个构造器接收2个参数。第一个参数是一个分配了Blob块的数组。数据的元素跟传入BlobBuilder的append()方法的值相同，可以是任意数量的字符串，Blobs和ArrayBuffers。第二个参数是一个包含了新创建的Blob属性的对象。当前有2个属性已经定义：类型——指定Blob的MIME类型；endings——值分别是“transparent”（默认值）和“native”。这里有个例子：  &lt;/p&gt;
+&lt;figure class=&#34;highlight javascript&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;var&lt;/span&gt; blob = &lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;Blob&lt;/span&gt;([&lt;span class=&#34;string&#34;&gt;&amp;quot;Hello world!&amp;quot;&lt;/span&gt;], &amp;#123; &lt;span class=&#34;attr&#34;&gt;type&lt;/span&gt;: &lt;span class=&#34;string&#34;&gt;&amp;quot;text/plain&amp;quot;&lt;/span&gt; &amp;#125;); &lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;  
+&lt;p&gt;像你看到的一样，这比使用BlobBuilder更加简单。Chrome的nightly builds版本和未来的Firefox 13将支持Blob构造器。其他浏览器还没有宣布实现该构造器的计划，尽管如此，现在它是File API*[3]*标准的一部分，期望以后会被普遍支持。  &lt;/p&gt;
+&lt;h2 id=&#34;总结&#34;&gt;&lt;a href=&#34;#总结&#34; class=&#34;headerlink&#34; title=&#34;总结&#34;&gt;&lt;/a&gt;总结&lt;/h2&gt;&lt;p&gt;这是“在JavaScript中进行文件处理”这一系列的最后一部分。我希望你了解到，File API非常强大，在web应用中开辟了很多全新的方式来处理文件。当用户需要上传文件时你不再需要坚持使用文件上传框，现在你可以在客户端读取文件，为客户端操作开辟了多种可能性。你可以在上传文件之前重置图片的大小（使用FileReader和&lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt;）；你可以单纯在浏览器里创建一个文本编辑器；你可以分隔大文件进行逐步上载。可能性不是无穷无尽的，但也很接近无穷尽了。  &lt;/p&gt;
+&lt;h4 id=&#34;引用&#34;&gt;&lt;a href=&#34;#引用&#34; class=&#34;headerlink&#34; title=&#34;引用&#34;&gt;&lt;/a&gt;引用&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.google.com/gwt/x?wsc=tb&amp;source=wax&amp;u=http://code.flickr.com/blog/2012/06/01/parsing-exif-client-side-using-javascript-2/&amp;ei=DcsYUMuwAcSmkAXmvoHoAg&#34;&gt;Parsing Exif client-side using JavaScript&lt;/a&gt; by Flickr Team&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.google.com/gwt/x?wsc=tb&amp;source=wax&amp;u=http://www.html5rocks.com/en/tutorials/workers/basics/&amp;ei=DcsYUMuwAcSmkAXmvoHoAg&#34;&gt;The Basics of Web Workers&lt;/a&gt; by Eric Bidelman&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.google.com/gwt/x?wsc=tb&amp;source=wax&amp;u=http://dev.w3.org/2006/webapi/FileAPI/&amp;ei=DcsYUMuwAcSmkAXmvoHoAg&amp;whp=3AconstructorBlob&#34;&gt;File API&lt;/a&gt; – Blob Constructor&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://zhaozhiming.github.io/2012/07/08/working-with-files-in-javascript-part-1/&#34;&gt;在JavaScript中进行文件处理，第一部分：基础&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://zhaozhiming.github.io/2012/07/16/working-with-files-in-javascript-part-2/&#34;&gt;在JavaScript中进行文件处理，第二部分：文件读取&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://zhaozhiming.github.io/2012/07/23/working-with-files-in-javascript-part-3/&#34;&gt;在JavaScript中进行文件处理，第三部分：处理事件和错误&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://zhaozhiming.github.io/2012/07/30/working-with-files-in-javascript-part-4/&#34;&gt;在JavaScript中进行文件处理，第四部分：对象URLs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+"> <!-- TODO: truncate -->
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">在JavaScript中进行文件处理，第五部分：Blobs</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2012-08-01T09:28:00.000Z" itemprop="datePublished">8月 1, 2012</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/javascript/">javascript</a>
+</div>
+    </div>
+	<div class="entry-content"><p><strong>译注：原文是《JavaScript高级程序设计》的作者Nicholas Zakas写的，本翻译纯属为自己学习而做，仅供参考。原文链接：<a target="_blank" rel="noopener" href="http://www.nczonline.net/blog/2012/05/31/working-with-files-in-javascript-part-5-Blobs">这里</a></strong>  </p>
+<hr>
+<p>到目前为止，这个系列的帖子集中在和这些文件交互——用户指定的文件和通过File对象访问的文件。File对象实际上是Blob的一个特殊版本，表示一块块的二进制数据。Blob对象继承了File对象的size和type属性。  </p>
+<span id="more"></span>  
+<p>在大部分情况下，Blobs和Files可以用在同一个地方。例如，你可以使用一个FileReader从一个Blob中读取数据，并且你可以在一个Blob中使用URL.createObjectURL()方法来创建一个对象URL。  </p>
+<h2 id="slice"><a href="#slice" class="headerlink" title="slice"></a>slice</h2><p>使用Blobs的一件有趣的事情是可以基于另外一个Blob的小部分来创建一个新的Blob。由于每个Blob代表的是数据的内存地址，而不是数据本身，所以你可以快速创建一个指向其他Blob子部分数据的Blob对象。这可以通过使用slice()方法来做到。  </p>
+<p>你可能对类似slice()的方法比较熟悉，可以用来处理字符串和数组，还有Blob。这个方法接收3个参数：起始字节的下标，结束字节的下标，还有一个可选且适用于Blob的MIME类型。如果MIME类型没有指定，新的Blob跟原始的BLob对象有相同的MIME类型。  </p>
+<p>浏览器对slice()的支持还不是很普遍，只有Firefox通过mozSlice()和webkitSlice()来支持它（其他浏览器现在都不支持）。这里有一个例子：    </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">sliceBlob</span>(<span class="params">blob, start, end, type</span>) &#123; </span><br><span class="line">　　type = type || blob.<span class="property">type</span>; </span><br><span class="line">　　<span class="keyword">if</span> (blob.<span class="property">mozSlice</span>) &#123; </span><br><span class="line">　　　　<span class="keyword">return</span> blob.<span class="title function_">mozSlice</span>(start, end, type); </span><br><span class="line">　　&#125; <span class="keyword">else</span> <span class="keyword">if</span> (blob.<span class="property">webkitSlice</span>) &#123; </span><br><span class="line">　　　　<span class="keyword">return</span> blob.<span class="title function_">webkitSlice</span>(start, end type); </span><br><span class="line">　　&#125; <span class="keyword">else</span> &#123; </span><br><span class="line">　　　　<span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;This doesn&#x27;t work!&quot;</span>); </span><br><span class="line">　　&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>  
+<p>比如，你可以使用这个函数将一个大文件拆分成一块块然后进行上传。每一个新产生的Blob都和原始的文件互不相干，即使每个blob的数据有重叠的部分。网络相册的工程师们使用blob分割来读取照片的可交换图片文件信息，这些照片是正在上传*[1]*的而不是已经上传到了服务器。当文件被选择的时候，上传文件和从照片中读取可交换图片文件信息，这2个动作在网络相册上传页面是同时开始的。这就允许在文件上传的时候，可以同时预览已经上传的部分数据的图像。  </p>
+<h2 id="创建Blobs的老方法"><a href="#创建Blobs的老方法" class="headerlink" title="创建Blobs的老方法"></a>创建Blobs的老方法</h2><p>ile对象在浏览器中开始出现后不久，开发人员意识到Blob对象是如此强大，以致想不通过用户交互就可以直接创建它们。毕竟，任何数据都可以放在Blob里面，而不一定要绑定一个文件。浏览器可以快速的创建BlobBuilder，这个对象类型的唯一目的就是将数据封装在一个Blob对象里面。这是一个非标准类型并且已经在Firefox（像MozBlobBuilder），IE10（像MSBlobBuilder）和Chrome（像WebKitBlobBuilder）中实现。  </p>
+<p>BlobBuilder通过创建一个实例，然后调用append()方法紧跟一个字符串、ArrayBuffer或者Blob来工作。一旦这些数据都被添加之后，你可以调用getBlob()并传递一个可选的MIME类型参数来使用Blob。这有个例子：  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> builder = <span class="keyword">new</span> <span class="title class_">BlobBuilder</span>(); </span><br><span class="line">builder.<span class="title function_">append</span>(<span class="string">&quot;Hello world!&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> blob = builder.<span class="title function_">getBlob</span>(<span class="string">&quot;text/plain&quot;</span>); </span><br></pre></td></tr></table></figure>  
+<p>为数据的任意片段创建URLs的能力是非常强大的，允许你在浏览器中动态的创建链接到文件的对象。例如，你可以使用一个Blob来创建一个web worker，而不需要为web worker指定文件。这项技术写在Web Workers*[2]*的基础里：  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Prefixed in Webkit, Chrome 12, and FF6: window.WebKitBlobBuilder, window.MozBlobBuilder </span></span><br><span class="line"><span class="keyword">var</span> bb = <span class="keyword">new</span> <span class="title class_">BlobBuilder</span>(); </span><br><span class="line">bb.<span class="title function_">append</span>(<span class="string">&quot;onmessage = function(e) &#123; </span></span><br><span class="line"><span class="string">　　postMessage(&#x27;msg from worker&#x27;); </span></span><br><span class="line"><span class="string">&#125;&quot;</span>); </span><br><span class="line"><span class="comment">// Obtain a blob URL reference to our worker &#x27;file&#x27;. </span></span><br><span class="line"><span class="comment">// Note: window.webkitURL.createObjectURL() in Chrome 10+. </span></span><br><span class="line"><span class="keyword">var</span> blobURL = <span class="variable language_">window</span>.<span class="property">URL</span>.<span class="title function_">createObjectURL</span>(bb.<span class="title function_">getBlob</span>()); </span><br><span class="line"><span class="keyword">var</span> worker = <span class="keyword">new</span> <span class="title class_">Worker</span>(blobURL); </span><br><span class="line">worker.<span class="property">onmessage</span> = <span class="keyword">function</span>(<span class="params">e</span>) &#123; </span><br><span class="line">　　<span class="comment">// e.data == &#x27;msg from worker&#x27; </span></span><br><span class="line">&#125;; </span><br><span class="line">worker.<span class="title function_">postMessage</span>(); </span><br><span class="line"><span class="comment">// Start the worker.</span></span><br></pre></td></tr></table></figure>
+<p>这段代码创建了一个简单的脚本，然后创建一个对象URL。将对象URL赋予一个web worker来代替一个脚本URL。  </p>
+<p>你可以任意次调用append()来创建Blob的内容。  </p>
+<h2 id="创建Blobs的新方式"><a href="#创建Blobs的新方式" class="headerlink" title="创建Blobs的新方式"></a>创建Blobs的新方式</h2><p>因为开发人员一直呼吁可以有一种方式来直接创建Blob对象，然后浏览器出现了BlobBuilder，它决定添加一个Blob构造器。这个构造器现在是规范的一部分，将是未来创建Blob对象的一种方式。  </p>
+<p>这个构造器接收2个参数。第一个参数是一个分配了Blob块的数组。数据的元素跟传入BlobBuilder的append()方法的值相同，可以是任意数量的字符串，Blobs和ArrayBuffers。第二个参数是一个包含了新创建的Blob属性的对象。当前有2个属性已经定义：类型——指定Blob的MIME类型；endings——值分别是“transparent”（默认值）和“native”。这里有个例子：  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> blob = <span class="keyword">new</span> <span class="title class_">Blob</span>([<span class="string">&quot;Hello world!&quot;</span>], &#123; <span class="attr">type</span>: <span class="string">&quot;text/plain&quot;</span> &#125;); </span><br></pre></td></tr></table></figure>  
+<p>像你看到的一样，这比使用BlobBuilder更加简单。Chrome的nightly builds版本和未来的Firefox 13将支持Blob构造器。其他浏览器还没有宣布实现该构造器的计划，尽管如此，现在它是File API*[3]*标准的一部分，期望以后会被普遍支持。  </p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这是“在JavaScript中进行文件处理”这一系列的最后一部分。我希望你了解到，File API非常强大，在web应用中开辟了很多全新的方式来处理文件。当用户需要上传文件时你不再需要坚持使用文件上传框，现在你可以在客户端读取文件，为客户端操作开辟了多种可能性。你可以在上传文件之前重置图片的大小（使用FileReader和<code>&lt;canvas&gt;</code>）；你可以单纯在浏览器里创建一个文本编辑器；你可以分隔大文件进行逐步上载。可能性不是无穷无尽的，但也很接近无穷尽了。  </p>
+<h4 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h4><ul>
+<li><a target="_blank" rel="noopener" href="http://www.google.com/gwt/x?wsc=tb&source=wax&u=http://code.flickr.com/blog/2012/06/01/parsing-exif-client-side-using-javascript-2/&ei=DcsYUMuwAcSmkAXmvoHoAg">Parsing Exif client-side using JavaScript</a> by Flickr Team</li>
+<li><a target="_blank" rel="noopener" href="http://www.google.com/gwt/x?wsc=tb&source=wax&u=http://www.html5rocks.com/en/tutorials/workers/basics/&ei=DcsYUMuwAcSmkAXmvoHoAg">The Basics of Web Workers</a> by Eric Bidelman</li>
+<li><a target="_blank" rel="noopener" href="http://www.google.com/gwt/x?wsc=tb&source=wax&u=http://dev.w3.org/2006/webapi/FileAPI/&ei=DcsYUMuwAcSmkAXmvoHoAg&whp=3AconstructorBlob">File API</a> – Blob Constructor</li>
+</ul>
+<hr>
+<ul>
+<li><a href="http://zhaozhiming.github.io/2012/07/08/working-with-files-in-javascript-part-1/">在JavaScript中进行文件处理，第一部分：基础</a></li>
+<li><a href="http://zhaozhiming.github.io/2012/07/16/working-with-files-in-javascript-part-2/">在JavaScript中进行文件处理，第二部分：文件读取</a></li>
+<li><a href="http://zhaozhiming.github.io/2012/07/23/working-with-files-in-javascript-part-3/">在JavaScript中进行文件处理，第三部分：处理事件和错误</a></li>
+<li><a href="http://zhaozhiming.github.io/2012/07/30/working-with-files-in-javascript-part-4/">在JavaScript中进行文件处理，第四部分：对象URLs</a></li>
+</ul>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2012/08/01/working-with-files-in-javascript-part-5/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2012/08/01/working-with-files-in-javascript-part-5/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

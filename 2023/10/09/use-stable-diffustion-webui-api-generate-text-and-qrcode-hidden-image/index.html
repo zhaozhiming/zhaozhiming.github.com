@@ -1,0 +1,317 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>使用 API 生成 Stable Diffustion 文字和二维码隐藏图片 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="使用 API 生成 Stable Diffustion 文字和二维码隐藏图片"> <!-- TODO: truncate -->
+	<meta name="keywords" content="stable-diffustion, webui, qrcode, controlnet, hidden-image">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">使用 API 生成 Stable Diffustion 文字和二维码隐藏图片</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-10-09T01:58:06.000Z" itemprop="datePublished">10月 9, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/stable-diffustion/">stable-diffustion</a> <a href="/tags/webui/">webui</a> <a href="/tags/qrcode/">qrcode</a> <a href="/tags/controlnet/">controlnet</a> <a href="/tags/hidden-image/">hidden-image</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/10/sd-hidden-api.png" class="" width="400" height="300">
+
+<p>Stable Diffusion 前段时间有几个比较火的效果，一个是将文字<strong>隐藏</strong>在图片中，放大看时是一张正常图片，缩小看却可以看到图片中的隐藏文字，另外一个效果与前者类似，但是图片中<strong>隐藏</strong>的是一个二维码，通过扫描图片可以进入二维码中的网址。由于出图效果好，很多人想要根据自己的需求制作这种图片，甚至有人在网上出售这种图片的定制服务。今天我们就来介绍下如何使用 API 的方式 在 Stable Diffusion 中实现这种效果。</p>
+<span id="more"></span>
+
+<h2 id="预安装环境"><a href="#预安装环境" class="headerlink" title="预安装环境"></a>预安装环境</h2><p><strong>硬件要求：</strong> 首先要使用 Stable Diffusion，建议有一张 GPU 显卡，CPU 的话速度会比较慢，显存建议是 6G 及以上，否则可能会出现显存不足的情况。</p>
+<h3 id="Stable-Diffusion-WebUI"><a href="#Stable-Diffusion-WebUI" class="headerlink" title="Stable Diffusion WebUI"></a>Stable Diffusion WebUI</h3><p>软件方面需要安装 <a target="_blank" rel="noopener" href="https://github.com/AUTOMATIC1111/stable-diffusion-webui">Stable Diffusion WebUI</a>（下面简称 sd-webui），安装方法可以参考其仓库上的安装说明，里面有针对 Linux 系统的一键安装脚本，这里就不再赘述。</p>
+<p>安装完软件后，系统会默认下载 Stable Diffusion 1.5 的模型，为了后面出图效果更好，建议大家下载以下 2 个模型，这 2 个模型都是写实风格的：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://civitai.com/models/4201/realistic-vision-v51">Realistic Vision V5.1</a>：人物写实风格</li>
+<li><a target="_blank" rel="noopener" href="https://civitai.com/models/84728?modelVersionId=90072">Photon</a>：场景写实风格</li>
+</ul>
+<p>模型下载下来后放到 sd-webui 的<code>models/Stable-diffusion</code>目录下，然后重启服务即可。</p>
+<h3 id="sd-webui-插件"><a href="#sd-webui-插件" class="headerlink" title="sd-webui 插件"></a>sd-webui 插件</h3><p>安装完 sd-webui 后，还需要安装以下几个插件。</p>
+<h4 id="sd-webui-controlnet"><a href="#sd-webui-controlnet" class="headerlink" title="sd-webui-controlnet"></a>sd-webui-controlnet</h4><p>要实现隐藏效果图片，需要借助大名鼎鼎的神经网络架构 <a target="_blank" rel="noopener" href="https://github.com/lllyasviel/ControlNet">ControlNet</a>，它可以使我们在图像生成过程中拥有更多的结构和艺术控制能力。ControlNet 在 sd-webui 中有相应的插件——<a target="_blank" rel="noopener" href="https://github.com/Mikubill/sd-webui-controlnet">sd-webui-controlnet</a>，安装方法可以参考其仓库上的安装说明。</p>
+<p>安装完插件后，我们还需要下载 2 个插件相关的模型（这里的模型是指 ControlNet 的模型，之前的模型是 Stable Diffusion 的模型，两者并不相同）：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/monster-labs/control_v1p_sd15_qrcode_monster">monster-labs&#x2F;control_v1p_sd15_qrcode_monster</a>：这个模型是用来生成隐藏效果图的关键模型，下载仓库中的<code>diffusion_pytorch_model.safetensors</code>文件即可，下载完成后将文件名修改成<code>control_v1p_sd15_qrcode_monster.safetensors</code>。</li>
+<li><a target="_blank" rel="noopener" href="https://huggingface.co/ioclab/control_v1p_sd15_brightness">ioclab&#x2F;control_v1p_sd15_brightness</a>：这个模型的效果是让亮的地方更亮，让暗的地方更暗，总的来说就是让<strong>隐藏</strong>的效果更加明显，下载仓库中的<code>diffusion_pytorch_model.safetensors</code>文件即可，下载完成后将文件名修改成<code>control_v1p_sd15_brightness.safetensors</code>。</li>
+</ul>
+<p>模型下载下来后放到 sd-webui 的<code>extensions/sd-webui-controlnet/models</code>目录下。</p>
+<h4 id="sd-webui-qrcode-toolkit"><a href="#sd-webui-qrcode-toolkit" class="headerlink" title="sd-webui-qrcode-toolkit"></a>sd-webui-qrcode-toolkit</h4><p><a target="_blank" rel="noopener" href="https://github.com/antfu/sd-webui-qrcode-toolkit">sd-webui-qrcode-toolkit</a>插件主要用来生成普通的二维码，然后将生成后的二维码图片放到文生图中制作隐藏效果图，安装方法可以参考其仓库上的安装说明。</p>
+<h4 id="ADetailer"><a href="#ADetailer" class="headerlink" title="ADetailer"></a>ADetailer</h4><p><a target="_blank" rel="noopener" href="https://github.com/Bing-su/adetaile">ADetailer</a>插件主要是用来做人物面部修复，隐藏效果图中如果包含人物，生成出来的图片有时候会因为隐藏信息导致人物的面部发生扭曲，使用这个插件可以修复这个问题，安装方法同样参考其仓库上的安装说明。</p>
+<h2 id="手动实现"><a href="#手动实现" class="headerlink" title="手动实现"></a>手动实现</h2><p>想要通过 API 实现隐藏效果图，我们先要知道在 sd-webui 页面上是如何实现的，然后再根据这个过程来实现 API 功能。</p>
+<h3 id="隐藏文字图片"><a href="#隐藏文字图片" class="headerlink" title="隐藏文字图片"></a>隐藏文字图片</h3><p>首先我们来看隐藏文字图片的生成，和普通图片的生成一样，需要先构造图片的提示词，这里推荐<a target="_blank" rel="noopener" href="https://www.ai-anywhere.com/#/?c=F43MLO6Q">灵羽助手</a>这个基于 ChatGPT 的桌面 AI 工具，它有多种提示词模板，其中包括中英文翻译，生成 AI 绘画中文提示词等，每天有 10 次免费的额度，想白嫖的话用每天的免费额度就足够了。</p>
+<p>在灵羽助手中先通过<code>生成AI绘画中文提示词</code>命令加上几个简单的词语描述就可以生成一段文生图的中文提示词，然后再利用<code>翻译成英文</code>命令将其翻译成英文，最后将英文提示词放到 sd-webui 的<strong>文生图</strong>正向提示词框中就可以了，这里我们准备生成一张海岸和海浪的图片。</p>
+<img src="/images/post/2023/10/ai-anywhere.png" class="" width="600" height="400">
+
+<p>反向提示词我们用这个就好了：<code>cartoonpaintingllustration, (worst quality, low quality, normal quality:2)</code>，其他配置可以参照下图，注意图片的宽度和高度要和 ControlNet 插件中上传的图片一致。</p>
+<img src="/images/post/2023/10/sd-hidden-txt.png" class="" width="600" height="400">
+
+<p>在 ControlNet 插件中，我们需要用到 2 个 ControlNet Unit，在第一个 Unit 中我们先上传一张文字图片，这个文字就是要在图片中<strong>隐藏</strong>的文字，可以用 Word 或者 WPS 写一个字然后截图保存下来，保存下来后记得看下图片的尺寸，然后修改上面提到的图片宽度和高度。其他属性的修改可以参考下图，模型要选择<code>control_v1p_sd15_qrcode_monster</code>：</p>
+<img src="/images/post/2023/10/controlnet-unit1-txt-hidden.png" class="" width="600" height="400">
+
+<p>因为文字图片是白底黑字的，需要在预处理中选择<code>invert</code>，如果文字图片是黑底白字的话就需要选择<code>无</code>。</p>
+<p>ControlNet 第二个 Unit 的配置大致相同，上传同样的图片，但模型要选择<code>control_v1p_sd15_brightness</code>，还有控制权重、启动控制的步数和结束控制的步数也需做相应调整，详细配置信息如下：</p>
+<img src="/images/post/2023/10/controlnet-unit2-txt-hidden.png" class="" width="600" height="400">
+
+<p>生成的效果如下：</p>
+<img src="/images/post/2023/10/controlnet-txt-hidden.png" class="" width="600" height="400">
+
+<p>除了隐藏文字外，我们还可以<strong>隐藏 LOGO</strong>，比如将文字图片中的文字换成 APPLE 的 LOGO，也可以实现类似的效果。</p>
+<h3 id="隐藏二维码图片"><a href="#隐藏二维码图片" class="headerlink" title="隐藏二维码图片"></a>隐藏二维码图片</h3><p>生成隐藏二维码图片我们需要先制作一张二维码图片，这张图片要放到 ContolNet 插件中作为图片生成的引导。二维码图片的制作需要用到之前预安装的<code>sd-webui-qrcode-toolkit</code>插件，安装完插件后，我们可以在 sd-webui 的顶部菜单栏中看到<code>QR Toolkit</code>这个菜单，进入后可以看到如下界面：</p>
+<img src="/images/post/2023/10/qr-toolkit.png" class="" width="600" height="400">
+
+<p>在 QR Toolkit 中输入一个网址后右边会生成二维码，下面的各种参数用来调整二维码图片的效果，截图之外的参数不需要调整，只需要调整上图中的参数即可。这里主要的目标是尽量让二维码图片看起来不那么像二维码，这样生成出来的图片<strong>二维码</strong>的痕迹就不会那么重。但如果二维码图片调整太过的话，可能导致生成的图片无法被正常扫描，因此要做好其中的权衡，在调整过程中如果二维码不容易被扫描，QR Toolkit 会提示：<code>This QR Code may or may not be scannable. Please verify before using</code>。调整完后下载二维码图片以备用。</p>
+<p>回到文生图界面中，这次我们选择的模型是<code>Realistic Vision V5.1</code>，准备生成一张森林女精灵的图片，采样器建议选择<code>Euler a</code>，注意宽度和高度要和二维码图片的高度和宽度一致，详细配置信息如下所示：</p>
+<img src="/images/post/2023/10/sd-hidden-qrcode.png" class="" width="600" height="400">
+
+<p>在 ControlNet 插件中，同样需要用到 2 个 ControlNet Unit，步骤与隐藏文字相同，只是将文字图片替换成之前生成的二维码图片，详细配置信息如下：</p>
+<img src="/images/post/2023/10/controlnet-unit1-qrcode-hidden.png" class="" width="600" height="400">
+
+<img src="/images/post/2023/10/controlnet-unit2-qrcode-hidden.png" class="" width="600" height="400">
+
+<p>因为这次生成的图片有人物，所以我们要用到 ADetailer 插件来进行面部修复，ADetailer 的配置信息如下：</p>
+<img src="/images/post/2023/10/adetailer.png" class="" width="600" height="400">
+
+<p>生成的效果如下：</p>
+<img src="/images/post/2023/10/controlnet-qrcode-hidden.png" class="" width="600" height="400">
+
+<h2 id="使用-API-实现"><a href="#使用-API-实现" class="headerlink" title="使用 API 实现"></a>使用 API 实现</h2><p>了解了手动实现的过程后，我们再来看 API 的实现方式。</p>
+<h3 id="sd-webui-API-服务"><a href="#sd-webui-API-服务" class="headerlink" title="sd-webui API 服务"></a>sd-webui API 服务</h3><p>首先我们要启动 sd-webui 的 API 服务，正常启动 sd-webui 是通过<code>webui.sh</code>命令（Windows 是<code>webui.bat</code>）进行启动，默认方式启动后只能是本地访问，如果你的 sd-webui 是部署在服务器上的话，那么你无法通过<code>&#123;服务器IP&#125;:7860</code>这个地址进行访问，这时候你需要添加参数<code>--listen</code>，添加过后就可以通过<code>&#123;服务器IP&#125;:7860</code>地址进行访问了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash webui.sh --listen</span><br></pre></td></tr></table></figure>
+
+<p>如果你想在浏览器上安装插件的话，系统会报安全错误提示，这意味着不允许你在服务器上直接安装 sd-webui 插件，这时候你需要添加参数<code>--enable-insecure-extension-access</code>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash webui.sh --listen --enable-insecure-extension-access</span><br></pre></td></tr></table></figure>
+
+<p>这样启动 sd-webui 服务后只能访问 web 页面，并没有 API 服务，如果想要启动 API 服务的话，需要添加参数<code>--api</code>，这样启动后就可以通过<code>&#123;服务器IP&#125;:7860/docs</code>地址来访问 sd-webui 的 API 文档了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash webui.sh --listen --enable-insecure-extension-access --api</span><br></pre></td></tr></table></figure>
+
+<p>如果你想为 sd-webui 增加一些安全性，可以添加参数<code>--gradio-auth</code>，启动服务后用户只要访问<code>&#123;服务器IP&#125;:7860</code>就会看到一个登陆页面，需要输入用户名和密码才能访问。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash webui.sh --listen --enable-insecure-extension-access --api --gradio-auth &#123;username&#125;:&#123;password&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="隐藏文字图片-1"><a href="#隐藏文字图片-1" class="headerlink" title="隐藏文字图片"></a>隐藏文字图片</h3><p>在手动生成图片的过程中，我们主要使用的是 sd-webui 的<strong>文生图</strong>功能，这个功能对应的 API 接口是<code>sdapi/v1/txt2img</code>，它的请求方式是<code>POST</code>，请求参数有模型、正向提示词、负向提示词等等，返回的结果在<code>images</code>参数中，是一个列表，列表中的每个元素都是一个图片的 base64 编码，我们只需要将列表中的第一个元素保存成图片即可，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">generate_img</span>() -&gt; <span class="built_in">str</span>:</span><br><span class="line">    response = requests.post(</span><br><span class="line">        url=<span class="string">f&quot;<span class="subst">&#123;SD_ENDPOINT&#125;</span>/sdapi/v1/txt2img&quot;</span>,</span><br><span class="line">        headers=&#123;<span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>, <span class="string">&quot;accept&quot;</span>: <span class="string">&quot;application/json&quot;</span>&#125;,</span><br><span class="line">        data=json.dumps(</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">&quot;prompt&quot;</span>: <span class="string">&quot;xxxx&quot;</span>, <span class="comment"># 正向提示词</span></span><br><span class="line">                <span class="string">&quot;negative_prompt&quot;</span>: <span class="string">&quot;yyy&quot;</span>, <span class="comment"># 反向提示词</span></span><br><span class="line">                <span class="string">&quot;sd_model_checkpoint&quot;</span>: <span class="string">&quot;realsticVisionV51_v51VAE.safetensors [15012c583f]&quot;</span>, <span class="comment"># 模型</span></span><br><span class="line">                <span class="string">&quot;width&quot;</span>: <span class="number">512</span>, <span class="comment"># 宽度</span></span><br><span class="line">                <span class="string">&quot;height&quot;</span>: <span class="number">512</span>, <span class="comment"># 高度</span></span><br><span class="line">                <span class="string">&quot;batch_size&quot;</span>: <span class="number">1</span>, <span class="comment"># 生成次数</span></span><br><span class="line">                <span class="string">&quot;n_iter&quot;</span>: <span class="number">1</span>, <span class="comment"># 每次数量</span></span><br><span class="line">                <span class="string">&quot;steps&quot;</span>: <span class="number">25</span>, <span class="comment"># 采样步数</span></span><br><span class="line">                <span class="string">&quot;cfg_scale&quot;</span>: <span class="number">7</span>, <span class="comment"># 提示词引导系数</span></span><br><span class="line">                <span class="string">&quot;sampler_name&quot;</span>: <span class="string">&quot;DPM++ SDE Karras&quot;</span>, <span class="comment"># 采样器</span></span><br><span class="line">            &#125;</span><br><span class="line">        ),</span><br><span class="line">    )</span><br><span class="line">    response.raise_for_status()</span><br><span class="line">    <span class="keyword">return</span> response.json()[<span class="string">&quot;images&quot;</span>][<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+
+<p>在示例代码中我们列举了手动生成图片的几个配置参数，其中模型参数<code>sd_model_checkpoint</code>的值可以通过另外一个接口<code>sdapi/v1/sd-models</code>来获取，更多的参数信息可以参考接口文档：</p>
+<img src="/images/post/2023/10/sd-api-param.png" class="" width="600" height="400">
+
+<p>在请求参数中，我们除了要传 sd-webui 的基本参数外，还需要传入我们所用到的插件的参数，比如我们在之前示例中用到的 ControlNet 插件，那么我们就需要将 ControlNet 插件的配置加入到请求参数中，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">data=json.dumps(</span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="string">&quot;alwayson_scripts&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;controlnet&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;args&quot;</span>: [</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="string">&quot;input_image&quot;</span>: input_image, <span class="comment"># 上传的文件</span></span><br><span class="line">                        <span class="string">&quot;model&quot;</span>: <span class="string">&quot;control_sd15_qrcode_monster [ff0e6388]&quot;</span>, <span class="comment"># 模型</span></span><br><span class="line">                        <span class="string">&quot;weight&quot;</span>: <span class="number">1</span>, <span class="comment"># 控制权重</span></span><br><span class="line">                        <span class="string">&quot;guidance_start&quot;</span>: <span class="number">0</span>, <span class="comment"># 启动控制的步数</span></span><br><span class="line">                        <span class="string">&quot;guidance_end&quot;</span>: <span class="number">1</span>, <span class="comment"># 结束控制的步数</span></span><br><span class="line">                        <span class="string">&quot;resize_mode&quot;</span>: <span class="number">2</span>, <span class="comment"># 缩放模式，2表示填充</span></span><br><span class="line">                        <span class="string">&quot;module&quot;</span>: <span class="string">&quot;invert&quot;</span>, <span class="comment"># 预处理</span></span><br><span class="line">                        <span class="string">&quot;pixel_perfect&quot;</span>: <span class="literal">True</span>, <span class="comment"># 完美匹配像素</span></span><br><span class="line">                    &#125;,</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="string">&quot;input_image&quot;</span>: input_image, <span class="comment"># 上传的文件</span></span><br><span class="line">                        <span class="string">&quot;model&quot;</span>: <span class="string">&quot;control_v1p_sd15_brightness [1cf9248a]&quot;</span>, <span class="comment"># 模型</span></span><br><span class="line">                        <span class="string">&quot;weight&quot;</span>: <span class="number">0.3</span>, <span class="comment"># 控制权重</span></span><br><span class="line">                        <span class="string">&quot;guidance_start&quot;</span>: <span class="number">0.65</span>, <span class="comment"># 启动控制的步数</span></span><br><span class="line">                        <span class="string">&quot;guidance_end&quot;</span>: <span class="number">0.9</span>, <span class="comment"># 结束控制的步数</span></span><br><span class="line">                        <span class="string">&quot;resize_mode&quot;</span>: <span class="number">2</span>, <span class="comment"># 缩放模式，2表示填充</span></span><br><span class="line">                        <span class="string">&quot;module&quot;</span>: <span class="string">&quot;invert&quot;</span>, <span class="comment"># 预处理</span></span><br><span class="line">                        <span class="string">&quot;pixel_perfect&quot;</span>: <span class="literal">True</span>, <span class="comment"># 完美匹配像素</span></span><br><span class="line">                    &#125;,</span><br><span class="line">                ]</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<p>sd-webui 插件的参数都放在<code>alwayson_scripts</code>中，每个插件以自己名称作为 key，ControlNet 插件的 key 是<code>controlnet</code>，下面的 <code>args</code> 数组是我们用到的 2 个 ControlNet Unit，然后是每个 Unit 的配置，这里我们列举了手动示例中的几个参数。其中的<code>model</code>参数的值可以通过另外一个接口<code>controlnet/modelslist</code>来获取，更多的参数可以参考<a target="_blank" rel="noopener" href="https://github.com/Mikubill/sd-webui-controlnet/wiki/API#controlnetunitrequest-json-object">ControlNet 插件的 API 文档</a>。</p>
+<p>其实每个插件都会将自己的接口信息会添加到 sd-webui API 的接口文档中，比如 ControlNet 插件就增加了以<code>controlnet</code>开头的几个接口，文档做得好的插件还会有自己的接口文档，通常放在插件仓库的 Wiki 中，比如 ControlNet 插件的接口文档就放在了<a target="_blank" rel="noopener" href="https://github.com/Mikubill/sd-webui-controlnet/wiki/API">这里</a>。</p>
+<p><code>input_image</code>参数是我们上传的文字图片，我们需要将其转换成 base64 编码，图片文件转 base64 编码的示例方法如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">image_to_base64</span>(<span class="params">image_path: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="comment"># 打开图像文件</span></span><br><span class="line">    <span class="keyword">with</span> Image.<span class="built_in">open</span>(image_path) <span class="keyword">as</span> image:</span><br><span class="line">        <span class="comment"># 创建一个BytesIO对象</span></span><br><span class="line">        buffered_image = BytesIO()</span><br><span class="line">        <span class="comment"># 保存图像到BytesIO对象</span></span><br><span class="line">        image.save(buffered_image, <span class="built_in">format</span>=<span class="string">&quot;PNG&quot;</span>)</span><br><span class="line">        <span class="comment"># 获取BytesIO对象的二进制数据</span></span><br><span class="line">        image_bytes = buffered_image.getvalue()</span><br><span class="line">        <span class="comment"># 转换二进制数据为base64编码</span></span><br><span class="line">        base64_string = base64.b64encode(image_bytes).decode(<span class="string">&quot;utf-8&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> base64_string</span><br></pre></td></tr></table></figure>
+
+<p>调用文生图接口生成图片后，我们可以将生成的图片保存到本地，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">saveImg</span>(<span class="params">output_path=<span class="string">&quot;output.jpg&quot;</span>, </span>):</span><br><span class="line">    img = generate_img()</span><br><span class="line">    image_data = base64.b64decode(img)</span><br><span class="line">    image_io = BytesIO(image_data)</span><br><span class="line">    image = Image.<span class="built_in">open</span>(image_io)</span><br><span class="line">    image.save(output_path)</span><br></pre></td></tr></table></figure>
+
+<p>这样我们就实现了通过 API 方式生成隐藏文字图片的功能了，生成的图片保存在<code>output.png</code>文件中。</p>
+<h3 id="隐藏二维码图片-1"><a href="#隐藏二维码图片-1" class="headerlink" title="隐藏二维码图片"></a>隐藏二维码图片</h3><p>隐藏二维码图片的 API 实现方式与隐藏图片的实现方式基本相同，不同的地方是我们还用到另外一个 ADetailer 插件，这个插件的配置我们也需要一起放在请求参数中，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">data=json.dumps(</span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="string">&quot;alwayson_scripts&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;controlnet&quot;</span>: &#123;...&#125;,</span><br><span class="line">            <span class="string">&quot;ADetailer&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;args&quot;</span>: [</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="string">&quot;ad_model&quot;</span>: <span class="string">&quot;face_yolov8n.pt&quot;</span>,</span><br><span class="line">                    &#125;</span><br><span class="line">                ]</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">),</span><br></pre></td></tr></table></figure>
+
+<p>这里我们只添加了 ADetailer 插件中的模型参数，其他参数都用默认的，插件更多参数信息可以参考<a target="_blank" rel="noopener" href="https://github.com/Bing-su/adetailer/wiki/API">ADetailer 插件的 API 文档</a>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上就是通过 API 实现 Stable Diffusion 文字和二维码隐藏图片的全部过程，现在有一些 APP 已经实现了这些功能，比如<strong>字画幻术图</strong>等，如果觉得自己实现起来比较麻烦的话，也可以直接使用这些 APP 来生成图片，它们的实现原理都是一样的，都是通过 sd-webui API 的方式来实现。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2023/10/09/use-stable-diffustion-webui-api-generate-text-and-qrcode-hidden-image/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2023/10/09/use-stable-diffustion-webui-api-generate-text-and-qrcode-hidden-image/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

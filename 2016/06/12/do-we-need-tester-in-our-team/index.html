@@ -1,0 +1,240 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>开发团队里是否需要测试人员？ - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="开发团队里是否需要测试人员？"> <!-- TODO: truncate -->
+	<meta name="keywords" content="tester">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">开发团队里是否需要测试人员？</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2016-06-12T12:06:00.000Z" itemprop="datePublished">6月 12, 2016</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/tester/">tester</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2016/06/qa.png" class="" width="400" height="300">  
+<p>最近在看“<a target="_blank" rel="noopener" href="https://book.douban.com/subject/4163938">软件随想录</a>”，里面有个非常有名的“<a target="_blank" rel="noopener" href="http://www.joelonsoftware.com/articles/fog0000000043.html">乔尔测试</a>”，其中有一个问题是“你的团队里面是否有测试人员”，如果有的话就加分，表明团队对产品质量比较重视。  </p>
+<p>但是在现在的软件开发团队中是否真的需要测试人员呢？  </p>
+<span id="more"></span>  
+
+<h2 id="如何替代测试人员的工作"><a href="#如何替代测试人员的工作" class="headerlink" title="如何替代测试人员的工作"></a>如何替代测试人员的工作</h2><p>我们先来看一下测试人员的工作是什么？测试人员的工作是尽可能的找出bug，然后提交给开发人员进行修复。如果团队里面没有测试人员，开发人员要如何找bug呢？  </p>
+<p>首先我们来看测试人员做的最多的测试——功能测试，对于功能测试我们有什么办法可以来替代呢？  </p>
+<h4 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h4><p>单元测试是开发人员找出代码中潜在bug的自我救赎行为，相比手工测试功能，开发人员一般更倾向于写代码来测试功能代码，即所谓的单元测试。只要能想到相应的测试案例，就能写出单元测试，可以测试包括正常，异常，分支，边界等情况下的问题。  </p>
+<h4 id="集成测试"><a href="#集成测试" class="headerlink" title="集成测试"></a>集成测试</h4><p>单元测试虽然可以找到一些bug，但还不能完全替代测试人员的工作，单元测试只能测试细粒度级别的功能，比如某个方法的功能，如果需要对几个功能点一起测试的话，单元测试就满足不了了。但没有关系，开发同样可以用代码来写测试，这种粒度稍大的测试就是集成测试，比如测试一个后端的api，验证输入参数和输出结果，这个api的真正功能可能是后端调用数据库等一系列的操作，你一个测试方法就可以把这个api的各个功能点串起来一起验证。  </p>
+<h4 id="UI测试"><a href="#UI测试" class="headerlink" title="UI测试"></a>UI测试</h4><p>还有粒度更大的测试，一个页面上的按钮的点击可以看成是UI测试，相对于集成测试，这个测试的范围涉及了前端和后端，测试包括验证前端的页面是否正确，到点击按钮后触发的后端功能是否正确。现在市面上有很多端到端的测试框架，涵盖各种语言和浏览器。  </p>
+<h4 id="性能测试"><a href="#性能测试" class="headerlink" title="性能测试"></a>性能测试</h4><p>除了功能测试，测试人员还会做一些性能测试，同样地，开发可以通过代码或者脚本来调用性能测试工具来对系统进行性能测试。  </p>
+<h4 id="持续集成"><a href="#持续集成" class="headerlink" title="持续集成"></a>持续集成</h4><p>如果不想像测试人员一样每天做重复性的劳动，就可以将以上那些测试代码放到持续集成上面，让机器帮你运行，想象一下，几百上千个测试，如果手工跑的话可能要花不止一天的时间，而通过持续集成，可能在一天就能跑完好几轮所有测试。  </p>
+<h2 id="不能替代的测试工作"><a href="#不能替代的测试工作" class="headerlink" title="不能替代的测试工作"></a>不能替代的测试工作</h2><p>如果我们做到了以上这些，是否就可以完全代替测试人员了呢？其实有些测试是机器无法测试的，比如网页的样式，机器只能判断是否有显示，但无法判断显示的是否好看。还有一些交互效果，也只有通过人工才能识别效果是否正确，还有其他各个领域的测试，目前是不能通过代码或者机器来替代的。  </p>
+<h2 id="高级测试工程师"><a href="#高级测试工程师" class="headerlink" title="高级测试工程师"></a>高级测试工程师</h2><p>可能有人会说上面提到的用代码来执行测试的工作，高级测试工程师也能做。其实我觉得软件开发和软件测试到了越高的位置，技能重合的领域就越大，两者都同时会写代码，做测试，可能还会部署，会运维，这个时候我觉得不如就叫高级工程师好了，或者全栈工程师。  </p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>说了这么多，所以结论是什么呢？  </p>
+<p>具体情况要具体分析，不能一概而论说完全不需要测试人员，团队不需要测试人员的条件是：  </p>
+<ul>
+<li>团队的开发人员可以写的单元测试，集成测试和UI测试</li>
+<li>没有太多需要人工测试的功能，比如团队开发的是常规的web系统或者纯后端应用等</li>
+</ul>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2016/06/12/do-we-need-tester-in-our-team/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2016/06/12/do-we-need-tester-in-our-team/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

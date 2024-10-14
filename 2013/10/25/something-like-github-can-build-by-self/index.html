@@ -1,0 +1,241 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>类似github的框架 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="类似github的框架"> <!-- TODO: truncate -->
+	<meta name="keywords" content="类似github的框架">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">类似github的框架</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2013-10-24T23:36:00.000Z" itemprop="datePublished">10月 25, 2013</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/github/">github</a> <a href="/tags/git/">git</a>
+</div>
+    </div>
+	<div class="entry-content"><p>github是程序员经常上的网站，但如果是在一家苦逼不能访问外网的公司，那不能把自己的代码托管在github上绝对是一件非常痛苦的事情。如果想要在公司内网也可以用github托管自己的代码，那就要自己搭建类似github的服务器，好在类似github的框架有很多，基本上都是基于git的，可以无缝衔接github而无需额外学习其他技术。  </p>
+<span id="more"></span>
+<h2 id="github企业版"><a href="#github企业版" class="headerlink" title="github企业版"></a>github企业版</h2><p><a target="_blank" rel="noopener" href="https://enterprise.github.com/">github enterprise</a>，如果你的基金充足，github企业版绝对是你的首选。它基本上包涵了现有github网站上面的一切功能，你使用它甚至在视觉上都不会发生任何变化，界面都是和现有github一样的。而且安装十分方便，安装文件就是一个虚拟机镜像文件，只要用虚拟机加载就可以了。但刚才说了“如果你的基金充足”，说明它是要收费的，而且价格不菲，1个20人团队的license每年要5000美刀。国外有用到github企业版的公司有Bizzard（玩游戏的都知道），国内用的很少，我了解到的只有豆瓣在用，而且只用在其中一个或几个项目组（PS:豆瓣好像有自己的代码托管工具叫豆瓣Code，克隆github且增加了自己的特性）。  </p>
+<h2 id="gitlab"><a href="#gitlab" class="headerlink" title="gitlab"></a>gitlab</h2><p><a target="_blank" rel="noopener" href="https://github.com/gitlabhq/gitlabhq">gitlab</a>，是用Ruby On Rails开发的一款开源代码托管框架，界面也是仿照github设计的，github用户可以快速上手，最重要的是它是一个开源的软件，这意味着你可以免费获取到软件，并将它部署到自己的机器上。但是gitlab的安装过程比较复杂，安装需要依赖以下几个工具：  </p>
+<ul>
+<li>ruby 1.9.3+</li>
+<li>git 1.7.10+</li>
+<li>redis 2.0+</li>
+<li>MySQL or PostgreSQL</li>
+</ul>
+<p>另外gitlab的markdown文件显示功能不是很好，比如markdown中的table和嵌入html在github上面是可以正常显示，但是在gitlab上面就不行。  </p>
+<h2 id="GitBucket"><a href="#GitBucket" class="headerlink" title="GitBucket"></a>GitBucket</h2><p><a target="_blank" rel="noopener" href="https://github.com/takezoe/gitbucket">GitBucket</a>，是一个用scala写的高仿github的代码托管框架。这个框架是今年才开发的，目前功能还不是很齐全，数据库也是用的内存数据库，但是github上面的基本功能都有。它的一个最重要的特点是<strong>安装非常方便</strong>，只需要下载gitbucket最新版本的war包，然后放到随便哪个web容器（Jetty，Tomcat）就可以启起来了，想尝尝鲜的同学可以试用一下。  </p>
+<h2 id="其他框架"><a href="#其他框架" class="headerlink" title="其他框架"></a>其他框架</h2><p>下面列举一些其他类似的框架，没怎么用过不好做评价，下面的括号表示用哪种语言写的。  </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://gitorious.org/">Gitorious</a>(Ruby)</li>
+<li><a target="_blank" rel="noopener" href="http://www.indefero.net/">InDefero</a>(PHP)</li>
+<li><a target="_blank" rel="noopener" href="http://repo.or.cz/">Girocco</a>(Perl)</li>
+<li><a target="_blank" rel="noopener" href="http://eagain.net/gitweb/?p=gitosis.git">Gitosis</a>(Python)</li>
+<li><a target="_blank" rel="noopener" href="http://github.com/sitaramc/gitolite">Gitolite</a>(Perl)</li>
+</ul>
+<p>这里也有一篇文章是介绍类似github框架的框架，看<a target="_blank" rel="noopener" href="http://blacka.com/david/2010/09/28/hosting-your-own-git-repositories/">这里</a>。  </p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2013/10/25/something-like-github-can-build-by-self/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2013/10/25/something-like-github-can-build-by-self/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>现代网页兼容 IE11 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="现代网页兼容 IE11"> <!-- TODO: truncate -->
+	<meta name="keywords" content="react,es6,css3,ie11">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">现代网页兼容 IE11</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2019-01-24T09:31:00.000Z" itemprop="datePublished">1月 24, 2019</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/react/">react</a> <a href="/tags/es6/">es6</a> <a href="/tags/css3/">css3</a> <a href="/tags/ie11/">ie11</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2019/01/ie11.png" class="" width="400" height="300">
+
+<blockquote><p>前端：兼容 IE 是不可能的，这辈子都不可能兼容 IE<br>BOSS：给你加薪 50%<br>前端：IE 是我用过最好用的浏览器（真诚脸）</p>
+</blockquote>
+
+<p>当你的网页使用了最新的流行技术（比如 React、CSS3, ES6&#x2F;7 等）却被要求兼容 IE 浏览器的时候你的内心其实是崩溃的，但毕竟 IE 存在了这么久要指望它一下子消失是不太现实的，所以作为一个有 (mei) 追 (ban) 求 (fa) 的前端我们还是来看看如何兼容 IE 吧（这里只考虑 IE11，其他的 IE 古董版本建议放弃）。</p>
+<span id="more"></span>
+
+<p>React 是目前用于编写前端页面最流行且使用最多的前端视图库（没有之一），所以我们主要介绍在 React 环境下如何兼容 IE11。</p>
+<h2 id="使用-IE-最高版本"><a href="#使用-IE-最高版本" class="headerlink" title="使用 IE 最高版本"></a>使用 IE 最高版本</h2><p>React 可以在支持 ES5 语法的浏览器上运行，这要求 IE 的版本必须不低于 IE9。在一些低版本的 Window 系统中会默认用低版本的 IE 引擎来渲染页面，如果页面需要在高版本的 IE 引擎上运行的话，需要在 html 页面中加入下面的代码。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;IE=edge&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这样页面就会使用系统中最高版本的 IE 引擎来加载页面，更多资料可以参考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/6771258/what-does-meta-http-equiv-x-ua-compatible-content-ie-edge-do">这里</a>。</p>
+<h2 id="ES-6-7"><a href="#ES-6-7" class="headerlink" title="ES 6&#x2F;7"></a>ES 6&#x2F;7</h2><p>现在越来越多的网页开始使用 ES6 的语法，ES6 相对于 ES5 新增了很多新特性和语法糖，减少了原始 JS 的一些语法混乱，让代码更加简洁，让 JS 开发人员更加高效。</p>
+<p>React 可以在支持 ES5 的浏览器上运行，包括 IE9 和 IE10，但如果你使用了 ES6&#x2F;7 的语法，则需要额外做一些操作才能兼容 IE11。</p>
+<h3 id="React-Polyfill"><a href="#React-Polyfill" class="headerlink" title="React Polyfill"></a>React Polyfill</h3><p>大部分 React 开发人员通过 <a target="_blank" rel="noopener" href="https://github.com/facebook/create-react-app">Create React App</a> 来创建项目，它是 Facebook 提供的 React 脚手架工具，可以方便 React 新人快速创建 React 项目。</p>
+<p>在这个脚手架的代码仓库中，包含了一些 polyfill（可以理解为一种补丁，让不支持该功能的设备或环境可以正常运行的补丁），可以让 React 项目在 IE 浏览器中完美运行。</p>
+<h4 id="功能特性"><a href="#功能特性" class="headerlink" title="功能特性"></a>功能特性</h4><ul>
+<li>支持 <code>Promise</code>，<code>async/await</code></li>
+<li>支持 <code>window.fetch</code></li>
+<li>支持 <code>Object.assign</code></li>
+<li>支持 <code>Symbol</code></li>
+<li>支持 <code>Array.from</code></li>
+</ul>
+<h4 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h4><ul>
+<li>通过<code>npm install react-app-polyfill</code>安装 polyfill</li>
+<li>在入口文件（通常是<code>src/index.js</code>）的第一行引入该库</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在文件的第一行导入，兼容 IE11</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;react-app-polyfill/ie11&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>更多内容可以查阅<a target="_blank" rel="noopener" href="https://github.com/facebook/create-react-app/tree/master/packages/react-app-polyfill">这里</a>。</p>
+<h3 id="core-js"><a href="#core-js" class="headerlink" title="core-js"></a>core-js</h3><p>即使使用了<code>React Polyfill</code>你的项目也可能在 IE11 上运行不起来，因为<code>React Polyfill</code>并没有支持全部 ES6 的语法，这时候我们可以选择另外一个第三方库 <a target="_blank" rel="noopener" href="https://github.com/zloirock/core-js">core-js</a>，这个库除了支持<code>React Polyfill</code>的功能特性外（window.fetch 不支持），<strong>还支持 ES6&#x2F;7&#x2F;8 一些常用的 API，比如 array.includes，string.includes，string.startsWith 等</strong>，可以在不支持这些特性的浏览器上正常运行。</p>
+<h4 id="使用步骤-1"><a href="#使用步骤-1" class="headerlink" title="使用步骤"></a>使用步骤</h4><ul>
+<li>通过<code>npm install core-js</code>命令进行安装</li>
+<li>在入口文件（通常是<code>src/index.js</code>）的第一行引入该库</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在文件的第一行导入</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;core-js&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>core-js</code>包含了<code>React Polyfill</code>大部分的功能（除了 window.fetch），所以通常没有必要两个库一起使用，只需要使用<code>core-js</code>就好了。</p>
+<h2 id="CSS-变量"><a href="#CSS-变量" class="headerlink" title="CSS 变量"></a>CSS 变量</h2><p>在很多 CSS 预处理器中已经包含了变量的特性，比如 Less、Sass 等，但在 CSS 的最新语法中已经可以支持变量，用法如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-pseudo">:root</span> &#123;</span><br><span class="line">  <span class="attr">--main-bg-color</span>: brown;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.app</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="built_in">var</span>(--main-bg-color);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>虽然微软已经在 Edge 浏览器中支持 CSS 变量，但很遗憾，在 IE11 中仍然不支持，如果想在 IE11 中运行有 CSS 变量的代码，我们需要引入 <a target="_blank" rel="noopener" href="https://github.com/jhildenbiddle/css-vars-ponyfill">css-vars-ponyfill</a> 这个库。</p>
+<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><ul>
+<li>首先通过命令安装这个库<code>npm install css-vars-ponyfill</code>。</li>
+<li>然后在入口文件引入这个库就可以了。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cssVars <span class="keyword">from</span> <span class="string">&#x27;css-vars-ponyfill&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 默认配置</span></span><br><span class="line"><span class="title function_">cssVars</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 还可以带配置参数</span></span><br><span class="line"><span class="title function_">cssVars</span>(&#123;</span><br><span class="line">  <span class="comment">// 配置参数</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><code>css-vars-ponyfill</code>会将项目中的 CSS 变量进行转换，在 IE11 中会直接转换成对应的变量值，这样带有 CSS 变量的项目就可以在 IE11 中运行了。</p>
+<h2 id="Flexbox"><a href="#Flexbox" class="headerlink" title="Flexbox"></a>Flexbox</h2><p>Flexbox 弹性盒子布局出来已经有一段时间了，广受前端开发人员喜欢，现在慢慢地其他平台也在使用这种布局方式，比如 React Native 等。</p>
+<p>Flexbox 已经被所有浏览器所支持…… 除了 IE，IE 因为有些 bug 无法修复所以只做到了部分支持，具体原因可以查阅 <a target="_blank" rel="noopener" href="https://caniuse.com/#search=flexbox">Can I Use</a>。</p>
+<p>那如何在 IE11 中正常运行 Flexbox 呢？这个时候我们可以使用一些小技巧来让我们的 CSS 特殊样式只在 IE 上运行。</p>
+<p>其实针对每种浏览器都有对应的 CSS 选择器来让 CSS 只在对应的浏览器上运行，比如 IE11 的特殊选择器是这样：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// IE11</span><br><span class="line">_:-ms-fullscreen, :root .selector &#123;</span><br><span class="line">  property: value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个选择器里面的 CSS 代码只会在 IE11 浏览器中生效，在其他浏览器不会有任何作用。</p>
+<p>还有 IE10 的特殊选择器也列举下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// IE10</span><br><span class="line">_:-ms-input-placeholder, :root .selector &#123;</span><br><span class="line">  property: value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样我们就可以通过一些只有 IE 会运行的 CSS 代码来微调我们的 Flexbox 布局了，从而达到实现 Flexbox 布局效果的目的。</p>
+<p>更多的资料可以查阅这里：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://jeffclayton.wordpress.com/2014/07/14/separating-internet-explorer-10-and-11-via-css-styles/">Separating Internet Explorer 10 and 11 via CSS Hacks</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.ryadel.com/en/css3-media-query-target-only-ie-ie6-ie11-firefox-chrome-safari-edge/">CSS3 Media Query to target only Internet Explorer (from IE6 to IE11+), Firefox, Chrome, Safari and&#x2F;or Edge</a></li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>文章从 HTML、JS 和 CSS 几个方面介绍了如何兼容 IE11 浏览器，但这里只是介绍了笔者经常遇到的一些问题，其实在兼容浏览器过程还会遇到更多更复杂的场景，需要根据具体问题进行具体分析，希望有相关经验的同学一起留言讨论，谢谢。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2019/01/24/make-modern-web-site-adapte-ie11/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2019/01/24/make-modern-web-site-adapte-ie11/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

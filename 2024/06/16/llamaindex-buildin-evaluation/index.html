@@ -1,0 +1,380 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>评估 RAG？只要 LlamaIndex 就足够了 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="介绍如何使用 LlamaIndex 内置评估工具进行 RAG 应用评估"> <!-- TODO: truncate -->
+	<meta name="keywords" content="rag, llamaindex, evaluation">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">评估 RAG？只要 LlamaIndex 就足够了</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2024-06-15T23:06:29.000Z" itemprop="datePublished">6月 16, 2024</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/llamaindex/">llamaindex</a> <a href="/tags/rag/">rag</a> <a href="/tags/evaluation/">evaluation</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2024/06/llamaindex-evaluation.jpg" class="" width="400" height="300">
+
+<p>我们之前介绍过一些 RAG （Retrieval Augmented Generation）的评估工具，比如 Turlens、Ragas 等，它们的评估指标丰富、使用方便，但它们始终是独立的第三方工具，需要和 LLM（大语言模型）开发框架（LangChain、LlamaIndex）进行集成才能使用，功能一旦更新不及时就会导致不可用的问题。如果你正在使用的是 LlamaIndex 开发框架，那么恭喜你，LlamaIndex 内置了评估工具，可以帮助你快速评估 RAG 应用，无需集成第三方的评估工具。今天我们就来详细了解一下 LlamaIndex 内置评估工具的原理以及它们的使用方法。</p>
+<span id="more"></span>
+
+<h2 id="LlamaIndex-评估工具"><a href="#LlamaIndex-评估工具" class="headerlink" title="LlamaIndex 评估工具"></a>LlamaIndex 评估工具</h2><p><a target="_blank" rel="noopener" href="https://www.llamaindex.ai/">LlamaIndex</a> 不但可以与很多外部优秀的第三方评估工具进行集成，而且在内部也自带了一套评估工具，如果你想快速地体验 RAG 的评估功能，那么使用 LlamaIndex 内置的评估工具就足够了。LlamaIndex 有以下评估指标：</p>
+<ul>
+<li>Answer Relevcancy</li>
+<li>Context Relevancy</li>
+<li>Relevancy</li>
+<li>Faithfulness</li>
+<li>Correctness</li>
+</ul>
+<p>这些评估指标我们后面会详细介绍，另外还有 LlamaIndex 特有的对比评估 Pairwise，可以帮助你评估两个检索引擎哪个生成的答案更好。</p>
+<p>LlamaIndex 还提供了测试数据的生成功能，可以帮助我们轻松地生成评估所需的测试数据，包括评估的问题、参考答案等，这样我们就可以快速地进行评估工作，而不需要花费大量的时间去准备测试数据。</p>
+<p>如果你想提升评估工作的效率，LlamaIndex 也提供了批量运行评估任务的工具，可以快速评估多种评估指标以及大量测试数据，批量任务的执行时间和单次任务的执行时间基本无异，这样就可以帮助我们快速地执行大量评估任务。</p>
+<h2 id="测试数据生成"><a href="#测试数据生成" class="headerlink" title="测试数据生成"></a>测试数据生成</h2><p>评估 RAG 应用需要用到几个评估实体，分别是：</p>
+<ul>
+<li>Question: 指用户输入的问题，RAG 应用通过问题检索到相关的文档上下文</li>
+<li>Context: 指检索到的文档上下文，RAG 应用检索到相关文档后会将这些上下文结合用户问题一起提交给 LLM，最后生成答案</li>
+<li>Answer: 指生成的答案，RAG 应用将问题和上下文提交给 LLM 后，LLM 会根据这些信息来生成答案</li>
+<li>Grouth Truth: 指人工标注的正确答案，利用这个实体可以对生成的答案进行分析，从而得到评估结果，在 LlamaIndex 中，这个实体叫做 Reference Answer</li>
+</ul>
+<p>其中 Question 和 Ground Truth 通过用户提供，Context 通过检索得到，Answer 是由 LLM 生成，后面我们在讲解的时候会沿用这些实体名称。在 LlamaIndex 中提供了生成测试数据集的功能，可以帮助我们快速生成测试数据集，无需人工干预。</p>
+<p>首先我们来看下如何生成评估所需的 Question，这里的测试文档使用维基百科上的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Avenger">复仇者联盟</a>电影剧情，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> SimpleDirectoryReader</span><br><span class="line"><span class="keyword">from</span> llama_index.core.llama_dataset.generator <span class="keyword">import</span> RagDatasetGenerator</span><br><span class="line"><span class="keyword">from</span> llama_index.llms.openai <span class="keyword">import</span> OpenAI</span><br><span class="line"></span><br><span class="line">documents = SimpleDirectoryReader(<span class="string">&quot;./data&quot;</span>).load_data()</span><br><span class="line">llm = OpenAI(model=<span class="string">&quot;gpt-3.5-turbo&quot;</span>)</span><br><span class="line">dataset_generator = RagDatasetGenerator.from_documents(</span><br><span class="line">    documents,</span><br><span class="line">    llm=llm,</span><br><span class="line">    num_questions_per_chunk=<span class="number">1</span>,</span><br><span class="line">)</span><br><span class="line">dataset = dataset_generator.generate_questions_from_nodes()</span><br><span class="line">examples = dataset.examples</span><br><span class="line"><span class="keyword">for</span> i, example <span class="keyword">in</span> <span class="built_in">enumerate</span>(examples):</span><br><span class="line">    contexts = [n[:<span class="number">100</span>] <span class="keyword">for</span> n <span class="keyword">in</span> example.reference_contexts]</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;i + <span class="number">1</span>&#125;</span>. <span class="subst">&#123;example.query&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line"><span class="number">1.</span> Question: How did Ultron initially come into existence <span class="keyword">and</span> what was his ultimate goal?</span><br><span class="line"><span class="number">2.</span> Question: What event prompts the Avengers to devise a plan involving time travel to undo Thanos<span class="string">&#x27;s actions in &quot;Avengers: Endgame&quot;?</span></span><br><span class="line"><span class="string">3. Question: How does Thanos acquire the Power Stone and what events transpire after he obtains it?</span></span><br><span class="line"><span class="string">4. Question: How does Thanos ultimately achieve his goal of completing the Gauntlet and causing half of all life across the universe to disintegrate in &quot;Avengers: Infinity War&quot;?</span></span><br><span class="line"><span class="string">5. Question: How does Loki initially gain access to Earth and what is his ultimate goal upon arriving?</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用<code>SimpleDirectoryReader</code>读取文档</li>
+<li>LlamaIndex 在新版本中推荐使用<code>RagDatasetGenerator</code>来生成测试数据，参数<code>documents</code>表示读取的文档列表，<code>llm</code>表示使用的大语言模型， 这里我们使用 OpenAI 的<code>gpt3.5</code>模型，<code>num_questions_per_chunk</code>表示每个文档生成的问题数量，这里我们设置为 1</li>
+<li>然后调用数据生成器的<code>generate_questions_from_nodes</code>方法生成问题集，其原理是用 LLM 来根据文档生成问题，生成后的数据保存在<code>examples</code>属性中</li>
+<li>最后遍历<code>examples</code> 对象，生成的 Question 在<code>example.query</code> 属性中</li>
+<li>从显示结果中可以看到生成了 5 个 Question</li>
+</ul>
+<p>除了生成 Question 外，数据生成器还可以生成 Ground Truth，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">dataset = dataset_generator.generate_dataset_from_nodes()</span><br><span class="line">examples = dataset.examples</span><br><span class="line"><span class="keyword">for</span> i, example <span class="keyword">in</span> <span class="built_in">enumerate</span>(examples):</span><br><span class="line">    contexts = [n[:<span class="number">100</span>] <span class="keyword">for</span> n <span class="keyword">in</span> example.reference_contexts]</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;i + <span class="number">1</span>&#125;</span>. <span class="subst">&#123;example.query&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Ground Truth: <span class="subst">&#123;example.reference_answer[:<span class="number">100</span>]&#125;</span>...&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line"><span class="number">1.</span> Question: How did Ultron initially come into existence <span class="keyword">and</span> what was his ultimate goal?</span><br><span class="line">Ground Truth: Ultron initially came into existence when Tony Stark <span class="keyword">and</span> Bruce Banner discovered an artificial intel...</span><br><span class="line"><span class="number">2.</span> Question: What event prompts the Avengers to devise a plan involving time travel to undo Thanos<span class="string">&#x27;s actions in &quot;Avengers: Endgame&quot;?</span></span><br><span class="line"><span class="string">Ground Truth: The event that prompts the Avengers to devise a plan involving time travel to undo Thanos&#x27;</span>s actions ...</span><br><span class="line"><span class="number">3.</span> Question: How does Thanos acquire the Power Stone <span class="keyword">and</span> what events transpire after he obtains it?</span><br><span class="line">Ground Truth: Thanos acquires the Power Stone <span class="keyword">from</span> the planet Xandar. After obtaining the Power Stone, Thanos <span class="keyword">and</span> ...</span><br><span class="line"><span class="number">4.</span> Question: How does Thanos ultimately achieve his goal of completing the Gauntlet <span class="keyword">and</span> causing half of <span class="built_in">all</span> life across the universe to disintegrate <span class="keyword">in</span> <span class="string">&quot;Avengers: Infinity War&quot;</span>?</span><br><span class="line">Ground Truth: Thanos ultimately achieves his goal of completing the Gauntlet <span class="keyword">and</span> causing half of <span class="built_in">all</span> life across t...</span><br><span class="line"><span class="number">5.</span> Question: How does Loki initially gain access to Earth <span class="keyword">and</span> what <span class="keyword">is</span> his ultimate goal upon arriving?</span><br><span class="line">Ground Truth: Loki initially gains access to Earth by using the Tesseract to <span class="built_in">open</span> a wormhole. His ultimate goal up...</span><br></pre></td></tr></table></figure>
+
+<p>这次使用数据生成器的<code>generate_dataset_from_nodes</code>方法来生成测试数据，生成的数据不仅包含 Question，还包含 Ground Truth，也是就代码中的<code>example.reference_answer</code>属性的值。其实除了 Question 和 Ground Truth 外，在生成的数据中还包含<code>reference_contexts</code>，这是数据生成器使用其内部检索器检索到的上下文，这个数据暂时对我们没有用处，我们只需要关注 Question 和 Ground Truth 即可。</p>
+<h3 id="将数据集保存到-json-文件"><a href="#将数据集保存到-json-文件" class="headerlink" title="将数据集保存到 json 文件"></a>将数据集保存到 json 文件</h3><p>每次运行程序都重新生成一遍测试数据比较耗费资源，我们可以将生成的数据集保存到 json 文件中，下次直接读取 json 文件即可，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> llama_index.core.llama_dataset.rag <span class="keyword">import</span> LabelledRagDataset</span><br><span class="line"></span><br><span class="line">dataset_json = <span class="string">&quot;./output/test-dataset.json&quot;</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(dataset_json):</span><br><span class="line">    dataset = dataset_generator.generate_dataset_from_nodes()</span><br><span class="line">    examples = dataset.examples</span><br><span class="line">    dataset.save_json(dataset_json)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    dataset = LabelledRagDataset.from_json(dataset_json)</span><br><span class="line">    examples = dataset.examples</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>保存数据时使用<code>dataset</code>对象的<code>save_json</code>方法</li>
+<li>读取数据时使用<code>LabelledRagDataset</code>的<code>from_json</code>方法</li>
+</ul>
+<h2 id="评估指标"><a href="#评估指标" class="headerlink" title="评估指标"></a>评估指标</h2><p>下面我们来详细介绍 LlamaIndex 的评估指标，并通过代码示例来了解如何使用这些评估指标。</p>
+<h3 id="Answer-Relevcancy"><a href="#Answer-Relevcancy" class="headerlink" title="Answer Relevcancy"></a>Answer Relevcancy</h3><p>Answer Revelancy 是评估 Answer 和 Question 的相关性，这个指标可以帮助我们评估生成的答案是否和问题相关，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.evaluation <span class="keyword">import</span> AnswerRelevancyEvaluator</span><br><span class="line"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> VectorStoreIndex, Settings</span><br><span class="line"><span class="keyword">from</span> llama_index.core.node_parser <span class="keyword">import</span> SentenceSplitter</span><br><span class="line"></span><br><span class="line">question = examples[<span class="number">0</span>].query</span><br><span class="line"></span><br><span class="line">node_parser = SentenceSplitter()</span><br><span class="line">nodes = node_parser.get_nodes_from_documents(documents)</span><br><span class="line">Settings.llm = llm</span><br><span class="line">vector_index = VectorStoreIndex(nodes)</span><br><span class="line">engine = vector_index.as_query_engine()</span><br><span class="line">response = engine.query(question)</span><br><span class="line">answer = <span class="built_in">str</span>(response)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;question&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Answer: <span class="subst">&#123;answer&#125;</span>&quot;</span>)</span><br><span class="line">evaluator = AnswerRelevancyEvaluator(llm)</span><br><span class="line">result = evaluator.evaluate(query=question, response=answer)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;score: <span class="subst">&#123;result.score&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;feedback: <span class="subst">&#123;result.feedback&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">Question: How did Ultron initially come into existence <span class="keyword">and</span> what was his ultimate goal?</span><br><span class="line">Answer: Ultron initially came into existence when Tony Stark <span class="keyword">and</span> Bruce Banner discovered an artificial intelligence within Loki<span class="string">&#x27;s scepter and decided to use it to complete Stark&#x27;</span>s <span class="string">&quot;Ultron&quot;</span> <span class="keyword">global</span> defense program. Ultron<span class="string">&#x27;s ultimate goal was to eradicate humanity in order to save Earth.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">score: 1.0</span></span><br><span class="line"><span class="string">feedback: 1. The provided response matches the subject matter of the user&#x27;</span>s query by explaining how Ultron initially came into existence <span class="keyword">and</span> what his ultimate goal was.</span><br><span class="line"><span class="number">2.</span> The response directly addresses the focus <span class="keyword">and</span> perspective of the use<span class="string">r&#x27;s query by detailing the specific events that led to Ultron&#x27;</span>s creation <span class="keyword">and</span> his ultimate goal of eradicating humanity.</span><br><span class="line"></span><br><span class="line">[RESULT] <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们使用测试数据集的第一条数据的问题作为评估问题</li>
+<li>然后构建一个普通的 RAG 查询引擎，并通过查询评估问题来得到答案</li>
+<li>将问题和答案传递给<code>AnswerRelevancyEvaluator</code>评估器，通过<code>evaluate</code>方法来评估问题和答案的相关性</li>
+<li>评估结果的<code>score</code>范围是 0~1，得分越高表示答案和问题的相关性越高，得分为 1 表示完全相关</li>
+<li>评估结果中还有<code>feedback</code>属性，用来解释评估结果，这个属性可以帮助我们了解评估结果的产生原因</li>
+</ul>
+<p>LlamaIndex 中每种评估器的初始化参数都基本一致，以<code>AnswerRelevancyEvaluator</code> 为例， 有以下主要参数：</p>
+<ul>
+<li>llm: 评估使用的大语言模型</li>
+<li>eval_template: 评估时所用的提示词模板</li>
+<li>score_threshold: 这个参数在不同的评估器中有不同的含义，在<code>AnswerRelevancyEvaluator</code> 中这个参数用来将反馈中的分数转换到 0~1 范围，在<code>CorrectnessEvaluator</code> 中这个参数用来评判答案是否正确</li>
+</ul>
+<p>在上面的反馈结果中我们可以看到<code>[RESULT] 2</code>，这个值就是反馈中的分数，LLM 在评估过程中评估了 2 个问题，每个问题回答正确则得 1 分，从得分结果来看，2 个问题都回答正确，所以得分为 2，然后除以阀值 2.0，得到最终分数为 1.0。</p>
+<h4 id="评估提示词模板修改"><a href="#评估提示词模板修改" class="headerlink" title="评估提示词模板修改"></a>评估提示词模板修改</h4><p><code>eval_template</code>参数用来设置评估提示词模板，我们可以来看下<code>AnswerRelevancyEvaluator</code>默认的评估提示词：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.prompts <span class="keyword">import</span> PromptTemplate</span><br><span class="line"></span><br><span class="line">DEFAULT_EVAL_TEMPLATE = PromptTemplate(</span><br><span class="line">    <span class="string">&quot;Your task is to evaluate if the response is relevant to the query.\n&quot;</span></span><br><span class="line">    <span class="string">&quot;The evaluation should be performed in a step-by-step manner by answering the following questions:\n&quot;</span></span><br><span class="line">    <span class="string">&quot;1. Does the provided response match the subject matter of the user&#x27;s query?\n&quot;</span></span><br><span class="line">    <span class="string">&quot;2. Does the provided response attempt to address the focus or perspective &quot;</span></span><br><span class="line">    <span class="string">&quot;on the subject matter taken on by the user&#x27;s query?\n&quot;</span></span><br><span class="line">    <span class="string">&quot;Each question above is worth 1 point. Provide detailed feedback on response according to the criteria questions above  &quot;</span></span><br><span class="line">    <span class="string">&quot;After your feedback provide a final result by strictly following this format: &#x27;[RESULT] followed by the integer number representing the total score assigned to the response&#x27;\n\n&quot;</span></span><br><span class="line">    <span class="string">&quot;Query: \n &#123;query&#125;\n&quot;</span></span><br><span class="line">    <span class="string">&quot;Response: \n &#123;response&#125;\n&quot;</span></span><br><span class="line">    <span class="string">&quot;Feedback:&quot;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>评估提示词模板是一个<code>PromptTemplate</code>对象，这个对象有一个<code>template</code>属性，这个属性就是评估提示词模板的字符串内容，如果我们想要修改评估提示词，一种方法是重新写一套评估提示词指令，另外一种方法是在这个模板的前面或后面添加提示词来对评估指令进行微调，比如我想让 LLM 将评估结果用中文回复，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.evaluation.answer_relevancy <span class="keyword">import</span> DEFAULT_EVAL_TEMPLATE</span><br><span class="line"></span><br><span class="line">translate_prompt = <span class="string">&quot;\n\nPlease reply in Chinese.&quot;</span></span><br><span class="line">eval_template = DEFAULT_EVAL_TEMPLATE</span><br><span class="line">eval_template.template += translate_prompt</span><br><span class="line">evaluator = AnswerRelevancyEvaluator(</span><br><span class="line">    llm=llm, eval_template=eval_template</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>这里我们在<code>AnswerRelevancyEvaluator</code>的默认提示词模板上添加了返回中文回复的提示词，然后通过<code>eval_template</code>参数传递给评估器，这样评估器在评估任务完成后就会将评估结果用中文返回。</p>
+<h3 id="Context-Relevancy"><a href="#Context-Relevancy" class="headerlink" title="Context Relevancy"></a>Context Relevancy</h3><p>Context Relevancy 是评估 Context 和 Question 的相关性，这个指标可以帮助我们评估检索到的文档上下文和问题的相关性，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.evaluation <span class="keyword">import</span> ContextRelevancyEvaluator</span><br><span class="line"></span><br><span class="line">contexts = [n.get_content() <span class="keyword">for</span> n <span class="keyword">in</span> response.source_nodes]</span><br><span class="line">evaluator = ContextRelevancyEvaluator(llm)</span><br><span class="line">result = evaluator.evaluate(query=question, contexts=contexts)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;score: <span class="subst">&#123;result.score&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;feedback: <span class="subst">&#123;result.feedback&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">score: <span class="number">1.0</span></span><br><span class="line">feedback: <span class="number">1.</span> The retrieved context matches the subject matter of the use<span class="string">r&#x27;s query. It provides a detailed explanation of how Ultron initially came into existence and what his ultimate goal was.</span></span><br><span class="line"><span class="string">2. The retrieved context can be used exclusively to provide a full answer to the user&#x27;</span>s query. It covers <span class="built_in">all</span> the necessary information about Ultron<span class="string">&#x27;s creation and his goal to eradicate humanity.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[RESULT] 4.0</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们通过查询引擎返回的结果<code>response</code>中的<code>source_nodes</code>属性获取到 Context，并将其转化为字符串列表，评估时需要这种格式的数据</li>
+<li>构建<code>ContextRelevancyEvaluator</code>评估器</li>
+<li>将 Question 和 Context 传递给评估器的<code>evaluate</code>方法进行评估</li>
+<li>最后输出评估结果</li>
+</ul>
+<p>从评估结果中可以看到，评估器评估了 2 个问题，每个问题得分 2，最终得分为 4，这个得分是通过评估器内部的评估模板计算出来的，分数经过转换后得到 score 为 1.0。</p>
+<p>在评估结果中除了<code>score</code>和<code>feedback</code>属性外，还有其他一些属性：</p>
+<ul>
+<li>query: 评估的问题，也就是 Question</li>
+<li>contexts: 评估的上下文，也就是 Context</li>
+<li>response: 评估的回答，也就是 Answer</li>
+<li>passing: 是否通过，如果评估结果通过则为 True，否则为 False，在一些评估器中这个属性和评估器的<code>score_threshold</code>属性有关</li>
+<li>pairwise_source: 对比评估源，这是对比评估才有的属性，后面会详细介绍</li>
+</ul>
+<h3 id="Relevancy"><a href="#Relevancy" class="headerlink" title="Relevancy"></a>Relevancy</h3><p>Relevancy 是评估 Answer、Context 与 Question 是否相关，这个指标可以帮助我们评估问题是否真正得到了回答，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.evaluation <span class="keyword">import</span> AnswerRelevancyEvaluator</span><br><span class="line"></span><br><span class="line">evaluator = RelevancyEvaluator(llm)</span><br><span class="line">result = evaluator.evaluate(query=question, response=answer, contexts=contexts)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;score: <span class="subst">&#123;result.score&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;feedback: <span class="subst">&#123;result.feedback&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;passing: <span class="subst">&#123;result.passing&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">score: <span class="number">1.0</span></span><br><span class="line">feedback: YES</span><br><span class="line">passing: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>构建<code>RelevancyEvaluator</code>评估器</li>
+<li>这个评估器需要传递 Question、Answer 和 Context 三个参数进行评估</li>
+<li>最后输出评估结果</li>
+</ul>
+<p>因为这个评估是检查 Answer 和 Context 是否与 Question 相关， 因此评估结果是一个布尔值， 当<code>feedback</code>为<code>YES</code>表示 Answer、Context 与 Question 相关，同时<code>passing</code>为<code>True</code>，<code>score</code>为 1.0。</p>
+<h3 id="Faithfulness"><a href="#Faithfulness" class="headerlink" title="Faithfulness"></a>Faithfulness</h3><p>Faithfulness 是评估 Answer 和 Context 是否匹配，这个指标可以帮助我们评估生成的答案是否符合上下文，检查答案是否有<strong>幻觉</strong>，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.evaluation <span class="keyword">import</span> FaithfulnessEvaluator</span><br><span class="line"></span><br><span class="line">evaluator = FaithfulnessEvaluator(llm)</span><br><span class="line">result = evaluator.evaluate(response=answer, contexts=contexts)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;score: <span class="subst">&#123;result.score&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;feedback: <span class="subst">&#123;result.feedback&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;passing: <span class="subst">&#123;result.passing&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">score: <span class="number">1.0</span></span><br><span class="line">feedback: YES</span><br><span class="line">passing: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>构建<code>FaithfulnessEvaluator</code>评估器</li>
+<li>这个评估器需要传递 Answer 和 Context 两个参数进行评估</li>
+<li>最后输出评估结果，评估结果也是一个布尔值，当<code>feedback</code>为<code>YES</code>表示两者相关， 同时<code>passing</code>为<code>True</code>，<code>score</code>为 1.0</li>
+</ul>
+<p>LlamaIndex 的评估工具不仅可以对检索引擎进行评估，还可以对 Pipeline 进行评估，只要将 Pipeline 的输出结果作为评估的参数即可：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.query_pipeline <span class="keyword">import</span> QueryPipeline, InputComponent</span><br><span class="line"><span class="keyword">from</span> llama_index.core.response_synthesizers.simple_summarize <span class="keyword">import</span> SimpleSummarize</span><br><span class="line"></span><br><span class="line">p = QueryPipeline(verbose=<span class="literal">True</span>)</span><br><span class="line">p.add_modules(</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;input&quot;</span>: InputComponent(),</span><br><span class="line">        <span class="string">&quot;retriever&quot;</span>: retriever,</span><br><span class="line">        <span class="string">&quot;output&quot;</span>: SimpleSummarize(),</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">p.add_link(<span class="string">&quot;input&quot;</span>, <span class="string">&quot;retriever&quot;</span>)</span><br><span class="line">p.add_link(<span class="string">&quot;input&quot;</span>, <span class="string">&quot;output&quot;</span>, dest_key=<span class="string">&quot;query_str&quot;</span>)</span><br><span class="line">p.add_link(<span class="string">&quot;retriever&quot;</span>, <span class="string">&quot;output&quot;</span>, dest_key=<span class="string">&quot;nodes&quot;</span>)</span><br><span class="line">output = p.run(<span class="built_in">input</span>=question)</span><br><span class="line">answer = <span class="built_in">str</span>(output)</span><br><span class="line">contexts = [n.get_content() <span class="keyword">for</span> n <span class="keyword">in</span> output.source_nodes]</span><br></pre></td></tr></table></figure>
+
+<p>我们创建一个基本的 RAG Pipeline， 然后使用 Pipeline 来代替检索引擎进行问题检索和回答生成，最后将得到的 Answer 和 Context 传递给评估器进行评估即可。关于<code>Pipeline</code>的更多介绍可以参考我之前的<a href="https://zhaozhiming.github.io/2024/06/08/rag-module-pipeline/">这篇文章</a>。</p>
+<h3 id="Correctness"><a href="#Correctness" class="headerlink" title="Correctness"></a>Correctness</h3><p>Correctness 是评估 Answer 和 Ground Truth 的相关性和正确性，这个指标可以帮助我们评估生成的答案是否正确，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.evaluation <span class="keyword">import</span> CorrectnessEvaluator</span><br><span class="line"></span><br><span class="line">evaluator = CorrectnessEvaluator(llm)</span><br><span class="line">ground_truth = dataset_examples[<span class="number">1</span>].reference_answer</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;question&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Answer: <span class="subst">&#123;answer&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Ground Truth: <span class="subst">&#123;ground_truth&#125;</span>&quot;</span>)</span><br><span class="line">result = evaluator.evaluate(query=question, response=answer, reference=ground_truth)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;score: <span class="subst">&#123;result.score&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;feedback: <span class="subst">&#123;result.feedback&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;passing: <span class="subst">&#123;result.passing&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">Question: What event prompts the Avengers to devise a plan involving time travel to undo Thanos<span class="string">&#x27;s actions in &quot;Avengers: Endgame&quot;?</span></span><br><span class="line"><span class="string">Answer: The event that prompts the Avengers to devise a plan involving time travel to undo Thanos&#x27;</span>s actions <span class="keyword">in</span> <span class="string">&quot;Avengers: Endgame&quot;</span> occurs when Scott Lang escapes <span class="keyword">from</span> the Quantum Realm <span class="keyword">and</span> reaches the Avengers Compound. He explains that he experienced only five hours <span class="keyword">while</span> trapped, despite being there <span class="keyword">for</span> five years. This leads to the realization that the Quantum Realm allows <span class="keyword">for</span> time travel, prompting the Avengers to ask Tony Stark to <span class="built_in">help</span> them retrieve the Infinity Stones <span class="keyword">from</span> the past to reverse Thanos<span class="string">&#x27;s actions in the present.</span></span><br><span class="line"><span class="string">Ground Truth: The event that prompts the Avengers to devise a plan involving time travel to undo Thanos&#x27;</span>s actions <span class="keyword">in</span> <span class="string">&quot;Avengers: Endgame&quot;</span> <span class="keyword">is</span> the discovery that Thanos has already destroyed the Infinity Stones, preventing <span class="built_in">any</span> further use to reverse his actions.</span><br><span class="line"></span><br><span class="line">score: <span class="number">4.0</span></span><br><span class="line">feedback: The generated answer <span class="keyword">is</span> relevant <span class="keyword">and</span> mostly correct <span class="keyword">in</span> detailing the events leading to the Avengers<span class="string">&#x27; decision to use time travel in &quot;Avengers: Endgame.&quot; It accurately describes Scott Lang&#x27;</span>s escape <span class="keyword">from</span> the Quantum Realm <span class="keyword">and</span> his crucial role <span class="keyword">in</span> introducing the concept of time manipulation via the Quantum Realm. However, it slightly deviates <span class="keyword">from</span> the reference answer, which emphasizes the destruction of the Infinity Stones by Thanos <span class="keyword">as</span> the critical event. The generated answer instead focuses on the discovery of time travel <span class="keyword">as</span> a viable option, which <span class="keyword">is</span> also a correct perspective but <span class="keyword">not</span> the only one. Thus, the score reflects high relevance <span class="keyword">and</span> correctness <span class="keyword">with</span> a minor deviation <span class="keyword">in</span> focus.</span><br><span class="line">passing: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>构建<code>CorrectnessEvaluator</code>评估器</li>
+<li>使用我们之前创建的测试数据集中某条数据的<code>reference_answer</code>作为 Ground Truth</li>
+<li>将 Question、Answer 和 Ground Truth 传递给评估器的<code>evaluate</code>方法进行评估</li>
+</ul>
+<p><code>CorrectnessEvaluator</code>评估器的得分范围是 1 ～ 5，当分数大于等于 4 时表示答案正确，<code>passing</code>为<code>True</code>，评估器根据 Qustion、Answer 和 Ground Truth 进行评估，最后输出评估结果。</p>
+<h3 id="Pairwise"><a href="#Pairwise" class="headerlink" title="Pairwise"></a>Pairwise</h3><p>Pairwise 是对比评估，可以帮助我们评估两个检索引擎生成的 Answer 哪个更好，在执行对比评估之前，我们需要再构建一个检索引擎，这个检索引擎我们使用不同的文档分块策略，这样才可以与之前的检索引擎进行区分，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">documents = SimpleDirectoryReader(<span class="string">&quot;./data&quot;</span>).load_data()</span><br><span class="line">node_parser = SentenceSplitter(chunk_size=<span class="number">128</span>, chunk_overlap=<span class="number">25</span>)</span><br><span class="line">nodes = node_parser.get_nodes_from_documents(documents)</span><br><span class="line">Settings.llm = llm</span><br><span class="line">vector_index = VectorStoreIndex(nodes)</span><br><span class="line">second_engine = vector_index.as_query_engine()</span><br><span class="line">second_response = engine.query(question)</span><br><span class="line">second_answer = <span class="built_in">str</span>(second_response)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>原来的检索引擎<code>engine</code>使用的是<code>SentenceSplitter</code>文档分割器默认的分块策略，<code>chunk_size</code>为 1024，<code>chunk_overlap</code>为 200</li>
+<li>我们新建了另外一个检索引擎<code>second_engine</code>，并将文档分割器的<code>chunk_size</code>设置为 128，<code>chunk_overlap</code>设置为 25</li>
+<li>然后使用<code>second_engine</code>来查询问题，得到另一个答案<code>second_answer</code></li>
+</ul>
+<p>然后我们使用<code>PairwiseEvaluator</code>评估器来对比两个答案，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.evaluation <span class="keyword">import</span> PairwiseComparisonEvaluator</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;question&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Answer: <span class="subst">&#123;answer&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Second Answer: <span class="subst">&#123;second_answer&#125;</span>&quot;</span>)</span><br><span class="line">evaluator = PairwiseComparisonEvaluator(llm)</span><br><span class="line">result = evaluator.evaluate(</span><br><span class="line">    query=question, response=answer, second_response=second_answer</span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;score: <span class="subst">&#123;result.score&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;feedback: <span class="subst">&#123;result.feedback&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;pairwise source: <span class="subst">&#123;<span class="built_in">str</span>(result.pairwise_source)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">Question: What event prompts the Avengers to devise a plan involving time travel to undo Thanos<span class="string">&#x27;s actions in &quot;Avengers: Endgame&quot;?</span></span><br><span class="line"><span class="string">Answer: The event that prompts the Avengers to devise a plan involving time travel to undo Thanos&#x27;</span>s actions <span class="keyword">in</span> <span class="string">&quot;Avengers: Endgame&quot;</span> <span class="keyword">is</span> the discovery that Thanos has already destroyed the Infinity Stones, preventing <span class="built_in">any</span> further use to reverse his actions.</span><br><span class="line">Second Answer: The destruction of the Infinity Stones by Thanos prompts the Avengers to devise a plan involving time travel to undo Thanos<span class="string">&#x27;s actions in &quot;Avengers: Endgame&quot;.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">score: 1.0</span></span><br><span class="line"><span class="string">feedback: Assistant A provides a more detailed and informative response by explaining that the Avengers discover that Thanos has already destroyed the Infinity Stones, which is the event that prompts them to devise a plan involving time travel to undo his actions in &quot;Avengers: Endgame.&quot; This additional context enhances the understanding of the situation and the motivation behind the Avengers&#x27;</span> plan. Assistant B, on the other hand, simply states that the destruction of the Infinity Stones by Thanos <span class="keyword">is</span> the event that leads to the Avengers<span class="string">&#x27; plan without providing any further elaboration.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Therefore, based on the level of detail and clarity provided in the responses, [[A]] Assistant A is better.</span></span><br><span class="line"><span class="string">pairwise source: EvaluationSource.ORIGINAL</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>构建<code>PairwiseComparisonEvaluator</code>评估器</li>
+<li>将 Question、Answer 和 Second Answer 传递给评估器的<code>evaluate</code>方法进行评估</li>
+</ul>
+<p>在显示结果中，我们打印了 Question、Answer 和 Second Answer，以及评估结果的几个属性，从评估结果中可以看到，第一个 Answer 比第二个 Answer 更好。在评估结果中还有一个<code>pairwise_source</code>属性，值是<code>EvaluationSource.ORIGINAL</code>，表示评估顺序是原始顺序。</p>
+<p>在 <code>PairwiseComparisonEvaluator</code>评估器中，有一个初始化参数<code>enforce_consensus</code>，默认值是 True。在评估器进行对比评估时，首先会将 Answer 和 Second Answer 进行对比， 即<code>evaluate(response=answer, second_response=second_answer)</code>，如果<code>enforce_consensus</code>为 True，<strong>则会将 Answer 和 Second Answer 反过来再进行对比</strong>， 即<code>evaluate(response=second_answer, second_response=answer)</code>， 最后根据两次结果来产生最终的评估结果。如果最终结果使用的是反转后的结果，那么<code>pairwise source</code>的值就是<code>EvaluationSource.FLIPPED</code>。</p>
+<p>可以看下另外一种对比结果，在下面的评估结果中，2 个 Answer 的得分一样，评估结果是平局：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">score: 0.5</span><br><span class="line">feedback: Both Assistant A and Assistant B provided the same answer to the user<span class="string">&#x27;s question, stating that Tony Stark and Bruce Banner are the two members of the Avengers who created Ultron. Since both responses are identical in terms of accuracy and relevance to the user&#x27;</span>s question, there is no significant difference between the two answers. Therefore, <span class="keyword">in</span> this <span class="keyword">case</span>, it is a tie between Assistant A and Assistant B.</span><br><span class="line"></span><br><span class="line">Therefore, the final verdict is <span class="string">&#x27;[[C]]&#x27;</span> <span class="keyword">for</span> a tie.</span><br><span class="line">pairwise_source: EvaluationSource.ORIGINAL</span><br></pre></td></tr></table></figure>
+
+<h2 id="批量评估"><a href="#批量评估" class="headerlink" title="批量评估"></a>批量评估</h2><p>介绍完了 LlamaIndex 的评估指标后，有人可能会担心如果一次性运行这么多评估指标，那么运行时间会不会很长，其实不用担心，LlamaIndex 很贴心地提供了一个批量评估的工具，可以帮助我们快速地运行多个评估指标，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.evaluation <span class="keyword">import</span> BatchEvalRunner</span><br><span class="line"></span><br><span class="line">answer_relevancy_evaluator = AnswerRelevancyEvaluator(llm)</span><br><span class="line">context_relevancy_evaluator = ContextRelevancyEvaluator(llm)</span><br><span class="line">relevant_evaluator = RelevancyEvaluator(llm)</span><br><span class="line">correctness_evaluator = CorrectnessEvaluator(llm)</span><br><span class="line">faithfulness_evaluator = FaithfulnessEvaluator(llm)</span><br><span class="line"></span><br><span class="line">runner = BatchEvalRunner(</span><br><span class="line">    evaluators=&#123;</span><br><span class="line">        <span class="string">&quot;answer_relevancy&quot;</span>: answer_relevancy_evaluator,</span><br><span class="line">        <span class="string">&quot;context_relevancy&quot;</span>: context_relevancy_evaluator,</span><br><span class="line">        <span class="string">&quot;relevancy&quot;</span>: relevant_evaluator,</span><br><span class="line">        <span class="string">&quot;correctness&quot;</span>: correctness_evaluator,</span><br><span class="line">        <span class="string">&quot;faithfulness&quot;</span>: faithfulness_evaluator,</span><br><span class="line">    &#125;,</span><br><span class="line">    workers=<span class="number">8</span>,</span><br><span class="line">)</span><br><span class="line">questions = [example.query <span class="keyword">for</span> example <span class="keyword">in</span> examples]</span><br><span class="line">ground_truths = [example.reference_answer <span class="keyword">for</span> example <span class="keyword">in</span> examples]</span><br><span class="line">metrics_results = runner.evaluate_queries(</span><br><span class="line">    engine, queries=questions, reference=ground_truths</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> metrics <span class="keyword">in</span> metrics_results.keys():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;metrics: <span class="subst">&#123;metrics&#125;</span>&quot;</span>)</span><br><span class="line">    eval_results = metrics_results[metrics]</span><br><span class="line">    <span class="keyword">for</span> eval_result <span class="keyword">in</span> eval_results:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;score: <span class="subst">&#123;eval_result.score&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;feedback: <span class="subst">&#123;eval_result.feedback&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> eval_result.passing <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;passing: <span class="subst">&#123;eval_result.passing&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">metrics: answer_relevancy</span><br><span class="line">score: <span class="number">1.0</span></span><br><span class="line">feedback: <span class="number">1.</span> The provided response matches the subject matter of the use<span class="string">r&#x27;s query by explaining how Ultron initially came into existence and what his ultimate goal was.</span></span><br><span class="line"><span class="string">2. The response directly addresses the focus and perspective of the user&#x27;</span>s query by detailing the specific events that led to Ultron<span class="string">&#x27;s creation and his ultimate goal of eradicating humanity.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[RESULT] 2</span></span><br><span class="line"><span class="string">......</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们首先创建了 5 个评估器，分别是<code>AnswerRelevancyEvaluator</code>、<code>ContextRelevancyEvaluator</code>、<code>RelevancyEvaluator</code>、<code>CorrectnessEvaluator</code>、<code>FaithfulnessEvaluator</code></li>
+<li>然后通过测试数据集提取了 Question 列表<code>questions</code>和 Ground Truth 列表<code>ground_truths</code>，每个列表分别有 5 个元素</li>
+<li>使用<code>BatchEvalRunner</code>构建一个批量评估运行器，初始化参数<code>evaluators</code>为 5 个评估器，<code>workers</code>参数表示并行运行的工作线程数，<code>workers</code>的数量可以根据运行机器上的 CPU 核数来决定</li>
+<li>调用<code>aevaluate_queries</code>方法来运行评估，传递的参数是查询引擎、Question 列表和 Ground Truth 列表</li>
+<li>评估结果最后会根据评估器名称保存在<code>metrics_results</code>字典中，我们遍历这个字典，输出评估结果</li>
+</ul>
+<p>5 个评估器加上 5 个问题，相当于我们执行了 25 次评估，但执行时间和运行单次评估的时间基本相同，但需要注意的是，<code>BatchEvalRunner</code>只能在检索引擎下使用，不能通过 Pipeline 使用。</p>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p>LlamaIndex 内置的评估工具有以下优缺点。</p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>不需要额外安装第三方库，可以快速使用</li>
+<li>评估指标可以满足大部分评估需求</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>评估方法基本上是通过 LLM 加提示词的方式来评估，评估使用的 LLM 不同，可能评估效果差别也会比较大，其他 RAG 评估工具会使用一些计算公式来结合提示词进行评估，从而减小 LLM 的影响</li>
+<li>是 LlamaIndex 内置的功能，这是优点也是缺点，毕竟评估功能与其他 RAG 功能相比重要性较低，以后随着 LlamaIndex 更多新功能的加入，评估功能的开发优先级可能会降低</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总体而言，LlamaIndex 的评估功能可以帮助我们快速地评估 RAG 的性能，满足我们基本的 RAG 评估需求，无需借助其他第三方库。如果你正在使用 LlamaIndex 开发 RAG 应用，建议使用 LlamaIndex 内置的评估工具，使用后如果发现满足不了需求再考虑使用其他第三方评估工具。希望这篇文章可以帮助大家更好地了解 LlamaIndex 的评估功能。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2024/06/16/llamaindex-buildin-evaluation/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2024/06/16/llamaindex-buildin-evaluation/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>在JavaScript中进行文件处理，第二部分：文件读取 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="&lt;p&gt;&lt;strong&gt;译注：原文是《JavaScript高级程序设计》的作者Nicholas Zakas写的，本翻译纯属为自己学习而做，仅供参考。原文链接：&lt;a href=&#34;http://www.nczonline.net/blog/2012/05/15/working-with-files-in-javascript-part-2/&#34;&gt;这里&lt;/a&gt;&lt;/strong&gt;  &lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;在我的前一篇blog中，我介绍了在JavaScript中如何使用文件，具体重点放在如何获得File对象。只有当用户通过上传或者拖拽的方式上传了文件，这些对象才拥有文件的元数据。一旦你有了这些文件，下一步就是从这些文件中读取数据。  &lt;/p&gt;
+&lt;span id=&#34;more&#34;&gt;&lt;/span&gt;
+&lt;h2 id=&#34;FileReader-类型&#34;&gt;&lt;a href=&#34;#FileReader-类型&#34; class=&#34;headerlink&#34; title=&#34;FileReader 类型&#34;&gt;&lt;/a&gt;FileReader 类型&lt;/h2&gt;&lt;p&gt;FileReader类型有一个单一的工作，就是从一个文件中读取数据并存储在一个JavaScript变量中。它的API有意设计得与XMLHttpRequest相同，因为它们都是从一个外部资源（浏览器之外）加载数据。读操作是异步的，这样不会使浏览器堵塞。  &lt;/p&gt;
+&lt;p&gt;FileReader可以创建多种格式来表示文件的数据，而当读取文件时返回的格式是必须的。读取操作是通过调用下面任一方法来完成的：    &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;readAsText() – 使用纯文本的形式返回文件内容&lt;/li&gt;
+&lt;li&gt;readAsBinaryString() – 使用加密二进制数据字符串的形式来返回文件内容（该方法已废弃，请使用readAsArrayBuffer()代替）&lt;/li&gt;
+&lt;li&gt;readAsArrayBuffer() – 使用ArrayBuffer的形式来返回文件内容（对二进制数据比如图像文件有用）&lt;/li&gt;
+&lt;li&gt;readAsDataURL() – 使用数据URL的形式返回文件内容&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;像XHR对象的send方法会发起一个Http请求一样，上面的每个方法都会启动一个文件读取。就这一点来说，在开始读取之前，你必须监听load事件，event.target.result总是返回读取的结果。例如：  &lt;/p&gt;
+&lt;figure class=&#34;highlight javascript&#34;&gt;&lt;figcaption&gt;&lt;span&gt;demo.js&lt;/span&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;var&lt;/span&gt; reader = &lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;FileReader&lt;/span&gt;();&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;reader.&lt;span class=&#34;property&#34;&gt;onload&lt;/span&gt; = &lt;span class=&#34;keyword&#34;&gt;function&lt;/span&gt;(&lt;span class=&#34;params&#34;&gt;event&lt;/span&gt;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;keyword&#34;&gt;var&lt;/span&gt; contents = event.&lt;span class=&#34;property&#34;&gt;target&lt;/span&gt;.&lt;span class=&#34;property&#34;&gt;result&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;variable language_&#34;&gt;console&lt;/span&gt;.&lt;span class=&#34;title function_&#34;&gt;log&lt;/span&gt;(&lt;span class=&#34;string&#34;&gt;&amp;quot;File contents: &amp;quot;&lt;/span&gt; + contents);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#125;;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;reader.&lt;span class=&#34;property&#34;&gt;onerror&lt;/span&gt; = &lt;span class=&#34;keyword&#34;&gt;function&lt;/span&gt;(&lt;span class=&#34;params&#34;&gt;event&lt;/span&gt;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;variable language_&#34;&gt;console&lt;/span&gt;.&lt;span class=&#34;title function_&#34;&gt;error&lt;/span&gt;(&lt;span class=&#34;string&#34;&gt;&amp;quot;File could not be read! Code &amp;quot;&lt;/span&gt; + event.&lt;span class=&#34;property&#34;&gt;target&lt;/span&gt;.&lt;span class=&#34;property&#34;&gt;error&lt;/span&gt;.&lt;span class=&#34;property&#34;&gt;code&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#125;;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;reader.&lt;span class=&#34;title function_&#34;&gt;readAsText&lt;/span&gt;(file);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;  
+&lt;p&gt;在这个例子中，我们简单地读取文件内容，并将内容以纯文本的形式输出到console。当文件被成功读取时会调用onload操作，而因为某些原因无法读取时会调用onerror操作。在事件处理器中可以通过event.target来获得FileReader实例，而且它推荐这样使用，而不是直接使用reader变量。result属性包含读取成功时的文件内容和读取失败时的错误信息。  &lt;/p&gt;
+&lt;h2 id=&#34;读取数据URI&#34;&gt;&lt;a href=&#34;#读取数据URI&#34; class=&#34;headerlink&#34; title=&#34;读取数据URI&#34;&gt;&lt;/a&gt;读取数据URI&lt;/h2&gt;&lt;p&gt;你可以用差不多的方法来将文件读取为一个数据URI，数据的URI（有时也叫数据URL）是个有趣的选项，比如你想要显示从磁盘上读取的图像文件，你可以用下面的代码这样做：  &lt;/p&gt;
+&lt;figure class=&#34;highlight javascript&#34;&gt;&lt;figcaption&gt;&lt;span&gt;demo.js&lt;/span&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;14&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;var&lt;/span&gt; reader = &lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;FileReader&lt;/span&gt;();&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;reader.&lt;span class=&#34;property&#34;&gt;onload&lt;/span&gt; = &lt;span class=&#34;keyword&#34;&gt;function&lt;/span&gt;(&lt;span class=&#34;params&#34;&gt;event&lt;/span&gt;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;keyword&#34;&gt;var&lt;/span&gt; dataUri = event.&lt;span class=&#34;property&#34;&gt;target&lt;/span&gt;.&lt;span class=&#34;property&#34;&gt;result&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        img     = &lt;span class=&#34;variable language_&#34;&gt;document&lt;/span&gt;.&lt;span class=&#34;title function_&#34;&gt;createElement&lt;/span&gt;(&lt;span class=&#34;string&#34;&gt;&amp;quot;img&amp;quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    img.&lt;span class=&#34;property&#34;&gt;src&lt;/span&gt; = dataUri;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;variable language_&#34;&gt;document&lt;/span&gt;.&lt;span class=&#34;property&#34;&gt;body&lt;/span&gt;.&lt;span class=&#34;title function_&#34;&gt;appendChild&lt;/span&gt;(img);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#125;;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;reader.&lt;span class=&#34;property&#34;&gt;onerror&lt;/span&gt; = &lt;span class=&#34;keyword&#34;&gt;function&lt;/span&gt;(&lt;span class=&#34;params&#34;&gt;event&lt;/span&gt;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;variable language_&#34;&gt;console&lt;/span&gt;.&lt;span class=&#34;title function_&#34;&gt;error&lt;/span&gt;(&lt;span class=&#34;string&#34;&gt;&amp;quot;File could not be read! Code &amp;quot;&lt;/span&gt; + event.&lt;span class=&#34;property&#34;&gt;target&lt;/span&gt;.&lt;span class=&#34;property&#34;&gt;error&lt;/span&gt;.&lt;span class=&#34;property&#34;&gt;code&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#125;;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;reader.&lt;span class=&#34;title function_&#34;&gt;readAsDataURL&lt;/span&gt;(file);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;  
+&lt;p&gt;这段代码简单地在页面上插入一个从磁盘上读取来的图像文件。因为这个数据URI包含了图像的所有数据，所以它可以被直接传给图像的src属性，并显示在页面上。你可以交替地加载图像和将其绘制到一个&lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt;上：  &lt;/p&gt;
+&lt;figure class=&#34;highlight javascript&#34;&gt;&lt;figcaption&gt;&lt;span&gt;demo.js&lt;/span&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;18&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;var&lt;/span&gt; reader = &lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;FileReader&lt;/span&gt;();&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;reader.&lt;span class=&#34;property&#34;&gt;onload&lt;/span&gt; = &lt;span class=&#34;keyword&#34;&gt;function&lt;/span&gt;(&lt;span class=&#34;params&#34;&gt;event&lt;/span&gt;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;keyword&#34;&gt;var&lt;/span&gt; dataUri = event.&lt;span class=&#34;property&#34;&gt;target&lt;/span&gt;.&lt;span class=&#34;property&#34;&gt;result&lt;/span&gt;,&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        context = &lt;span class=&#34;variable language_&#34;&gt;document&lt;/span&gt;.&lt;span class=&#34;title function_&#34;&gt;getElementById&lt;/span&gt;(&lt;span class=&#34;string&#34;&gt;&amp;quot;mycanvas&amp;quot;&lt;/span&gt;).&lt;span class=&#34;title function_&#34;&gt;getContext&lt;/span&gt;(&lt;span class=&#34;string&#34;&gt;&amp;quot;2d&amp;quot;&lt;/span&gt;),&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        img     = &lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;Image&lt;/span&gt;();&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt; &lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;comment&#34;&gt;// wait until the image has been fully processed&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    img.&lt;span class=&#34;property&#34;&gt;onload&lt;/span&gt; = &lt;span class=&#34;keyword&#34;&gt;function&lt;/span&gt;(&lt;span class=&#34;params&#34;&gt;&lt;/span&gt;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        context.&lt;span class=&#34;title function_&#34;&gt;drawImage&lt;/span&gt;(img, &lt;span class=&#34;number&#34;&gt;100&lt;/span&gt;, &lt;span class=&#34;number&#34;&gt;100&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &amp;#125;;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    img.&lt;span class=&#34;property&#34;&gt;src&lt;/span&gt; = dataUri;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#125;;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;reader.&lt;span class=&#34;property&#34;&gt;onerror&lt;/span&gt; = &lt;span class=&#34;keyword&#34;&gt;function&lt;/span&gt;(&lt;span class=&#34;params&#34;&gt;event&lt;/span&gt;) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;variable language_&#34;&gt;console&lt;/span&gt;.&lt;span class=&#34;title function_&#34;&gt;error&lt;/span&gt;(&lt;span class=&#34;string&#34;&gt;&amp;quot;File could not be read! Code &amp;quot;&lt;/span&gt; + event.&lt;span class=&#34;property&#34;&gt;target&lt;/span&gt;.&lt;span class=&#34;property&#34;&gt;error&lt;/span&gt;.&lt;span class=&#34;property&#34;&gt;code&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#125;;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;reader.&lt;span class=&#34;title function_&#34;&gt;readAsDataURL&lt;/span&gt;(file);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;  
+&lt;p&gt;这段代码将图像数据加载到一个新的Image对象，并将其绘制到一个画布上（宽度和长度都指定为100）。  &lt;/p&gt;
+&lt;p&gt;数据URI一般用来做这个，但能用在任何类型的文件上。将文件读取为一个数据URI最普遍的用法是在web页面中快速显示文件内容。  &lt;/p&gt;
+&lt;h2 id=&#34;读取ArrayBuffers&#34;&gt;&lt;a href=&#34;#读取ArrayBuffers&#34; class=&#34;headerlink&#34; title=&#34;读取ArrayBuffers&#34;&gt;&lt;/a&gt;读取ArrayBuffers&lt;/h2&gt;&lt;p&gt;ArrayBuffer类型*[1]&lt;em&gt;最初是作为WebGL的一部分被引进的。一个Arraybuffer代表一个有限的字节数，可以用来存储任意大小的数字。读取一个ArrayBuffer数据的方式需要一个特定的视图，比如Int8Array是将其中的字节处理为一个有符号的8位整数集合，而Float32Array是将其中的字节处理为一个32位浮点数的集合。这些称为类型数组&lt;/em&gt;[2]*，这样可以强制你工作在一个特定的数字类型上，而不是包含任意类型的数据（像传统的数组）。  &lt;/p&gt;
+&lt;p&gt;当处理二进制文件时你可以优先使用ArrayBuffer，这样对数据可以有更细粒度的控制。要解释关于ArrayBuffer的所有ins和outs已经超出本篇blog的范围，你只需要知道在你需要的时候可以很容易地将一个文件读取为一个ArrayBuffer就可以了。你可以直接传一个ArrayBuffer到一个XHR对象的send()方法，发送原始数据到服务器（你会在服务器的请求中读取这个数据去重建文件），只要你的浏览器完全支持XMLHttpRequest Level 2*[3]*（大部分最新的浏览器，包括IE10和Opera12都支持）。  &lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;下集预告&#34;&gt;&lt;a href=&#34;#下集预告&#34; class=&#34;headerlink&#34; title=&#34;下集预告&#34;&gt;&lt;/a&gt;下集预告&lt;/h4&gt;&lt;p&gt;使用FileReader读取文件数据相当简单。如果你知道怎么使用XMLHttpRequest, 那么你肯定知道怎么从文件中读取数据。在这个系列的下一章，你将学到更多有关如何使用FileReader事件和理解更多潜在错误的内容。   &lt;/p&gt;
+&lt;h4 id=&#34;相关链接&#34;&gt;&lt;a href=&#34;#相关链接&#34; class=&#34;headerlink&#34; title=&#34;相关链接&#34;&gt;&lt;/a&gt;相关链接&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en/JavaScript_typed_arrays/ArrayBuffer&#34;&gt;ArrayBuffer&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.khronos.org/registry/typedarray/specs/latest/&#34;&gt;Typed Array Specification&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.w3.org/TR/XMLHttpRequest/&#34;&gt;XMLHttpRequest Level 2&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://zhaozhiming.github.io/2012/07/08/working-with-files-in-javascript-part-1/&#34;&gt;在JavaScript中进行文件处理，第一部分：基础&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://zhaozhiming.github.io/2012/07/23/working-with-files-in-javascript-part-3/&#34;&gt;在JavaScript中进行文件处理，第三部分：处理事件和错误&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://zhaozhiming.github.io/2012/07/30/working-with-files-in-javascript-part-4/&#34;&gt;在JavaScript中进行文件处理，第四部分：对象URLs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://zhaozhiming.github.io/2012/08/01/working-with-files-in-javascript-part-5/&#34;&gt;在JavaScript中进行文件处理，第五部分：Blobs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+"> <!-- TODO: truncate -->
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">在JavaScript中进行文件处理，第二部分：文件读取</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2012-07-16T02:09:00.000Z" itemprop="datePublished">7月 16, 2012</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/javascript/">javascript</a>
+</div>
+    </div>
+	<div class="entry-content"><p><strong>译注：原文是《JavaScript高级程序设计》的作者Nicholas Zakas写的，本翻译纯属为自己学习而做，仅供参考。原文链接：<a target="_blank" rel="noopener" href="http://www.nczonline.net/blog/2012/05/15/working-with-files-in-javascript-part-2/">这里</a></strong>  </p>
+<hr>
+<p>在我的前一篇blog中，我介绍了在JavaScript中如何使用文件，具体重点放在如何获得File对象。只有当用户通过上传或者拖拽的方式上传了文件，这些对象才拥有文件的元数据。一旦你有了这些文件，下一步就是从这些文件中读取数据。  </p>
+<span id="more"></span>
+<h2 id="FileReader-类型"><a href="#FileReader-类型" class="headerlink" title="FileReader 类型"></a>FileReader 类型</h2><p>FileReader类型有一个单一的工作，就是从一个文件中读取数据并存储在一个JavaScript变量中。它的API有意设计得与XMLHttpRequest相同，因为它们都是从一个外部资源（浏览器之外）加载数据。读操作是异步的，这样不会使浏览器堵塞。  </p>
+<p>FileReader可以创建多种格式来表示文件的数据，而当读取文件时返回的格式是必须的。读取操作是通过调用下面任一方法来完成的：    </p>
+<ul>
+<li>readAsText() – 使用纯文本的形式返回文件内容</li>
+<li>readAsBinaryString() – 使用加密二进制数据字符串的形式来返回文件内容（该方法已废弃，请使用readAsArrayBuffer()代替）</li>
+<li>readAsArrayBuffer() – 使用ArrayBuffer的形式来返回文件内容（对二进制数据比如图像文件有用）</li>
+<li>readAsDataURL() – 使用数据URL的形式返回文件内容</li>
+</ul>
+<p>像XHR对象的send方法会发起一个Http请求一样，上面的每个方法都会启动一个文件读取。就这一点来说，在开始读取之前，你必须监听load事件，event.target.result总是返回读取的结果。例如：  </p>
+<figure class="highlight javascript"><figcaption><span>demo.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reader = <span class="keyword">new</span> <span class="title class_">FileReader</span>();</span><br><span class="line">reader.<span class="property">onload</span> = <span class="keyword">function</span>(<span class="params">event</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> contents = event.<span class="property">target</span>.<span class="property">result</span>;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;File contents: &quot;</span> + contents);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">reader.<span class="property">onerror</span> = <span class="keyword">function</span>(<span class="params">event</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&quot;File could not be read! Code &quot;</span> + event.<span class="property">target</span>.<span class="property">error</span>.<span class="property">code</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">reader.<span class="title function_">readAsText</span>(file);</span><br></pre></td></tr></table></figure>  
+<p>在这个例子中，我们简单地读取文件内容，并将内容以纯文本的形式输出到console。当文件被成功读取时会调用onload操作，而因为某些原因无法读取时会调用onerror操作。在事件处理器中可以通过event.target来获得FileReader实例，而且它推荐这样使用，而不是直接使用reader变量。result属性包含读取成功时的文件内容和读取失败时的错误信息。  </p>
+<h2 id="读取数据URI"><a href="#读取数据URI" class="headerlink" title="读取数据URI"></a>读取数据URI</h2><p>你可以用差不多的方法来将文件读取为一个数据URI，数据的URI（有时也叫数据URL）是个有趣的选项，比如你想要显示从磁盘上读取的图像文件，你可以用下面的代码这样做：  </p>
+<figure class="highlight javascript"><figcaption><span>demo.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reader = <span class="keyword">new</span> <span class="title class_">FileReader</span>();</span><br><span class="line">reader.<span class="property">onload</span> = <span class="keyword">function</span>(<span class="params">event</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> dataUri = event.<span class="property">target</span>.<span class="property">result</span>,</span><br><span class="line">        img     = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&quot;img&quot;</span>);</span><br><span class="line"></span><br><span class="line">    img.<span class="property">src</span> = dataUri;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="property">body</span>.<span class="title function_">appendChild</span>(img);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">reader.<span class="property">onerror</span> = <span class="keyword">function</span>(<span class="params">event</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&quot;File could not be read! Code &quot;</span> + event.<span class="property">target</span>.<span class="property">error</span>.<span class="property">code</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">reader.<span class="title function_">readAsDataURL</span>(file);</span><br></pre></td></tr></table></figure>  
+<p>这段代码简单地在页面上插入一个从磁盘上读取来的图像文件。因为这个数据URI包含了图像的所有数据，所以它可以被直接传给图像的src属性，并显示在页面上。你可以交替地加载图像和将其绘制到一个<code>&lt;canvas&gt;</code>上：  </p>
+<figure class="highlight javascript"><figcaption><span>demo.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reader = <span class="keyword">new</span> <span class="title class_">FileReader</span>();</span><br><span class="line">reader.<span class="property">onload</span> = <span class="keyword">function</span>(<span class="params">event</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> dataUri = event.<span class="property">target</span>.<span class="property">result</span>,</span><br><span class="line">        context = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;mycanvas&quot;</span>).<span class="title function_">getContext</span>(<span class="string">&quot;2d&quot;</span>),</span><br><span class="line">        img     = <span class="keyword">new</span> <span class="title class_">Image</span>();</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// wait until the image has been fully processed</span></span><br><span class="line">    img.<span class="property">onload</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">        context.<span class="title function_">drawImage</span>(img, <span class="number">100</span>, <span class="number">100</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">    img.<span class="property">src</span> = dataUri;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">reader.<span class="property">onerror</span> = <span class="keyword">function</span>(<span class="params">event</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&quot;File could not be read! Code &quot;</span> + event.<span class="property">target</span>.<span class="property">error</span>.<span class="property">code</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">reader.<span class="title function_">readAsDataURL</span>(file);</span><br></pre></td></tr></table></figure>  
+<p>这段代码将图像数据加载到一个新的Image对象，并将其绘制到一个画布上（宽度和长度都指定为100）。  </p>
+<p>数据URI一般用来做这个，但能用在任何类型的文件上。将文件读取为一个数据URI最普遍的用法是在web页面中快速显示文件内容。  </p>
+<h2 id="读取ArrayBuffers"><a href="#读取ArrayBuffers" class="headerlink" title="读取ArrayBuffers"></a>读取ArrayBuffers</h2><p>ArrayBuffer类型*[1]<em>最初是作为WebGL的一部分被引进的。一个Arraybuffer代表一个有限的字节数，可以用来存储任意大小的数字。读取一个ArrayBuffer数据的方式需要一个特定的视图，比如Int8Array是将其中的字节处理为一个有符号的8位整数集合，而Float32Array是将其中的字节处理为一个32位浮点数的集合。这些称为类型数组</em>[2]*，这样可以强制你工作在一个特定的数字类型上，而不是包含任意类型的数据（像传统的数组）。  </p>
+<p>当处理二进制文件时你可以优先使用ArrayBuffer，这样对数据可以有更细粒度的控制。要解释关于ArrayBuffer的所有ins和outs已经超出本篇blog的范围，你只需要知道在你需要的时候可以很容易地将一个文件读取为一个ArrayBuffer就可以了。你可以直接传一个ArrayBuffer到一个XHR对象的send()方法，发送原始数据到服务器（你会在服务器的请求中读取这个数据去重建文件），只要你的浏览器完全支持XMLHttpRequest Level 2*[3]*（大部分最新的浏览器，包括IE10和Opera12都支持）。  </p>
+<hr>
+<h4 id="下集预告"><a href="#下集预告" class="headerlink" title="下集预告"></a>下集预告</h4><p>使用FileReader读取文件数据相当简单。如果你知道怎么使用XMLHttpRequest, 那么你肯定知道怎么从文件中读取数据。在这个系列的下一章，你将学到更多有关如何使用FileReader事件和理解更多潜在错误的内容。   </p>
+<h4 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en/JavaScript_typed_arrays/ArrayBuffer">ArrayBuffer</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.khronos.org/registry/typedarray/specs/latest/">Typed Array Specification</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.w3.org/TR/XMLHttpRequest/">XMLHttpRequest Level 2</a></li>
+</ul>
+<hr>
+<ul>
+<li><a href="http://zhaozhiming.github.io/2012/07/08/working-with-files-in-javascript-part-1/">在JavaScript中进行文件处理，第一部分：基础</a></li>
+<li><a href="http://zhaozhiming.github.io/2012/07/23/working-with-files-in-javascript-part-3/">在JavaScript中进行文件处理，第三部分：处理事件和错误</a></li>
+<li><a href="http://zhaozhiming.github.io/2012/07/30/working-with-files-in-javascript-part-4/">在JavaScript中进行文件处理，第四部分：对象URLs</a></li>
+<li><a href="http://zhaozhiming.github.io/2012/08/01/working-with-files-in-javascript-part-5/">在JavaScript中进行文件处理，第五部分：Blobs</a></li>
+</ul>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2012/07/16/working-with-files-in-javascript-part-2/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2012/07/16/working-with-files-in-javascript-part-2/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>MongoDB简介 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="MongoDB简介"> <!-- TODO: truncate -->
+	<meta name="keywords" content="mongodb">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">MongoDB简介</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2015-02-26T08:42:00.000Z" itemprop="datePublished">2月 26, 2015</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/mongodb/">mongodb</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2015-2/mongodb.jpeg" class="">  
+<p><a target="_blank" rel="noopener" href="http://www.mongodb.org/">MongoDB</a>是一个<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/NoSQL">NoSQL</a>(Not only SQL)数据库，使用C++语言编写，当前最新版本为3.0(beta)。  </p>
+<span id="more"></span>  
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>在MongoDB官网上有各个OS的安装指导，但在docker横行的时代，使用docker来安装无疑是最方便的，这里是<a target="_blank" rel="noopener" href="https://registry.hub.docker.com/_/mongo/">MongoDB的docker镜像地址</a>，使用非常简单，执行以下命令，docker就会自动下载镜像并启动MongoDB容器了。  </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name somename -d -p 27017:27017 mongo:tag</span><br></pre></td></tr></table></figure> 
+<h2 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h2><p>对比了几个MongoDB的GUI客户端，发现一个比较好用的客户端<a target="_blank" rel="noopener" href="http://robomongo.org/">Robomongo</a>，而且是跨平台的，安装完成后点击添加连接，输入ip和端口号就可以连接到你的MongoDB服务器了。  </p>
+<img src="/images/post/2015-2/robomongo.png" class="">  
+<p>PS:因为我是OS系统，用boot2docker来启动docker的，所以我的ip不是<code>localhost</code>，而是<code>192.168.59.103</code>。  </p>
+<h2 id="sql查询"><a href="#sql查询" class="headerlink" title="sql查询"></a>sql查询</h2><p>MongoDB是用表达式语言进行数据库操作的，这里<a target="_blank" rel="noopener" href="http://www.cnblogs.com/hoojo/archive/2011/06/01/2066426.html">有一篇blog</a>介绍了MongoDB的一些简单操作，并有SQL语句与之对应，下面简单介绍几个命令。  </p>
+<h4 id="关系型数据库-vs-NoSQL"><a href="#关系型数据库-vs-NoSQL" class="headerlink" title="关系型数据库 vs NoSQL"></a>关系型数据库 vs NoSQL</h4><p>在介绍命令之前，需要先理解与关系型数据库两者概念上的区别。  </p>
+<ul>
+<li>表：table vs collection</li>
+<li>行：view&#x2F;row(s) vs json document</li>
+<li>索引：index vs index</li>
+</ul>
+<h4 id="简单命令"><a href="#简单命令" class="headerlink" title="简单命令"></a>简单命令</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建一个聚集集合（table）</span></span><br><span class="line">db.createCollection(“collName”, &#123;size: 20, capped: 5, max: 100&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查询集合所有记录</span></span><br><span class="line">db.userInfo.find();</span><br><span class="line">相当于: <span class="keyword">select</span> * from userInfo;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查询age = 22的记录</span></span><br><span class="line">db.userInfo.find(&#123;<span class="string">&quot;age&quot;</span>: 22&#125;);</span><br><span class="line">相当于: <span class="keyword">select</span> * from userInfo <span class="built_in">where</span> age = 22;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查询name中包含 mongo的数据</span></span><br><span class="line">db.userInfo.find(&#123;name: /mongo/&#125;);</span><br><span class="line">相当于: <span class="keyword">select</span> * from userInfo <span class="built_in">where</span> name like ‘%mongo%’;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查询name = zhangsan, age = 22的数据</span></span><br><span class="line">db.userInfo.find(&#123;name: <span class="string">&#x27;zhangsan&#x27;</span>, age: 22&#125;);</span><br><span class="line">相当于: <span class="keyword">select</span> * from userInfo <span class="built_in">where</span> name = ‘zhangsan’ and age = ‘22’;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新记录</span></span><br><span class="line">db.users.update(&#123;age: 25&#125;, &#123;<span class="variable">$set</span>: &#123;name: <span class="string">&#x27;changeName&#x27;</span>&#125;&#125;, <span class="literal">false</span>, <span class="literal">true</span>);</span><br><span class="line">相当于: update <span class="built_in">users</span> <span class="built_in">set</span> name = ‘changeName’ <span class="built_in">where</span> age = 25;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除</span></span><br><span class="line">db.users.remove(&#123;age: 132&#125;);</span><br><span class="line">相当于: delete from <span class="built_in">users</span> <span class="built_in">where</span> age = 132;</span><br></pre></td></tr></table></figure> 
+<h2 id="Java示例"><a href="#Java示例" class="headerlink" title="Java示例"></a>Java示例</h2><p>使用Java来操作MongoDB也比较简单，首先要下载Java驱动，在Maven库上可以查询到，下面是驱动的Gradle定义。  </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.mongodb:mongo-java-driver:3.0.0-beta2</span><br></pre></td></tr></table></figure> 
+<p>驱动最新的版本是3.0，语法上跟2.x有一些差别，具体示例可以参考<a target="_blank" rel="noopener" href="http://docs.mongodb.org/ecosystem/tutorial/getting-started-with-3.0-java-driver/">MongoDB官网的Java示例</a>。  </p>
+<h4 id="简单示例"><a href="#简单示例" class="headerlink" title="简单示例"></a>简单示例</h4><figure class="highlight java"><figcaption><span>MyMongoDB.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.mongodb.BasicDBObject;</span><br><span class="line"><span class="keyword">import</span> com.mongodb.MongoClient;</span><br><span class="line"><span class="keyword">import</span> com.mongodb.client.FindIterable;</span><br><span class="line"><span class="keyword">import</span> com.mongodb.client.MongoCollection;</span><br><span class="line"><span class="keyword">import</span> com.mongodb.client.MongoDatabase;</span><br><span class="line"><span class="keyword">import</span> org.bson.Document;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyMongoDb</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">MongoClient</span> <span class="variable">mongo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MongoClient</span>(<span class="string">&quot;192.168.59.103&quot;</span>, <span class="number">27017</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 根据名称查找数据库</span></span><br><span class="line">        <span class="type">MongoDatabase</span> <span class="variable">mydb</span> <span class="operator">=</span> mongo.getDatabase(<span class="string">&quot;mydb&quot;</span>);</span><br><span class="line">        <span class="comment">// 根据名称查找集合</span></span><br><span class="line">        MongoCollection&lt;Document&gt; collection = mydb.getCollection(<span class="string">&quot;collectName&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 查询该集合的所有记录</span></span><br><span class="line">        FindIterable&lt;Document&gt; documents = collection.find();</span><br><span class="line">        <span class="keyword">for</span> (Document document : documents) &#123;</span><br><span class="line">            System.out.println(document.toString());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 插入一条记录</span></span><br><span class="line">        <span class="type">Document</span> <span class="variable">t</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Document</span>(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;time&quot;</span>)</span><br><span class="line">                .append(<span class="string">&quot;age&quot;</span>, <span class="number">100</span>)</span><br><span class="line">                .append(<span class="string">&quot;sex&quot;</span>, <span class="literal">true</span>)</span><br><span class="line">                .append(<span class="string">&quot;address&quot;</span>, <span class="keyword">new</span> <span class="title class_">BasicDBObject</span>(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;china&quot;</span>).append(<span class="string">&quot;province&quot;</span>, <span class="string">&quot;Sichuan&quot;</span>));</span><br><span class="line">        collection.insertOne(t);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 更新一条记录</span></span><br><span class="line">        collection.updateOne(<span class="keyword">new</span> <span class="title class_">Document</span>(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;time&quot;</span>), <span class="keyword">new</span> <span class="title class_">Document</span>(<span class="string">&quot;$set&quot;</span>, <span class="keyword">new</span> <span class="title class_">Document</span>(<span class="string">&quot;age&quot;</span>, <span class="number">101</span>)));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure> 
+<h2 id="数据库设计原则"><a href="#数据库设计原则" class="headerlink" title="数据库设计原则"></a>数据库设计原则</h2><p>MongoDB的数据模式有2种结构：引用(References)和内嵌(Embedded)。  </p>
+<ul>
+<li>引用和关系型数据库的表设计比较像，不同的对象放在不同的集合(表)中。</li>
+</ul>
+<img src="/images/post/2015-2/mongo-references.png" class="">  
+<ul>
+<li>内嵌比较特殊，是把对象的关联对象放到一个集合(表)中，这个恰恰是关系系数据库做不到的。</li>
+</ul>
+<img src="/images/post/2015-2/mongo-embedded.png" class="">  
+<p>那问题来了，什么时候使用引用，什么时候使用内嵌呢？下面是官方给的一些建议，总结如下: </p>
+<ul>
+<li>顶级对象，一般使用独立的collection，区别于内嵌</li>
+<li>线性明细对象如订单里的订单项，一般使用内嵌</li>
+<li>包含关系的对象通常使用内嵌</li>
+<li>多对多的关系通常采用引用，dbref</li>
+<li>只有少量数据的可以单独作为一个collection，这样可以快速缓存到应用服务器内存</li>
+<li>内嵌对象比顶级对象难引用，至少现在还不能对它使用dbref</li>
+<li>内嵌对象的获取有时候会比较难，例如各科分数内嵌到学生对象，从所有学生中获取前100个高分，不内嵌会更简单</li>
+<li>如果内嵌对象数量很多，可以限制其大小</li>
+<li>性能存在问题（应是查询的性能），使用内嵌</li>
+</ul>
+<p>总而言之，数据库的设计需要考虑需求的使用场景，能一次查询到结果的尽量不要分多次进行查询，更多内容可以参考MongoDB官网<a target="_blank" rel="noopener" href="http://docs.mongodb.org/manual/core/data-modeling-introduction/">Data Modeling</a>的章节。  </p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2015/02/26/hello-mongodb/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2015/02/26/hello-mongodb/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

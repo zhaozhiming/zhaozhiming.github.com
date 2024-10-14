@@ -1,0 +1,354 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>高级 RAG 检索策略之递归检索 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="使用递归检索进行高级 RAG 检索"> <!-- TODO: truncate -->
+	<meta name="keywords" content="rag, llamaindex, recursive-retrieve">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">高级 RAG 检索策略之递归检索</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2024-04-09T07:34:44.000Z" itemprop="datePublished">4月 9, 2024</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/llamaindex/">llamaindex</a> <a href="/tags/rag/">rag</a> <a href="/tags/recursive-retrieve/">recursive-retrieve</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2024/04/recursive-retriever.jpeg" class="" width="400" height="300">
+
+<p>随着 LLM（大语言模型）技术的发展，RAG（Retrieval-Augmented Generation）技术在问答、对话等任务中的应用越来越广泛。RAG 技术的一个重要组成部分是文档检索器，它负责从大量的文档中检索出与问题相关的文档，以供 LLM 生成答案。RAG 检索器的效果直接影响到 LLM 生成答案的效果，因此如何设计高效的 RAG 检索器是一个重要的研究课题。目前，有多种 RAG 的检索策略，本文将介绍一种高级的 RAG 检索策略——递归检索，它通过递归的方式检索相关文档，可以提高检索的效果。</p>
+<span id="more"></span>
+
+<h2 id="递归检索介绍"><a href="#递归检索介绍" class="headerlink" title="递归检索介绍"></a>递归检索介绍</h2><p>递归检索相较于普通 RAG 检索，可以解决后者因文档切片过大而导致检索信息不准确的问题，下面是递归检索的流程图：</p>
+<img src="/images/post/2024/04/recursive-retriever-rag.png" class="" width="1000" height="600">
+
+<ul>
+<li>递归检索在原始文档节点基础上，扩展了更多粒度更小的文档节点</li>
+<li>检索文档时如果检索到扩展节点，会递归检索到其原始节点，然后再将原始节点做为检索结果提交给 LLM</li>
+</ul>
+<p>在<a target="_blank" rel="noopener" href="https://www.llamaindex.ai/">LlamaIndex</a>的实现中，递归检索主要有两种方式：块引用的递归检索和元数据引用的递归检索。</p>
+<h2 id="普通-RAG-检索"><a href="#普通-RAG-检索" class="headerlink" title="普通 RAG 检索"></a>普通 RAG 检索</h2><p>在介绍递归检索之前，我们先来看下使用 LlamaIndex 进行普通 RAG 检索的代码示例：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> SimpleDirectoryReader</span><br><span class="line"><span class="keyword">from</span> llama_index.core.node_parser <span class="keyword">import</span> SentenceSplitter</span><br><span class="line"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> VectorStoreIndex</span><br><span class="line"></span><br><span class="line">question = <span class="string">&quot;奥创是由哪两位复仇者联盟成员创造的？&quot;</span></span><br><span class="line"></span><br><span class="line">documents = SimpleDirectoryReader(<span class="string">&quot;./data&quot;</span>).load_data()</span><br><span class="line">node_parser = SentenceSplitter(chunk_size=<span class="number">1024</span>)</span><br><span class="line">base_nodes = node_parser.get_nodes_from_documents(documents)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;base_nodes len: <span class="subst">&#123;<span class="built_in">len</span>(base_nodes)&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> idx, node <span class="keyword">in</span> <span class="built_in">enumerate</span>(base_nodes):</span><br><span class="line">    node.id_ = <span class="string">f&quot;node-<span class="subst">&#123;idx&#125;</span>&quot;</span></span><br><span class="line">base_index = VectorStoreIndex(nodes=base_nodes)</span><br><span class="line">base_retriever = base_index.as_retriever(similarity_top_k=<span class="number">2</span>)</span><br><span class="line">retrievals = base_retriever.retrieve(question)</span><br><span class="line"><span class="keyword">for</span> n <span class="keyword">in</span> retrievals:</span><br><span class="line">    <span class="built_in">print</span>(</span><br><span class="line">        <span class="string">f&quot;Node ID: <span class="subst">&#123;n.node_id&#125;</span>\nSimilarity: <span class="subst">&#123;n.score&#125;</span>\nText: <span class="subst">&#123;n.text[:<span class="number">100</span>]&#125;</span>...\n&quot;</span></span><br><span class="line">    )</span><br><span class="line">response = base_retriever.query(question)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;response: <span class="subst">&#123;response&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;len: <span class="subst">&#123;<span class="built_in">len</span>(response.source_nodes)&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们在<code>data</code>目录中放置维基百科上的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Avenger">复仇者联盟</a>电影剧情来作为我们的文档测试数据</li>
+<li>再使用<code>SentenceSplitter</code>文档解析器对文档进行解析，<code>SentenceSplitter</code>可以尽量保持句子和段落的完整性，默认的<code>chunk_size</code>是 1024</li>
+<li>文档解析器解析后的原始节点 id 默认是一个随机字符串，我们将其格式化为<code>node-&#123;idx&#125;</code>的形式，方便我们后面验证检索结果</li>
+<li>然后创建<code>VectorStoreIndex</code>索引，将原始节点传入，再创建一个检索器<code>base_retriever</code>，设置<code>similarity_top_k=2</code>，表示检索时返回相似度最高的 2 个节点，然后打印出检索到的节点信息</li>
+<li>最后使用检索器对问题生成答案，并打印出答案</li>
+</ul>
+<p>我们来看下程序运行的结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">base_nodes len: 15</span><br><span class="line">Node ID: node-0</span><br><span class="line">Similarity: 0.8425314373498192</span><br><span class="line">Text: 神盾局解散后，由托尼·斯塔克、史蒂芬·罗杰斯、雷神、娜塔莎·罗曼诺夫、布鲁斯·班纳以及克林特·巴顿组成的复仇者联盟负责全力搜查九头蛇的下落，这次透过“盟友”提供的情报而进攻位于东欧的国家“索科维亚”的...</span><br><span class="line"></span><br><span class="line">Node ID: node-1</span><br><span class="line">Similarity: 0.8135015554872678</span><br><span class="line">Text: 奥创来到克劳位于南非的武器船厂获取所有振金，并砍断克劳的左手。复仇者们到达后跟他们正面交锋，但大多数人被旺达用幻象术迷惑，看到各自心中最深层的“阴影”；唯独托尔看见在家乡阿萨神域发生的不明景象。旺达同...</span><br><span class="line"></span><br><span class="line">response: 奥创是由托尼·斯塔克和布鲁斯·班纳这两位复仇者联盟成员创造的。</span><br><span class="line">nodes len: 2</span><br></pre></td></tr></table></figure>
+
+<p>可以看到通过文档解析器解析后的原始节点有 15 个，检索到的节点有 2 个，这两个节点都是原始节点。</p>
+<h2 id="块引用的递归检索"><a href="#块引用的递归检索" class="headerlink" title="块引用的递归检索"></a>块引用的递归检索</h2><p>块引用的递归检索是在普通 RAG 检索的基础上，将每个原始文档节点拆分成更小的文档节点，这些节点跟原始节点是父子关系，当检索到子节点时，会递归检索到其父节点，然后再将父节点为检索结果提交给 LLM。</p>
+<p>下面我们通过代码示例来理解块引用的递归检索，首先我们创建几个 chunk_size 更小的文档解析器：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sub_chunk_sizes = [<span class="number">128</span>, <span class="number">256</span>, <span class="number">512</span>]</span><br><span class="line">sub_node_parsers = [</span><br><span class="line">    SentenceSplitter(chunk_size=c, chunk_overlap=<span class="number">20</span>) <span class="keyword">for</span> c <span class="keyword">in</span> sub_chunk_sizes</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>再通过文档解析器将原始节点解析成子节点：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.schema <span class="keyword">import</span> IndexNode</span><br><span class="line"></span><br><span class="line">all_nodes = []</span><br><span class="line"><span class="keyword">for</span> base_node <span class="keyword">in</span> base_nodes:</span><br><span class="line">    <span class="keyword">for</span> n <span class="keyword">in</span> sub_node_parsers:</span><br><span class="line">        sub_nodes = n.get_nodes_from_documents([base_node])</span><br><span class="line">        sub_inodes = [</span><br><span class="line">            IndexNode.from_text_node(sn, base_node.node_id) <span class="keyword">for</span> sn <span class="keyword">in</span> sub_nodes</span><br><span class="line">        ]</span><br><span class="line">        all_nodes.extend(sub_inodes)</span><br><span class="line"></span><br><span class="line">    original_node = IndexNode.from_text_node(base_node, base_node.node_id)</span><br><span class="line">    all_nodes.append(original_node)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;all_nodes len: <span class="subst">&#123;<span class="built_in">len</span>(all_nodes)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">all_nodes <span class="built_in">len</span>: <span class="number">331</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们使用每个小 chunk 的文档解析器对原始节点进行解析，然后将解析后的子节点和原始节点放入<code>all_nodes</code>列表中</li>
+<li>每个原始节点的 chunk_size 是 1024，如果按照 chunk_size 为 512 大小进行拆分，大概会产生 2 个左右的子节点，如果按照 chunk_size 为 256 大小进行拆分，大概会产生 4 个左右的子节点，如果按照 chunk_size 为 128 大小进行拆分，大概会产生 8 个左右的子节点</li>
+<li>每个子节点<code>node_id</code>属性的值是原始节点的<code>id_</code>，也就是我们之前格式化的<code>node-&#123;idx&#125;</code>，但是子节点的<code>id_</code>属性值还是由 LlamaIndex 生成的随机字符串</li>
+<li>原始节点是一个<code>TextNode</code>类型的节点，我们将其转换成<code>IndexNode</code>类型的节点，并添加到<code>all_nodes</code>列表中，最终产生了 331 个节点</li>
+</ul>
+<img src="/images/post/2024/04/recursive-retriever-chunk.png" class="" width="1000" height="600">
+
+<p>然后我们再创建检索索引，将所有节点传入，先对问题进行一次普通检索，观察普通检索的结果：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">vector_index_chunk = VectorStoreIndex(all_nodes)</span><br><span class="line">vector_retriever_chunk = vector_index_chunk.as_retriever(similarity_top_k=<span class="number">2</span>)</span><br><span class="line">nodes = vector_retriever_chunk .retrieve(question)</span><br><span class="line"><span class="keyword">for</span> node <span class="keyword">in</span> nodes:</span><br><span class="line">    <span class="built_in">print</span>(</span><br><span class="line">        <span class="string">f&quot;Node ID: <span class="subst">&#123;node.node_id&#125;</span>\nSimilarity: <span class="subst">&#123;node.score&#125;</span>\nText: <span class="subst">&#123;node.text[:<span class="number">100</span>]&#125;</span>...\n&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">Node ID: 0e3409e5-6c84-4bbf-886a-40e8553eb463</span><br><span class="line">Similarity: <span class="number">0.8476561735049716</span></span><br><span class="line">Text: 神盾局解散后，由托尼·斯塔克、史蒂芬·罗杰斯、雷神、娜塔莎·罗曼诺夫、布鲁斯·班纳以及克林特·巴顿组成的复仇者联盟负责全力搜查九头蛇的下落，这次透过“盟友”提供的情报而进攻位于东欧的国家“索科维亚”的...</span><br><span class="line"></span><br><span class="line">Node ID: 0ed2ca24-f262-40fe-855b-0eb84c1a1567</span><br><span class="line">Similarity: <span class="number">0.8435371049710689</span></span><br><span class="line">Text: 奥创来到克劳位于南非的武器船厂获取所有振金，并砍断克劳的左手。复仇者们到达后跟他们正面交锋，但大多数人被旺达用幻象术迷惑，看到各自心中最深层的“阴影”；唯独托尔看见在家乡阿萨神域发生的不明景象。旺达同...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>创建<code>VectorStoreIndex</code>索引，将所有节点传入，再创建一个检索器<code>vector_retriever_chunk</code>，设置<code>similarity_top_k=2</code>，表示检索时返回相似度最高的 2 个节点</li>
+<li>在普通检索的结果中，可以看到检索出来 2 个子节点，因为其 Node ID 是随机字符串，而不是我们之前格式化的<code>node-&#123;idx&#125;</code></li>
+</ul>
+<p>我们再来看看使用递归检索的检索结果：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.retrievers <span class="keyword">import</span> RecursiveRetriever</span><br><span class="line"></span><br><span class="line">all_nodes_dict = &#123;n.node_id: n <span class="keyword">for</span> n <span class="keyword">in</span> all_nodes&#125;</span><br><span class="line">retriever_chunk = RecursiveRetriever(</span><br><span class="line">    <span class="string">&quot;vector&quot;</span>,</span><br><span class="line">    retriever_dict=&#123;<span class="string">&quot;vector&quot;</span>: vector_retriever_chunk&#125;,</span><br><span class="line">    node_dict=all_nodes_dict,</span><br><span class="line">    verbose=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line">nodes = retriever_chunk.retrieve(question)</span><br><span class="line"><span class="keyword">for</span> node <span class="keyword">in</span> nodes:</span><br><span class="line">    <span class="built_in">print</span>(</span><br><span class="line">        <span class="string">f&quot;Node ID: <span class="subst">&#123;node.node_id&#125;</span>\nSimilarity: <span class="subst">&#123;node.score&#125;</span>\nText: <span class="subst">&#123;node.text[:<span class="number">1000</span>]&#125;</span>...\n&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">Retrieving <span class="keyword">with</span> query <span class="built_in">id</span> <span class="literal">None</span>: 奥创是由哪两位复仇者联盟成员创造的？</span><br><span class="line">Retrieved node <span class="keyword">with</span> <span class="built_in">id</span>, entering: node-<span class="number">0</span></span><br><span class="line">Retrieving <span class="keyword">with</span> query <span class="built_in">id</span> node-<span class="number">0</span>: 奥创是由哪两位复仇者联盟成员创造的？</span><br><span class="line">Node ID: node-<span class="number">0</span></span><br><span class="line">Similarity: <span class="number">0.8476561735049716</span></span><br><span class="line">Text: 神盾局解散后，由托尼·斯塔克、史蒂芬·罗杰斯、雷神、娜塔莎·罗曼诺夫、布鲁斯·班纳以及克林特·巴顿组成的复仇者联盟负责全力搜查九头蛇的下落，这次透过“盟友”提供的情报而进攻位于东欧的国家“索科维亚”的...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>首先构造一个<code>all_nodes_dict</code>字典，将所有节点的<code>node_id</code>作为 key，节点对象作为 value，这是为了递归检索时能够通过<code>node_id</code>找到对应的节点对象</li>
+<li>再创建一个<code>RecursiveRetriever</code>检索器，将<code>vector_retriever_chunk</code>检索器和<code>all_nodes_dict</code>字典传入，设置<code>verbose=True</code>，表示打印检索过程</li>
+<li>最后对问题进行递归检索，可以看到检索结果是 1 个原始节点，这是因为在之前的普通检索结果中，<strong>2 个子节点的父节点都是同一个原始节点</strong>，所以递归检索时只返回了这个原始节点，而且这个节点的相似度分数跟普通检索结果的第一个节点是一样的：<code>0.8476561735049716</code></li>
+</ul>
+<p>最后使用 LLM 对问题生成答案：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.query_engine <span class="keyword">import</span> RetrieverQueryEngine</span><br><span class="line"></span><br><span class="line">llm = OpenAI(model=<span class="string">&quot;gpt-3.5-turbo&quot;</span>, temperature=<span class="number">0.1</span>)</span><br><span class="line">query_engine_chunk = RetrieverQueryEngine.from_args(retriever_chunk, llm=llm)</span><br><span class="line">response = query_engine_chunk.query(question)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;response: <span class="subst">&#123;<span class="built_in">str</span>(response)&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;nodes len: <span class="subst">&#123;<span class="built_in">len</span>(response.source_nodes)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">response: 奥创是由托尼·斯塔克和布鲁斯·班纳这两位复仇者联盟成员创造的。</span><br><span class="line">nodes <span class="built_in">len</span>: <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到递归检索生成的答案跟普通 RAG 检索生成的答案是一样的。</p>
+<h2 id="元数据引用的递归检索"><a href="#元数据引用的递归检索" class="headerlink" title="元数据引用的递归检索"></a>元数据引用的递归检索</h2><p>基于元数据引用的递归检索和块引用的递归检索类似，只是在解析原始节点时，不是将原始节点进行拆分，而是根据原始节点来生成元数据子节点，然后再将元数据子节点和原始节点一起传入检索索引。</p>
+<p>下面我们通过代码示例来理解元数据引用的递归检索，首先我们创建几个元数据的提取器：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.extractors <span class="keyword">import</span> (</span><br><span class="line">    SummaryExtractor,</span><br><span class="line">    QuestionsAnsweredExtractor,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">extractors = [</span><br><span class="line">    SummaryExtractor(summaries=[<span class="string">&quot;self&quot;</span>], show_progress=<span class="literal">True</span>),</span><br><span class="line">    QuestionsAnsweredExtractor(questions=<span class="number">5</span>, show_progress=<span class="literal">True</span>),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们创建了 2 个元数据提取器，一个是<code>SummaryExtractor</code>，用于生成文档的摘要，另一个是<code>QuestionsAnsweredExtractor</code>，用于生成文档中可以回答的问题</li>
+<li>QuestionsAnsweredExtractor 的参数<code>questions=5</code>表示生成 5 个问题</li>
+<li><code>show_progress=True</code>表示显示提取过程</li>
+<li>这 2 个提取器使用 LLM 进行元数据生成，默认使用的是 OpenAI 的 GPT-3.5-turbo 模型</li>
+</ul>
+<p>然后我们通过元数据提取器将原始节点解析成元数据子节点：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">node_to_metadata = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> extractor <span class="keyword">in</span> extractors:</span><br><span class="line">    metadata_dicts = extractor.extract(base_nodes)</span><br><span class="line">    <span class="keyword">for</span> node, metadata <span class="keyword">in</span> <span class="built_in">zip</span>(base_nodes, metadata_dicts):</span><br><span class="line">        <span class="keyword">if</span> node.node_id <span class="keyword">not</span> <span class="keyword">in</span> node_to_metadata:</span><br><span class="line">            node_to_metadata[node.node_id] = metadata</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            node_to_metadata[node.node_id].update(metadata)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们分别使用 2 种提取器对原始节点进行元数据生成，并将结果保存在 node_to_metadata 字典中</li>
+<li>node_to_metadata 字典的 key 是原始文档的 node_id，value 是原始节点的元数据，包括摘要和问题</li>
+</ul>
+<p>代码执行后 node_to_metadata 的数据结构如下所示：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;node-0&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;section_summary&quot;</span><span class="punctuation">:</span> <span class="string">&quot;...&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;questions_this_excerpt_can_answer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1. ...?\n2. ...?\n3. ...?\n4. ...?\n5. ...?&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;node-1&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;section_summary&quot;</span><span class="punctuation">:</span> <span class="string">&quot;...&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;questions_this_excerpt_can_answer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1. ...?\n2. ...?\n3. ...?\n4. ...?\n5. ...?&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  ......</span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以将 node_to_metadata 的数据保存到文件中，方便后续使用，这样就不用每次都调用 LLM 来生成元数据了。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">save_metadata_dicts</span>(<span class="params">path, data</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(path, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> fp:</span><br><span class="line">        json.dump(data, fp)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_metadata_dicts</span>(<span class="params">path</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(path, <span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> fp:</span><br><span class="line">        data = json.load(fp)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line">save_metadata_dicts(<span class="string">&quot;output/avengers_metadata_dicts.json&quot;</span>, node_to_metadata)</span><br><span class="line">node_to_metadata = load_metadata_dicts(<span class="string">&quot;output/avengers_metadata_dicts.json&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们定义了 2 个方法，一个是<code>save_metadata_dicts</code>，用于将元数据字典保存到文件中，另一个是<code>load_metadata_dicts</code>，用于从文件中加载元数据字典</li>
+<li>我们将元数据字典保存到<code>output/avengers_metadata_dicts.json</code>文件中</li>
+<li>以后重新需要使用元数据字典时，可以使用 load_metadata_dicts 方法直接从文件中加载</li>
+</ul>
+<p>我们再将原始节点和元数据子节点组合成一个新的节点列表：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> copy</span><br><span class="line"></span><br><span class="line">all_nodes = copy.deepcopy(base_nodes)</span><br><span class="line"><span class="keyword">for</span> node_id, metadata <span class="keyword">in</span> node_to_metadata.items():</span><br><span class="line">    <span class="keyword">for</span> val <span class="keyword">in</span> metadata.values():</span><br><span class="line">        all_nodes.append(IndexNode(text=val, index_id=node_id))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;all_nodes len: <span class="subst">&#123;<span class="built_in">len</span>(all_nodes)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">all_nodes <span class="built_in">len</span>: <span class="number">45</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们首先将原始节点拷贝到新的节点列表中</li>
+<li>然后将元数据字典中的摘要和问题作为新的节点，添加到新的节点列表中，并与原始节点进行关联，与其形成父子关系</li>
+<li>最终产生了 45 个节点，其中包括 15 个原始节点和 30 个元数据子节点</li>
+</ul>
+<img src="/images/post/2024/04/recursive-retriever-metadata.png" class="" width="1000" height="600">
+
+<p>我们可以看下新节点列表中<code>node-0</code>原始节点和其子节点的内容：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">node0_nodes = <span class="built_in">list</span>(</span><br><span class="line">    <span class="built_in">filter</span>(</span><br><span class="line">        <span class="keyword">lambda</span> x: x.id_ == <span class="string">&quot;node-0&quot;</span></span><br><span class="line">        <span class="keyword">or</span> (<span class="built_in">hasattr</span>(x, <span class="string">&quot;index_id&quot;</span>) <span class="keyword">and</span> x.index_id == <span class="string">&quot;node-0&quot;</span>),</span><br><span class="line">        all_nodes,</span><br><span class="line">    )</span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;node0_nodes len: <span class="subst">&#123;<span class="built_in">len</span>(node0_nodes)&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> node <span class="keyword">in</span> node0_nodes:</span><br><span class="line">    index_id_str = node.index_id <span class="keyword">if</span> <span class="built_in">hasattr</span>(node, <span class="string">&#x27;index_id&#x27;</span>) <span class="keyword">else</span> <span class="string">&#x27;N/A&#x27;</span></span><br><span class="line">    <span class="built_in">print</span>(</span><br><span class="line">        <span class="string">f&quot;Node ID: <span class="subst">&#123;node.node_id&#125;</span>\nIndex ID: <span class="subst">&#123;index_id_str&#125;</span>\nText: <span class="subst">&#123;node.text[:<span class="number">100</span>]&#125;</span>...\n&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">node0_nodes <span class="built_in">len</span>: <span class="number">3</span></span><br><span class="line">Node ID: node-<span class="number">0</span></span><br><span class="line">Index ID: N/A</span><br><span class="line">Text: 神盾局解散后，由托尼·斯塔克、史蒂芬·罗杰斯、雷神、娜塔莎·罗曼诺夫、布鲁斯·班纳以及克林特·巴顿组成的复仇者联盟负责全力搜查九头蛇的下落，这次透过“盟友”提供的情报而进攻位于东欧的国家“索科维亚”的...</span><br><span class="line"></span><br><span class="line">Node ID: 45d41128-a8e6-4cdc-8ef3-7a71f01ddd96</span><br><span class="line">Index ID: node-<span class="number">0</span></span><br><span class="line">Text: The key topics of the section include the creation of Ultron by Tony Stark <span class="keyword">and</span> Bruce Banner, the <span class="built_in">int</span>...</span><br><span class="line"></span><br><span class="line">Node ID: a06f3bb9-8a57-455f-b0c6-c9602b107158</span><br><span class="line">Index ID: node-<span class="number">0</span></span><br><span class="line">Text: <span class="number">1.</span> What are the names of the Avengers who raid the Hydra facility <span class="keyword">in</span> Sokovia at the beginning of the...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们使用<code>filter</code>函数过滤出<code>node-0</code>的原始节点和其相关联的元数据子节点，共有 3 个节点</li>
+<li>其中第一个是原始节点，第二个是元数据摘要子节点，第三个是元数据问题子节点</li>
+<li>因为元数据提取器使用的是英文模板的提示词，所以生成的元数据子节点的文档是英文的</li>
+</ul>
+<p>然后我们再创建检索索引，将所有节点传入，先对问题进行一次普通检索，观察普通检索的结果：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">vector_index_metadata = VectorStoreIndex(all_nodes)</span><br><span class="line">vector_retriever_metadata = vector_index_metadata.as_retriever(similarity_top_k=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">enginer = vector_index_metadata.as_query_engine(similarity_top_k=<span class="number">2</span>)</span><br><span class="line">nodes = enginer.retrieve(question)</span><br><span class="line"><span class="keyword">for</span> node <span class="keyword">in</span> nodes:</span><br><span class="line">    <span class="built_in">print</span>(</span><br><span class="line">        <span class="string">f&quot;Node ID: <span class="subst">&#123;node.node_id&#125;</span>\nSimilarity: <span class="subst">&#123;node.score&#125;</span>\nText: <span class="subst">&#123;node.text[:<span class="number">100</span>]&#125;</span>...\n&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">Node ID: d2cc032a-b258-<span class="number">4715</span>-b335-ebd1cf80494d</span><br><span class="line">Similarity: <span class="number">0.857976008616706</span></span><br><span class="line">Text: The key topics of the section include the creation of Ultron by Tony Stark <span class="keyword">and</span> Bruce Banner, the <span class="built_in">int</span>...</span><br><span class="line"></span><br><span class="line">Node ID: node-<span class="number">0</span></span><br><span class="line">Similarity: <span class="number">0.8425314373498192</span></span><br><span class="line">Text: 神盾局解散后，由托尼·斯塔克、史蒂芬·罗杰斯、雷神、娜塔莎·罗曼诺夫、布鲁斯·班纳以及克林特·巴顿组成的复仇者联盟负责全力搜查九头蛇的下落，这次透过“盟友”提供的情报而进攻位于东欧的国家“索科维亚”的...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>创建<code>VectorStoreIndex</code>索引，将所有节点传入，再创建一个检索器<code>vector_retriever_metadata</code>，设置<code>similarity_top_k=2</code>，表示检索时返回相似度最高的 2 个节点</li>
+<li>在普通检索的结果中，可以看到检索出来的结果是 2 个节点，第一个是元数据摘要子节点，第二个是原始节点，通过其<code>Node ID</code>可以对是否原始节点进行识别</li>
+</ul>
+<p>上面是普通检索的结果，我们再来看使用递归检索的检索结果：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">all_nodes_dict = &#123;n.node_id: n <span class="keyword">for</span> n <span class="keyword">in</span> all_nodes&#125;</span><br><span class="line">retriever_metadata = RecursiveRetriever(</span><br><span class="line">    <span class="string">&quot;vector&quot;</span>,</span><br><span class="line">    retriever_dict=&#123;<span class="string">&quot;vector&quot;</span>: vector_retriever_metadata&#125;,</span><br><span class="line">    node_dict=all_nodes_dict,</span><br><span class="line">    verbose=<span class="literal">False</span>,</span><br><span class="line">)</span><br><span class="line">nodes = retriever_metadata.retrieve(question)</span><br><span class="line"><span class="keyword">for</span> node <span class="keyword">in</span> nodes:</span><br><span class="line">    <span class="built_in">print</span>(</span><br><span class="line">        <span class="string">f&quot;Node ID: <span class="subst">&#123;node.node_id&#125;</span>\nSimilarity: <span class="subst">&#123;node.score&#125;</span>\nText: <span class="subst">&#123;node.text[:<span class="number">100</span>]&#125;</span>...\n\n&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">Node ID: node-<span class="number">0</span></span><br><span class="line">Similarity: <span class="number">0.857976008616706</span></span><br><span class="line">Text: 神盾局解散后，由托尼·斯塔克、史蒂芬·罗杰斯、雷神、娜塔莎·罗曼诺夫、布鲁斯·班纳以及克林特·巴顿组成的复仇者联盟负责全力搜查九头蛇的下落，这次透过“盟友”提供的情报而进攻位于东欧的国家“索科维亚”的...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这里的代码和之前的块引用的递归检索类似，只是将<code>vector_retriever_chunk</code>替换成了<code>vector_retriever_metadata</code>，然后对问题进行递归检索</li>
+<li>可以看到最终检索出来的结果只有 1 个原始节点，这是因为在之前的普通检索结果中，返回 1 个元数据子节点和1 个原始节点，而<strong>这个子节点的父节点又是这个原始节点</strong>，所以递归检索时只返回了这个原始节点，并且这个原始节点的相似度分数跟普通检索结果的第一个节点相同：<code>0.857976008616706</code></li>
+</ul>
+<p>最后使用 LLM 对问题生成答案：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">query_engine_metadata = RetrieverQueryEngine.from_args(retriever_metadata, llm=llm)</span><br><span class="line">response = query_engine_metadata.query(question)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;response: <span class="subst">&#123;<span class="built_in">str</span>(response)&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;nodes len: <span class="subst">&#123;<span class="built_in">len</span>(response.source_nodes)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">response: 奥创是由托尼·斯塔克和布鲁斯·班纳这两位复仇者联盟成员创造的。</span><br><span class="line">nodes <span class="built_in">len</span>: <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到递归检索生成的答案跟普通 RAG 检索生成的答案是一样的。</p>
+<h2 id="检索效果对比"><a href="#检索效果对比" class="headerlink" title="检索效果对比"></a>检索效果对比</h2><p>我们接下来使用<a target="_blank" rel="noopener" href="https://www.trulens.org/">Trulens</a>来评估普通 RAG 检索、块引用的递归检索和元数据引用的递归检索的效果。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tru.reset_database()</span><br><span class="line">rag_evaluate(base_engine, <span class="string">&quot;base_evaluation&quot;</span>)</span><br><span class="line">rag_evaluate(engine, <span class="string">&quot;recursive_retriever_chunk_evaluation&quot;</span>)</span><br><span class="line">rag_evaluate(engine, <span class="string">&quot;recursive_retriever_metadata_evaluation&quot;</span>)</span><br><span class="line">Tru().run_dashboard()</span><br></pre></td></tr></table></figure>
+
+<p><code>rag_evaluate</code>的具体代码可以看我<a href="https://zhaozhiming.github.io/2024/03/11/sentence-windows-rag/">之前的文章</a>，主要是使用 Trulens 的<code>groundedness</code>，<code>qa_relevance</code>和<code>qs_relevance</code>对 RAG 检索结果进行评估。执行代码后，我们可以在浏览器中看到 Trulens 的评估结果：</p>
+<img src="/images/post/2024/04/rr-evaluate.png" class="" width="1000" height="600">
+
+<p>在评估结果中，我们可以看到两种递归检索都比普通 RAG 检索效果要好，元数据引用的递归检索比块引用的递归检索效果更好一些，但评估结果并不是绝对的，具体的评估效果还要根据实际情况来评估。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>递归检索是一种高级的 RAG 检索策略，开始通过原始文档节点扩展出更多粒度更小的文档节点，这样在检索过程中可以更加准确地检索到相关的文档，然后再通过递归检索找出与之相匹配的原始文档节点。递归检索可以提高 RAG 检索的效果，但是也会增加检索的时间和计算资源，因此在实际应用中需要根据实际情况来选择合适的检索策略。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2024/04/09/recursive-retriever-rag/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2024/04/09/recursive-retriever-rag/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

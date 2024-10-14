@@ -1,0 +1,252 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>科学上网利器Shadowsocks - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="翻墙利器Shadowsocks"> <!-- TODO: truncate -->
+	<meta name="keywords" content="ss,vps">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">科学上网利器Shadowsocks</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2015-11-07T02:31:00.000Z" itemprop="datePublished">11月 7, 2015</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/ss/">ss</a> <a href="/tags/vps/">vps</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2015-11/ss_vultr.jpg" class="" width="400" height="350">  
+<p>前段时间AppStore出了一款神器<a target="_blank" rel="noopener" href="https://itunes.apple.com/cn/app/surge-web-developer-tool-proxy/id1040100637?ls=1&mt=8">Surge</a>，可以让iOS像其他平台使用<a target="_blank" rel="noopener" href="https://github.com/shadowsocks/shadowsocks/wiki">Shadowsocks</a>（以下简称ss）一样地轻松科学上网，因为以前都是用买的SSH或VPN科学上网，所以对自建的VPN服务这一块没有太多关注，甚至错过了ss这种成熟的工具。最近试用了过后觉得非常方便，所以在这里记录一下。</p>
+<span id="more"></span>  
+<h2 id="ss介绍"><a href="#ss介绍" class="headerlink" title="ss介绍"></a>ss介绍</h2><p>简单的说，ss就是帮助你翻过伟大的GFW的一个工具，只要你有一台可以访问国外网站的服务器，你就可以建立自己的VPN服务。它的方案十分完备，有服务端和各种操作系统的客户端，而且还内置了一个路由列表，在访问网站时会自动识别该网站是否需要科学上网，如果需要的则走国外线路，否则走本地线路，非常智能。  </p>
+<h2 id="vps选择"><a href="#vps选择" class="headerlink" title="vps选择"></a>vps选择</h2><p>要搭建自己的VPN，首先需要一台国外的服务器。老牌的vps有<a target="_blank" rel="noopener" href="http://www.linode.com/">Linode</a>和<a target="_blank" rel="noopener" href="https://www.digitalocean.com/">DigitalOcean</a>，都是不错的选择，后起之秀有<a target="_blank" rel="noopener" href="https://www.vultr.com/">vultr</a>，我选择vultr是因为它最近在做活动，每个新用户送50美元，但是50美元需要在2个月内使用完，相当于头2个月可以选择25美元&#x2F;月的服务器，这种价位的服务器性能是很高的。  </p>
+<p>vultr50美元的活动链接是这个：<a target="_blank" rel="noopener" href="https://www.vultr.com/freetrial/">50美元活动</a>，需点击页面中的<code>TRY VULTR CLOUD SERVERS FREE</code>按钮来注册用户，注册之后会要求绑定银行信用卡，绑定成功后vultr会在信用卡上预约扣款2.5美元，放心这个钱后面会退的。因为vultr需要24小时来审核你的账户，vultr要求每个人只能有一个账号，不允许一个人建立多个账号。</p>
+<p>当过了2个月之后，还可以使用其他优惠码来对账户进行充值，优惠码链接请看这里：<a target="_blank" rel="noopener" href="http://vultr.youhuima.cc/">vultr优惠码</a>。</p>
+<h2 id="vps使用"><a href="#vps使用" class="headerlink" title="vps使用"></a>vps使用</h2><p>vps就是一台云服务器，创建的时候要选择机房的物理位置、对应的操作系统和服务器配置，vultr最低的配置是5美元&#x2F;月，对普通的搭搭博客和搭建VPN的需求是绰绰有余了。  </p>
+<img src="/images/post/2015-11/vultr_size.png" class="">  
+<p>搭建完后就可以对机器进行相关的配置了，最常用的就是配置自己的访问电脑<code>SSH KEYS</code>，这样每次ssh登陆就可以不用输入密码了。  </p>
+<img src="/images/post/2015-11/vultr_ssh.png" class="">  
+<h2 id="ss服务端"><a href="#ss服务端" class="headerlink" title="ss服务端"></a>ss服务端</h2><p>搭建ss服务器的说明请看这里：<a target="_blank" rel="noopener" href="https://github.com/shadowsocks/shadowsocks/wiki/Shadowsocks-%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E">ss服务器搭建</a>，操作比较简单，先安装pip，然后再通过pip安装ss，pip是Python的下载包工具，现在的linux操作系统一般都默认安装了Python。  </p>
+<p>然后是设置端口、密码和加密算法，建议用后台方式启动服务，我是用配置文件的方式启动ss服务，这种方式可以将配置信息放在文件中维护。  </p>
+<p>如果连接有问题，可以通过查看日志文件来看是什么问题，文件路径：<code>/var/log/shadowsock.log</code>。  </p>
+<h2 id="ss客户端——android"><a href="#ss客户端——android" class="headerlink" title="ss客户端——android"></a>ss客户端——android</h2><p>ss安卓客户端的下载地址在这里：<a target="_blank" rel="noopener" href="https://github.com/shadowsocks/shadowsocks-android/releases">ss安卓客户端</a>。App中文名字叫<code>影梭</code>，安装完成后打开配置界面，填写服务器ip，远程端口，本地端口，密码和加密方法，这些都是和服务端的配置文件内容一致的，完了点击连接，然后你的手机就可以科学上网了，赶紧把Fackbook, Twitter这些下下来玩一下吧。  </p>
+<img src="/images/post/2015-11/ss_android.jpg" class="" width="200" height="150">  
+<h2 id="ss客户端——mac"><a href="#ss客户端——mac" class="headerlink" title="ss客户端——mac"></a>ss客户端——mac</h2><p>ss在Mac上的客户端在这里：<a target="_blank" rel="noopener" href="https://github.com/shadowsocks/shadowsocks-iOS/wiki/Shadowsocks-for-OSX-%E5%B8%AE%E5%8A%A9">ssMac客户端</a>。下载后直接安装即可，安装完成后在右上角菜单栏有个箭头的Logo就是ss了。如下图所示，进入ss的Server来配置服务端的信息。  </p>
+<img src="/images/post/2015-11/ss_mac.png" class="" width="200" height="150">  
+<p>配置完成后，点击<code>Turn Shadowsocks On</code>就可以开启ss客户端了，然后在Chrome浏览器中安装SwitchySharp插件，配置信息如下，以后只要选择了这个代理就可以科学上网了。  </p>
+<img src="/images/post/2015-11/chrome_proxy.png" class="" width="400" height="350">  
+<h2 id="proxifier"><a href="#proxifier" class="headerlink" title="proxifier"></a>proxifier</h2><p>在Mac上安装了ss的客户端之后，虽然可以通过浏览器科学上网了，但是如果想让其他软件，比如邮箱，terminal等也能科学上网的话，就需要将你的ss代理全局化了。这里介绍一个软件<a target="_blank" rel="noopener" href="https://www.proxifier.com/">proxifier</a>，它可以很方便地将ss的服务设置为全局服务。  </p>
+<ul>
+<li>首先创建代理</li>
+</ul>
+<img src="/images/post/2015-11/proxy_create.png" class="" width="400" height="350">  
+<ul>
+<li>然后再创建规则，注意这时要将Mac上的ss客户端ShadowsocksX设为<code>直连</code>，其他应用设为走ss代理。</li>
+</ul>
+<img src="/images/post/2015-11/proxy_rule.png" class="" width="400" height="350">  
+<ul>
+<li>最后观看proxifier的连接信息，就可以看到电脑上应用的网络连接信息了。</li>
+</ul>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2015/11/07/use-shadowsocks-and-vps/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2015/11/07/use-shadowsocks-and-vps/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

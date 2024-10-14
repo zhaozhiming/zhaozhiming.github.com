@@ -1,0 +1,272 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>内存管理速成教程 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="内存管理速成教程"> <!-- TODO: truncate -->
+	<meta name="keywords" content="内存管理">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">内存管理速成教程</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2017-06-20T11:29:00.000Z" itemprop="datePublished">6月 20, 2017</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/内存管理/">内存管理</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2017/06/01_07.png" class="" width="400" height="350">
+
+<p>我一直很佩服那些能将复杂原理讲得通俗易懂的人，<a target="_blank" rel="noopener" href="http://code-cartoons.com/">Lin Clark 女神</a> 就是其中一个，拜读完她新发布的系列文章“通俗漫画介绍 SharedArrayBuffers”之后，深深为之折服，文章不仅一如既往地通俗易懂，作者亲自画的图更是和文章相得益彰。看完萌生出了翻译该系列文章的想法，不过本人英文能力有限，如果觉得翻译地不好的还请看英文原版，英文版也是很容易理解的。</p>
+<p>这是 3 篇文章中的第一篇：</p>
+<ul>
+<li>内存管理速成教程</li>
+<li><a href="https://zhaozhiming.github.io/2017/06/20/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers-zh/">通俗漫画介绍 ArrayBuffers 和 SharedArrayBuffers</a></li>
+<li><a href="https://zhaozhiming.github.io/2017/06/21/avoiding-race-conditions-in-sharedarraybuffers-with-atomics-zh/">在 Sharedarraybuffers 中使用 Atomics 来避免竞态条件</a></li>
+</ul>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://hacks.mozilla.org/2017/06/a-crash-course-in-memory-management/">A crash course in memory management</a></p>
+<span id="more"></span>
+
+<h1 id="内存管理速成教程"><a href="#内存管理速成教程" class="headerlink" title="内存管理速成教程"></a>内存管理速成教程</h1><p>为了搞明白我们为什么把 SharedArrayBuffer 加入到 JavaScript，你首选需要搞懂一点关于内存管理方面的知识。  </p>
+<p>你可以把机器中的内存想象成一堆盒子，我觉得这个有点像你工作中的办公邮箱，或者学校学生的储物柜。  </p>
+<p>如果你想给学生们留一些东西，你可以把东西放到盒子里面。  </p>
+<img src="/images/post/2017/06/01_01.png" class="" width="400" height="350">
+<p>在每个盒子旁边都有一个数字，这就是内存地址，这用来让你告诉别人留给他们的东西在哪个位置。  </p>
+<p>每个盒子都有相同的大小，能容纳一定量的信息。盒子的容量指定给了机器，这个容量就叫字长。字长一般是 32 位或者 64 位，但为了让它容易演示，我会使用 8 位的字长。  </p>
+<img src="/images/post/2017/06/01_02.png" class="" width="400" height="350">
+<p>如果我们想要把数字 2 放到其中的一个盒子里，我们可以很容易地做到，因为数字很容易<a target="_blank" rel="noopener" href="https://www.khanacademy.org/math/algebra-home/alg-intro-to-algebra/algebra-alternate-number-bases/v/decimal-to-binary">表现成二进制</a>。  </p>
+<img src="/images/post/2017/06/01_03.png" class="" width="400" height="350">
+<p>如果我们想要放一个不是数字的东西呢？比如字母 H ？  </p>
+<p>我们需要一个方法将其展示成数字，为了做到这一点，我们需要编码格式，比如 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/UTF-8">UTF-8</a>，然后我们需要一个东西将其转换成数字。比如一个编码环，这样我们就可以存储它了。  </p>
+<img src="/images/post/2017/06/01_04.png" class="" width="400" height="350">
+<p>当我们想要从盒子中取出它时，我们需要一个解码器将其转换回字符 H 。  </p>
+<h2 id="自动内存管理"><a href="#自动内存管理" class="headerlink" title="自动内存管理"></a>自动内存管理</h2><p>当你使用 JavaScript 时，实际上你不需要过多考虑内存的事情，它是远离你的一个抽象概念，这意味着你不会直接和内存打交道。  </p>
+<p>JS 引擎作为一个中间人的角色来代替你打交道，它替你管理着内存。  </p>
+<img src="/images/post/2017/06/01_05.png" class="" width="400" height="350">
+<p>让我们写一些 JS 代码，比如 React，需要创建一个变量。  </p>
+<img src="/images/post/2017/06/01_06.png" class="" width="400" height="350">
+<p>JS 引擎做的事情就是运行通过编码器转换成二进制表示的值。  </p>
+<img src="/images/post/2017/06/01_07.png" class="" width="400" height="350">
+<p>然后它找到可以存放二进制表示值的空间，这个过程叫做分配内存。  </p>
+<img src="/images/post/2017/06/01_08.png" class="" width="400" height="350">
+<p>然后，引擎会跟踪这个变量是否仍然在程序中被引用，如果变量不在被使用，内存将被回收，这样 JS 引擎就可以存放新的值了。  </p>
+<img src="/images/post/2017/06/01_09.png" class="" width="400" height="350">
+<p>观察内存中的变量（包括字符串，对象和其他类型的值），当它们不再有用的时候清除它们的过程，叫做垃圾回收。 </p>
+<p>像 JavaScript 这种不用直接处理内存的语言，叫做内存自动管理语言。  </p>
+<p>内存自动管理可以让开发人员开发程序更加简单，但也增加了程序的开销，这些开销有时候会让性能变得不可预测。  </p>
+<h2 id="手动管理内存"><a href="#手动管理内存" class="headerlink" title="手动管理内存"></a>手动管理内存</h2><p>手动管理内存的语言不一样。举个例子，让我们看一下如果用 C 语言来写 React 的话（现在可以使用 WebAssembly 做到这一点），将如何处理内存。  </p>
+<p>C 语言没有像 JavaScript 那样有一个抽象层来管理内存，相反，你可以直接操作内存，你可以从内存中加载数据，你也可以直接在内存中存储数据。  </p>
+<img src="/images/post/2017/06/01_10.png" class="" width="400" height="350">
+<p>当你编译 C 或者其他语言成 WebAssembly 时，你使用的工具会添加一些辅助代码到你的 WebAssembly，例如添加编码和解码二进制字节的代码。这个代码叫做运行时环境。运行时代码会做一些像 JS 引擎在 JS 中做的事情。  </p>
+<img src="/images/post/2017/06/01_11.png" class="" width="400" height="350">
+<p>但对于一个手动管理内存语言来说，运行期不包括垃圾回收。  </p>
+<p>这并不意味着你什么事情都要自己做，即使是在手动管理内存语言里，你也会常受到语言运行期的帮助，拿 C 语言来说，运行期会跟踪自由列表中打开的内存地址。  </p>
+<img src="/images/post/2017/06/01_12.png" class="" width="400" height="350">
+
+<p>你可以使用<code>malloc</code>方法（内存分配）来让运行期找到哪些内存地址可以来存放你的数据，这将从自由列表中取出这些地址，当你处理完这些数据，你必须使用<code>free</code>方法来释放内存，然后这些地址将重新回到自由列表中。  </p>
+<p>你必须计算出什么时候来调用这些方法，这就是为什么我们叫它做手动内存管理了，你要自己来管理内存。  </p>
+<p>对于一个开发人员来说，计算出什么时候该释放哪个区域的内存是很难的，如果你的计算时间出错了，那么将可能引发缺陷甚至会导致一个安全漏洞，如果你不释放内存，那么内存终将会耗尽。  </p>
+<p>这就是为什么很多现代语言会使用自动内存管理，为了避免人为的错误，但这也带来了性能上的开销，我会在<a href="http://zhaozhiming.github.io/blog/2017/06/20/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers-zh/">下一篇文章</a> 讲更多这方面的内容。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2017/06/20/a-crash-course-in-memory-management-zh/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2017/06/20/a-crash-course-in-memory-management-zh/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>Langchain ChatChat 本地知识库问答系统部署 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="Langchain ChatChat 本地知识库问答系统部署"> <!-- TODO: truncate -->
+	<meta name="keywords" content="langchain, chatglm">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">Langchain ChatChat 本地知识库问答系统部署</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-08-17T03:10:02.000Z" itemprop="datePublished">8月 17, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/langchain/">langchain</a> <a href="/tags/chatglm/">chatglm</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/08/langchain-chatchat.jpeg" class="" width="400" height="300">
+
+<p>之前写了一篇文章介绍<a href="https://zhaozhiming.github.io/2023/07/12/deploy-langchain-chatglm-on-cloud%20gpu/">Langchain-ChatGLM 项目的部署</a>，最近该项目更新了<code>0.2</code>新版本，这个版本与之前的版本差别很大，底层的架构发生了很大的变化。该项目最早是基于 ChatGLM 这个 LLM（大语言模型）来搭建的，但后来集成的 LLM 越来越多, (我估计）项目团队也借此机会将项目名称改成了<code>Langchain-Chatchat</code>。版本更新之后，项目的部署方式也发生了变化，之前的部署方式已经不适用了，这里我将介绍一下新版本的部署方式。</p>
+<span id="more"></span>
+
+<h2 id="机器配置"><a href="#机器配置" class="headerlink" title="机器配置"></a>机器配置</h2><p>项目的部署需要一台 GPU 服务器，不管是云服务器还是本地服务器都可以，但是需要注意的是，服务器至少需要<strong>16G 的显存</strong>，太低的话项目会运行不起来。</p>
+<p>关于云 GPU 服务器的选择可以参考我之前的<a href="https://zhaozhiming.github.io/2023/07/12/deploy-langchain-chatglm-on-cloud%20gpu/">文章</a>，这里不再赘述。</p>
+<p>我选择的是在 AutoDL 服务器上部署。</p>
+<h2 id="项目更新内容"><a href="#项目更新内容" class="headerlink" title="项目更新内容"></a>项目更新内容</h2><p>Langchain-Chatchat 项目的更新内容可以参考<a target="_blank" rel="noopener" href="https://github.com/chatchat-space/Langchain-Chatchat/releases/tag/v0.2.0">这里</a>，主要有以下几点：</p>
+<h3 id="使用-FastChat-提供开源-LLM-模型的-API"><a href="#使用-FastChat-提供开源-LLM-模型的-API" class="headerlink" title="使用 FastChat 提供开源 LLM 模型的 API"></a>使用 FastChat 提供开源 LLM 模型的 API</h3><p><a target="_blank" rel="noopener" href="https://github.com/lm-sys/FastChat">FastChat</a>是一个用于训练和评估遵循指令 LLM 的框架，可以将 LLM 部署为带有标准应用程序编程接口（API）的软件服务。</p>
+<p>这个改动带来的最大变化就是，原来是部署 1 个服务（WebUI），现在需要部署 3 个服务，分别是 LLM API 服务、Langchain Chatchat 本身的 API 服务和 WebUI 服务，这样的好处是可以将原先的内部服务都解耦出来，用户可以选择不同的服务来构建自己的应用。比如你的项目只需要用到 LLM，那么你只需要部署 LLM API 服务就可以了；或者是你想用自己的前端服务，那么你只需要部署 2 个 API 服务，然后自己写一个前端服务就可以。</p>
+<h3 id="接口参数根据-OpenAI-API-接口形式接入"><a href="#接口参数根据-OpenAI-API-接口形式接入" class="headerlink" title="接口参数根据 OpenAI API 接口形式接入"></a>接口参数根据 OpenAI API 接口形式接入</h3><p>接口参数根据 OpenAI API 接口形式接入，让请求参数更加合理。比如以前对话 API 中的<code>对话历史</code>参数是一个二维数组，跟我们熟悉的 OpenAI API 参数差别很大，可以看下面的例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 原 Langchain ChatGLM 的对话历史参数</span><br><span class="line">history: [[&quot;你好&quot;, &quot;你好，有什么可以帮到你&quot;], [&quot;1 加 1 等于几&quot;, &quot;2&quot;]]</span><br><span class="line"></span><br><span class="line"># OpenAI 的对话历史参数</span><br><span class="line">messages: [&#123; &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;你好&quot; &#125;, &#123; &quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;你好，有什么可以帮到你&quot; &#125;]</span><br><span class="line"></span><br><span class="line"># 新版 Langchain Chatchat 的对话历史参数</span><br><span class="line">history: [&#123; &quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;你好&quot; &#125;, &#123; &quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;你好，有什么可以帮到你&quot; &#125;]</span><br></pre></td></tr></table></figure>
+
+<p>可以看到原来的参数形式是一个二维数组，每轮对话都会放到一个子数组中，包含用户和 AI 的对话信息，而 OpenAI 的参数形式是一个对象数组，每个对象包含对话的角色和对话的内容，这样的数据结构程序会更容易处理，新版的参数形式改成了 OpenAI 的这种形式，虽然字段名有些不一样。</p>
+<h3 id="使用-Streamlit-提供-WebUI-服务"><a href="#使用-Streamlit-提供-WebUI-服务" class="headerlink" title="使用 Streamlit 提供 WebUI 服务"></a>使用 Streamlit 提供 WebUI 服务</h3><p>原先是用<code>Gadio</code>来编写 WebUI 页面的，现在改成了<code>Streamlit</code>，<code>Streamlit</code>提供了创建更复杂应用程序的能力，而且它提供了丰富的组件库，并支持自定义组件，可以看到新版的页面更加美观。</p>
+<h3 id="项目中默认-LLM-模型改为-CHATGLM2-6B"><a href="#项目中默认-LLM-模型改为-CHATGLM2-6B" class="headerlink" title="项目中默认 LLM 模型改为 CHATGLM2-6B"></a>项目中默认 LLM 模型改为 CHATGLM2-6B</h3><p>原来默认用的 LLM 是 ChatGLM-6B，现在改成了 ChatGLM2-6B，ChatGLM2-6B 是开源中英双语对话模型 ChatGLM-6B 的第二代版本，在保留了初代模型对话流畅、部署门槛较低等众多优秀特性的基础之上，增加了更强大的性能，更长的上下文，更高效的推理和更开发的协议。</p>
+<h3 id="默认-Embedding-模型改为-M3E-BASE"><a href="#默认-Embedding-模型改为-M3E-BASE" class="headerlink" title="默认 Embedding 模型改为 M3E-BASE"></a>默认 Embedding 模型改为 M3E-BASE</h3><p>原来的 Embedding 模型是 <a target="_blank" rel="noopener" href="https://huggingface.co/GanymedeNil/text2vec-large-chinese">GanymedeNil&#x2F;text2vec-large-chinese</a>，现在改成了<a target="_blank" rel="noopener" href="https://huggingface.co/moka-ai/m3e-base">moka-ai&#x2F;m3e-base</a>，TEXT2VEC 和 M3E-BASE 都支持中文，但 M3E-BASE 对英文的支持更好，文件加载方式与文段划分方式也有调整，后续将重新实现上下文扩充，并增加可选设置。</p>
+<h2 id="项目部署"><a href="#项目部署" class="headerlink" title="项目部署"></a>项目部署</h2><p>下面我们开始来部署 Langchain-Chatchat 项目。</p>
+<h3 id="项目初始化"><a href="#项目初始化" class="headerlink" title="项目初始化"></a>项目初始化</h3><p>下载项目代码，同时安装依赖，注意新版的依赖文件有 3 个，一个是 API 服务的依赖文件 <code>requirements_api.txt</code>，一个是 WebUI 服务的依赖文件 <code>requirements_webui.txt</code>，还有一个是整个项目的依赖文件 <code>requirements.txt</code>，因为我们前后端都要部署，所以我们要用整个项目的依赖文件来安装依赖：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/chatchat-space/Langchain-Chatchat.git</span><br><span class="line"><span class="built_in">cd</span> Langchain-Chatchat</span><br><span class="line">pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple <span class="comment"># 照例加上百度源提高下载速度</span></span><br></pre></td></tr></table></figure>
+
+<p>如果是第一次运行本项目，需要通过以下命令来初始化知识库：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python init_database.py --recreate-vs</span><br></pre></td></tr></table></figure>
+
+<h3 id="模型下载"><a href="#模型下载" class="headerlink" title="模型下载"></a>模型下载</h3><p>下载 ChatGLM2-6B 和 M3E-BASE 模型，这两个模型都在 HuggingFace 上，可以直接克隆仓库：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 开启大文件下载</span></span><br><span class="line">git lfs install</span><br><span class="line"><span class="comment"># 下载 ChatGLM2-6B</span></span><br><span class="line">git <span class="built_in">clone</span> https://huggingface.co/THUDM/chatglm2-6b</span><br><span class="line"><span class="comment"># 下载 M3E-BASE</span></span><br><span class="line">git <span class="built_in">clone</span> https://huggingface.co/moka-ai/m3e-base</span><br></pre></td></tr></table></figure>
+
+<h3 id="项目配置修改"><a href="#项目配置修改" class="headerlink" title="项目配置修改"></a>项目配置修改</h3><p>模型下载完成后接着修改配置文件，新版的项目提供了一个配置文件模板<code>model_config.py.example</code>文件，需要将其复制一份并重命名为<code>model_config.py</code>，然后修改里面的配置项：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> Langchain-Chatchat</span><br><span class="line"><span class="built_in">cp</span> configs/model_config.py.example configs/model_config.py</span><br></pre></td></tr></table></figure>
+
+<p>然后修改<code>model_config.py</code>文件中的配置项，将模型的路径改成你自己的路径：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">embedding_model_dict = &#123;</span><br><span class="line"><span class="deletion">-  &quot;m3e-base&quot;: &quot;moka-ai/m3e-base&quot;,</span></span><br><span class="line"><span class="addition">+  &quot;m3e-base&quot;: &quot;/你的下载路径/m3e-base&quot;,</span></span><br><span class="line"></span><br><span class="line">llm_model_dict = &#123;</span><br><span class="line">    &quot;chatglm2-6b&quot;: &#123;</span><br><span class="line"><span class="deletion">-       &quot;local_model_path&quot;: &quot;THUDM/chatglm2-6b&quot;,</span></span><br><span class="line"><span class="addition">+       &quot;local_model_path&quot;: &quot;/你的下载地址/chatglm2-6b&quot;,</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="LLM-API-服务部署"><a href="#LLM-API-服务部署" class="headerlink" title="LLM API 服务部署"></a>LLM API 服务部署</h3><p>执行以下命令启动 LLM API 服务：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python server/llm_api.py</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong> <code>llm_api.py</code> 中的<code>openai_api_port</code>端口要和<code>configs/model_config.py</code>中 LLM 的服务端口保持一致，否则接口调用会报错。另外如果你是在<code>AutoDL</code>的服务器上部署的话，服务器的<code>8888</code>端口会被<code>Juypter</code>服务占用，建议改成其他端口，代码实例如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># llm_api.py</span></span><br><span class="line">openai_api_port = 7777 <span class="comment"># 如果你是用AutoDL服务器的话，这个端口不要用8888</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># configs/model_config.py</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;chatglm-6b&quot;</span>: &#123;</span><br><span class="line">   <span class="string">&quot;local_model_path&quot;</span>: <span class="string">&quot;/你的下载地址/chatglm-6b&quot;</span>,</span><br><span class="line">   <span class="string">&quot;api_base_url&quot;</span>: <span class="string">&quot;http://localhost:7777/v1&quot;</span>,  <span class="comment"># 这里的端口要和上面的openai_api_port保持一致</span></span><br><span class="line">   <span class="string">&quot;api_key&quot;</span>: <span class="string">&quot;EMPTY&quot;</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+<p>服务启动后，实际会启动 3 个子服务，端口分别是<code>8888</code>（上面我们改成了<code>7777</code>）、<code>20001</code>、<code>20002</code>，其中<code>8888</code>端口的服务是 LLM 的接口服务，里面提供了文本推理、embedding、token 检查等接口，跟 OpenAI 的接口十分相似。其他 2 个端口的服务我理解是对 LLM 服务的一些监控和管理。</p>
+<p>如果启动服务后发现调用接口异常，可以在本地通过 curl 命令对<code>8888</code>端口的服务进行测试。</p>
+<h3 id="API-服务部署"><a href="#API-服务部署" class="headerlink" title="API 服务部署"></a>API 服务部署</h3><p>执行以下命令启动 API 服务：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python server/api.py</span><br></pre></td></tr></table></figure>
+
+<p>这个服务主要提供了 Langchain Chatchat 的功能接口，包括 LLM 问答、知识库问答、知识库管理等接口。同样地，我们也可以通过 curl 命令对该服务进行测试，服务的端口默认是 <code>7861</code>。</p>
+<h3 id="WebUI-服务部署"><a href="#WebUI-服务部署" class="headerlink" title="WebUI 服务部署"></a>WebUI 服务部署</h3><p>最后是启动 WebUI 服务，执行以下命令启动 WebUI 服务，默认的端口号是<code>8501</code>，可以通过<code>--server.port</code>参数来修改端口：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">streamlit run webui.py --server.port 6006</span><br></pre></td></tr></table></figure>
+
+<p>我在启动 WebUI 服务时还遇到一个问题，就是启动服务时报了<code>protobuf</code>这个依赖包版本不对的错误，导致 Web 服务启动失败，后面我将<code>protobuf</code>的版本降级成了<code>3.20.3</code>就可以正常启动了。</p>
+<p>启动后可以通过浏览器访问 WebUI 服务，界面如下所示：</p>
+<img src="/images/post/2023/08/chatchat-ui.png" class="" width="1000" height="600">
+
+<h2 id="其他未测试的部署方式"><a href="#其他未测试的部署方式" class="headerlink" title="其他未测试的部署方式"></a>其他未测试的部署方式</h2><p>因为项目新版本才刚发布，我还没有对所有部署方式进行试用，比如对于 API 服务，除了单独启动服务外，还有一个<code>api_allinone.py</code>的文件，我理解是用来同时启动 LLM API 服务和 API 服务的。还有一个<code>webui_allinone.py</code>的文件，应该是用来同时启动所有服务的。这些功能可以让我们更加方便的部署项目，大家可以自行验证这些部署方式。</p>
+<p>由于新版本刚发布，新版本的功能可能存在不少问题，在项目的 issue 区可以看到大量新版本的问题，包括服务启动不起来，或者是启动起来之后 Web 页面没有反应等问题，这些问题应该都是可以解决的，只是需要再给项目团队一些时间。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>AI 知识库问答系统是一个很有前景的方向，它是对传统知识库系统的一种升级，相信在未来会有很多垂直领域的公司会用到这个技术。从 Langchain Chatchat 项目的发展过程上来看，项目从原来的一个 demo 级别的项目，逐渐向一个完整的产品迈进，在架构、UI 界面、LLM 集成方面也在不断完善，我相信这是一个未来可期的项目。而对于那些还在用老版本的小伙伴，建议尽快升级到新版本，因为项目团队以后的主要精力都会放在新版本的开发上，老版本的功能可能不会再更新了。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2023/08/17/deploy-langchain-chatchat/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2023/08/17/deploy-langchain-chatchat/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

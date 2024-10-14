@@ -1,0 +1,392 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>Semantic Kernel —— LangChain 的替代品？ - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="Semantic Kernel —— LangChain 的替代品？"> <!-- TODO: truncate -->
+	<meta name="keywords" content="semantic-kernel, semantic function, native function, planner, ReAct, langchain">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">Semantic Kernel —— LangChain 的替代品？</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-10-02T06:02:51.000Z" itemprop="datePublished">10月 2, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/langchain/">langchain</a> <a href="/tags/semantic-kernel/">semantic-kernel</a> <a href="/tags/semantic-function/">semantic function</a> <a href="/tags/native-function/">native function</a> <a href="/tags/planner/">planner</a> <a href="/tags/ReAct/">ReAct</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/10/semantic-kernel.png" class="" width="400" height="300">
+
+<p>微软在 AI 领域的探索和投入从未间断，它不仅在前期对 OpenAI 进行了大量投资 ，还在其搜索引擎 Bing 和云服务 Azure 上集成了 ChatGPT，以增强用户体验和服务能力。最近，微软更是推出了一个名为 Semantic Kernel 的 AI 应用开发工具，旨在与 LangChain 竞争，展现了其在 AI 应用开发领域的持续创新和努力。今天我们就来了解下 Semantic Kernel 的特点和功能，以及它与 LangChain 的区别。</p>
+<span id="more"></span>
+
+<h2 id="Semantic-Kernel-是什么"><a href="#Semantic-Kernel-是什么" class="headerlink" title="Semantic Kernel 是什么"></a>Semantic Kernel 是什么</h2><p><a target="_blank" rel="noopener" href="https://github.com/microsoft/semantic-kernel">Semantic Kernel</a> 是一个开源的软件开发套件，允许开发者将 AI 服务与传统编程语言结合起来，创建可以整合两者优势的 AI 应用。它位于 AI 应用架构的中心，允许开发者编排 AI 插件，同时扩展现有应用的功能。它为开发者提供了灵活集成 AI 服务到现有应用的能力，包括通过插件添加功能和扩展功能。为了简化创建人工智能应用程序的过程，出现了像 LangChain 这样的开源项目。Semantic Kernel 是微软在这个领域的贡献，旨在支持希望将人工智能集成到现有应用程序中的企业应用程序开发人员。</p>
+<p>这是官方的介绍，我们还是通过一些实际的例子来了解 Semantic Kernel，看它是否能否达到 LangChain 一样的功能。</p>
+<h2 id="集成-AI-模型"><a href="#集成-AI-模型" class="headerlink" title="集成 AI 模型"></a>集成 AI 模型</h2><p>目前 Semantic Kernel 支持的 AI 模型包括 OpenAI，Azure OpenAI 以及 HuggingFace 上的模型。OpenAI 和 Azure OpenAI 模型可以通过 Semantic Kernel 的<code>add_chat_service</code>方法来接入，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> semantic_kernel <span class="keyword">as</span> sk</span><br><span class="line"><span class="keyword">from</span> semantic_kernel.connectors.ai.open_ai <span class="keyword">import</span> OpenAIChatCompletion, AzureChatCompletion</span><br><span class="line"></span><br><span class="line">kernel = sk.Kernel()</span><br><span class="line"><span class="comment"># 集成 OpenAI 模型</span></span><br><span class="line">api_key, org_id = sk.openai_settings_from_dot_env()</span><br><span class="line">kernel.add_chat_service(<span class="string">&quot;OpenAI_chat_gpt&quot;</span>, OpenAIChatCompletion(<span class="string">&quot;gpt-3.5-turbo&quot;</span>, api_key, org_id))</span><br><span class="line"><span class="comment"># 集成 Azure OpenAI 模型</span></span><br><span class="line">deployment, api_key, endpoint = sk.azure_openai_settings_from_dot_env()</span><br><span class="line">kernel.add_chat_service(<span class="string">&quot;Azure_curie&quot;</span>, AzureChatCompletion(deployment, endpoint, api_key))</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码中，我们分别接入 OpenAI 和 Azure OpenAI 的模型来作为 Semantic Kernel 的 2 个聊天服务，模型所需的参数是从环境变量中获取，可以在项目根目录下创建一个<code>.env</code>文件来存放环境变量，示例代码如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">OPENAI_API_KEY=&quot;&quot;</span></span><br><span class="line"><span class="string">OPENAI_ORG_ID=&quot;&quot;</span></span><br><span class="line"><span class="string">AZURE_OPENAI_DEPLOYMENT_NAME=&quot;&quot;</span></span><br><span class="line"><span class="string">AZURE_OPENAI_ENDPOINT=&quot;&quot;</span></span><br><span class="line"><span class="string">AZURE_OPENAI_API_KEY=&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>而要接入 HuggingFace 上的模型则需要通过 transformers 库来实现，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> semantic_kernel <span class="keyword">as</span> sk</span><br><span class="line"><span class="keyword">import</span> semantic_kernel.connectors.ai.hugging_face <span class="keyword">as</span> sk_hf</span><br><span class="line"></span><br><span class="line">kernel = sk.Kernel()</span><br><span class="line">kernel.add_text_completion_service(</span><br><span class="line">    <span class="string">&quot;gpt2&quot;</span>, sk_hf.HuggingFaceTextCompletion(<span class="string">&quot;gpt2&quot;</span>, task=<span class="string">&quot;text-generation&quot;</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>使用 Semantic Kernel 添加 HuggingFace 上模型，会根据模型名称从 HuggingFace 上下载模型，或者根据模型的文件路径加载模型，跟接入 OpenAI 模型不同的地方是，接入 HuggingFace 模型需要在本地机器上运行模型，这往往意味着需要昂贵的 GPU 资源，而 OpenAI 模型是运行在 OpenAI 的服务器上，本地只是调用其 API 接口。</p>
+<p>目前 Semantic Kernel 只支持以上这些模型的接入，相对于 LangChain 来说可接入的模型还是比较少的，LangChain 最大的好处是可以通过兼容 OpenAI API 的接口来接入本地的 LLM（大语言模型），这对于企业来说是非常有吸引力的，对于 LangChain 如何集成本地 LLM 可以参考我之前的<a href="https://zhaozhiming.github.io/2023/09/11/langchain-custom-llm/">这篇文章</a>。</p>
+<h2 id="语义函数-vs-自然函数"><a href="#语义函数-vs-自然函数" class="headerlink" title="语义函数 vs. 自然函数"></a>语义函数 vs. 自然函数</h2><p>Semantic Kernel 中的<strong>语义函数</strong>和<strong>自然函数</strong>是开发者创建自定义插件的两种方式。语义函数是用逻辑语言模型创建的，而自然函数则是用传统编程语言如 Python 编写的。语义函数通常用于处理与 AI 交互的任务，而自然函数则更适用于执行常规编程任务和集成现有应用。</p>
+<h3 id="语义函数"><a href="#语义函数" class="headerlink" title="语义函数"></a>语义函数</h3><p>每个语义函数都会有 2 个文件——提示词模板文件和配置文件，我们来看一个<strong>讲笑话</strong>的语义函数例子，首先是提示词文件<code>skprompt.txt</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">请精确地写出一个关于以下主题的笑话或幽默故事：</span><br><span class="line"></span><br><span class="line">笑话必须要符合以下要求：</span><br><span class="line">- 简短，不超过100字</span><br><span class="line">- 安全适用于职场和家庭</span><br><span class="line">不得包含性别歧视、种族歧视或其他偏见/偏执行为。</span><br><span class="line"></span><br><span class="line">请发挥创意，制造欢乐。我想笑一笑。</span><br><span class="line">如果提供了风格建议，请将其融入其中：&#123;&#123;$style&#125;&#125;</span><br><span class="line">+++++</span><br><span class="line"></span><br><span class="line">&#123;&#123;$input&#125;&#125;</span><br><span class="line">+++++</span><br></pre></td></tr></table></figure>
+
+<p>可以看到在提示词模板文件中用自然语言描述了这个语义函数的功能，像普通函数一样，语义函数也有参数，参数用<code>&#123;&#123;$&#125;&#125;</code>符号来表示，这里的参数有 2 个，一个是<code>input</code>，一个是<code>style</code>，这些参数会在配置文件中定义。我们再来看配置文件<code>config.json</code>：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;schema&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;生成一个有趣的笑话&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;completion&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;completion&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;max_tokens&quot;</span><span class="punctuation">:</span> <span class="number">1000</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;temperature&quot;</span><span class="punctuation">:</span> <span class="number">0.9</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;top_p&quot;</span><span class="punctuation">:</span> <span class="number">0.0</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;presence_penalty&quot;</span><span class="punctuation">:</span> <span class="number">0.0</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;frequency_penalty&quot;</span><span class="punctuation">:</span> <span class="number">0.0</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;parameters&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;input&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;笑话主题&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;defaultValue&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;style&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;提示你想要的笑话风格&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;defaultValue&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>配置文件中定义了了这个语义函数的功能描述，LLM 的相关参数（temperature、top_p 等），以及语义函数的参数，这里的重点是几个<code>description</code>字段，这是让 LLM 决定是否调用该语义函数的关键。</p>
+<p>这 2 个文件会放在同一个目录下，这个目录名我们可以叫<code>Joke</code>，然后它的上层还有一个<code>Skills</code>的父文件夹，目录结构如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">├── Skills</span><br><span class="line">│   └── Joke</span><br><span class="line">│       ├── config.json</span><br><span class="line">│       └── skprompt.txt</span><br></pre></td></tr></table></figure>
+
+<p>定义好语义函数后，我们可以这样来调用函数：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">skills_directory = <span class="string">&quot;./&quot;</span></span><br><span class="line">funFunctions = kernel.import_semantic_skill_from_directory(skills_directory, <span class="string">&quot;Skills&quot;</span>)</span><br><span class="line">jokeFunction = funFunctions[<span class="string">&quot;Joke&quot;</span>]</span><br><span class="line">result = jokeFunction(<span class="string">&quot;穿越到恐龙时代&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+
+<p>我们使用<code>import_semantic_skill_from_directory</code>方法来添加语义函数，注意这里添加的是<code>Skills</code>文件夹，然后再通过<code>funFunctions[&quot;Joke&quot;]</code>来获取到我们定义的语义函数，最后调用该函数并传入参数，就可以得到结果了。</p>
+<h3 id="自然函数"><a href="#自然函数" class="headerlink" title="自然函数"></a>自然函数</h3><p>自然函数就跟我们平时代码中写的函数一样，只不过要加一些 Semantic Kernel 的标签，我们来看一个<strong>网络查询</strong>的自然函数例子：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">WebSearchEngineSkill</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    一个搜索引擎技能。</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">from</span> semantic_kernel.orchestration.sk_context <span class="keyword">import</span> SKContext</span><br><span class="line">    <span class="keyword">from</span> semantic_kernel.skill_definition <span class="keyword">import</span> sk_function</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, connector</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="variable language_">self</span>._connector = connector</span><br><span class="line"></span><br><span class="line"><span class="meta">    @sk_function(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="meta">        description=<span class="string">&quot;基于提供的语句进行网络查询&quot;</span>,</span></span></span><br><span class="line"><span class="params"><span class="meta">        name=<span class="string">&quot;searchAsync&quot;</span>,</span></span></span><br><span class="line"><span class="params"><span class="meta">        input_description=<span class="string">&quot;查询语句&quot;</span>,</span></span></span><br><span class="line"><span class="params"><span class="meta">    </span>)</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">search_async</span>(<span class="params">self, query: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        result = <span class="keyword">await</span> <span class="variable language_">self</span>._connector.search_async(query, num_results=<span class="number">5</span>, offset=<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">str</span>(result)</span><br></pre></td></tr></table></figure>
+
+<p>这里的<code>@sk_function</code>就是 Semantic Kernel 的标签，<code>@sk_function</code>用来标记这是一个自然函数，标签中定义了自然函数的功能描述，调用的函数名和参数描述，后面我们会通过这里定义的函数名来调用该自然函数。在自然函数的实现中，我们使用网络连接器<code>connector</code>的 API 来进行网络查询，然后返回结果。</p>
+<p>定义好自然函数后，我们可以这样来调用函数：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> semantic_kernel <span class="keyword">as</span> sk</span><br><span class="line"><span class="keyword">from</span> semantic_kernel.connectors.search_engine <span class="keyword">import</span> BingConnector</span><br><span class="line"></span><br><span class="line">BING_API_KEY = sk.bing_search_settings_from_dot_env()</span><br><span class="line">connector = BingConnector(BING_API_KEY)</span><br><span class="line">skill = kernel.import_skill(WebSearchEngineSkill(connector))</span><br><span class="line">search = skill[<span class="string">&quot;searchAsync&quot;</span>]</span><br><span class="line">result = search(<span class="string">&quot;2023年亚运会金牌最多的国家是哪个？&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;result: <span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>我们创建了一个 Bing 网络连接器，这里 Bing 的 API KEY 也存在<code>.env</code>文件中（如何获取 Bing 的 API KEY 可以查看<a target="_blank" rel="noopener" href="https://www.microsoft.com/en-us/bing/apis/bing-web-search-api">这里</a>，每个月有 1000 次的免费查询）。然后通过<code>import_skill</code>方法来添加自然函数，最后通过<code>skill[&quot;searchAsync&quot;]</code>来获取到我们定义的自然函数，最后调用该函数并传入参数，就可以得到结果了。</p>
+<p>在官方仓库中，Semantic Kernel 还提供了一系列常用的语义函数，如翻译、总结、写邮件等（见下图），以方便开发者直接使用。我个人认为，Semantic Kernel 在规范语义函数方面做得非常出色，例如语义函数的文件命名规范和目录结构规范等。这样一来，开发者能够更有效地开发语义函数，并保持每个语义函数的一致风格。</p>
+<img src="/images/post/2023/10/sk-plugins.png" class="" width="1000" height="600">
+
+<h2 id="Planner"><a href="#Planner" class="headerlink" title="Planner"></a>Planner</h2><p>了解 LangChain 的同学应该对其强大的 Agent 功能有所了解，不熟悉的同学也可以看下我之前<a href="https://zhaozhiming.github.io/2023/09/06/langchain-agent-implementation-principle/">这篇关于 Agent 的文章</a>。而 Semantic Kernel 也有类似的功能——Planner。</p>
+<p>在 Semantic Kernel 中，<code>Planner</code>是一个功能，它接收用户的请求，并返回完成请求所需的计划。它通过使用 AI 来混合和匹配在 Semantic Kernel 中注册的插件，以便将它们重新组合成一系列完成目标的步骤。这是一个强大的概念，因为它允许你创建可能连你都未曾想到的功能。例如，如果你有任务和日历事件插件，Planner 可以将它们组合起来创建工作流，例如”提醒我去商店时购买牛奶”或”提醒我明天给妈妈打电话”，而无需为这些情境明确编写代码。</p>
+<p>Semantic Kernel 提供了几种开箱即用的 Planner，每种 Planner 有其特定的用途。这些 Planner 的目的是自动化地编排 AI 功能，使开发者能够构建复杂的 AI 应用，而无需为每个可能的用户请求手动创建工作流程。</p>
+<h3 id="Action-Planner"><a href="#Action-Planner" class="headerlink" title="Action Planner"></a>Action Planner</h3><p>Action Planner 是其中一个开箱即用的 Planner，它的作用是根据用户问题，在一组函数（语义函数或自然函数）中找到最适合的一个函数来执行。我们来看一个例子：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">from</span> semantic_kernel.planning <span class="keyword">import</span> ActionPlanner</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">action_planner</span>(<span class="params">ask: <span class="built_in">str</span></span>):</span><br><span class="line">    <span class="comment"># kernel 中已添加之前演示的语义函数和自然函数</span></span><br><span class="line">    planner = ActionPlanner(kernel)</span><br><span class="line">    plan = <span class="keyword">await</span> planner.create_plan_async(goal=ask)</span><br><span class="line">    result = <span class="keyword">await</span> plan.invoke_async()</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下面的方法会调用讲笑话的语义函数</span></span><br><span class="line">asyncio.run(action_planner(<span class="string">&quot;讲一个穿越到恐龙时代的笑话&quot;</span>))</span><br><span class="line"><span class="comment"># 下面的方法会调用网络查询的自然函数</span></span><br><span class="line">asyncio.run(action_planner(<span class="string">&quot;上网查询一下2023年亚运会金牌最多的国家是哪个？&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>我们通过<code>ActionPlanner.create_plan_async</code>的方法来创建一个 Planner，这里的<code>goal</code>参数就是用户的问题，然后通过<code>invoke_async</code>方法来执行计划，最后就可以得到结果。我们在<code>kernel</code>中已添加了之前演示的 2 个函数：讲笑话的语义函数和网络查询的自然函数，ActionPlanner 在执行时会根据用户问题寻找到最适合的函数来执行，然后输出函数的执行结果。</p>
+<p>需要注意到是，ActionPlanner 的返回结果是执行某个函数后的返回结果，它并不会经过 LLM 进行加工，也就是说函数返回什么，ActionPlanner 就会返回什么。如果你希望返回的结果更加理想，可以使用 LLM 结合问题和返回结果进行一次加工，这样就可以得到更加符合用户需求的结果了。</p>
+<p>ActionPlanner 比较适合用来实现一些 AI 工具平台，用户可以根据自然语言来调用平台上的各种工具。LangChain 与之对应的是 <a target="_blank" rel="noopener" href="https://python.langchain.com/docs/modules/agents/agent_types/chat_conversation_agent">Conversational Agent</a>，它的功能更加强大，可以实现对话的历史信息管理，以及对返回结果进行加工等功能。</p>
+<h3 id="Stepwise-Planner"><a href="#Stepwise-Planner" class="headerlink" title="Stepwise Planner"></a>Stepwise Planner</h3><p>还有一个 Planner 是 Stepwise Planner，它基于 MRKL 和 ReAct 的基本原理，允许人工智能形成<strong>想法</strong>和<strong>观察</strong>，并基于这些执行动作来实现用户的目标。这一过程会一直持续，直到完成所有所需的功能并生成最终输出。我们来看它的一个简单示例：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">stepwise_planner</span>(<span class="params">ask: <span class="built_in">str</span></span>):</span><br><span class="line">    <span class="comment"># kernel 中已添加之前演示的语义函数和自然函数</span></span><br><span class="line">    planner = StepwisePlanner(</span><br><span class="line">        kernel, StepwisePlannerConfig(max_iterations=<span class="number">10</span>, min_iteration_time_ms=<span class="number">1000</span>)</span><br><span class="line">    )</span><br><span class="line">    plan = planner.create_plan(goal=ask)</span><br><span class="line">    result = <span class="keyword">await</span> plan.invoke_async()</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br><span class="line">    <span class="keyword">for</span> index, step <span class="keyword">in</span> <span class="built_in">enumerate</span>(plan._steps):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Step:&quot;</span>, index)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Description:&quot;</span>, step.description)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Function:&quot;</span>, step.skill_name + <span class="string">&quot;.&quot;</span> + step._function.name)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(step._outputs) &gt; <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;  Output:\n&quot;</span>, <span class="built_in">str</span>.replace(result[step._outputs[<span class="number">0</span>]], <span class="string">&quot;\n&quot;</span>, <span class="string">&quot;\n  &quot;</span>))</span><br><span class="line"></span><br><span class="line">asyncio.run(stepwise_planner(<span class="string">&quot;根据2023年亚运会金牌最多的国家查询结果，讲一个从这个国家穿越到恐龙时代的笑话&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<p><code>StepwisePlanner</code>的使用和<code>ActionPlanner</code>有些类似，不同的地方是<code>StepwisePlanner</code>可以设置最大迭代次数和最小迭代时间，最大迭代次数表示最多思考多少轮，到了最大的次数后即使没有最终答案也会退出程序。在上面的执行方法中，我们还打印了每一轮的思考过程，包括其调用的函数和输出的结果。</p>
+<p>LangChain 与之对应的功能是<a target="_blank" rel="noopener" href="https://python.langchain.com/docs/modules/agents/agent_types/react">ReAct Agent</a>，也是 LangChain 比较常用的一种 Agent，Stepwise Planner 与 ReAct Agent 两者区别不大。</p>
+<p>Semantic Kernel 的 Planner 功能和 LangChain 的 Agent 一样，需要在一些相对<strong>智能</strong>的 LLM 上运行才能取得好的效果，比如 GPT-4 或 GPT3.5，如果是在一些低参数的 LLM 上执行的话就会出现各种问题了。</p>
+<h2 id="与-LangChain-的对比"><a href="#与-LangChain-的对比" class="headerlink" title="与 LangChain 的对比"></a>与 LangChain 的对比</h2><p>下面列举一些 Semantic Kernel 和 LangChain 的对比。</p>
+<h3 id="功能对比"><a href="#功能对比" class="headerlink" title="功能对比"></a>功能对比</h3><table>
+<thead>
+<tr>
+<th>LangChain</th>
+<th>Semantic Kernel</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Chains</td>
+<td>Kernel</td>
+<td>构造调用序列</td>
+</tr>
+<tr>
+<td>Agents</td>
+<td>Planner</td>
+<td>自动创建工具以满足用户的新需求</td>
+</tr>
+<tr>
+<td>Tools</td>
+<td>Plugins (语义函数+自然函数)</td>
+<td>可以自定义工具来满足不同的应用场景</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>Memory</td>
+<td>保存对话上下文信息</td>
+</tr>
+</tbody></table>
+<p>可以看到 LangChain 几个核心模块的功能 Semantic Kernel 都有对应的实现。</p>
+<h3 id="语言对比"><a href="#语言对比" class="headerlink" title="语言对比"></a>语言对比</h3><table>
+<thead>
+<tr>
+<th>语言</th>
+<th>LangChain</th>
+<th>Semantic Kernel</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Python</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>JavaScript</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>C#</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Java</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<p>支持的语言对比（因为 Semantic Kernel 是用 C#开发的，所以它对 C#比较支持）如上所示。不清楚 Semantic Kernel 为什么要用 C#来开发，C#相比 Python 和 JavaScript 来说使用的人会少很多。</p>
+<h3 id="大语言模型的对比"><a href="#大语言模型的对比" class="headerlink" title="大语言模型的对比"></a>大语言模型的对比</h3><table>
+<thead>
+<tr>
+<th>模型</th>
+<th>LangChain</th>
+<th>Semantic Kernel</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Embedding 模型</td>
+<td>超过 25 种不同的 Embedding 模型</td>
+<td>OpenAI, Azure OpenAI，HuggingFace</td>
+</tr>
+<tr>
+<td>Completion 或 Chat 模型</td>
+<td>超过 64 种不同的 LLM 模型</td>
+<td>OpenAI, Azure OpenAI，HuggingFace</td>
+</tr>
+</tbody></table>
+<p>Semantic Kernel 只支持 OpenAI，Azure OpenAI，HuggingFace 上的模型，而 LangChain 支持的模型要多得多。</p>
+<h3 id="任务编排对比"><a href="#任务编排对比" class="headerlink" title="任务编排对比"></a>任务编排对比</h3><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>LangChain Agents</th>
+<th>Semantic Kernel Planner</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>对话</td>
+<td>✅</td>
+<td>✅ (ActionPlanner)</td>
+</tr>
+<tr>
+<td>执行计划</td>
+<td>✅</td>
+<td>✅ (SequentialPlanner)</td>
+</tr>
+<tr>
+<td>ReAct</td>
+<td>✅</td>
+<td>✅ (StepwisePlanner)</td>
+</tr>
+<tr>
+<td>思维树(ToT)</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+</tbody></table>
+<p>目前 Semantic Kernel 就只有几种 Planner，对比 LangChain 还是比较少的，但一般的应用场景也足够用了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Semantic Kernel 代表了微软在 AI 应用开发领域的探索，其功能和 LangChain 有所相似，但 LangChain 显得更为强大。得益于较早的推出时间，LangChain 在功能完善度、LLM 的支持以及应用开发场景的丰富性上均领先于 Semantic Kernel。然而，LangChain 的快速发展也带来了代码质量的问题，受到了一些人的诟病。相较之下，Semantic Kernel 吸纳了前者的宝贵经验，展现了更为优良的架构和代码质量，同时制定了更为合理的插件开发规范。随着微软对 AI 投入的不断加大，我们有理由相信 Semantic Kernel 将得到持续完善，并有望成为未来极具优势的 AI 应用开发框架。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2023/10/02/semantic-kernel-intro/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2023/10/02/semantic-kernel-intro/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

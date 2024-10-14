@@ -1,0 +1,272 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>LangChain 知识库检索问题及解决方案 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="LangChain 知识库检索问题及解决方案"> <!-- TODO: truncate -->
+	<meta name="keywords" content="langchain">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">LangChain 知识库检索问题及解决方案</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-07-19T06:10:01.000Z" itemprop="datePublished">7月 19, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/langchain/">langchain</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/07/langchain.png" class="" width="400" height="300">
+
+<p>在之前的文章中，我们介绍了如何使用 LangChain 打造一个垂直领域的知识库问答系统。知识库问答系统包含了一系列的功能，包括：文档载入、文档分隔、文档 Embedding、文档存储、文档检索、组合问题上下文等。在实际使用的过程中，每个环节都可能遇到一些复杂的问题，今天我们就来看看在实际应用中，LangChain 在进行知识库检索时会遇到的一些问题以及解决方案。</p>
+<span id="more"></span>
+
+<h2 id="重复文档问题"><a href="#重复文档问题" class="headerlink" title="重复文档问题"></a>重复文档问题</h2><p>在使用 LangChain 打造的知识库系统时，我们首先要进行知识库文档的上传，在上传文档的过程中有时候会上传一些重复内容的文档（文件名不同，内容相同），或者是上传一些类似的文档（文件名不同，内容不同），这些文档会导致我们的知识库中存在大量的重复文档，这些重复文档会影响我们的知识库检索效果。</p>
+<p>举个例子，比如我们想收集用户评价中反馈最多的 10 类评价，这类评价有：<code>非常好</code>，<code>很好</code>，<code>很好用</code>，<code>安装非常方便</code>，<code>用户体验很好</code>，<code>界面简洁</code>等等，这些评价中有些评价是十分相似的，比如<code>非常好</code>和<code>很好</code>，<code>很好用</code>和<code>用户体验很好</code>，我们希望在收集的评价中可以听到尽可能多的声音，以便我们可以对系统进行改进，但相似的评价会阻碍我们看到更多不同的反馈。</p>
+<p>下面再举一个具体的代码示例，假设我们用几个简单的句子来代替文档，比如有下面三个文档。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">texts = [</span><br><span class="line">    <span class="string">&quot;&quot;&quot;见手青被触碰后菌肉迅速变蓝的食用菌。&quot;&quot;&quot;</span>,</span><br><span class="line">    <span class="string">&quot;&quot;&quot;见手青其菌肉遭受伤害后会快速变成蓝绿色。&quot;&quot;&quot;</span>,</span><br><span class="line">    <span class="string">&quot;&quot;&quot;见手青未煮熟或食用过量可能会导致中毒。&quot;&quot;&quot;</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到这三个文档的内容虽然是不同的，但是有些文档内容极其相似，比如第一个和第二个文档。如果我们使用普通的检索功能，检索出与问题最相关的 2 个文档，那么第一个和第二个文档都会被检索出来。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.vectorstores <span class="keyword">import</span> Chroma</span><br><span class="line"><span class="keyword">from</span> langchain.embeddings.openai <span class="keyword">import</span> OpenAIEmbeddings</span><br><span class="line">persist_directory = <span class="string">&#x27;docs/demo_mmr/&#x27;</span></span><br><span class="line">embedding = OpenAIEmbeddings()</span><br><span class="line">vectordb = Chroma(</span><br><span class="line">    persist_directory=persist_directory,</span><br><span class="line">    embedding_function=embedding</span><br><span class="line">)</span><br><span class="line">smalldb = Chroma.from_texts(texts, embedding=embedding)</span><br><span class="line">question = <span class="string">&quot;告诉我关于见手青的信息。&quot;</span></span><br><span class="line">smalldb.similarity_search(question, k=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">[Document(page_content=&#x27;见手青其菌肉遭受伤害后会快速变成蓝绿色。&#x27;, metadata=&#123;&#125;),</span></span><br><span class="line"><span class="string"> Document(page_content=&#x27;见手青被触碰后菌肉迅速变蓝的食用菌。&#x27;, metadata=&#123;&#125;)]</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里我们使用<a target="_blank" rel="noopener" href="https://www.trychroma.com/"><code>Chroma</code></a>来做向量存储，使用 OpenAI 的 Embedding 来做文档 Embedding（注意：如果想实际运行代码，需要在环境变量中设置 OpenAI 的 API Key）。<br>然后我们使用<code>similarity_search</code>来进行检索，这里我们检索出与问题最相关的 2 个文档，可以看到第一个和第二个文档都被检索出来了。<br>如果将这两个文档结合问题一起发给大语言模型（LLM），得到的答案可能会过于片面，我们希望能结合更多不同内容的文档来进行答案的生成。</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>在 LangChain 的官方文档中介绍了如何使用<strong>最大边际相关性</strong>（Maximal Marginal Relevance，简称为 MMR）来解决重复文档的问题。</p>
+<p>MMR 是一种广泛应用于信息检索和自然语言处理领域的算法。MMR 的主要目标是在文档排序和摘要生成等任务中平衡相关性和新颖性。换句话说，MMR 旨在为用户提供既相关又包含新信息的结果。MMR 的基本思想是在选择下一篇要呈现给用户的文档时，不仅要考虑其与查询的相关性，还要考虑其与已经呈现给用户的文档之间的相似性。如果一篇文档与查询非常相关，但与已经呈现给用户的文档非常相似，那么这篇文档的边际收益可能就不大。通过这种方式，MMR 算法可以生成一个既包含相关信息又包含新信息的结果列表，从而帮助用户在大量信息中找到他们真正需要的信息。</p>
+<p>在 LangChain 中我们可以用 vectordb 对象中的<code>max_marginal_relevance_search</code>来进行 MMR 检索。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">smalldb.max_marginal_relevance_search(question, k=<span class="number">2</span>, fetch_k=<span class="number">3</span>)</span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">[Document(page_content=&#x27;见手青其菌肉遭受伤害后会快速变成蓝绿色。&#x27;, metadata=&#123;&#125;),</span></span><br><span class="line"><span class="string"> Document(page_content=&#x27;见手青未煮熟或食用过量可能会导致中毒&#x27;, metadata=&#123;&#125;)]</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里的<code>fetch_k</code>参数表示在进行 MMR 检索时，每次从 vectordb 中取出多少个文档进行计算，然后再从中选择最相关的文档。这里我们设置为 3，表示每次从 vectordb 中取出 3 个文档进行计算，然后再从中选择最相关的文档。这里我们可以看到，第一个和第三个文档被检索出来了，第二个文档没有被检索出来，这是因为第二个文档与第一个文档的相似度太高，所以在进行 MMR 检索时，第二个文档被过滤掉了。</p>
+<h2 id="多维检索条件错误"><a href="#多维检索条件错误" class="headerlink" title="多维检索条件错误"></a>多维检索条件错误</h2><p>在使用知识库进行提问时，系统除了会根据知识库内容进行回答，还会说明引用了知识库中的哪些文档，常见的引用信息有文件的文件名和引用内容的行数。但是在实际应用中，我们可能会遇到一些错误的引用。</p>
+<p>比如我们的知识库有 2 个文档，分别是<code>2022年高评分电影</code> 和 <code>2023年高评分电影</code>，这两个文档包含了两个年份的电影信息，如果我们提问：<code>请帮我找XX导演的，在2023年上映的电影</code>，那么系统返回的引用文档中，可能既包含了<code>2023年高评分电影</code>，也包含了<code>2022年高评分电影</code>，因为 2022 年的文档中也包含了该导演的电影，这样的引用信息就是错误的。</p>
+<p>我们再用代码示例来说明这个问题。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.schema <span class="keyword">import</span> Document</span><br><span class="line"></span><br><span class="line">all_docs = [</span><br><span class="line">    Document(page_content=<span class="string">&quot;通过九儿与余占鳌的爱情故事，描述了1930年代中国北方农村的生活景象，展示了人性的激情与冷酷。&quot;</span>, metadata=&#123;<span class="string">&quot;year&quot;</span>: <span class="number">1987</span>, <span class="string">&quot;rating&quot;</span>: <span class="number">8.2</span>, <span class="string">&quot;genre&quot;</span>: <span class="string">&quot;剧情&quot;</span>, <span class="string">&quot;director&quot;</span>: <span class="string">&quot;张艺谋&quot;</span>, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;红高粱&quot;</span>&#125;),</span><br><span class="line">    Document(page_content=<span class="string">&quot;描述了在戏曲舞台上与幕后生活中，程蝶衣、段小楼两位&#x27;京剧人&#x27;半个世纪的悲欢离合，是一部跨越五十年的人性史诗。&quot;</span>, metadata=&#123;<span class="string">&quot;year&quot;</span>: <span class="number">1993</span>, <span class="string">&quot;director&quot;</span>: <span class="string">&quot;陈凯歌&quot;</span>, <span class="string">&quot;rating&quot;</span>: <span class="number">9.5</span>, <span class="string">&quot;genre&quot;</span>: <span class="string">&quot;剧情&quot;</span>, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;霸王别姬&quot;</span>&#125;),</span><br><span class="line">    Document(page_content=<span class="string">&quot;一个关于复仇，爱情，自我牺牲和道德责任的故事，融合了武侠动作和浪漫剧情元素，被誉为是现代武侠电影的杰出代表。&quot;</span>, metadata=&#123;<span class="string">&quot;year&quot;</span>: <span class="number">2000</span>, <span class="string">&quot;director&quot;</span>: <span class="string">&quot;李安&quot;</span>, <span class="string">&quot;rating&quot;</span>: <span class="number">8.8</span>, <span class="string">&quot;genre&quot;</span>: <span class="string">&quot;动作&quot;</span>, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;卧虎藏龙&quot;</span>&#125;),</span><br><span class="line">    Document(page_content=<span class="string">&quot;描绘了一段充满讽刺和黑色幽默的中国西南地区的权力斗争，全片充满了荒诞和激进的政治讽刺。&quot;</span>, metadata=&#123;<span class="string">&quot;year&quot;</span>: <span class="number">2010</span>, <span class="string">&quot;director&quot;</span>: <span class="string">&quot;姜文&quot;</span>, <span class="string">&quot;rating&quot;</span>: <span class="number">8.5</span>, <span class="string">&quot;genre&quot;</span>: <span class="string">&quot;剧情&quot;</span>, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;让子弹飞&quot;</span>&#125;),</span><br><span class="line">    Document(page_content=<span class="string">&quot;描述了地球面临毁灭，人类联合构建地球发动机，推动地球离开太阳系，展现了人类对未知宇宙的探索和对生存的渴望。&quot;</span>, metadata=&#123;<span class="string">&quot;year&quot;</span>: <span class="number">2019</span>, <span class="string">&quot;director&quot;</span>: <span class="string">&quot;郭帆&quot;</span>, <span class="string">&quot;rating&quot;</span>: <span class="number">7.9</span>, <span class="string">&quot;genre&quot;</span>: <span class="string">&quot;科幻&quot;</span>, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;流浪地球&quot;</span>&#125;),</span><br><span class="line">    Document(page_content=<span class="string">&quot;根据真实事件改编，中国特警队在湄公河流域的金三角地带进行卧底行动，破获一个特大毒品案件，表现了中国警察的决心和勇气。&quot;</span>, metadata=&#123;<span class="string">&quot;year&quot;</span>: <span class="number">2016</span>, <span class="string">&quot;rating&quot;</span>: <span class="number">8.0</span>, <span class="string">&quot;director&quot;</span>: <span class="string">&quot;林超贤&quot;</span>, <span class="string">&quot;genre&quot;</span>: <span class="string">&quot;动作&quot;</span>, <span class="string">&quot;rating&quot;</span>: <span class="number">8.0</span>, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;湄公河行动&quot;</span>&#125;)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>假设我们有以上这些文档内容，每个文档是一部电影信息的信息，在这里我们使用 LangChain 的 Document 对象来存储电影信息，其中<code>page_content</code>字段存储电影的简介，<code>metadata</code>字段存储电影的其他信息，比如电影的年份、导演、评分、类型等。</p>
+<p>然后我们再用 LangChain 中的普通方法进行检索。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.vectorstores <span class="keyword">import</span> Chroma</span><br><span class="line"><span class="keyword">from</span> langchain.embeddings.openai <span class="keyword">import</span> OpenAIEmbeddings</span><br><span class="line"></span><br><span class="line">embedding = OpenAIEmbeddings()</span><br><span class="line">persist_directory = <span class="string">&#x27;docs/demo_sq/&#x27;</span></span><br><span class="line"></span><br><span class="line">vectordb = Chroma.from_documents(</span><br><span class="line">    documents=all_docs,</span><br><span class="line">    embedding=embedding,</span><br><span class="line">    persist_directory=persist_directory</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">question = <span class="string">&quot;请帮我推荐一些剧情类电影&quot;</span></span><br><span class="line">docs = vectordb.similarity_search(question, k=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">[Document(page_content=&#x27;一个关于复仇，爱情，自我牺牲和道德责任的故事，融合了武侠动作和浪漫剧情元素，被誉为是现代武侠电影的杰出代表。&#x27;, metadata=&#123;&#x27;year&#x27;: 2000, &#x27;director&#x27;: &#x27;李安&#x27;, &#x27;rating&#x27;: 8.8, &#x27;genre&#x27;: &#x27;动作&#x27;, &#x27;name&#x27;: &#x27;卧虎藏龙&#x27;&#125;),</span></span><br><span class="line"><span class="string"> Document(page_content=&#x27;描绘了一段充满讽刺和黑色幽默的中国西南地区的权力斗争，全片充满了荒诞和激进的政治讽刺。&#x27;, metadata=&#123;&#x27;year&#x27;: 2010, &#x27;director&#x27;: &#x27;姜文&#x27;, &#x27;rating&#x27;: 8.5, &#x27;genre&#x27;: &#x27;剧情&#x27;, &#x27;name&#x27;: &#x27;让子弹飞&#x27;&#125;)]</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到，使用普通的方法进行检索剧情类电影，返回的结果中，包含了<code>卧虎藏龙</code>和<code>让子弹飞</code>两部电影，但是<code>卧虎藏龙</code>是动作片，这样的结果是不符合我们的预期的。</p>
+<h3 id="解决方案-1"><a href="#解决方案-1" class="headerlink" title="解决方案"></a>解决方案</h3><h4 id="元数据过滤"><a href="#元数据过滤" class="headerlink" title="元数据过滤"></a>元数据过滤</h4><p>为了解决这个问题，许多向量存储支持了对元数据的操作。LangChain 的 Document 对象中有个 2 个属性，分别是<code>page_content</code>和<code>metadata</code>，<code>metadata</code>就是元数据，我们可以使用<code>metadata</code>属性来过滤掉不符合条件的电影。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">question = <span class="string">&quot;请帮我推荐一些剧情类电影&quot;</span></span><br><span class="line">docs = vectordb.similarity_search(</span><br><span class="line">    question,</span><br><span class="line">    k=<span class="number">3</span>,</span><br><span class="line">    <span class="built_in">filter</span>=&#123;<span class="string">&quot;genre&quot;</span>:<span class="string">&quot;剧情&quot;</span>&#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">[Document(page_content=&#x27;描绘了一段充满讽刺和黑色幽默的中国西南地区的权力斗争，全片充满了荒诞和激进的政治讽刺。&#x27;, metadata=&#123;&#x27;year&#x27;: 2010, &#x27;director&#x27;: &#x27;姜文&#x27;, &#x27;rating&#x27;: 8.5, &#x27;genre&#x27;: &#x27;剧情&#x27;, &#x27;name&#x27;: &#x27;让子弹飞&#x27;&#125;),</span></span><br><span class="line"><span class="string"> Document(page_content=&#x27;通过九儿与余占鳌的爱情故事，描述了1930年代中国北方农村的生活景象，展示了人性的激情与冷酷。&#x27;, metadata=&#123;&#x27;year&#x27;: 1987, &#x27;rating&#x27;: 8.2, &#x27;genre&#x27;: &#x27;剧情&#x27;, &#x27;director&#x27;: &#x27;张艺谋&#x27;, &#x27;name&#x27;: &#x27;红高粱&#x27;&#125;),</span></span><br><span class="line"><span class="string"> Document(page_content=&quot;描述了在戏曲舞台上与幕后生活中，程蝶衣、段小楼两位&#x27;京剧人&#x27;半个世纪的悲欢离合，是一部跨越五十年的人性史诗。&quot;, metadata=&#123;&#x27;year&#x27;: 1993, &#x27;director&#x27;: &#x27;陈凯歌&#x27;, &#x27;rating&#x27;: 9.5, &#x27;genre&#x27;: &#x27;剧情&#x27;, &#x27;name&#x27;: &#x27;霸王别姬&#x27;&#125;)]</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到，使用元数据过滤后，返回的结果中，只有剧情类的电影，这样就解决了上面的问题。</p>
+<h4 id="自查询检索器"><a href="#自查询检索器" class="headerlink" title="自查询检索器"></a>自查询检索器</h4><p>元数据过滤的方法虽然有用，但需要我们手动来指定过滤条件，我们更希望让 LLM 帮我们自动过滤掉不符合条件的文档。LangChain 提供了一个自查询（Self-querying）的检索器，可以帮助我们自动过滤元数据的信息。可以看看官方的介绍：</p>
+<blockquote>
+<p>顾名思义，自查询检索器是一种能够查询自身的检索器。具体而言，给定任何自然语言查询，检索器使用查询构造 LLM 链来编写结构化查询，然后将该结构化查询应用于其底层 VectorStore。这允许检索器不仅使用用户输入查询与存储的文档的内容进行语义相似性比较，而且还从用户查询中提取对存储文档的元数据过滤器，并执行这些过滤器。</p>
+</blockquote>
+<img src="/images/post/2023/07/self-querying.jpg" class="" width="800" height="400">
+
+<p>下面我们用自查询过滤器来改进上面的例子。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.llms <span class="keyword">import</span> OpenAI</span><br><span class="line"><span class="keyword">from</span> langchain.retrievers.self_query.base <span class="keyword">import</span> SelfQueryRetriever</span><br><span class="line"><span class="keyword">from</span> langchain.chains.query_constructor.base <span class="keyword">import</span> AttributeInfo</span><br><span class="line"></span><br><span class="line">metadata_field_info=[</span><br><span class="line">    AttributeInfo(</span><br><span class="line">        name=<span class="string">&quot;genre&quot;</span>,</span><br><span class="line">        description=<span class="string">&quot;电影的类型&quot;</span>,</span><br><span class="line">        <span class="built_in">type</span>=<span class="string">&quot;string&quot;</span>,</span><br><span class="line">    ),</span><br><span class="line">    AttributeInfo(</span><br><span class="line">        name=<span class="string">&quot;year&quot;</span>,</span><br><span class="line">        description=<span class="string">&quot;电影发布的时间&quot;</span>,</span><br><span class="line">        <span class="built_in">type</span>=<span class="string">&quot;integer&quot;</span>,</span><br><span class="line">    ),</span><br><span class="line">    AttributeInfo(</span><br><span class="line">        name=<span class="string">&quot;director&quot;</span>,</span><br><span class="line">        description=<span class="string">&quot;导演的名字&quot;</span>,</span><br><span class="line">        <span class="built_in">type</span>=<span class="string">&quot;string&quot;</span>,</span><br><span class="line">    ),</span><br><span class="line">    AttributeInfo(</span><br><span class="line">        name=<span class="string">&quot;rating&quot;</span>,</span><br><span class="line">        description=<span class="string">&quot;电影评分，1-10分&quot;</span>,</span><br><span class="line">        <span class="built_in">type</span>=<span class="string">&quot;float&quot;</span></span><br><span class="line">    ),</span><br><span class="line">    AttributeInfo(</span><br><span class="line">        name=<span class="string">&quot;name&quot;</span>,</span><br><span class="line">        description=<span class="string">&quot;电影的名字&quot;</span>,</span><br><span class="line">        <span class="built_in">type</span>=<span class="string">&quot;string&quot;</span></span><br><span class="line">    ),</span><br><span class="line">]</span><br><span class="line">document_content_description = <span class="string">&quot;电影的简短描述&quot;</span></span><br><span class="line">llm = OpenAI(temperature=<span class="number">0</span>)</span><br><span class="line">retriever = SelfQueryRetriever.from_llm(</span><br><span class="line">    llm,</span><br><span class="line">    vectordb,</span><br><span class="line">    document_content_description,</span><br><span class="line">    metadata_field_info,</span><br><span class="line">    verbose=<span class="literal">True</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">question = <span class="string">&quot;请帮我推荐一些剧情类电影&quot;</span></span><br><span class="line">docs = retriever.get_relevant_documents(question)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">query=&#x27;剧情&#x27; filter=Comparison(comparator=&lt;Comparator.EQ: &#x27;eq&#x27;&gt;, attribute=&#x27;genre&#x27;, value=&#x27;剧情&#x27;) limit=None</span></span><br><span class="line"><span class="string">[Document(page_content=&quot;描述了在戏曲舞台上与幕后生活中，程蝶衣、段小楼两位&#x27;京剧人&#x27;半个世纪的悲欢离合，是一部跨越五十年的人性史诗。&quot;, metadata=&#123;&#x27;year&#x27;: 1993, &#x27;director&#x27;: &#x27;陈凯歌&#x27;, &#x27;rating&#x27;: 9.5, &#x27;genre&#x27;: &#x27;剧情&#x27;, &#x27;name&#x27;: &#x27;霸王别姬&#x27;&#125;),</span></span><br><span class="line"><span class="string"> Document(page_content=&#x27;通过九儿与余占鳌的爱情故事，描述了1930年代中国北方农村的生活景象，展示了人性的激情与冷酷。&#x27;, metadata=&#123;&#x27;year&#x27;: 1987, &#x27;rating&#x27;: 8.2, &#x27;genre&#x27;: &#x27;剧情&#x27;, &#x27;director&#x27;: &#x27;张艺谋&#x27;, &#x27;name&#x27;: &#x27;红高粱&#x27;&#125;),</span></span><br><span class="line"><span class="string"> Document(page_content=&#x27;描绘了一段充满讽刺和黑色幽默的中国西南地区的权力斗争，全片充满了荒诞和激进的政治讽刺。&#x27;, metadata=&#123;&#x27;year&#x27;: 2010, &#x27;director&#x27;: &#x27;姜文&#x27;, &#x27;rating&#x27;: 8.5, &#x27;genre&#x27;: &#x27;剧情&#x27;, &#x27;name&#x27;: &#x27;让子弹飞&#x27;&#125;)]</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>在上面的示例代码中，我们首先定义了电影元数据中每个属性的信息，包括属性的名字，属性的描述（描述非常重要，尽量详细，这是 LLM 解读的关键），还有属性的类型（有些 VectorStore 不支持高级的属性类型，比如 Chroma 不支持 list 类型）。<br>然后我们使用<code>SelfQueryRetriever.from_llm</code>方法来创建一个自查询检索器，这个方法需要传入一个 LLM 模型，一个 VectorStore，一个文档内容的描述，还有上面定义的元数据信息。在<code>from_llm</code>的参数中我们还可以指定<code>verbose=True</code>，这样就可以看到检索器内部的运行过程，方便我们调试。<br>最后我们就可以使用<code>get_relevant_documents</code>方法来检索文档了。检索出来的结果第一行是检索器的调试信息，可以看到检索器使用<code>EQ</code>（相等）操作符来匹配电影类型，剩下的结果与元数据过滤方案的结果相同。</p>
+<p>我们再查询一下评分大于 8 分的电影，从结果上看到检索器使用了<code>GTE</code>（大于等于）操作符来匹配评分。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">question = <span class="string">&quot;请帮我推荐评分8分以上的电影&quot;</span></span><br><span class="line">docs = retriever.get_relevant_documents(question)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">query=&#x27; &#x27; filter=Comparison(comparator=&lt;Comparator.GTE: &#x27;gte&#x27;&gt;, attribute=&#x27;rating&#x27;, value=8) limit=None</span></span><br><span class="line"><span class="string">[Document(page_content=&#x27;描绘了一段充满讽刺和黑色幽默的中国西南地区的权力斗争，全片充满了荒诞和激进的政治讽刺。&#x27;, metadata=&#123;&#x27;year&#x27;: 2010, &#x27;director&#x27;: &#x27;姜文&#x27;, &#x27;rating&#x27;: 8.5, &#x27;genre&#x27;: &#x27;剧情&#x27;, &#x27;name&#x27;: &#x27;让子弹飞&#x27;&#125;),</span></span><br><span class="line"><span class="string"> Document(page_content=&#x27;一个关于复仇，爱情，自我牺牲和道德责任的故事，融合了武侠动作和浪漫剧情元素，被誉为是现代武侠电影的杰出代表。&#x27;, metadata=&#123;&#x27;year&#x27;: 2000, &#x27;director&#x27;: &#x27;李安&#x27;, &#x27;rating&#x27;: 8.8, &#x27;genre&#x27;: &#x27;动作&#x27;, &#x27;name&#x27;: &#x27;卧虎藏龙&#x27;&#125;),</span></span><br><span class="line"><span class="string"> Document(page_content=&#x27;根据真实事件改编，中国特警队在湄公河流域的金三角地带进行卧底行动，破获一个特大毒品案件，表现了中国警察的决心和勇气。&#x27;, metadata=&#123;&#x27;year&#x27;: 2016, &#x27;rating&#x27;: 8.0, &#x27;director&#x27;: &#x27;林超贤&#x27;, &#x27;genre&#x27;: &#x27;动作&#x27;, &#x27;name&#x27;: &#x27;湄公河行动&#x27;&#125;),</span></span><br><span class="line"><span class="string"> Document(page_content=&quot;描述了在戏曲舞台上与幕后生活中，程蝶衣、段小楼两位&#x27;京剧人&#x27;半个世纪的悲欢离合，是一部跨越五十年的人性史诗。&quot;, metadata=&#123;&#x27;year&#x27;: 1993, &#x27;director&#x27;: &#x27;陈凯歌&#x27;, &#x27;rating&#x27;: 9.5, &#x27;genre&#x27;: &#x27;剧情&#x27;, &#x27;name&#x27;: &#x27;霸王别姬&#x27;&#125;)]</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们再查询一下八零年代的电影，从结果上看到检索器使用了<code>GTE</code>（大于等于）和<code>LTE</code>（小于等于）操作符来匹配年份。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">question = <span class="string">&quot;请帮我推荐一些八零年代的电影&quot;</span></span><br><span class="line">docs = retriever.get_relevant_documents(question)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">query=&#x27; &#x27; filter=Operation(operator=&lt;Operator.AND: &#x27;and&#x27;&gt;, arguments=[Comparison(comparator=&lt;Comparator.GTE: &#x27;gte&#x27;&gt;, attribute=&#x27;year&#x27;, value=1980), Comparison(comparator=&lt;Comparator.LTE: &#x27;lte&#x27;&gt;, attribute=&#x27;year&#x27;, value=1989)]) limit=None</span></span><br><span class="line"><span class="string">[Document(page_content=&#x27;通过九儿与余占鳌的爱情故事，描述了1930年代中国北方农村的生活景象，展示了人性的激情与冷酷。&#x27;, metadata=&#123;&#x27;year&#x27;: 1987, &#x27;rating&#x27;: 8.2, &#x27;genre&#x27;: &#x27;剧情&#x27;, &#x27;director&#x27;: &#x27;张艺谋&#x27;, &#x27;name&#x27;: &#x27;红高粱&#x27;&#125;)]</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文介绍了 LangChain 打造知识库过程中遇到的文档检索问题以及解决方案，这也是在 Deeplearning 推出的关于 LangChain 最新短课程——<a target="_blank" rel="noopener" href="https://learn.deeplearning.ai/langchain-chat-with-your-data/lesson/1/introduction">《LangChain: Chat with Your Data》</a>中学到的，里面还讲解了更多关于知识库文档方面的实用技术，感兴趣的同学可以去 Deeplearning 官网了解一下。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2023/07/19/langchain-mmr-and-metadata-filter/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2023/07/19/langchain-mmr-and-metadata-filter/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

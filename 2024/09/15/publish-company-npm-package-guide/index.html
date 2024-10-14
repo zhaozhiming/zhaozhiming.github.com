@@ -1,0 +1,307 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>一步一步发布公司的 NPM 包 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="介绍管理员如何管理公司的 NPM 账号，以及指导开发人员如何发布公司的 NPM 包"> <!-- TODO: truncate -->
+	<meta name="keywords" content="npm, javascript">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">一步一步发布公司的 NPM 包</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2024-09-15T07:18:54.000Z" itemprop="datePublished">9月 15, 2024</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/javascript/">javascript</a> <a href="/tags/npm/">npm</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2024/09/publish-company-npm.jpeg" class="" width="400" height="300">
+
+<p>在项目开发中，有时候需要将自研的 NPM 包会发布到 NPM 的<a target="_blank" rel="noopener" href="https://registry.npmjs.org/">公共注册表</a>让别人进行使用，NPM 的公共注册表是一个全球性的包管理库，任何用户都可以访问和下载你发布的公开包。如果你发布的是个人的 NPM 包，那么直接发布就可以了，但是如果你发布的是公司的 NPM 包，那么就需要通过一些流程和规范，来和公司其他同事进行协同合作。本文将为你介绍如何从零开始一步一步发布公司的 NPM 包，如果你的公司现在或以后也有这种需求，那么请跟我一起来学习吧。</p>
+<span id="more"></span>
+
+<h2 id="什么是-NPM"><a href="#什么是-NPM" class="headerlink" title="什么是 NPM"></a>什么是 NPM</h2><p>NPM 是 Node Package Manager 的缩写，它是一个针对 NPM 编程语言的包管理工具。它是随 Node.js 一起安装的，用于管理和分享 NPM 代码包（modules）。NPM 允许开发者轻松下载、安装、更新、删除各种开源的 NPM 包，并且可以轻松管理项目中的依赖关系。</p>
+<h2 id="人员角色"><a href="#人员角色" class="headerlink" title="人员角色"></a>人员角色</h2><p>在发布公司 NPM 包的过程中，有以下人员或角色，他们主要负责以下工作：</p>
+<ul>
+<li>管理员：负责管理公司 NPM 组织，添加和删除 NPM 组织成员，处理 NPM 包发布权限申请等，可能会有多个管理员。</li>
+<li>开发人员: 指公司内部所有的开发人员，负责开发公司的 NPM 包，发布公司的 NPM 包到 NPM 包管理库。</li>
+</ul>
+<img src="/images/post/2024/09/npm-flow.png" class="" width="1000" height="600">
+
+<h2 id="创建公司邮箱群组"><a href="#创建公司邮箱群组" class="headerlink" title="创建公司邮箱群组"></a>创建公司邮箱群组</h2><p>发布 NPM 包需要 NPM 账号，而注册 NPM 账号需要邮箱，如果是发布个人 NPM 包的话直接使用个人邮箱注册就可以了，但是如果是发布公司的 NPM 包，那么要注册 NPM 账号的邮箱就不能是个人邮箱，而应该是一个公司邮箱群组。邮箱群组是一个包含多个员工电子邮箱地址的统一地址，用于向所有成员同时发送邮件。</p>
+<p>使用邮箱群组是出于多方面的考虑，一方面是安全，注册 NPM 账号的邮箱主要是用来接收 NPM 的通知邮件，比如发布 NPM 包成功后的通知。假设有人用公司的名义发了一个恶意的 NPM 包，那么公司的邮箱群组会收到 NPM 的通知邮件，这样公司的管理员们可以及时发现问题，如果是个人邮箱的话，那么就只有个人知道，这样就会增加安全风险。</p>
+<p>另一方面单点问题，设想一下，如果是个人邮箱管理公司的 NPM 包，那么如果这个人离职了，那么这个人的邮箱就作废了，从而导致 NPM 上的组织也作废了，公司需要重新使用新邮箱注册 NPM 账号，重新在 NPM 上面创建组织。而最麻烦的是，以前的 NPM 包公司已经无法管理了，无法再对老的 NPM 包进行升级或者删除。</p>
+<p>所以建议公司在注册 NPM 账号时，使用公司邮箱群组来注册，这样可以避免上述问题。邮箱群组的名字建议叫 <code>npm@公司域名</code>，比如 <code>npm@your-company.com</code>，这样可以清晰的表明这个邮箱群组是用来注册 NPM 账号的。</p>
+<h2 id="管理员创建-NPM-账号与组织"><a href="#管理员创建-NPM-账号与组织" class="headerlink" title="管理员创建 NPM 账号与组织"></a>管理员创建 NPM 账号与组织</h2><p>有了邮箱群组后，管理员首先到 <a target="_blank" rel="noopener" href="https://www.npmjs.com/">NPM 网站</a>上创建一个账号，NPM 账号创建可以<a target="_blank" rel="noopener" href="https://docs.npmjs.com/creating-a-new-npm-user-account">参考 NPM 的官方文档</a>进行创建。</p>
+<p>创建完 NPM 账号后，管理员需要创建一个 NPM 组织，NPM 组织是一个用于管理公司 NPM 包的组织，公司内部的所有 NPM 包都会发布到这个组织下。NPM 组织的创建可以<a target="_blank" rel="noopener" href="https://docs.npmjs.com/creating-an-organization">参考 NPM 的官方文档</a>进行创建。</p>
+<h2 id="开启双因子认证"><a href="#开启双因子认证" class="headerlink" title="开启双因子认证"></a>开启双因子认证</h2><p>对于公司的 NPM 账号，安全性是非常重要的，谁也不想看到有天公司的 NPM 包被别人恶意篡改了。为了增加账号的安全性，建议开启<a target="_blank" rel="noopener" href="https://docs.npmjs.com/about-two-factor-authentication">双因子认证</a>。</p>
+<blockquote>
+<p>双因子认证（Two-Factor Authentication，简称 2FA）是一种增强账户安全性的验证方法，通过要求用户在登录或进行敏感操作时提供两种不同类型的认证因素，从而确保用户身份的真实性。与仅依赖单一密码相比，双因子认证显著提高了账户的安全性，减少了未经授权访问的风险。</p>
+</blockquote>
+<p>NPM 上的双因子认证可以通过安全密钥或 TOTP（Time-based One-time Password）来实现。</p>
+<ul>
+<li>安全密钥允许使用生物识别设备（ 比如苹果的 <a target="_blank" rel="noopener" href="https://support.apple.com/en-gb/HT204587">Touch ID</a>）进行认证</li>
+<li>TOTP 需要在移动设备上安装认证应用程序（比如 <a target="_blank" rel="noopener" href="https://support.google.com/accounts/answer/1066447">Google Authenticator</a>） 来生成验证码</li>
+</ul>
+<h3 id="多管理员设置双因子认证"><a href="#多管理员设置双因子认证" class="headerlink" title="多管理员设置双因子认证"></a>多管理员设置双因子认证</h3><p>对于多管理员的 NPM 账号来说，使用 TOTP 不太方便，因为每个管理员都需要在自己的手机上安装认证应用程序，这样就会增加管理的复杂度。所以建议使用安全密钥的方式来开启双因子认证。</p>
+<p><strong>首个</strong>管理员开启双因子认证后，需要创建<strong>恢复码</strong>，然后将恢复码分享给<strong>其他</strong>管理员，其他管理员<strong>首次登录</strong>可以使用恢复码来登录 NPM 网站，然后设置自己的安全密钥。</p>
+<p>在账号的<code>Profile</code> -&gt; <code>Account</code> -&gt; <code>Two-factor authentication</code> 页面可以设置安全密钥和恢复码。</p>
+<img src="/images/post/2024/09/npm-2fa.png" class="" width="1000" height="600">
+
+<p><strong>注意</strong>：NPM 每次可以生成 5 个恢复码，这些恢复码通常用于在无法进行双因子认证时登录账户。一旦您使用某个恢复码成功登录，系统将自动使该恢复码<strong>无效</strong>以防止重复使用。所以当其他管理员使用了恢复码登录后，建议尽快生成新的恢复码，并告知其他管理员。</p>
+<img src="/images/post/2024/09/npm-recover-code.png" class="" width="1000" height="600">
+
+<p>其他管理员使用恢复码登录后，可以设置自己的安全密钥，比如使用 Apple Touch ID 作为安全密钥，这样在下次登录时就可以直接使用 Touch ID 而不需要输入恢复码了。</p>
+<h2 id="邀请组织成员"><a href="#邀请组织成员" class="headerlink" title="邀请组织成员"></a>邀请组织成员</h2><p>创建好组织后，就可以邀请开发人员加入组织了，邀请流程如下：</p>
+<ul>
+<li>进入用户设置页面，选择组织名称，比如<code>your-organization</code></li>
+<li>选择<code>成员</code>标签，然后点击<code>邀请成员</code></li>
+<li>输入开发人员的邮箱并点击<code>邀请</code>按钮，NPM 将向开发人员发送一封邮件</li>
+<li>开发人员点击邮件中的链接后，将加入 NPM 组织</li>
+</ul>
+<img src="/images/post/2024/09/npm-invite-member.png" class="" width="1000" height="600">
+
+<h2 id="开发人员注册账号"><a href="#开发人员注册账号" class="headerlink" title="开发人员注册账号"></a>开发人员注册账号</h2><p>开发人员也需要到 NPM 网站上创建一个账号，发布 NPM 包需要使用账号进行发布，有以下注意事项：</p>
+<ul>
+<li>建议使用公司邮箱进行注册</li>
+<li>创建账号完成后，开启双因子认证</li>
+</ul>
+<h2 id="发布权限申请"><a href="#发布权限申请" class="headerlink" title="发布权限申请"></a>发布权限申请</h2><p>创建完 NPM 账号后，开发人员需要申请公司 NPM 包发布权限，否则无法发布公司的 NPM 包，申请流程为：</p>
+<ul>
+<li>找管理员将开发人员的 NPM 账号添加到公司的 NPM 组织</li>
+<li>开发人员需要提供 NPM 账号名或注册邮箱给管理员</li>
+<li>管理员邀请开发人员的 NPM 账号到公司的 NPM 组织后，开发人员的邮箱会收到一封邀请邮件</li>
+<li>开发人员点击邮件中的链接后，将加入 NPM 组织</li>
+</ul>
+<p>这样开发人员就拥有了发布公司 NPM 包的权限。</p>
+<img src="/images/post/2024/09/npm-join-org.png" class="" width="1000" height="600">
+
+<h2 id="发布-NPM-包"><a href="#发布-NPM-包" class="headerlink" title="发布 NPM 包"></a>发布 NPM 包</h2><p>开发人员申请了公司 NPM 包发布权限后，就可以发布公司的 NPM 包了。</p>
+<h3 id="修改包名"><a href="#修改包名" class="headerlink" title="修改包名"></a>修改包名</h3><p>首先需要修改 NPM 包名称，公司的 NPM 包将以公司组织名称开头，比如 <code>@your-organization</code>。修改你项目中的 <code>package.json</code> 文件，将其中的 <code>name</code> 加上公司的 NPM 组织名称，假设你原来的 NPM 包名为 <code>foo</code>，那么修改后的内容如下所示：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;@you-organization/foo&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-NPM-CLI-登录"><a href="#使用-NPM-CLI-登录" class="headerlink" title="使用 NPM CLI 登录"></a>使用 NPM CLI 登录</h3><p>再使用 NPM 命令行工具在终端进行登录，在终端执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm login</span><br></pre></td></tr></table></figure>
+
+<p>命令执行后，会提示你按回车键打开浏览器链接，打开浏览器后会进入到 NPM 网站。如果你没有在 NPM 网站上登录，会提示输入用户名和密码进行登录。如果你设置了双因子认证，网页会提示你输入安全密钥或验证码。</p>
+<img src="/images/post/2024/09/npm-cli-login.png" class="" width="1000" height="600">
+
+<p>完成以上操作后终端会提示你登录成功。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ npm login</span><br><span class="line">npm notice Log <span class="keyword">in</span> on https://registry.npmjs.org/</span><br><span class="line">Login at:</span><br><span class="line">https://www.npmjs.com/login?next=/login/cli/14939f9b-26fa-48df-ad2a-f4ac972897f9</span><br><span class="line">Press ENTER to open <span class="keyword">in</span> the browser...</span><br><span class="line"></span><br><span class="line">Logged <span class="keyword">in</span> on https://registry.npmjs.org/.</span><br></pre></td></tr></table></figure>
+
+<h3 id="执行发布命令"><a href="#执行发布命令" class="headerlink" title="执行发布命令"></a>执行发布命令</h3><p>在终端登录了 NPM 账号后，执行以下命令进行 NPM 包发布：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm publish --access public</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：发布命令加上 <code>--access public</code> 参数，表示将 NPM 包发布到 NPM 的<strong>公开</strong>包管理库。如果不添加该参数的话，NPM 会默认将你的包发布到 NPM 的<strong>私有</strong>包管理库，这种类型的包管理库是 NPM 的收费服务，如果公司没有购买这种服务，那么发布到私有包管理库会导致发布失败。</p>
+<p>开发人员也可以在 <code>pacakge.json</code> 文件中添加以下内容，然后直接通过 <code>npm publish</code> 命令进行发布，这种方法也会发布到 NPM 公开包管理库。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;publishConfig&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;access&quot;</span><span class="punctuation">:</span> <span class="string">&quot;public&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>执行了发布命令后，跟登录命令一样，会提示你进入 NPM 网站进行双因子认证，认证成功后将发布 NPM 包到 NPM 的公开包管理库。</p>
+<p>发布成功后可以在 NPM 官网的公司组织下查看包是否上传成功，以 <code>next</code> 组织为例，可以在浏览器地址 <code>https://www.npmjs.com/org/next</code> 上查看该组织的 NPM 包信息。</p>
+<img src="/images/post/2024/09/npm-org-packages.png" class="" width="1000" height="600">
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文介绍了发布公司 NPM 包的一系列流程和建议，包括作为管理员或者普通开发人员需要执行的一些操作，以及在安全方面需要注意的一些事项。此流程不仅适用于 NPM 包，也适用于其他包管理工具，比如 PIP 或者 Maven 等。如果你也正在发布公司的 NPM 包，那么希望这篇文章对你有所帮助。</p>
+<p>关注我，一起学习各种人工智能和 GenAI 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2024/09/15/publish-company-npm-package-guide/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2024/09/15/publish-company-npm-package-guide/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

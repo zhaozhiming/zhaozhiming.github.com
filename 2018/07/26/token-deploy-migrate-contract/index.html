@@ -1,0 +1,288 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>发行代币——部署代币智能合约 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="发行代币——部署代币智能合约"> <!-- TODO: truncate -->
+	<meta name="keywords" content="ethereum,token,truffle,openzeppelin,rinkeby">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">发行代币——部署代币智能合约</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2018-07-26T12:52:00.000Z" itemprop="datePublished">7月 26, 2018</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/ethereum/">ethereum</a> <a href="/tags/token/">token</a> <a href="/tags/rinkeby/">rinkeby</a> <a href="/tags/truffle/">truffle</a> <a href="/tags/openzeppelin/">openzeppelin</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2018/07/deploy_contract.jpg" class="" width="400" height="300">
+
+<p>现在越来越多的公司发行了自己的以太坊代币，不管他们的目的是推进公司建设也好，还是割韭菜也好，其实跟我们开发者的关系并不大，我们应该关注的是其背后的区块链技术。上一次我们讲了如何编写代币的智能合约，这次我们来看下怎么发布智能合约。</p>
+<span id="more"></span>
+
+<h2 id="部署合约"><a href="#部署合约" class="headerlink" title="部署合约"></a>部署合约</h2><p>当我们把智能合约编译完成后，我们就可以将其发布到区块链上了，这里我们介绍如何将智能合约发布到本地环境和 Rinkeby 测试环境。</p>
+<p>首先我们需要在<code>migrations</code>文件夹中新增一个<code>2_deploy_contracts.js</code>文件，文件内容如下，这样部署程序才会部署我们的合约：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Mytoken</span> = artifacts.<span class="built_in">require</span>(<span class="string">&#x27;./Mytoken.sol&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="keyword">function</span>(<span class="params">deployer</span>) &#123;</span><br><span class="line">  deployer.<span class="title function_">deploy</span>(<span class="title class_">Mytoken</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="部署本地环境"><a href="#部署本地环境" class="headerlink" title="部署本地环境"></a>部署本地环境</h3><p>我们可以使用之前介绍的<code>Ganache</code>来创建本地环境，打开<code>Ganache</code>客户端我们可以看到本地环境已经启动，同时默认创建了 10 个测试账号。</p>
+<img src="/images/post/2018/07/Ganache.png" class="">
+
+<p>然后打开编辑器开始修改工程目录下的<code>truffle.js</code>文件，新增开发环境网络。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">networks</span>: &#123;</span><br><span class="line">    <span class="comment">// 本地环境配置</span></span><br><span class="line">    <span class="attr">development</span>: &#123;</span><br><span class="line">      <span class="attr">host</span>: <span class="string">&#x27;127.0.0.1&#x27;</span>,</span><br><span class="line">      <span class="attr">port</span>: <span class="number">7545</span>,</span><br><span class="line">      <span class="attr">network_id</span>: <span class="string">&#x27;*&#x27;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后执行发布命令，从输出信息中我们可以看到，我们创建了 2 个智能合约，第一个是项目默认的<code>Migrations</code>，第二个就是我们的代币合约。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ truffle migrate</span><br><span class="line">Using network <span class="string">&#x27;development&#x27;</span>.</span><br><span class="line"></span><br><span class="line">Running migration: 1_initial_migration.js</span><br><span class="line">  Deploying Migrations...</span><br><span class="line">  ... 0x77229d85d7a60ba492254db506561ab1ce56a50198c616ddc9b96555e10b796c</span><br><span class="line">  Migrations: 0xf6a0e4e40f0ae34dba890ebacb775371fb965658  // 这是项目默认的智能合约</span><br><span class="line">Saving successful migration to network...</span><br><span class="line">  ... 0xe0fbc8fa8f42e7a920184c597e5ecf14a1dca8ab7b246a68153f3117cc24aced</span><br><span class="line">Saving artifacts...</span><br><span class="line">Running migration: 2_deploy_contracts.js</span><br><span class="line">  Deploying ZzmCoin...</span><br><span class="line">  ... 0x2aab385e1ea9ab9dd65be93b3df99118a521822b18c48d76e3f6ae7933de9e4d</span><br><span class="line">  Mytoken: 0x593e548762ae1ca31bcdfa1be54f7e93d8265b9c // 这是我们的代币合约</span><br><span class="line">Saving successful migration to network...</span><br><span class="line">  ... 0xc1a702e5d6582aaa6cb57903849a007024c887a89d67a982afa13f09ede7e736</span><br><span class="line">Saving artifacts...</span><br></pre></td></tr></table></figure>
+
+<p>因为部署本地环境是用第一个账号来发布合约，并且创建合约是需要花费账号金额的， 所以发布完成后，我们再次查看<code>Ganache</code>客户端，可以看到我们的第一个账号的账户金额发生了变化，并且产生了 4 个交易，这样就表示我们的代币已经发布成功了。</p>
+<img src="/images/post/2018/07/local_account_balance.png" class="">
+
+<img src="/images/post/2018/07/local_txs.png" class="">
+
+<h3 id="部署-Rinkeby-环境"><a href="#部署-Rinkeby-环境" class="headerlink" title="部署 Rinkeby 环境"></a>部署 Rinkeby 环境</h3><p>下面我们将代币发布到与生产环境比较相似的测试环境 Rinkeby，这里有两种方式可以来发布代币。</p>
+<h4 id="第一种方式：使用-Geth"><a href="#第一种方式：使用-Geth" class="headerlink" title="第一种方式：使用 Geth"></a>第一种方式：使用 Geth</h4><p>我们先用<code>Geth</code>在本地启动一个 Rinkeby 节点，启动时我们指定节点的<code>datadir</code>目录，同时指定我们需要的几个<code>rpcapi</code>，并将日志写入到<code>rinkeby.log</code>文件。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">geth --datadir <span class="string">&quot;rinkeby&quot;</span> --rinkeby --rpcapi eth,web3,personal,db,net --rpc --rpcaddr=0.0.0.0 --rpccorsdomain <span class="string">&quot;*&quot;</span> console 2&gt;&gt;rinkeby.log</span><br></pre></td></tr></table></figure>
+
+<p>这种方式需要将 Rinkeby 的全部数据先同步下来，可以在<code>Geth 的 console 页面</code>输入<code>eth.syncing</code>，如果返回值是<code>false</code>则表示已经同步完成了，如果是返回一个 json 对象，则表示还在同步。</p>
+<p><strong>PS：同步 Rinkeby 全节点数据大概是 16G 左右（截止 2018 年 7 月）</strong></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt; eth.syncing</span><br><span class="line">&#123;</span><br><span class="line">  currentBlock: 2678044,</span><br><span class="line">  highestBlock: 2701227,</span><br><span class="line">  knownStates: 10200179,</span><br><span class="line">  pulledStates: 10200179,</span><br><span class="line">  startingBlock: 2677747</span><br><span class="line">&#125;</span><br><span class="line">&gt; eth.syncing</span><br><span class="line"><span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<p>接着我们编辑<code>truffle.js</code>文件中的网络配置信息：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">networks</span>: &#123;</span><br><span class="line">    <span class="attr">rinkeby</span>: &#123;</span><br><span class="line">      <span class="attr">host</span>: <span class="string">&#x27;127.0.0.1&#x27;</span>,</span><br><span class="line">      <span class="attr">port</span>: <span class="number">8545</span>,</span><br><span class="line">      <span class="attr">from</span>: <span class="string">&#x27;0xd2e7c99558878629bb841678a022508b8ff585ff&#x27;</span>, <span class="comment">// 这里指定由哪个账号来创建智能合约</span></span><br><span class="line">      <span class="attr">network_id</span>: <span class="number">4</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意<code>from</code>属性是指通过哪个账号来创建合约，但这个账号必须在 Rinkeby 网络中有一定数量的 ETH，否则创建合约将失败，Rinkeby 网络获取 ETH 方法可以参照<a href="https://zhaozhiming.github.io/blog/2018/04/18/how-to-earn-eth-and-token-in-rinkeby/">如何在 Rinkeby 网络赚取以太币及代币</a>。</p>
+<p>在发布合约之前，我们还需要将刚才提到的账号解锁，在<code>Geth 的 console 页面</code>输入解锁命令和账号密码，看到返回结果为<code>true</code>则表示解锁成功。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; personal.unlockAccount(<span class="string">&#x27;0xd2e7c99558878629bb841678a022508b8ff585ff&#x27;</span>)</span><br><span class="line">Unlock account 0xd2e7c99558878629bb841678a022508b8ff585ff</span><br><span class="line">Passphrase:</span><br><span class="line"><span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p>最后同样是执行发布命令，但需要在后面加上参数：<code>truffle migrate --network rinkeby</code>，执行成功的输出信息和本地环境是一样的。</p>
+<h4 id="第二种方式：使用-HDwallet"><a href="#第二种方式：使用-HDwallet" class="headerlink" title="第二种方式：使用 HDwallet"></a>第二种方式：使用 HDwallet</h4><p>使用<code>Geth</code>方式比较麻烦的一点就是需要同步全节点的数据，下面介绍通过<code>infura</code>网络直接部署到 Rinkeby 测试环境的方法。</p>
+<p>首先我们需要先安装<code>truffle-hdwallet-provider</code>：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add truffle-hdwallet-provider</span><br></pre></td></tr></table></figure>
+
+<p>然后再修改<code>truffle.js</code>的配置信息，将 Rinkeby 网络配置改成如下所示：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">HDWalletProvider</span> = <span class="built_in">require</span>(<span class="string">&#x27;truffle-hdwallet-provider&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> mnemonic =</span><br><span class="line">  <span class="string">&#x27;trumpet human tree genius reject purity secret off regret join orbit tent&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">networks</span>: &#123;</span><br><span class="line">    <span class="attr">rinkeby</span>: &#123;</span><br><span class="line">      <span class="attr">provider</span>: <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">HDWalletProvider</span>(mnemonic, <span class="string">&#x27;https://rinkeby.infura.io/&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">network_id</span>: <span class="number">4</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>注意，这里通过助记词创建的账号是用来发布智能合约的，所以账号里面也需要有一定数量的 ETH。</p>
+<p>最后执行发布命令<code>truffle migrate --network rinkeby</code>就可以了。</p>
+<h2 id="合约源码开源"><a href="#合约源码开源" class="headerlink" title="合约源码开源"></a>合约源码开源</h2><p>代币发布完成之后，我们可以在以太坊浏览器中查看代币的详细信息，如果我们是发布到 Rinkeby 网络就可以查看<code>rinkeby.etherscan.io</code>这个网址，然后在上面输入合约地址就可以进行代币信息的查询了。</p>
+<img src="/images/post/2018/07/zzm_token.png" class="">
+
+<p>在以太坊上很多运作良好的代币都会将代币合约源码进行开源，以证明代币的公正公开公平，但我们刚发布的代币并没有源码信息，所以我们需要手动上传代币的源码。</p>
+<p>以 Rinkeby 网络为例，进入<code>rinkeby.etherscan.io</code>后在右上角菜单可以看到一个<code>Verify Contract</code>选项。</p>
+<img src="/images/post/2018/07/verify_contract1.png" class="">
+
+<p>点击选项后进入智能合约源码上传页面，在这里要填写合约地址、合约名称，编译器版本等信息，还有上传合约的源码。</p>
+<img src="/images/post/2018/07/verify_contract2.png" class="">
+
+<p>注意事项：</p>
+<ul>
+<li><code>Optimization</code>选项要选择<code>No</code>，选择<code>Yes</code>会报错，具体原因未知</li>
+<li>编译器版本可以查看编译后的 json 文件，里面有<code>compiler</code>属性</li>
+<li>因为我们的合约是继承自<code>Openzeppelin</code>的<code>StandardToken</code>类，所以要将继承的基类源码一起上传才能验证通过，比如我们的代码继承了<code>StandardToken</code>这个基类，就需要将它的代码一起上传，然后<code>StandardToken</code>又继承了<code>ERC20</code>和<code>BaseToken</code>这 2 个类，则需要再将这 2 个类的源码一起上传，这些基类的源码可以在<code>Openzeppelin</code>的 github 仓库中找到。</li>
+</ul>
+<p>最后点击<code>Verify And Publish</code>按钮就可以上传智能合约的源码了，上传成功后我们可以在<code>Code</code>栏查看上传后的源码。</p>
+<img src="/images/post/2018/07/contract_code.png" class="">
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我们主要介绍了代币的智能合约编写、发布以及源码上传等过程，这里要感谢开源社区的框架和工具，让我们编写智能合约变得越来越简单，希望区块链以后可以吸引到更多开发者来参与基础设施的建设。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2018/07/26/token-deploy-migrate-contract/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2018/07/26/token-deploy-migrate-contract/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

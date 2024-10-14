@@ -1,0 +1,546 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>Grid 的完整介绍（二） - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="Grid 的完整介绍（二）"> <!-- TODO: truncate -->
+	<meta name="keywords" content="css,grid">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">Grid 的完整介绍（二）</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2017-01-09T11:30:00.000Z" itemprop="datePublished">1月 9, 2017</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/css/">css</a> <a href="/tags/grid/">grid</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2017/01/css_grid2.png" class="" width="400" height="350">
+
+<p>全篇 blog 太长，分成三篇文章分享。</p>
+<p>原文地址见这里：<a target="_blank" rel="noopener" href="https://css-tricks.com/snippets/css/complete-guide-grid/">A Complete Guide to Grid</a>。</p>
+<ul>
+<li><a href="http://zhaozhiming.github.io/blog/2017/01/08/complete-guide-grid-zhcn-part1/">Grid 的完整介绍（一）</a></li>
+<li><a href="http://zhaozhiming.github.io/blog/2017/01/10/complete-guide-grid-zhcn-part3/">Grid 的完整介绍（三）</a></li>
+</ul>
+<span id="more"></span>
+
+<h2 id="Grid-的完整介绍（二）"><a href="#Grid-的完整介绍（二）" class="headerlink" title="Grid 的完整介绍（二）"></a>Grid 的完整介绍（二）</h2><h3 id="网格容器的属性"><a href="#网格容器的属性" class="headerlink" title="网格容器的属性"></a>网格容器的属性</h3><ul>
+<li><a href="#display">display</a></li>
+<li><a href="#grid-template-columns">grid-template-columns</a></li>
+<li><a href="#grid-template-rows">grid-template-rows</a></li>
+<li><a href="#grid-template-areas">grid-template-areas</a></li>
+<li><a href="#grid-column-gap">grid-column-gap</a></li>
+<li><a href="#grid-row-gap">grid-row-gap</a></li>
+<li><a href="#grid-gap">grid-gap</a></li>
+<li><a href="#justify-items">justify-items</a></li>
+<li><a href="#align-items">align-items</a></li>
+<li><a href="#justify-content">justify-content</a></li>
+<li><a href="#align-content">align-content</a></li>
+<li><a href="#grid-auto-columns">grid-auto-columns</a></li>
+<li><a href="#grid-auto-rows">grid-auto-rows</a></li>
+<li><a href="#grid-auto-flow">grid-auto-flow</a></li>
+<li><a href="#grid">grid</a></li>
+</ul>
+<h4 id="display"><a href="#display" class="headerlink" title="display"></a>display</h4><p>定义一个元素为网格容器并为其内容创建一个新的网格格式环境。</p>
+<p>值有：</p>
+<ul>
+<li>grid - 生成一个块级别的网格</li>
+<li>inline-grid - 生成一个内联级别的网格</li>
+<li>subgrid - 如果你的网格容器是它自己的一个网格子项（比如内嵌的网格），你可以使用这个属性来表示你想要从其父级来获取行和列的大小而不是自己来指定它们。</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">display</span>: grid | inline-grid | subgrid;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：<code>column</code>, <code>float</code>, <code>clear</code>和<code>vertical-align</code>对网格容器没有效果。</p>
+<h4 id="grid-template-columns"><a href="#grid-template-columns" class="headerlink" title="grid-template-columns"></a>grid-template-columns</h4><h4 id="grid-template-rows"><a href="#grid-template-rows" class="headerlink" title="grid-template-rows"></a>grid-template-rows</h4><p>通过空格分隔的一系列值来定义网格的行和列，这些值相当于轨迹大小，它们之间的距离相当于网格线。</p>
+<p>值有：</p>
+<ul>
+<li><track-size> - 可以是一个长度，百分比或者是网格中自由空间的份数（使用<code>fr</code>这个单位）</li>
+<li><line-name> - 一个你选择的任意名字</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-template-columns</span>: &lt;track-size&gt; ... | &lt;line-name&gt; &lt;track-size&gt; ...;</span><br><span class="line">  <span class="attribute">grid-template-rows</span>: &lt;track-size&gt; ... | &lt;line-name&gt; &lt;track-size&gt; ...;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>举例：</p>
+<p>当你在轨迹值中间留空格，网格线将被自动以数字命名：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-template-columns</span>: <span class="number">40px</span> <span class="number">50px</span> auto <span class="number">50px</span> <span class="number">40px</span>;</span><br><span class="line">  <span class="attribute">grid-template-rows</span>: <span class="number">25%</span> <span class="number">100px</span> auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-numbers.png" class="">
+
+<p>但你可以给网格线指定一个名字，注意网格线命名时的中括号语法：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-template-columns</span>: [first] <span class="number">40px</span> [line2] <span class="number">50px</span> [line3] auto [col4-start] <span class="number">50px</span> [five] <span class="number">40px</span> [end];</span><br><span class="line">  <span class="attribute">grid-template-rows</span>: [row1-start] <span class="number">25%</span> [row1-end] <span class="number">100px</span> [third-line] auto [last-line];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-names.png" class="">
+
+<p>注意一根网格线可以有多个名字，例如在下面的例子中第二根线有两个名字：<code>row1-end</code> 和 <code>row2-start</code>。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-template-rows</span>: [row1-start] <span class="number">25%</span> [row1-end row2-start] <span class="number">25%</span> [row2-end];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果你定义了容器的重复部分，你可以使用<code>repeat()</code>方法来生成多个相同值：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-template-columns</span>: <span class="built_in">repeat</span>(<span class="number">3</span>, <span class="number">20px</span> [col-start]) <span class="number">5%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>它等价于：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-template-columns</span>: <span class="number">20px</span> [col-start] <span class="number">20px</span> [col-start] <span class="number">20px</span> [col-start] <span class="number">5%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>fr</code>单元允许你将网格容器中的自由空间设置为一个份数，举个例子，下面的例子将把网格容器的每个子项设置为三分之一。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-template-columns</span>: <span class="number">1</span>fr <span class="number">1</span>fr <span class="number">1</span>fr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>自由空间是在固定子项确定后开始计算的，在下面的例子中自由空间是<code>fr</code>单位的总和但不包括<code>50px</code>：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-template-columns</span>: <span class="number">1</span>fr <span class="number">50px</span> <span class="number">1</span>fr <span class="number">1</span>fr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="grid-template-areas"><a href="#grid-template-areas" class="headerlink" title="grid-template-areas"></a>grid-template-areas</h4><p>通过引用在<code>grid-area</code>属性中指定的网格区域名字来定义网格模板。重复网格区域的名字将让内容跨越那些单元。一个句点表示一个空单元，语法本身提供了一个可视化的结构网格。</p>
+<p>值有：</p>
+<ul>
+<li><grid-area-name> - 在<code>grid-area</code>中指定的网格区域名字</li>
+<li>. - 一个句点表示一个空的网格单元</li>
+<li>none - 没有网格区域被定义</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-template-areas</span>: <span class="string">&quot;&lt;grid-area-name&gt; | . | none | ...&quot;</span></span><br><span class="line">                       <span class="string">&quot;...&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>举个例子：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.item-a</span>&#123;</span><br><span class="line">  <span class="attribute">grid-area</span>: header;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.item-b</span>&#123;</span><br><span class="line">  <span class="attribute">grid-area</span>: main;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.item-c</span>&#123;</span><br><span class="line">  <span class="attribute">grid-area</span>: sidebar;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.item-d</span>&#123;</span><br><span class="line">  <span class="attribute">grid-area</span>: footer;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-template-columns</span>: <span class="number">50px</span> <span class="number">50px</span> <span class="number">50px</span> <span class="number">50px</span>;</span><br><span class="line">  <span class="attribute">grid-template-rows</span>: auto;</span><br><span class="line">  <span class="attribute">grid-template-areas</span>: <span class="string">&quot;header header header header&quot;</span></span><br><span class="line">                       <span class="string">&quot;main main . sidebar&quot;</span></span><br><span class="line">                       <span class="string">&quot;footer footer footer footer&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这将创建一个 4 乘以 3 的网格，第一行由<code>header</code>区域组成，中间一行由 2 个<code>main</code>区域和一个空单元和一个<code>sidebar</code>区域组成，最后一行由<code>footer</code>区域组成。</p>
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-template-areas.png" class="">
+
+<p>在你定义的每一行都需要拥有相同的单元格。</p>
+<p>你可以使用任意毗邻的阶段来声明一个单独的空单元，只要这些阶段中间没有空间都可以认为是一个单独的单元。</p>
+<p>注意，在这里你的语法只是命名了区域但没有对网格线进行命名，当你使这种语法时，区域任意一边的线会被自动命名。如果你的网格区域的名字是<code>foo</code>，然么网格的开始行和开始列网格线的名字将会是<code>foo-start</code>，并且它的最后一行和最后一列的网格线名字是<code>foo-end</code>。这意味着一些网格线可能有多个名字，比如上面那个例子中最左边的线，它会有三个名字分别是：<code>header-start</code>，<code>main-start</code>，<code>footer-start</code>。</p>
+<h4 id="grid-column-gap"><a href="#grid-column-gap" class="headerlink" title="grid-column-gap"></a>grid-column-gap</h4><h4 id="grid-row-gap"><a href="#grid-row-gap" class="headerlink" title="grid-row-gap"></a>grid-row-gap</h4><p>指定网格线的大小，你可以认为它就是设置行和列中间沟槽的宽度。</p>
+<p>值有：</p>
+<ul>
+<li><line-size> - 一个长度值</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-column</span>-<span class="attribute">gap</span>: &lt;line-size&gt;;</span><br><span class="line">  <span class="attribute">grid-row</span>-<span class="attribute">gap</span>: &lt;line-size&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>举例：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-template-columns</span>: <span class="number">100px</span> <span class="number">50px</span> <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">grid-template-rows</span>: <span class="number">80px</span> auto <span class="number">80px</span>;</span><br><span class="line">  <span class="attribute">grid-column</span>-<span class="attribute">gap</span>: <span class="number">10px</span>;</span><br><span class="line">  <span class="attribute">grid-row</span>-<span class="attribute">gap</span>: <span class="number">15px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-column-row-gap.png" class="">
+
+<p>只会创建行和列的沟槽，不包括边缘。</p>
+<h4 id="grid-gap"><a href="#grid-gap" class="headerlink" title="grid-gap"></a>grid-gap</h4><p>一个<code>grid-column-gap</code> + <code>grid-row-gap</code>的简称。</p>
+<p>值有：</p>
+<ul>
+<li><grid-column-gap> <grid-row-gap> - 长度值</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-gap</span>: &lt;grid-column-gap&gt; &lt;grid-row-gap&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>举例：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-template-columns</span>: <span class="number">100px</span> <span class="number">50px</span> <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">grid-template-rows</span>: <span class="number">80px</span> auto <span class="number">80px</span>;</span><br><span class="line">  <span class="attribute">grid-gap</span>: <span class="number">10px</span> <span class="number">15px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果没有写<code>grid-row-gap</code>，那么它的值将和<code>grid-column-gap</code>的一样。</p>
+<h4 id="justify-items"><a href="#justify-items" class="headerlink" title="justify-items"></a>justify-items</h4><p>让网格子项的内容和列轴对齐（<code>align-items</code>则相反，是和行轴对齐），这个值对容器里面的所有网格子项都有用。</p>
+<p>值有：</p>
+<ul>
+<li>start - 内容和网格区域的左边对齐</li>
+<li>end - 内容和网格区域的右边对齐</li>
+<li>center - 内容和网格区域的中间对齐</li>
+<li>stretch - 填充整个网格区域的宽度（默认值）</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">justify-items</span>: start | end | center | stretch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>举例：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">justify-items</span>: start;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-justify-items-start.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">justify-items</span>: end;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-justify-items-end.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">justify-items</span>: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-justify-items-center.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">justify-items</span>: stretch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-justify-items-stretch.png" class="">
+
+<p>可以通过<code>justify-self</code>属性把这个行为设置到单独的网格子项。</p>
+<h5 id="align-items"><a href="#align-items" class="headerlink" title="align-items"></a>align-items</h5><p>让网格子项的内容和行轴对齐（<code>justify-items</code>则相反，是和列轴对齐），这个值对容器里面的所有网格子项都有用。</p>
+<p>值有：</p>
+<ul>
+<li>start - 内容和网格区域的上边对齐</li>
+<li>end - 内容和网格区域的下边对齐</li>
+<li>center - 内容和网格区域的中间对齐</li>
+<li>stretch - 填充整个网格区域的高度（默认值）</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">align-items</span>: start | end | center | stretch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>举例：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">align-items</span>: start;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-align-items-start.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">align-items</span>: end;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-align-items-end.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">align-items</span>: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-align-items-center.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">align-items</span>: stretch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-align-items-stretch.png" class="">
+
+<p>可以通过<code>align-self</code>属性把这个行为设置到单独的网格子项。</p>
+<h4 id="justify-content"><a href="#justify-content" class="headerlink" title="justify-content"></a>justify-content</h4><p>有时候你的网格总大小可能会比它的网格容器的容量小，这可能是你的所有网格子项都使用了固定值比如<code>px</code>来确定大小，在这个情况下你可以在网格容器中设置网格的对齐方式。这个属性将网格和列轴对齐（和<code>align-content</code>相反，它是和行轴对齐）。</p>
+<p>值有：</p>
+<ul>
+<li>start - 网格在网格容器左边对齐</li>
+<li>end - 网格在网格容器右边对齐</li>
+<li>center - 网格在网格容器中间对齐</li>
+<li>stretch - 改变网格子项的容量让其填充整个网格容器宽度</li>
+<li>space-around - 在每个网格子项中间放置均等的空间，在始末两端只有一半大小</li>
+<li>space-between - 在每个网格子项中间放置均等的空间，在始末两端没有空间</li>
+<li>space-evenly - 在每个网格子项中间放置均等的空间，包括始末两端</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">justify-content</span>: start | end | center | stretch | space-around | space-between | space-evenly;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>举例：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">justify-content</span>: start;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-justify-content-start.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">justify-content</span>: end;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-justify-content-end.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">justify-content</span>: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-justify-content-center.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">justify-content</span>: stretch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-justify-content-stretch.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">justify-content</span>: space-around;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-justify-content-space-around.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">justify-content</span>: space-between;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-justify-content-space-between.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">justify-content</span>: space-evenly;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-justify-content-space-evenly.png" class="">
+
+<h4 id="align-content"><a href="#align-content" class="headerlink" title="align-content"></a>align-content</h4><p>有时候你的网格总大小可能会比它的网格容器的容量小，这可能是你的所有网格子项都使用了固定值比如<code>px</code>来确定大小，在这个情况下你可以在网格容器中设置网格的对齐方式。这个属性将网格和行轴对齐（和<code>justify-content</code>相反，它是和列轴对齐）。</p>
+<p>值有：</p>
+<ul>
+<li>start - 网格在网格容器上边对齐</li>
+<li>end - 网格在网格容器下边对齐</li>
+<li>center - 网格在网格容器中间对齐</li>
+<li>stretch - 改变网格子项的容量让其填充整个网格容器高度</li>
+<li>space-around - 在每个网格子项中间放置均等的空间，在始末两端只有一半大小</li>
+<li>space-between - 在每个网格子项中间放置均等的空间，在始末两端没有空间</li>
+<li>space-evenly - 在每个网格子项中间放置均等的空间，包括始末两端</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">align-content</span>: start | end | center | stretch | space-around | space-between | space-evenly;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">align-content</span>: start;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-align-content-start.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">align-content</span>: end;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-align-content-end.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">align-content</span>: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-align-content-center.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">align-content</span>: stretch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-align-content-stretch.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">align-content</span>: space-around;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-align-content-space-around.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">align-content</span>: space-between;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-align-content-space-between.png" class="">
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">align-content</span>: space-evenly;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-align-content-space-evenly.png" class="">
+
+<h4 id="grid-auto-columns"><a href="#grid-auto-columns" class="headerlink" title="grid-auto-columns"></a>grid-auto-columns</h4><h4 id="grid-auto-rows"><a href="#grid-auto-rows" class="headerlink" title="grid-auto-rows"></a>grid-auto-rows</h4><p>指定自动生成的网格迹的大小（又叫隐式网格轨迹），当你精确指定行和列的位置大于定义的网格时（通过 grid-template-rows&#x2F;grid-template-columns）时隐式网格轨迹会被创建。</p>
+<p>值有：</p>
+<p><track-size> - 可以是一个长度，百分比或者是一个网格中自由空间的份数（通过使用<code>fr</code>单位）。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-auto-columns</span>: &lt;track-size&gt; ...;</span><br><span class="line">  <span class="attribute">grid-auto-rows</span>: &lt;track-size&gt; ...;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>为了说明隐式网格轨迹如何被创建，思考一下这个：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-template-columns</span>: <span class="number">60px</span> <span class="number">60px</span>;</span><br><span class="line">  <span class="attribute">grid-template-rows</span>: <span class="number">90px</span> <span class="number">90px</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-auto.png" class="">
+
+<p>这里创建了 2 x 2 的网格。</p>
+<p>但现在想象你使用<code>grid-column</code>和<code>grid-row</code>来定位你的网格子项，就像这样：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.item-a</span>&#123;</span><br><span class="line">  <span class="attribute">grid-column</span>: <span class="number">1</span> / <span class="number">2</span>;</span><br><span class="line">  <span class="attribute">grid-row</span>: <span class="number">2</span> / <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.item-b</span>&#123;</span><br><span class="line">  <span class="attribute">grid-column</span>: <span class="number">5</span> / <span class="number">6</span>;</span><br><span class="line">  <span class="attribute">grid-row</span>: <span class="number">2</span> / <span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/implicit-tracks.png" class="">
+
+<p>我们告诉<code>.item-b</code>在第 5 列网格线开始第 6 列网格线结束，但我们还没有定义第 5 或者第 6 列。因为我们引用的线不存在，0 宽度的隐式网格轨迹将被创建来填充这些空缺。我们可以使用<code>grid-auto-columns</code>和<code>grid-auto-rows</code>来指定这些隐式网格轨迹的宽度：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-auto-columns</span>: <span class="number">60px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/implicit-tracks-with-widths.png" class="">
+
+<h4 id="grid-auto-flow"><a href="#grid-auto-flow" class="headerlink" title="grid-auto-flow"></a>grid-auto-flow</h4><p>如果你有网格子项没有明确地放置在网格中，自动布局算法会将网格子项自动放置起来，这个属性控制自动布局算法如何工作。</p>
+<p>值有：</p>
+<ul>
+<li>row - 告诉自动布局算法在每一行中依次填充，必要时添加新行</li>
+<li>column - 告诉自动布局算法在每一列中依次填充，必要时添加新列</li>
+<li>dense - 告诉自动布局算法如果更小的子项出现时尝试在网格中填补漏洞</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">  <span class="attribute">grid-auto-flow</span>: row | column | row dense | column dense</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意<code>dense</code>可能让你的网格子项出现错乱。</p>
+<p>举个例子：</p>
+<p>考虑一下这个 HTML：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">section</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;item-a&quot;</span>&gt;</span>item-a<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;item-b&quot;</span>&gt;</span>item-b<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;item-c&quot;</span>&gt;</span>item-c<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;item-d&quot;</span>&gt;</span>item-d<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;item-e&quot;</span>&gt;</span>item-e<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>你定义一个 5 列 2 行的网格，并设置<code>grid-auto-flow</code>为<code>row</code>（这也是默认值）：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">    <span class="attribute">display</span>: grid;</span><br><span class="line">    <span class="attribute">grid-template-columns</span>: <span class="number">60px</span> <span class="number">60px</span> <span class="number">60px</span> <span class="number">60px</span> <span class="number">60px</span>;</span><br><span class="line">    <span class="attribute">grid-template-rows</span>: <span class="number">30px</span> <span class="number">30px</span>;</span><br><span class="line">    <span class="attribute">grid-auto-flow</span>: row;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当在网格中放置子项时，你只能为其中 2 个指定斑点：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.item-a</span>&#123;</span><br><span class="line">    <span class="attribute">grid-column</span>: <span class="number">1</span>;</span><br><span class="line">    <span class="attribute">grid-row</span>: <span class="number">1</span> / <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.item-e</span>&#123;</span><br><span class="line">    <span class="attribute">grid-column</span>: <span class="number">5</span>;</span><br><span class="line">    <span class="attribute">grid-row</span>: <span class="number">1</span> / <span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为我们设置<code>grid-auto-flow</code>为<code>row</code>，我们的网格看起来就像这样，注意这三个我们没有放置的子项（<code>item-b</code>，<code>item-c</code>，<code>item-d</code>) 将如何以行的方式流动的：</p>
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-auto-flow-row.png" class="">
+
+<p>如果我们将<code>grid-auto-flow</code>设为<code>column</code>，<code>item-b</code>，<code>item-c </code>和<code>item-d</code>以列的方式向下流动：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">    <span class="attribute">display</span>: grid;</span><br><span class="line">    <span class="attribute">grid-template-columns</span>: <span class="number">60px</span> <span class="number">60px</span> <span class="number">60px</span> <span class="number">60px</span> <span class="number">60px</span>;</span><br><span class="line">    <span class="attribute">grid-template-rows</span>: <span class="number">30px</span> <span class="number">30px</span>;</span><br><span class="line">    <span class="attribute">grid-auto-flow</span>: column;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-auto-flow-column.png" class="">
+
+<h4 id="grid"><a href="#grid" class="headerlink" title="grid"></a>grid</h4><p>以下属性的简写方式：<code>grid-template-rows</code>，<code>grid-template-columns</code>，<code>grid-template-areas</code>，<code>grid-auto-rows</code>，<code>grid-auto-columns</code>，<code>grid-auto-flow</code>。它也可以设置<code>grid-column-gap</code>和<code>grid-row-gap</code>为它们的初始值，尽管它们不能通过这个属性来精确设置。<br>值有：</p>
+<ul>
+<li>none - 设置所有紫属性为它们的初始值</li>
+<li><grid-template-rows> &#x2F; <grid-template-columns> - 分别设置<code>grid-template-rows</code>和<code>grid-template-columns</code>的指定值，以及设置其他所有子属性为初始值</li>
+<li><grid-auto-flow> [<grid-auto-rows> [ &#x2F; <grid-auto-columns>] ] - 分别接收所有像<code>grid-auto-flow</code>，<code>grid-auto-rows</code>和<code>grid-auto-columnsaccepts</code>的相同值。如果<code>grid-auto-columns</code>被省略了，那么它的值会通过<code>grid-auto-rows</code>来设置，如果两个都省略了，它们将被设置为默认值。</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">    <span class="attribute">grid</span>: none | &lt;grid-template-rows&gt; / &lt;grid-template-columns&gt; | &lt;grid-auto-flow&gt; [&lt;grid-auto-rows&gt; [/ &lt;grid-auto-columns&gt;]];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>举例：</p>
+<p>下面 2 段代码是相等的：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">    <span class="attribute">grid</span>: <span class="number">200px</span> auto / <span class="number">1</span>fr auto <span class="number">1</span>fr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">    <span class="attribute">grid-template-rows</span>: <span class="number">200px</span> auto;</span><br><span class="line">    <span class="attribute">grid-template-columns</span>: <span class="number">1</span>fr auto <span class="number">1</span>fr;</span><br><span class="line">    <span class="attribute">grid-template-areas</span>: none;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面这 2 段代码也是等价的：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">    <span class="attribute">grid</span>: column <span class="number">1</span>fr / auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">    <span class="attribute">grid-auto-flow</span>: column;</span><br><span class="line">    <span class="attribute">grid-auto-rows</span>: <span class="number">1</span>fr;</span><br><span class="line">    <span class="attribute">grid-auto-columns</span>: auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>它也可以接收一个更复杂但又相当方便的语法来一次性设置所有属性，你可以指定<code>grid-template-areas</code>，<code>grid-auto-rows</code>和<code>grid-auto-columns</code>，并且所有其他紫属性被设置为它们的默认值。你需要做的是指定网格线的名称和网格轨迹的大小来生成它们的网格区域。最简单的表述方法就是举一个例子：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">    <span class="attribute">grid</span>: [row1-start] <span class="string">&quot;header header header&quot;</span> <span class="number">1</span>fr [row1-end]</span><br><span class="line">          [row2-start] <span class="string">&quot;footer footer footer&quot;</span> <span class="number">25px</span> [row2-end]</span><br><span class="line">          / auto <span class="number">50px</span> auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面跟下面是等价的：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line">    <span class="attribute">grid-template-areas</span>: <span class="string">&quot;header header header&quot;</span></span><br><span class="line">                         <span class="string">&quot;footer footer footer&quot;</span>;</span><br><span class="line">    <span class="attribute">grid-template-rows</span>: [row1-start] <span class="number">1</span>fr [row1-end row2-start] <span class="number">25px</span> [row2-end];</span><br><span class="line">    <span class="attribute">grid-template-columns</span>: auto <span class="number">50px</span> auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2017/01/09/complete-guide-grid-zhcn-part2/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2017/01/09/complete-guide-grid-zhcn-part2/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

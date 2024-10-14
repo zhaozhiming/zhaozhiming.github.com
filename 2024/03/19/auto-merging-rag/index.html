@@ -1,0 +1,312 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>高级 RAG 检索策略之自动合并检索 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="使用自动合并进行高级 RAG 检索"> <!-- TODO: truncate -->
+	<meta name="keywords" content="rag, llamaindex, auto-merging">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">高级 RAG 检索策略之自动合并检索</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2024-03-19T10:24:16.000Z" itemprop="datePublished">3月 19, 2024</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/llamaindex/">llamaindex</a> <a href="/tags/rag/">rag</a> <a href="/tags/auto-merging/">auto-merging</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2024/03/auto-merging.jpg" class="" width="400" height="300">
+
+<p>之前介绍了高级 RAG 检索的句子窗口检索策略，今天我们再来介绍另外一种高级检索策略——自动合并检索，它比句子窗口要复杂一些，但请不用担心，下面的介绍会让你理解其中原理，同时会介绍如何使用 LlamaIndex 来构建一个自动合并检索，最后使用 Trulens 来对检索效果进行评估，并与之前的检索策略进行对比。</p>
+<span id="more"></span>
+
+<h2 id="自动合并检索介绍"><a href="#自动合并检索介绍" class="headerlink" title="自动合并检索介绍"></a>自动合并检索介绍</h2><p>自动合并检索主要是将文档按照块大小拆分成不同层级的节点，这些节点包括父节点和子节点，然后在检索过程中找到相似度高的叶子节点，如果一个父节点中有多个子节点被检索到，那么这个父节点就会被自动合并，最终将父节点的所有文档都作为上下文发送给 LLM（大语言模型），下面是自动合并检索的示意图：</p>
+<img src="/images/post/2024/03/auto-merging-rag.png" class="" width="1000" height="600">
+
+<p>自动合并检索是 LlamaIndex 中的一种高级检索功能，主要有文档拆分和文档合并两个过程，下面我们将通过代码来讲解其中的原理。</p>
+<h3 id="文档拆分"><a href="#文档拆分" class="headerlink" title="文档拆分"></a>文档拆分</h3><p>在构建一个自动合并检索时，我们首先要创建一个 HierarchicalNodeParser 文档解析器：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> SimpleDirectoryReader</span><br><span class="line"><span class="keyword">from</span> llama_index.core.node_parser <span class="keyword">import</span> HierarchicalNodeParser</span><br><span class="line"></span><br><span class="line">documents = SimpleDirectoryReader(<span class="string">&quot;./data&quot;</span>).load_data()</span><br><span class="line">node_parser = HierarchicalNodeParser.from_defaults(chunk_sizes=[<span class="number">2048</span>, <span class="number">512</span>, <span class="number">128</span>])</span><br><span class="line">nodes = node_parser.get_nodes_from_documents(documents)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>首先我们从<code>data</code>目录中加载文档，这个目录的文档是我们我们之前使用的维基百科上的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Avenger">复仇者联盟</a>电影剧情</li>
+<li>然后我们创建一个<code>HierarchicalNodeParser</code>文档解析器，并设置<code>chunk_sizes</code>为[2048, 512, 128]</li>
+<li>再使用文档解析器将文档解析成节点</li>
+</ul>
+<p>HierarchicalNodeParser 解析器中的参数<code>chunk_sizes</code>默认值是<code>[2048, 512, 128]</code>，这表示将文档拆分成 3 个层级，第一个层级的文档大小为 2048，第二个层级的文档大小为 512，第三个层级的文档大小为 128。当然你也可以将层级设置为更少或者更多，比如设置成 2 级，那么<code>chunk_sizes</code>可以是<code>[1024, 128]</code>，或者 4 级<code>[2048, 1024, 512, 128]</code>。文档拆分的越小，检索的准确度就会越高，但同时也会造成合并的概率降低，需要根据评估结果来进行调整。</p>
+<h4 id="获取根节点和叶子节点"><a href="#获取根节点和叶子节点" class="headerlink" title="获取根节点和叶子节点"></a>获取根节点和叶子节点</h4><p>LlamaIndex 提供了几个工具函数来帮助我们获取节点中不同层级的节点，首先我们看下如何获取根节点和叶子节点：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.node_parser <span class="keyword">import</span> get_leaf_nodes, get_root_nodes</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;total len: <span class="subst">&#123;<span class="built_in">len</span>(nodes)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">root_nodes = get_root_nodes(nodes)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;root len: <span class="subst">&#123;<span class="built_in">len</span>(root_nodes)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">leaf_nodes = get_leaf_nodes(nodes)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;leaf len: <span class="subst">&#123;<span class="built_in">len</span>(leaf_nodes)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">total <span class="built_in">len</span>: <span class="number">66</span></span><br><span class="line">root <span class="built_in">len</span>: <span class="number">4</span></span><br><span class="line">leaf <span class="built_in">len</span>: <span class="number">52</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>get_leaf_nodes</code>和<code>get_root_nodes</code>这 2 个方法都是传入一个节点列表</li>
+<li>可以看到总的节点数是 66，根节点是 4，叶子节点是 52</li>
+<li>根节点加上叶子节点的总数是 56（4+52），和总节点数 66 并不匹配，所以剩下的节点是中间层级的节点，我们可以推算出中间节点数是 10（66-56）</li>
+<li>如果你的文档层级是 2 级，那么根节点和叶子节点数加起来的总数就等于总节点数</li>
+</ul>
+<h4 id="获取不同层级节点"><a href="#获取不同层级节点" class="headerlink" title="获取不同层级节点"></a>获取不同层级节点</h4><p>我们再用其他工具函数来验证我们的推理是否正确，这里我们需要使用到 get_deeper_nodes 函数：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.node_parser <span class="keyword">import</span> get_deeper_nodes</span><br><span class="line"></span><br><span class="line">deep0_nodes = get_deeper_nodes(nodes, depth=<span class="number">0</span>)</span><br><span class="line">deep1_nodes = get_deeper_nodes(nodes, depth=<span class="number">1</span>)</span><br><span class="line">deep2_nodes = get_deeper_nodes(nodes, depth=<span class="number">2</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;deep0 len: <span class="subst">&#123;<span class="built_in">len</span>(deep0_nodes)&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;deep1 len: <span class="subst">&#123;<span class="built_in">len</span>(deep1_nodes)&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;deep2 len: <span class="subst">&#123;<span class="built_in">len</span>(deep2_nodes)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">deep0 <span class="built_in">len</span>: <span class="number">4</span></span><br><span class="line">deep1 <span class="built_in">len</span>: <span class="number">10</span></span><br><span class="line">deep2 <span class="built_in">len</span>: <span class="number">52</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>get_deeper_nodes 方法第一个参数是节点列表，第二参数是要查询的层级，0 表示第 1 层级，也就是根节点</li>
+</ul>
+<p>可以看到<code>deep0</code>节点数是 4，相当是根节点，<code>deep2</code>的节点数是 52，相当是叶子节点，而<code>deep1</code>就是中间层级的节点，共有 10 个，和我们推理的结果是一致的。</p>
+<img src="/images/post/2024/03/am-node-parse.png" class="" width="1000" height="600">
+
+<h4 id="获取子节点"><a href="#获取子节点" class="headerlink" title="获取子节点"></a>获取子节点</h4><p>LlamaIndex 还提供了 get_child_nodes 函数来获取节点的子节点：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.node_parser <span class="keyword">import</span> get_child_nodes</span><br><span class="line"></span><br><span class="line">middle_nodes = get_child_nodes(root_nodes, all_nodes=nodes)</span><br><span class="line">leaf_nodes = get_child_nodes(middle_nodes, all_nodes=nodes)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;middle len: <span class="subst">&#123;<span class="built_in">len</span>(middle_nodes)&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;leaf len: <span class="subst">&#123;<span class="built_in">len</span>(leaf_nodes)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">middle <span class="built_in">len</span>: <span class="number">10</span></span><br><span class="line">leaf <span class="built_in">len</span>: <span class="number">52</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>get_child_nodes 方法第一个参数是要获取子节点的节点列表，第二个参数是所有节点</li>
+<li>这里我们先获取根节点下的所有子节点，得到 10 个子节点，这些节点也就是中间层级节点</li>
+<li>然后我们再获取这些中间节点下的所有子节点，得到 52 个子节点，这些节点也就是叶子节点</li>
+</ul>
+<p>当然我们也可以获取某个节点下的子节点，比如获取第一个根节点的子节点：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root0_child_nodes = get_child_nodes(root_nodes[<span class="number">0</span>], all_nodes=nodes)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;root0 child len: <span class="subst">&#123;<span class="built_in">len</span>(root0_child_nodes)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">root0 child <span class="built_in">len</span>: <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>这表示第一个根节点下有两个子节点，这 2 个子节点也是中间层级节点。</p>
+<h4 id="节点文档内容"><a href="#节点文档内容" class="headerlink" title="节点文档内容"></a>节点文档内容</h4><p>每个父节点的文档内容包含了它所有子节点的文档内容：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;deep1[0] node: <span class="subst">&#123;deep1_nodes[<span class="number">0</span>].text&#125;</span>&quot;</span>)</span><br><span class="line">child = get_child_nodes([deep1_nodes[<span class="number">0</span>]], all_nodes=nodes)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;child[0] node of deep1[0]: <span class="subst">&#123;child[<span class="number">0</span>].text&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">deep1[<span class="number">0</span>] node: 自从宇宙魔方于<span class="number">1942</span>年被人类发现后针对其展开过无数次探索，栖息于宇宙中的强大外星势力也从此开始盯住地球，被它们营救的洛基负责率领齐塔瑞军团。在地球，由神盾局建立的一所科研基地[注 <span class="number">14</span>]中进行着神盾局与美国国家航空航天局和美国空军合作的“天马项目”[注 <span class="number">15</span>]，试图提炼出魔方的能量并加以利用，但却造成魔方的能量数值持续攀升。神盾局探员菲尔·考森和玛丽亚·希尔受尼克·弗瑞局长的命令疏散基地，而魔方却于地下实验室自行开启传送门将洛基传送过来。洛基杀光所有护卫后，用他手上的一把能灌输能量的权杖洗脑并操纵弗瑞的亲信克林特·巴顿和协助神盾局着手魔方项目的科学家埃里克·塞尔维格格，在他们的陪同下带着魔方坐车逃离基地。没过多久，流出的能量爆发造成基地完全坍塌，弗瑞为了应对外来威胁而命令所有人备战。</span><br><span class="line">child[<span class="number">0</span>] node of deep1[<span class="number">0</span>]: 自从宇宙魔方于<span class="number">1942</span>年被人类发现后针对其展开过无数次探索，栖息于宇宙中的强大外星势力也从此开始盯住地球，被它们营救的洛基负责率领齐塔</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们首先打印中间层级第一个节点的文档内容</li>
+<li>然后再获取这个中间节点第一个子节点，并打印其文档内容</li>
+<li>可以看到父节点的文档内容包含了子节点的文档内容</li>
+</ul>
+<h3 id="文档合并"><a href="#文档合并" class="headerlink" title="文档合并"></a>文档合并</h3><p>文档合并是自动合并检索的重要组成部分，文档合并的效果决定了提交给 LLM 的上下文内容，从而影响了最终的生成结果。</p>
+<p>首先自动合并检索会根据问题对所有叶子节点进行检索，这使得检索的准确率比较高，在自动合并检索中有一个参数叫<code>simple_ratio_thresh</code>，它的默认值是 0.5，表示自动合并文档的阀值，如果在一个父节点中，子节点被检索到的比例小于这个阀值，那么自动合并功能将不会生效，这样提交给 LLM 的上下文就只会包含检索到的叶子节点。反之如果大于这个阀值，文档就会自动合并，最终提交给 LLM 的上下文就会包含这个父节点的内容。</p>
+<p>比如父节点有 4 个子节点，检索时发现只有 1 个子节点，那么子节点被检索到的比例就是 0.25（1&#x2F;4），小于阀值 0.5，所以自动合并功能不会生效，最终提交给 LLM 的上下文就只会包含那个检索到的子节点。</p>
+<img src="/images/post/2024/03/am-ratio-less.png" class="" width="600" height="400">
+
+<p>如果父节点有 4 个子节点，检索时发现有 3 个子节点，那么子节点被检索到的比例就是 0.75（3&#x2F;4），大于阀值 0.5，所以自动合并功能会生效，最终提交给 LLM 的上下文就是父节点的内容。</p>
+<img src="/images/post/2024/03/am-ratio-large.png" class="" width="600" height="400">
+
+<p>而且自动合并的功能是一个不断重复的过程，这表示自动合并会从最底层的节点开始合并，然后一直合并到最顶层的节点，最终得到所有合并后的文档，重复的次数取决于文档解析器拆分文档的层级和达到阀值的父节点数，比如<code>chunk_sizes</code>是<code>[2048, 512, 128]</code>，那么文档拆分后的层级是 3，如果拆分后的文档数从下到上如果是 4-2-1，并且每一层的自动合并都被触发的话，那么总共就会自动合并 2 次。</p>
+<img src="/images/post/2024/03/am-ratio-recursive.png" class="" width="800" height="600">
+
+<h2 id="自动合并使用"><a href="#自动合并使用" class="headerlink" title="自动合并使用"></a>自动合并使用</h2><p>下面我们再来看看自动合并检索在实际 RAG 项目中的使用，文档数据我们还是使用之前维基百科上的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Avenger">复仇者联盟</a>电影剧情来进行测试。</p>
+<h3 id="自动合并检索示例"><a href="#自动合并检索示例" class="headerlink" title="自动合并检索示例"></a>自动合并检索示例</h3><p>我们来看下如何使用 LlamaIndex 构建自动合并检索：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.node_parser <span class="keyword">import</span> (</span><br><span class="line">    HierarchicalNodeParser,</span><br><span class="line">    get_leaf_nodes,</span><br><span class="line">)</span><br><span class="line"><span class="keyword">from</span> llama_index.embeddings.openai <span class="keyword">import</span> OpenAIEmbedding</span><br><span class="line"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> SimpleDirectoryReader</span><br><span class="line"><span class="keyword">from</span> llama_index.llms.openai <span class="keyword">import</span> OpenAI</span><br><span class="line"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> VectorStoreIndex, StorageContext</span><br><span class="line"><span class="keyword">from</span> llama_index.core.settings <span class="keyword">import</span> Settings</span><br><span class="line"><span class="keyword">from</span> llama_index.core.storage.docstore <span class="keyword">import</span> SimpleDocumentStore</span><br><span class="line"><span class="keyword">from</span> llama_index.core.retrievers <span class="keyword">import</span> AutoMergingRetriever</span><br><span class="line"><span class="keyword">from</span> llama_index.core.query_engine <span class="keyword">import</span> RetrieverQueryEngine</span><br><span class="line"></span><br><span class="line">node_parser = HierarchicalNodeParser.from_defaults(chunk_sizes=[<span class="number">2048</span>, <span class="number">512</span>, <span class="number">128</span>])</span><br><span class="line">documents = SimpleDirectoryReader(<span class="string">&quot;./data&quot;</span>).load_data()</span><br><span class="line">nodes = node_parser.get_nodes_from_documents(documents)</span><br><span class="line">leaf_nodes = get_leaf_nodes(nodes)</span><br><span class="line"></span><br><span class="line">llm = OpenAI(model=<span class="string">&quot;gpt-3.5-turbo&quot;</span>, temperature=<span class="number">0.1</span>)</span><br><span class="line">embed_model = OpenAIEmbedding()</span><br><span class="line">Settings.llm = llm</span><br><span class="line">Settings.embed_model = embed_model</span><br><span class="line">Settings.node_parser = node_parser</span><br><span class="line"></span><br><span class="line">docstore = SimpleDocumentStore()</span><br><span class="line">docstore.add_documents(nodes)</span><br><span class="line">storage_context = StorageContext.from_defaults(docstore=docstore)</span><br><span class="line"></span><br><span class="line">base_index = VectorStoreIndex(leaf_nodes, storage_context=storage_context)</span><br><span class="line">base_retriever = base_index.as_retriever(similarity_top_k=<span class="number">12</span>)</span><br><span class="line">retriever = AutoMergingRetriever(</span><br><span class="line">    base_retriever,</span><br><span class="line">    storage_context,</span><br><span class="line">    simple_ratio_thresh=<span class="number">0.3</span>,</span><br><span class="line">    verbose=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">auto_merging_engine = RetrieverQueryEngine.from_args(retriever)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>首先我们定义了<code>HierarchicalNodeParser</code>文档解析器来解析文档，这在前面已经介绍过了，这里不再赘述</li>
+<li>然后我们使用 OpenAI 的 LLM 和 Embedding 模型进行答案生成和向量生成</li>
+<li>再创建<code>storage_context</code>来保存所有节点<code>nodes</code>，后面的自动合并检索会根据叶子节点来找其相关的父节点，所以这里需要保存所有节点</li>
+<li>接下来我们先构建一个基础检索<code>base_index</code>，这个检索会根据问题对所有叶子节点<code>leaf_nodes</code>进行检索，找到匹配度最高的<code>similarity_top_k</code>个节点，这里我们将获取 12 个匹配度最高的叶子节点</li>
+<li>我们再构建一个自动合并检索<code>AutoMergingRetriever</code>，这个检索会根据基础检索的结果来进行合并操作，这里我们设置了<code>simple_ratio_thresh</code>为 0.3，即当检索子节点比例大于这个阀值的节点就会进行自动合并。<code>verbose</code>参数设置为 True，表示输出合并的过程</li>
+<li>最后我们使用<code>RetrieverQueryEngine</code>来创建一个检索引擎</li>
+</ul>
+<p>接下来我们就可以使用这个检索引擎来回答问题了：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">question = <span class="string">&quot;奥创是由哪两位复仇者联盟成员创造的？&quot;</span></span><br><span class="line">response = auto_merging_engine.query(question)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;response: <span class="subst">&#123;<span class="built_in">str</span>(response)&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;nodes len: <span class="subst">&#123;<span class="built_in">len</span>(response.source_nodes)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">&gt; Merging <span class="number">5</span> nodes into parent node.</span><br><span class="line">&gt; Parent node <span class="built_in">id</span>: 80d1eeed-<span class="number">3447</span>-<span class="number">4987</span>-b05d-49fd4b6aabd4.</span><br><span class="line">&gt; Parent node text: 神盾局解散后，由托尼·斯塔克、史蒂芬·罗杰斯、雷神、娜塔莎·罗曼诺夫、布鲁斯·班纳以及克林特·巴顿组成的复仇者联盟负责全力搜查九头蛇的下落，这次透过“盟友”提供的情报而进攻位于东欧的国家“索科维...</span><br><span class="line"></span><br><span class="line">&gt; Merging <span class="number">4</span> nodes into parent node.</span><br><span class="line">&gt; Parent node <span class="built_in">id</span>: 2e719ad1-89fe-4d00-add4-e0296b19eab3.</span><br><span class="line">&gt; Parent node text: 复仇者们到达后跟他们正面交锋，但大多数人被旺达用幻象术迷惑，看到各自心中最深层的“阴影”；唯独托尔看见在家乡阿萨神域发生的不明景象。旺达同时迷惑班纳的大脑，使其丧失理智而变成绿巨人跑到约翰内斯堡...</span><br><span class="line"></span><br><span class="line">&gt; Merging <span class="number">2</span> nodes into parent node.</span><br><span class="line">&gt; Parent node <span class="built_in">id</span>: c1e7e8a1-d50b-4a35-9b0d-beec29993d1a.</span><br><span class="line">&gt; Parent node text: 奥创发布机械大军，在位于城市正中央的教堂里启动靠振金造的陆地合成器，使整座城市陆地上升，企图透过陨石撞击方式灭绝人类后由机器人取代。班纳潜入基地救出娜塔莎，娜塔莎将他从高处推落释放出绿巨人支持战...</span><br><span class="line"></span><br><span class="line">response: 奥创是由托尼·斯塔克和布鲁斯·班纳这两位复仇者联盟成员创造的。</span><br><span class="line">nodes <span class="built_in">len</span>: <span class="number">4</span></span><br></pre></td></tr></table></figure>
+
+<p>在没有经过自动合并之前，我们让基础检索获取了 12 个匹配度最高的叶子节点，在输出结果中可以看到，这 12 个节点经过了 3 次合并操作，最终我们得到了 4 个节点，这些节点中既包含叶子节点，也包含合并过后的父节点。</p>
+<h2 id="检索效果对比"><a href="#检索效果对比" class="headerlink" title="检索效果对比"></a>检索效果对比</h2><p>我们再使用<a target="_blank" rel="noopener" href="https://www.trulens.org/">Trulens</a>来评估自动合并检索的效果：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tru.reset_database()</span><br><span class="line">rag_evaluate(base_engine, <span class="string">&quot;base_evaluation&quot;</span>)</span><br><span class="line">rag_evaluate(sentence_window_engine, <span class="string">&quot;sentence_window_evaluation&quot;</span>)</span><br><span class="line">rag_evaluate(sentence_window_engine, <span class="string">&quot;auto_merging_evaluation&quot;</span>)</span><br><span class="line">Tru().run_dashboard()</span><br></pre></td></tr></table></figure>
+
+<p><code>rag_evaluate</code>的具体代码可以看我的<a href="https://zhaozhiming.github.io/2024/03/11/sentence-windows-rag/">上一篇文章</a>，主要是使用 Trulens 的<code>groundedness</code>，<code>qa_relevance</code>和<code>qs_relevance</code>对 RAG 检索结果进行评估，我们保留了之前的普通检索和句子窗口检索的评估，并添加了自动合并检索的评估。执行代码后，我们可以在浏览器中看到 Trulens 的评估结果：</p>
+<img src="/images/post/2024/03/am-evaluate.png" class="" width="1000" height="600">
+
+<p>在评估结果中，我们可以看到自动合并检索相比其他两种检索的效果要好，但这不表示自动合并检索会一直比其他检索好，具体的评估效果还要看原始的输入文档，以及检索的参数设置等，总之，具体的评估效果要根据实际情况来评估。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>自动合并检索是高级 RAG 检索的一种方法，文档拆分和文档合并的思想是该方法的主要特点，本文介绍了自动合并检索的原理和实现方法，并使用 Trulens 来评估了自动合并检索的效果，希望可以帮助大家更好地理解和使用自动合并检索。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2024/03/19/auto-merging-rag/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2024/03/19/auto-merging-rag/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

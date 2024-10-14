@@ -1,0 +1,348 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>持续集成一天一美元 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="&lt;p&gt;原文：&lt;a href=&#34;http://jamesshore.com/Blog/Continuous-Integration-on-a-Dollar-a-Day.html&#34;&gt;http://jamesshore.com/Blog/Continuous-Integration-on-a-Dollar-a-Day.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;有一种持续集成，比使用像 CruiseControl 这样的构建服务来的更容易更便宜。实际上，它是如此简单，你可以从现在开始做这件事，不用为你还没有构建服务而感到不舒服。&lt;/p&gt;
+&lt;span id=&#34;more&#34;&gt;&lt;/span&gt;
+
+&lt;p&gt;（肮脏的小秘密？我将要告诉你的是比使用 CruiseControl 更好的东西!）&lt;/p&gt;
+&lt;h3 id=&#34;第一步：找一台老的电脑&#34;&gt;&lt;a href=&#34;#第一步：找一台老的电脑&#34; class=&#34;headerlink&#34; title=&#34;第一步：找一台老的电脑&#34;&gt;&lt;/a&gt;第一步：找一台老的电脑&lt;/h3&gt;&lt;p&gt;找一台你以前用来做开发的电脑，不要太老…它需要用来跑构建程序。找一个没用的显示器和一个废弃的角落，把它连接起来，放一张破旧的椅子在前面，不需要太舒适…你不会想这里坐太久。&lt;/p&gt;
+&lt;h3 id=&#34;第二步：找一只橡皮鸡-不是真的鸡&#34;&gt;&lt;a href=&#34;#第二步：找一只橡皮鸡-不是真的鸡&#34; class=&#34;headerlink&#34; title=&#34;第二步：找一只橡皮鸡(不是真的鸡)&#34;&gt;&lt;/a&gt;第二步：找一只橡皮鸡(&lt;em&gt;不是真的鸡&lt;/em&gt;)&lt;/h3&gt;&lt;img src=&#34;http://www.jamesshore.com/Blog/usbchicken.jpg&#34; class=&#34;&#34;&gt;  
+&lt;p&gt;&lt;em&gt;我的办公室，大概在 2001 年&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;你如果想要也可以使用其他东西，比如毛绒绒的玩具。玩具要搞笑、没有菱角，这样你用力把它扔向某人时不会不小心伤害到别人的眼睛（特别是你误中他人的时候）。如果你没有合适的东西，不要让这一步搁置你的下一步行动。即兴创作，有趣就行。&lt;/p&gt;
+&lt;p&gt;我想&lt;a href=&#34;http://www.cs.cmu.edu/afs/cs.cmu.edu/user/sprite/www/Origami/crane_gif.html&#34;&gt;这个&lt;/a&gt;有助于即兴创作，但我做不来，所以你不会也没关系。&lt;/p&gt;
+&lt;h3 id=&#34;第三步：买一个桌铃&#34;&gt;&lt;a href=&#34;#第三步：买一个桌铃&#34; class=&#34;headerlink&#34; title=&#34;第三步：买一个桌铃&#34;&gt;&lt;/a&gt;第三步：买一个桌铃&lt;/h3&gt;&lt;p&gt;那种你轻拍就会发出“叮”的铃铛。不要因为你没有一个桌铃就停止做持续集成，可以后面再做这一步。现在你已经有开始的势头了。旧电脑，就绪。插线，就绪。搞笑玩具，就绪。你离开始做持续集成已经越来越近了（如果你真的没钱，你可以完全跳过这一步（译者注：指桌铃））。&lt;/p&gt;
+&lt;h3 id=&#34;第四步：让你的构建自动化&#34;&gt;&lt;a href=&#34;#第四步：让你的构建自动化&#34; class=&#34;headerlink&#34; title=&#34;第四步：让你的构建自动化&#34;&gt;&lt;/a&gt;第四步：让你的构建自动化&lt;/h3&gt;&lt;p&gt;噢！这是最难的一步。好消息是 CruiseControl 的好处之一就是可以使你的构建自动化。更好的消息是你接下来要做的持续集成，可以做的事情比 CruiseControl 的自动化构建要多，并且我将帮你获得所有的这些好处。但你还是需要让你的构建自动化。&lt;/p&gt;
+&lt;p&gt;好吧，这个很难，我知道。如果你已经依赖你的 IDE 为你构建，让构建自动化可能意味着要做很多的工作。现在，你可能要创建一个批处理文件来跑你的 IDE 并要求它来构建。程序运行的时间太长不是件好事，所以还是回来做正确的事情吧。&lt;/p&gt;
+&lt;p&gt;如果你已经有了自动化检查的单元测试，比如 JUnit&amp;#x2F;NUnit 测试，也将它们放到构建里面。&lt;/p&gt;
+&lt;p&gt;在你继续之前，走向那台旧电脑（见第一步），然后确认你的版本库中的最新代码可以成功构建。没有使用任何版本控制工具？额…好吧…放下键盘然后离开电脑。现在，跟我读：“原谅我，老天爷，我错了。我又一次没有使用版本控制来编程。我会马上下载 TortoiseSvn（译者注：现在当然是 git 了），安装使用它。从今以后我不会再犯了。”谢谢。&lt;/p&gt;
+&lt;p&gt;如果一个干净运行的自动化构建超过 10 分钟，那么请停下来。你还没为持续集成做好准备，你需要加速你的构建。你可以做接下来的步骤，或者你可以使用 CruiseControl，但真正的持续集成现在还不属于你。&lt;/p&gt;
+&lt;h3 id=&#34;第五步：洗脑&#34;&gt;&lt;a href=&#34;#第五步：洗脑&#34; class=&#34;headerlink&#34; title=&#34;第五步：洗脑&#34;&gt;&lt;/a&gt;第五步：洗脑&lt;/h3&gt;&lt;p&gt;这在列表中绝对，毫无疑问，100%是最重要的一步。让你团队中的所有开发人员一起去到一个房间。&lt;/p&gt;
+&lt;p&gt;如果有人问，不，这不是开会。你将要在 5 分钟内完成某件事情。有用，简短，所以这不是一个会议。&lt;/p&gt;
+&lt;p&gt;现在，在保证没有动用武力胁迫的情况下，让每个人都同意下面的话：&lt;/p&gt;
+&lt;blockquote&gt;&lt;p&gt;“从现在开始，我们版本库中的代码将一直构建成功并且可以跑过所有测试。”&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;如果有人抱怨这个太难了，让他们知道，通过持续集成来做这个很简单。额，应该说更简单。如果他们仍然认为这太难了，可以委婉地提醒他们的工作，你知道，构建软件。&lt;/p&gt;
+&lt;p&gt;噢，太残酷了，还是不要说的好。啊，我刚失去了 10 个粉丝，呀，又一个，11 个。&lt;/p&gt;
+&lt;p&gt;实际上，“每个人都同意这是个好主意”的部分真的非常重要。你看，能够一直依赖你的软件构建，是持续集成的革命性部分。想象一下如果你知道你刚从版本库上下下来的代码可以工作，你的生活会变得多轻松。&lt;/p&gt;
+&lt;p&gt;让我来讲一个小故事。我维护开源软件的一块叫 NUnitAsp。去年，我开了一门课来专门将它。在讲课期间，有人要求增加一个 NUnitAsp 没有的功能。我看了下代码发现很容易就可以增加。所以我做了修改（花了几分钟）。然后我跑我的构建，96 秒后有个新的发布文件，然后把它拿出来。真实的故事，我们甚至有一个编程奖品，我们叫它“找 bug 得杯具”（我们人很好，即使没有找到 bug 的人我们也给他杯具）。&lt;/p&gt;
+&lt;p&gt;好了，你的持续集成可能还没到那一步。你需要像我的那个项目一样有很好的自动化测试来构建和发布。所以让我来讲另外一个故事。在另外一个项目，没有那么成功，我们所有人在代码的不同部分上工作。虽然我们每天都很小心的检入代码，但我们没有构建整个工程或跑测试。（测试？我们没有任何自动化测试。）六个月以后，我们尝试去集成，但没有东西可以组装在一起。我们花费了一个星期才让程序跑起来。我甚至不想描述在这个过程中有多少个 bug 了。持续集成，即使没有好的测试，也意味着你将再次不会面对这种噩梦了。&lt;/p&gt;
+&lt;p&gt;我讨厌试图去说服人们相信这是个好主意。我告诉你要刷牙了吗？但你还是会每天做。这个对你有好处。不想做？那就不要做！不是我的问题。&lt;/p&gt;
+&lt;p&gt;12…13…14，15，16…妹的。（译者注：指粉丝流失）&lt;/p&gt;
+&lt;p&gt;不然怎样，如果没有让每个人都同意这样做，那么这个过程将不会有效。你还能指望什么？&lt;/p&gt;
+&lt;p&gt;###第六步：启动！&lt;/p&gt;
+&lt;p&gt;在&lt;a href=&#34;http://jamesshore.com/Blog/Continuous-Integration-Checklist.html&#34;&gt;这里&lt;/a&gt;看到可打印的清单。&lt;/p&gt;
+&lt;p&gt;你已经准备好了！让我们浏览一下预启动清单：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;构建电脑？就绪。&lt;/li&gt;
+&lt;li&gt;搞笑玩具？就绪。&lt;/li&gt;
+&lt;li&gt;烦人的闹铃？可选。&lt;/li&gt;
+&lt;li&gt;自动构建？就绪。&lt;/li&gt;
+&lt;li&gt;团队同意？就绪。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;现在，让我们开始吧！&lt;/p&gt;
+&lt;p&gt;首先，每天至少检入代码 2 次。这是“持续”的部分。当你熟练以后，你将每 1~2 个小时检入一次。&lt;/p&gt;
+&lt;p&gt;在获取版本库的最新代码之前，看下有没有人手里有橡皮鸡。如果有，先等他们把代码检入。&lt;/p&gt;
+&lt;p&gt;当你检入时，遵循以下步骤：&lt;/p&gt;
+&lt;p&gt;A 在本地跑构建&amp;#x2F;测试脚本，确认 100%通过。&lt;br&gt;B 把橡皮鸡从它原来的地方拿过来。如果橡皮鸡不在原地，找一下看在谁那里，然后一直烦着他们直到他们检入代码。&lt;br&gt;C 从版本库下载最新代码然后再次运行构建脚本。如果没有运行成功，你知道刚下的代码有问题。发发牢骚抱怨一下，然后找到最后检入代码的那个人帮你解决问题。解决问题后重新开始。&lt;br&gt;D 检入你的代码。&lt;br&gt;E 走向那台破旧的构建电脑，从版本库获取最新代码，再次运行构建脚本。如果没有运行成功，将你检入的代码还原。没成功的原因，可能是你安装了一些新的软件，或者修改了一个环境变量，或者设置注册表环境，或者忘记添加文件到版本库，或者其他原因。不管怎样，你需要在你的电脑上修复这个问题然后重新试一次。你可以暂时保留橡皮鸡，但如果其他人需要你要还回去（然后重新开始）。&lt;br&gt;F 让铃铛响起来。（其他人会为你鼓掌，或以其他方式为你高兴。）把橡皮鸡放回去，你已经做完了。&lt;/p&gt;
+&lt;p&gt;顺便说一下，当步骤 E 失败了，你可能会冒险在构建机器上直接修复问题，但如果你这样做了，下一个可怜的家伙下载了最新代码后将会构建失败。&lt;/p&gt;
+&lt;p&gt;最后，但并非最不重要：保持你的构建时间在 10 分钟之内，少于 5 分钟更好。如果运行时间太长，这个过程将不再是一件愉快的事情而是痛苦的开始。而且一般来说快速构建对你有好处，不管怎样，因为速度慢的构建往往意味着测试方法的缺陷。&lt;/p&gt;
+&lt;h3 id=&#34;为什么比-CruiseControl-好？&#34;&gt;&lt;a href=&#34;#为什么比-CruiseControl-好？&#34; class=&#34;headerlink&#34; title=&#34;为什么比 CruiseControl 好？&#34;&gt;&lt;/a&gt;为什么比 CruiseControl 好？&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;代码在版本控制中总是周期性地可以构建和通过测试。&lt;/li&gt;
+&lt;li&gt;如果出错了，你知道问题出在哪里。要么是你的代码（在步骤 A 失败了），要么是其他人的代码（在步骤 C 失败了），或者是环境改变了（在步骤 E 失败了）。反正你可以找到原因，让修复问题更简单。&lt;/li&gt;
+&lt;li&gt;当其他人没有等 CruiseControl 跑完构建就跑去吃午饭时，你不用再去修复其他人引起的构建失败。&lt;/li&gt;
+&lt;li&gt;你会让构建运行的时间保持简短（长时间运行的构建会让你痛苦），这意味着测试写得更好，使设计更佳。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;高级课程&#34;&gt;&lt;a href=&#34;#高级课程&#34; class=&#34;headerlink&#34; title=&#34;高级课程&#34;&gt;&lt;/a&gt;高级课程&lt;/h3&gt;&lt;p&gt;一旦你让基础设施工作起来了，你可以继续真正完善你的持续集成的使用。一个可选的做法是让你的构建独立起来，换句话说，你构建所需的所有东西就只是你的源控制，一旦你得到代码了，你就可以断开网络连接去构建。这个好处是让你的构建更可信，允许你轻易地去构建老版本。这也有助于找出数据库配置和迁移的错误。&lt;/p&gt;
+&lt;p&gt;真正给力的测试也是一个好的选择。如果你真的拥有给力的测试，那么你可以盖着帽子好好休息了。&lt;/p&gt;
+&lt;p&gt;我同样喜欢让我的构建脚本来构建一个安装包。人们经常从他们的测试和集成过程中拿掉安装程序，然后忍受花费额外时间来构建一个安装包。这是快速构建带来的众多好处之一，让你做这件事情更容易，虽然自动测试安装程序是一件痛苦的事情。&lt;/p&gt;
+&lt;p&gt;嗯…我讨厌承认…安装 CruiseControl 也是一个好主意，等你从高级课程毕业了再接触比较好。而现在，你已经真正做到熟悉（持续集成）基础（团队同意，快速测试，永不破坏的构建），你已经不大可能回到坏实践中去了。&lt;/p&gt;
+&lt;p&gt;最后祝你好运！别忘了给我一美元。&lt;/p&gt;
+&lt;h3 id=&#34;相关材料：&#34;&gt;&lt;a href=&#34;#相关材料：&#34; class=&#34;headerlink&#34; title=&#34;相关材料：&#34;&gt;&lt;/a&gt;相关材料：&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.martinfowler.com/articles/continuousIntegration.html&#34;&gt;Continuous Integration&lt;/a&gt; (Martin Fowler)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://jamesshore.com/Blog/Red-Green-Refactor.html&#34;&gt;Red-Green-Refactor&lt;/a&gt; (James Shore)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://jamesshore.com/Blog/Continuous-Integration-is-an-Attitude.html&#34;&gt;Continuous Integration is an Attitude, Not a Tool&lt;/a&gt; (James Shore)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blogs.msdn.com/mswanson/articles/169058.aspx&#34;&gt;Automated Continuous Integration and the Ambient Orb&lt;/a&gt; (Michael Swanson)&lt;/li&gt;
+&lt;/ul&gt;
+"> <!-- TODO: truncate -->
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">持续集成一天一美元</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2012-09-17T13:53:00.000Z" itemprop="datePublished">9月 17, 2012</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/ci/">ci</a>
+</div>
+    </div>
+	<div class="entry-content"><p>原文：<a target="_blank" rel="noopener" href="http://jamesshore.com/Blog/Continuous-Integration-on-a-Dollar-a-Day.html">http://jamesshore.com/Blog/Continuous-Integration-on-a-Dollar-a-Day.html</a></p>
+<p>有一种持续集成，比使用像 CruiseControl 这样的构建服务来的更容易更便宜。实际上，它是如此简单，你可以从现在开始做这件事，不用为你还没有构建服务而感到不舒服。</p>
+<span id="more"></span>
+
+<p>（肮脏的小秘密？我将要告诉你的是比使用 CruiseControl 更好的东西!）</p>
+<h3 id="第一步：找一台老的电脑"><a href="#第一步：找一台老的电脑" class="headerlink" title="第一步：找一台老的电脑"></a>第一步：找一台老的电脑</h3><p>找一台你以前用来做开发的电脑，不要太老…它需要用来跑构建程序。找一个没用的显示器和一个废弃的角落，把它连接起来，放一张破旧的椅子在前面，不需要太舒适…你不会想这里坐太久。</p>
+<h3 id="第二步：找一只橡皮鸡-不是真的鸡"><a href="#第二步：找一只橡皮鸡-不是真的鸡" class="headerlink" title="第二步：找一只橡皮鸡(不是真的鸡)"></a>第二步：找一只橡皮鸡(<em>不是真的鸡</em>)</h3><img src="http://www.jamesshore.com/Blog/usbchicken.jpg" class="">  
+<p><em>我的办公室，大概在 2001 年</em></p>
+<p>你如果想要也可以使用其他东西，比如毛绒绒的玩具。玩具要搞笑、没有菱角，这样你用力把它扔向某人时不会不小心伤害到别人的眼睛（特别是你误中他人的时候）。如果你没有合适的东西，不要让这一步搁置你的下一步行动。即兴创作，有趣就行。</p>
+<p>我想<a target="_blank" rel="noopener" href="http://www.cs.cmu.edu/afs/cs.cmu.edu/user/sprite/www/Origami/crane_gif.html">这个</a>有助于即兴创作，但我做不来，所以你不会也没关系。</p>
+<h3 id="第三步：买一个桌铃"><a href="#第三步：买一个桌铃" class="headerlink" title="第三步：买一个桌铃"></a>第三步：买一个桌铃</h3><p>那种你轻拍就会发出“叮”的铃铛。不要因为你没有一个桌铃就停止做持续集成，可以后面再做这一步。现在你已经有开始的势头了。旧电脑，就绪。插线，就绪。搞笑玩具，就绪。你离开始做持续集成已经越来越近了（如果你真的没钱，你可以完全跳过这一步（译者注：指桌铃））。</p>
+<h3 id="第四步：让你的构建自动化"><a href="#第四步：让你的构建自动化" class="headerlink" title="第四步：让你的构建自动化"></a>第四步：让你的构建自动化</h3><p>噢！这是最难的一步。好消息是 CruiseControl 的好处之一就是可以使你的构建自动化。更好的消息是你接下来要做的持续集成，可以做的事情比 CruiseControl 的自动化构建要多，并且我将帮你获得所有的这些好处。但你还是需要让你的构建自动化。</p>
+<p>好吧，这个很难，我知道。如果你已经依赖你的 IDE 为你构建，让构建自动化可能意味着要做很多的工作。现在，你可能要创建一个批处理文件来跑你的 IDE 并要求它来构建。程序运行的时间太长不是件好事，所以还是回来做正确的事情吧。</p>
+<p>如果你已经有了自动化检查的单元测试，比如 JUnit&#x2F;NUnit 测试，也将它们放到构建里面。</p>
+<p>在你继续之前，走向那台旧电脑（见第一步），然后确认你的版本库中的最新代码可以成功构建。没有使用任何版本控制工具？额…好吧…放下键盘然后离开电脑。现在，跟我读：“原谅我，老天爷，我错了。我又一次没有使用版本控制来编程。我会马上下载 TortoiseSvn（译者注：现在当然是 git 了），安装使用它。从今以后我不会再犯了。”谢谢。</p>
+<p>如果一个干净运行的自动化构建超过 10 分钟，那么请停下来。你还没为持续集成做好准备，你需要加速你的构建。你可以做接下来的步骤，或者你可以使用 CruiseControl，但真正的持续集成现在还不属于你。</p>
+<h3 id="第五步：洗脑"><a href="#第五步：洗脑" class="headerlink" title="第五步：洗脑"></a>第五步：洗脑</h3><p>这在列表中绝对，毫无疑问，100%是最重要的一步。让你团队中的所有开发人员一起去到一个房间。</p>
+<p>如果有人问，不，这不是开会。你将要在 5 分钟内完成某件事情。有用，简短，所以这不是一个会议。</p>
+<p>现在，在保证没有动用武力胁迫的情况下，让每个人都同意下面的话：</p>
+<blockquote><p>“从现在开始，我们版本库中的代码将一直构建成功并且可以跑过所有测试。”</p>
+</blockquote>
+
+<p>如果有人抱怨这个太难了，让他们知道，通过持续集成来做这个很简单。额，应该说更简单。如果他们仍然认为这太难了，可以委婉地提醒他们的工作，你知道，构建软件。</p>
+<p>噢，太残酷了，还是不要说的好。啊，我刚失去了 10 个粉丝，呀，又一个，11 个。</p>
+<p>实际上，“每个人都同意这是个好主意”的部分真的非常重要。你看，能够一直依赖你的软件构建，是持续集成的革命性部分。想象一下如果你知道你刚从版本库上下下来的代码可以工作，你的生活会变得多轻松。</p>
+<p>让我来讲一个小故事。我维护开源软件的一块叫 NUnitAsp。去年，我开了一门课来专门将它。在讲课期间，有人要求增加一个 NUnitAsp 没有的功能。我看了下代码发现很容易就可以增加。所以我做了修改（花了几分钟）。然后我跑我的构建，96 秒后有个新的发布文件，然后把它拿出来。真实的故事，我们甚至有一个编程奖品，我们叫它“找 bug 得杯具”（我们人很好，即使没有找到 bug 的人我们也给他杯具）。</p>
+<p>好了，你的持续集成可能还没到那一步。你需要像我的那个项目一样有很好的自动化测试来构建和发布。所以让我来讲另外一个故事。在另外一个项目，没有那么成功，我们所有人在代码的不同部分上工作。虽然我们每天都很小心的检入代码，但我们没有构建整个工程或跑测试。（测试？我们没有任何自动化测试。）六个月以后，我们尝试去集成，但没有东西可以组装在一起。我们花费了一个星期才让程序跑起来。我甚至不想描述在这个过程中有多少个 bug 了。持续集成，即使没有好的测试，也意味着你将再次不会面对这种噩梦了。</p>
+<p>我讨厌试图去说服人们相信这是个好主意。我告诉你要刷牙了吗？但你还是会每天做。这个对你有好处。不想做？那就不要做！不是我的问题。</p>
+<p>12…13…14，15，16…妹的。（译者注：指粉丝流失）</p>
+<p>不然怎样，如果没有让每个人都同意这样做，那么这个过程将不会有效。你还能指望什么？</p>
+<p>###第六步：启动！</p>
+<p>在<a target="_blank" rel="noopener" href="http://jamesshore.com/Blog/Continuous-Integration-Checklist.html">这里</a>看到可打印的清单。</p>
+<p>你已经准备好了！让我们浏览一下预启动清单：</p>
+<ol>
+<li>构建电脑？就绪。</li>
+<li>搞笑玩具？就绪。</li>
+<li>烦人的闹铃？可选。</li>
+<li>自动构建？就绪。</li>
+<li>团队同意？就绪。</li>
+</ol>
+<p>现在，让我们开始吧！</p>
+<p>首先，每天至少检入代码 2 次。这是“持续”的部分。当你熟练以后，你将每 1~2 个小时检入一次。</p>
+<p>在获取版本库的最新代码之前，看下有没有人手里有橡皮鸡。如果有，先等他们把代码检入。</p>
+<p>当你检入时，遵循以下步骤：</p>
+<p>A 在本地跑构建&#x2F;测试脚本，确认 100%通过。<br>B 把橡皮鸡从它原来的地方拿过来。如果橡皮鸡不在原地，找一下看在谁那里，然后一直烦着他们直到他们检入代码。<br>C 从版本库下载最新代码然后再次运行构建脚本。如果没有运行成功，你知道刚下的代码有问题。发发牢骚抱怨一下，然后找到最后检入代码的那个人帮你解决问题。解决问题后重新开始。<br>D 检入你的代码。<br>E 走向那台破旧的构建电脑，从版本库获取最新代码，再次运行构建脚本。如果没有运行成功，将你检入的代码还原。没成功的原因，可能是你安装了一些新的软件，或者修改了一个环境变量，或者设置注册表环境，或者忘记添加文件到版本库，或者其他原因。不管怎样，你需要在你的电脑上修复这个问题然后重新试一次。你可以暂时保留橡皮鸡，但如果其他人需要你要还回去（然后重新开始）。<br>F 让铃铛响起来。（其他人会为你鼓掌，或以其他方式为你高兴。）把橡皮鸡放回去，你已经做完了。</p>
+<p>顺便说一下，当步骤 E 失败了，你可能会冒险在构建机器上直接修复问题，但如果你这样做了，下一个可怜的家伙下载了最新代码后将会构建失败。</p>
+<p>最后，但并非最不重要：保持你的构建时间在 10 分钟之内，少于 5 分钟更好。如果运行时间太长，这个过程将不再是一件愉快的事情而是痛苦的开始。而且一般来说快速构建对你有好处，不管怎样，因为速度慢的构建往往意味着测试方法的缺陷。</p>
+<h3 id="为什么比-CruiseControl-好？"><a href="#为什么比-CruiseControl-好？" class="headerlink" title="为什么比 CruiseControl 好？"></a>为什么比 CruiseControl 好？</h3><ol>
+<li>代码在版本控制中总是周期性地可以构建和通过测试。</li>
+<li>如果出错了，你知道问题出在哪里。要么是你的代码（在步骤 A 失败了），要么是其他人的代码（在步骤 C 失败了），或者是环境改变了（在步骤 E 失败了）。反正你可以找到原因，让修复问题更简单。</li>
+<li>当其他人没有等 CruiseControl 跑完构建就跑去吃午饭时，你不用再去修复其他人引起的构建失败。</li>
+<li>你会让构建运行的时间保持简短（长时间运行的构建会让你痛苦），这意味着测试写得更好，使设计更佳。</li>
+</ol>
+<h3 id="高级课程"><a href="#高级课程" class="headerlink" title="高级课程"></a>高级课程</h3><p>一旦你让基础设施工作起来了，你可以继续真正完善你的持续集成的使用。一个可选的做法是让你的构建独立起来，换句话说，你构建所需的所有东西就只是你的源控制，一旦你得到代码了，你就可以断开网络连接去构建。这个好处是让你的构建更可信，允许你轻易地去构建老版本。这也有助于找出数据库配置和迁移的错误。</p>
+<p>真正给力的测试也是一个好的选择。如果你真的拥有给力的测试，那么你可以盖着帽子好好休息了。</p>
+<p>我同样喜欢让我的构建脚本来构建一个安装包。人们经常从他们的测试和集成过程中拿掉安装程序，然后忍受花费额外时间来构建一个安装包。这是快速构建带来的众多好处之一，让你做这件事情更容易，虽然自动测试安装程序是一件痛苦的事情。</p>
+<p>嗯…我讨厌承认…安装 CruiseControl 也是一个好主意，等你从高级课程毕业了再接触比较好。而现在，你已经真正做到熟悉（持续集成）基础（团队同意，快速测试，永不破坏的构建），你已经不大可能回到坏实践中去了。</p>
+<p>最后祝你好运！别忘了给我一美元。</p>
+<h3 id="相关材料："><a href="#相关材料：" class="headerlink" title="相关材料："></a>相关材料：</h3><ul>
+<li><a target="_blank" rel="noopener" href="http://www.martinfowler.com/articles/continuousIntegration.html">Continuous Integration</a> (Martin Fowler)</li>
+<li><a target="_blank" rel="noopener" href="http://jamesshore.com/Blog/Red-Green-Refactor.html">Red-Green-Refactor</a> (James Shore)</li>
+<li><a target="_blank" rel="noopener" href="http://jamesshore.com/Blog/Continuous-Integration-is-an-Attitude.html">Continuous Integration is an Attitude, Not a Tool</a> (James Shore)</li>
+<li><a target="_blank" rel="noopener" href="http://blogs.msdn.com/mswanson/articles/169058.aspx">Automated Continuous Integration and the Ambient Orb</a> (Michael Swanson)</li>
+</ul>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2012/09/17/continuous-integration-on-a-dollar-a-day/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2012/09/17/continuous-integration-on-a-dollar-a-day/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

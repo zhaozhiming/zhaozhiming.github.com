@@ -1,0 +1,316 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>React Navtive App 自动打包实践指南 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="React Navtive App 自动打包实践指南"> <!-- TODO: truncate -->
+	<meta name="keywords" content="react-native,auto-build">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">React Navtive App 自动打包实践指南</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2019-02-15T05:29:00.000Z" itemprop="datePublished">2月 15, 2019</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/react-native/">react-native</a> <a href="/tags/auto-build/">auto-build</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2019/02/auto-build.jpg" class="" width="400" height="300">
+
+<p>React Native 创建项目有 2 种方式，一种是通过 <a target="_blank" rel="noopener" href="https://expo.io/">Expo</a> 框架创建，这种项目可以通过 Expo 提供的命令进行打包；另外一种是通过 React Native 原生命令生成的项目，需要使用 <a target="_blank" rel="noopener" href="https://gradle.org/">Gradle</a> 和 <a target="_blank" rel="noopener" href="https://developer.apple.com/xcode/">Xcode</a> 这些原生工具打包，虽然麻烦了一些，但是灵活性更高，今天讨论的自动打包主要是基于后者。</p>
+<span id="more"></span>
+
+<h2 id="打包流程"><a href="#打包流程" class="headerlink" title="打包流程"></a>打包流程</h2><img src="/images/post/2019/02/process.png" class="" width="873" height="300">
+
+<p>这是自动打包程序的流程图，概述了从我们提交代码到收到通知这一过程。</p>
+<ul>
+<li>提交代码：将要发布的代码提交到代码库，这里我们假设使用 <a target="_blank" rel="noopener" href="https://about.gitlab.com/">gitlab</a> 来做为我们代码管理的平台。</li>
+<li>持续集成：将新代码合并到代码库后执行的一系列操作，多用来做静态检查、单元测试等，可以尽早发现集成过程中的问题，这里我们用持续集成来自动打包。</li>
+<li>上传 App：将打好的 App 文件上传到分发平台，这里我们选择<a target="_blank" rel="noopener" href="https://www.pgyer.com/">蒲公英</a>，它是国内提供手机应用内测服务较好的供应商。</li>
+<li>消息通知：当所有东西都完成后，我们需要及时通知到相关人员，结合笔者平时工作用的聊天工具<code>钉钉</code>，我们可以使用钉钉的自定义机器人来发送消息。</li>
+</ul>
+<p>PS：在持续集成的过程中，我们根据不同的设备使用了不同的打包策略，Android 使用 Docker + Gradle 的方式，而 iOS 因为强依赖于 Mac 的系统和环境，所以需要单独一台 Mac 机器来做打包机器，详细的打包过程将在下面介绍。</p>
+<h3 id="工具集"><a href="#工具集" class="headerlink" title="工具集"></a>工具集</h3><p>打包过程涉及的工具简单介绍一下：</p>
+<ul>
+<li>gitlab：代码托管平台，类似 <a target="_blank" rel="noopener" href="https://github.com/">github</a>，但可以支持免费内部部署服务，是大部分公司使用的内部代码托管平台。</li>
+<li>gitlab-ci：市面上有很多持续集成的框架，但如果是用 gitlab 来做代码管理的话，使用 gitlab-ci 无疑是最简单的持续集成方式。</li>
+<li>Docker：容器管理工具，可以和大部分持续集成工具集成，使用 Docker 来做持续集成是一种趋势。</li>
+<li>蒲公英：国内做的比较好的手机内测服务平台，在上面上传 App 后用户就可以进行 App 测试，它对应的竞品是 <a target="_blank" rel="noopener" href="https://fir.im/">Fir.im</a>。</li>
+<li>Mac 机器：这里需要借助 Mac 的机器来执行 iOS App 的打包程序，可以是任意苹果公司的机器，比如 Mac mini、MacBook air&#x2F;pro 等。</li>
+<li>钉钉：阿里推出的企业聊天工具，它支持自定义聊天机器人，方便我们定制自动发送消息的功能。</li>
+</ul>
+<h2 id="Android-打包"><a href="#Android-打包" class="headerlink" title="Android 打包"></a>Android 打包</h2><p>React Native 工程下面有个<code>android</code>目录，里面放置的是 Android 的原生代码，手动打包只需要在该目录下执行<code>gradlew assembleRelease</code>命令即可。</p>
+<p>但如果要实现自动打包，则需要先做以下准备。</p>
+<h3 id="Docker-镜像"><a href="#Docker-镜像" class="headerlink" title="Docker 镜像"></a>Docker 镜像</h3><p>首先要准备一个 Docker 镜像，这个镜像需要可以同时运行 Android 和 React Native 环境，那么问题就来了，我们是要在 React Native 环境的镜像上添加 Android 呢，还是在 Android 环境的镜像上添加 React Native 呢？</p>
+<p>运行 Android 需要安装 JDK（Java SE Development Kit）和 Android SDK 等，而运行 React Native 环境只需要安装 Node.js 就可以了，相对于 Android 环境比较简单，所以我们可以找一个 Android 环境的镜像，然后在这个镜像的基础上安装 Node.js。</p>
+<p>Docker 镜像可以上 <a target="_blank" rel="noopener" href="https://hub.docker.com/">Docker Hub</a> 上查找，如果没有找到合适的，也可以用<a target="_blank" rel="noopener" href="https://gist.github.com/zhaozhiming/f4a082168f4d82876a50dc6c0ba7e8b5">这个的 Dockerfile</a> 来创建。</p>
+<p>在本地创建完 Docker 镜像后记得将镜像上传到 Docker Hub，以便下面的步骤可以使用。</p>
+<h3 id="gitlab-ci-配置"><a href="#gitlab-ci-配置" class="headerlink" title="gitlab-ci 配置"></a>gitlab-ci 配置</h3><p>接下来我们可以在 gitlab-ci 上配置自动打包的任务了，首先需要在项目中添加一个<code>.gitlab-ci.yml</code>文件，这个文件是用来配置 gitlab-ci 持续集成任务，下面是自动打包任务的示例：</p>
+<figure class="highlight yaml"><figcaption><span>gitlab-ci.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy_android:</span> <span class="string">//</span> <span class="string">任务名称</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">deploy</span></span><br><span class="line">  <span class="attr">image:</span> <span class="string">your_docker_react_native_android_image_name</span> <span class="string">//</span> <span class="string">上面的</span> <span class="string">Docker</span> <span class="string">镜像名称</span></span><br><span class="line">  <span class="attr">only:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">staging</span> <span class="string">//</span> <span class="string">指定某个分支有代码进入时执行</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">some</span> <span class="string">scripts</span> <span class="string">//</span> <span class="string">自动打包命令</span></span><br></pre></td></tr></table></figure>
+
+<p>配置完成后，只要代码库中的<code>staging</code>分支有新代码进入，gitlab-ci 就会开始执行自动打包任务，步骤如下：</p>
+<ul>
+<li>下载 Docker 镜像（有则跳过这一步）</li>
+<li>使用 Docker 镜像创建容器实例</li>
+<li>拉取项目最新代码</li>
+<li>执行任务中的<code>script</code>命令</li>
+</ul>
+<p>关于<code>.gitlab-ci.yml</code>文件的更多信息可以参考<a target="_blank" rel="noopener" href="https://docs.gitlab.com/ee/ci/yaml/">这里</a>。</p>
+<h3 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h3><p>在上面的自动打包任务的示例代码中，<code>script</code>属性用来配置任务的执行命令，Android 的打包任务比较简单，首先是安装依赖包，然后执行<code>gradle</code>命令就可以了，下面是<code>script</code>的示例脚本：</p>
+<figure class="highlight yaml"><figcaption><span>gitlab-ci.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">script:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">npm</span> <span class="string">install</span> <span class="string">//</span> <span class="string">安装依赖包</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">cd</span> <span class="string">android</span> <span class="string">&amp;&amp;</span> <span class="string">./gradlew</span> <span class="string">assembleRelease</span> <span class="string">//</span> <span class="string">进入</span> <span class="string">android</span> <span class="string">目录并执行打包命令</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="上传-App"><a href="#上传-App" class="headerlink" title="上传 App"></a>上传 App</h3><p>打包命令执行完成后，会在工程目录下生成一个<code>apk</code>文件，我们需要找到这个文件并上传到<code>蒲公英</code>分发平台，这样其他人才能下载这个 App。</p>
+<p>其实 apk 文件也可以放在 gitlab-ci 上，然后让用户通过 gitlab 的链接来下载，但是 gitlab 的权限管理比较严格，每个要下载 App 的人都必须在 gitlab 上授权，这样会比较麻烦，所以我们还是用<code>蒲公英</code>这个分发平台比较好。</p>
+<p><code>蒲公英</code>提供了<a target="_blank" rel="noopener" href="https://www.pgyer.com/doc/api#uploadApp">上传 App 的 API</a>，调用这个 API 需要提供用户的<code>uKey</code>和<code>api_key</code>，这 2 个 key 在<code>蒲公英</code>的账号设置中可以找到。</p>
+<img src="/images/post/2019/02/pgyer.png" class="">
+
+<p>一般使用<code>curl</code>命令调用这个 API 就可以了，打包后的 Android apk 文件会在<code>android/app/build/outputs/apk/release/</code>这个目录下找到。所以我们任务中的<code>script</code>属性可以加上上传的命令：</p>
+<figure class="highlight yaml"><figcaption><span>gitlab-ci.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">script:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">npm</span> <span class="string">install</span> <span class="string">//</span> <span class="string">安装依赖包</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">cd</span> <span class="string">android</span> <span class="string">&amp;&amp;</span> <span class="string">./gradlew</span> <span class="string">assembleRelease</span> <span class="string">//</span> <span class="string">进入</span> <span class="string">android</span> <span class="string">目录并执行打包命令</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">curl</span> <span class="string">-F</span> <span class="string">&quot;file=@android/app/build/outputs/apk/release/app-release.apk&quot;</span> <span class="string">-F</span> <span class="string">&quot;uKey=yourUkey&quot;</span> <span class="string">-F</span> <span class="string">&quot;_api_key=yourApiKey&quot;</span> <span class="string">https://qiniu-storage.pgyer.com/apiv1/app/upload</span> <span class="string">//</span> <span class="string">上传</span> <span class="string">App</span></span><br></pre></td></tr></table></figure>
+
+<p>上传 App 成功后，App 会上传到你的<code>蒲公英</code>账号下面（因为是通过你的账号的 key 来创建的），把下载链接发给用户，用户就可以直接下载 App 了。</p>
+<h3 id="打包成功通知"><a href="#打包成功通知" class="headerlink" title="打包成功通知"></a>打包成功通知</h3><p>最后一步是提醒相关人员 App 已经打包完成，这里我们利用了<code>钉钉</code>的<a target="_blank" rel="noopener" href="https://open-doc.dingtalk.com/docs/doc.htm?treeId=257&articleId=105735&docType=1">自定义机器人</a> 功能。</p>
+<p>首先在<code>钉钉</code>的工作群里添加一个<code>自定义机器人</code>，然后获取到机器人的<code>Hook 地址</code>，最后再用<code>curl</code>命令调用这个地址就可以发消息了，我们再将这一步添加到<code>script</code>属性中：</p>
+<figure class="highlight yaml"><figcaption><span>gitlab-ci.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">script:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">npm</span> <span class="string">install</span> <span class="string">//</span> <span class="string">安装依赖包</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">cd</span> <span class="string">android</span> <span class="string">&amp;&amp;</span> <span class="string">./gradlew</span> <span class="string">assembleRelease</span> <span class="string">//</span> <span class="string">进入</span> <span class="string">android</span> <span class="string">目录并执行打包命令</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">curl</span> <span class="string">-F</span> <span class="string">&quot;file=@android/app/build/outputs/apk/release/app-release.apk&quot;</span> <span class="string">-F</span> <span class="string">&quot;uKey=yourUkey&quot;</span> <span class="string">-F</span> <span class="string">&quot;_api_key=yourApiKey&quot;</span> <span class="string">https://qiniu-storage.pgyer.com/apiv1/app/upload</span> <span class="string">//</span> <span class="string">上传</span> <span class="string">App</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">curl</span> <span class="string">机器人地址</span> <span class="string">-XPOST</span> <span class="string">-H</span> <span class="string">&#x27;content-type:application/json&#x27;</span> <span class="string">-d</span> <span class="string">&#x27;&#123;&quot;msgtype&quot;:&quot;text&quot;,&quot;text&quot;:&#123;&quot;content&quot;:&quot;@13912345678 Android 打包完成，下载地址：https://www.pgyer.com/xxxx&quot;&#125;,&quot;at&quot;:&#123;&quot;atMobiles&quot;:[&quot;13912345678&quot;],&quot;isAtAll&quot;:false&#125;&#125;&#x27;</span> <span class="string">//</span> <span class="string">利用钉钉机器人通知群里的某人</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="iOS-打包"><a href="#iOS-打包" class="headerlink" title="iOS 打包"></a>iOS 打包</h2><p>iOS 打包的原理和 Android 的差不多，不同的是需要一台 Mac 操作系统的机器来执行，因为需要用到<code>Xcode</code>来打包。</p>
+<h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><p>准备好一台 Mac 机器后，我们需要将其集成到 gitlab-ci 来作为执行任务的 Runner，安装步骤可以参照 gitlab 的官方指南：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.gitlab.com/runner/install/osx.html">安装<code>gitlab-runner</code></a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.gitlab.com/runner/register/index.html">注册 Runner</a></li>
+<li>Runner 的安装及启动：<code>gitlab-runner install &amp;&amp; gitlab-runner start</code></li>
+</ul>
+<p>完成后可以在 gitlab 的 Runners 界面看到多了一台 Runner 机器。</p>
+<img src="/images/post/2019/02/runner.png" class="">
+
+<p>我们可以为其添加 tag 以便执行 iOS 打包任务时可以指定这一台 Runner 来执行。</p>
+<figure class="highlight yaml"><figcaption><span>gitlab-ci.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy_ios:</span> <span class="string">//</span> <span class="string">任务名称</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">deploy</span></span><br><span class="line">  <span class="attr">only:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">staging</span> <span class="string">//</span> <span class="string">指定某个分支有代码进入时执行</span></span><br><span class="line">  <span class="attr">tags:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">ios</span>  <span class="string">//</span> <span class="string">通过</span> <span class="string">tags</span> <span class="string">指定</span> <span class="string">Runner</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">some</span> <span class="string">scripts</span> <span class="string">//</span> <span class="string">自动打包命令</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="打包-1"><a href="#打包-1" class="headerlink" title="打包"></a>打包</h3><p>iOS 的手动打包一般是通过苹果的专用 IDE <code>Xcode</code>来完成，操作步骤是：</p>
+<ul>
+<li>点击<code>Product</code>菜单的<code>Archive</code>命令完成 App 的归档</li>
+<li>再通过<code>Export</code>命令导出 App 的<code>ipa</code>文件</li>
+</ul>
+<p>如果要自动打包，我们就不可能像手动打包一样打开<code>Xcode</code>了，因为 gitlab-ci 不提供 Runner 的 GUI 界面，但我们可以使用<code>Xcode</code>提供的命令行工具<code>xcodebuild</code>来进行打包。</p>
+<p>新建一个脚本来编写打包命令，如下所示：</p>
+<figure class="highlight sh"><figcaption><span>build_ios.sh</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建打包 build 目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ios/build</span><br><span class="line"><span class="comment"># 删除之前的打包文件及目录</span></span><br><span class="line"><span class="built_in">rm</span> -rf ios/build/archive.xcarchive ios/build/ipa-*</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打包 app</span></span><br><span class="line">xcodebuild -scheme project_name -workspace ./ios/project_name.xcworkspace -configuration Release clean build archive -derivedDataPath <span class="string">&quot;./ios/build&quot;</span> -archivePath <span class="string">&quot;./ios/build/archive.xcarchive&quot;</span> -quiet</span><br><span class="line"></span><br><span class="line">xcodebuild -exportArchive \</span><br><span class="line">    -archivePath ./ios/build/archive.xcarchive \</span><br><span class="line">    -exportPath ./ios/build/ipa-ad-hoc \</span><br><span class="line">    -exportOptionsPlist ./ci/ad-hoc.plist \</span><br><span class="line">    -allowProvisioningUpdates</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong></p>
+<ul>
+<li><code>project_name</code>需要改成真正的 App 名称。</li>
+<li>构建参数<code>-quiet</code> 表示打包过程中减少打印信息，如果不加这个参数，会导致 gitlab-ci 任务上的日志信息过多而失败。</li>
+<li><code>ad-hoc.plist</code> 文件可以在手动打包的导出文件夹中找到，原来的名字是<code>ExportOptions.plist</code>，可以根据 App 的类型重命名为<code>ad-hoc.plist</code>或<code>ad-store.plist</code>。</li>
+</ul>
+<img src="/images/post/2019/02/plist.jpg" class="">
+
+<p>脚本写完后，将打包脚本添加到自动打包的任务中：</p>
+<figure class="highlight yaml"><figcaption><span>gitlab-ci.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">script:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">npm</span> <span class="string">install</span> <span class="string">//</span> <span class="string">安装依赖包</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">./build_ios.sh</span> <span class="string">//</span> <span class="string">iOS</span> <span class="string">打包</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="上传-App-1"><a href="#上传-App-1" class="headerlink" title="上传 App"></a>上传 App</h3><p>上传 App 和 Android 类似，只是文件的地址要换一下，iOS 生成的 ipa 文件路径是<code>ios/build/ipa-ad-hoc/app.ipa</code>。</p>
+<figure class="highlight yaml"><figcaption><span>gitlab-ci.yml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">script:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">npm</span> <span class="string">install</span> <span class="string">//</span> <span class="string">安装依赖包</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">./build_ios.sh</span> <span class="string">//</span> <span class="string">iOS</span> <span class="string">打包</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">curl</span> <span class="string">-F</span> <span class="string">&quot;file=@ios/build/ipa-ad-hoc/app-release.ipa&quot;</span> <span class="string">-F</span> <span class="string">&quot;uKey=yourUkey&quot;</span> <span class="string">-F</span> <span class="string">&quot;_api_key=yourApiKey&quot;</span> <span class="string">https://qiniu-storage.pgyer.com/apiv1/app/upload</span> <span class="string">//</span> <span class="string">上传</span> <span class="string">App</span></span><br></pre></td></tr></table></figure>
+
+<p>注意：苹果的<code>ipa</code>文件不像 Android 的<code>apk</code>文件一样可以直接在手机设备上安装，所以特别需要<code>蒲公英</code>这样的平台来进行分发。</p>
+<h3 id="打包成功通知-1"><a href="#打包成功通知-1" class="headerlink" title="打包成功通知"></a>打包成功通知</h3><p>通知功能与 Android 相同，这里就不重复介绍了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>文章简单介绍了 React Native 的自动打包流程，这个流程是基于笔者的工作开发环境：gitlab + 蒲公英 + 钉钉，但其实这几个部分都是可以替换的，比如用<code>Jenkins</code>代替 gitlab-ci，用<code>fir.im</code>代替蒲公英，用 <code>Slack</code>或者邮件代替钉钉等，读者可以根据自己的工作环境自行替换，也欢迎留言共同讨论交流。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2019/02/15/react-native-app-auto-build-process/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2019/02/15/react-native-app-auto-build-process/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>使用 LlamaIndex 结合 Eleasticsearch 进行 RAG 检索增强生成 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="介绍 Elasticsearch 部署、Embedding 模型部署以及如何使用 LlamaIndex 进行 RAG"> <!-- TODO: truncate -->
+	<meta name="keywords" content="llamaindex, elasticsearch, embedding, rag">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">使用 LlamaIndex 结合 Eleasticsearch 进行 RAG 检索增强生成</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2024-01-13T07:12:46.000Z" itemprop="datePublished">1月 13, 2024</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/elasticsearch/">elasticsearch</a> <a href="/tags/llamaindex/">llamaindex</a> <a href="/tags/embedding/">embedding</a> <a href="/tags/rag/">rag</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2024/01/llamaindex-es.png" class="" width="400" height="300">
+
+<p>检索增强生成（Retrieval-Augmented Generation，RAG）是一种结合了检索（Retrieval）和生成（Generation）的技术，它有效地解决了大语言模型（LLM）的一些问题，比如幻觉、知识限制等。随着 RAG 技术的发展，RAG 涉及到的向量技术受到了大家的关注，向量数据库也慢慢被大家所了解，一些老牌的数据库厂商也纷纷表示支持向量检索，比如 Elasticsearch 也在最近的版本增加了向量检索的支持。本文将介绍 Elasticsearch 和 RAG 中相关的 Embedding 模型的部署，以及在 LLM 框架 LLamaIndex 中如何使用 Elasticsearch 进行文档索引入库和检索。</p>
+<span id="more"></span>
+
+<h2 id="RAG-介绍"><a href="#RAG-介绍" class="headerlink" title="RAG 介绍"></a>RAG 介绍</h2><p>在使用 LLM 时我们经常会遇到这样一些情况，比如当我们的问题超出 LLM 的知识范围时，它要么解释说这个问题超出它的知识范围（这是 LLM 的知识限制），要么它会很自信地<strong>瞎编</strong>一些答案（这是我们所说的 LLM 幻觉）。</p>
+<p>为了应对 LLM 的这些问题，RAG（检索增强生成）技术应运而生，RAG 的主要原理是将文档向量化后进行存储，在提出问题时将问题进行向量检索，检索出相关的文档，然后再将文档作为问题的上下文，一起发送给 LLM，让 LLM 来生成问题的答案，有了相关文档的支持，LLM 在内容的生成上就会参考这些文档，这样就可以有效地解决 LLM 的幻觉问题。同时，RAG 可以让 LLM 更快地了解到最新的信息，通常要让 LLM 了解到更新的信息，需要对 LLM 进行重新训练，训练方式不管是预训练还是微调，成本都是比较高的，而 RAG 只需要将最新的文档加入到数据库中即可，这样 LLM 就可以通过向量检索的方式来获取最新的信息。</p>
+<img src="/images/post/2024/01/rag.png" class="" width="1000" height="600">
+
+<h2 id="关键字检索和语义检索"><a href="#关键字检索和语义检索" class="headerlink" title="关键字检索和语义检索"></a>关键字检索和语义检索</h2><p>RAG 的相关技术包括向量检索，也称为语义检索，它不同于传统的关键字检索，关键字检索依赖于在文档中查找与查询中使用的确切词汇匹配的单词或短语，它通常只关注字面上的匹配，而不考虑查询的上下文或语义含义，而语义检索旨在理解查询的意图和上下文含义，不仅仅是文字匹配，它通过分析词语的语义关系（如同义词、词义消歧）来提高检索的相关性。</p>
+<p>举一个简单的例子，比如我们输入<strong>苹果 2024 新品发布</strong>，关键字检索可能返回关于苹果公司 2024 年的任何新闻发布，但也可能包括与水果苹果相关的新品种发布的信息，语义检索则会查找出关于苹果公司最新电子产品发布的新闻，而忽略与水果苹果相关的内容。</p>
+<p>Elasitcsearch（以下简称 ES） 虽然一开始只是全文搜索引擎，也就是关键字检索，但是随着向量检索技术的发展，ES 也开始支持向量检索，这让 ES 成为了一个既可以做关键字检索，又可以做语义检索的数据库。下面我们就来介绍 ES 数据库的部署。</p>
+<h2 id="Elasticsearch-部署"><a href="#Elasticsearch-部署" class="headerlink" title="Elasticsearch 部署"></a>Elasticsearch 部署</h2><p>部署 ES 最简单的方式是通过 Docker，首先需要安装 Docker，可以参考 Docker 的<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/">官方安装文档</a>。</p>
+<p>Docker 安装完成后开始安装 ES，我们需要使用 ES 的最新版本，因为最新的版本包括了向量检索的功能，目前最新的版本是<code>8.11.3</code>，安装启动命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name es -p 9200:9200 -p 9300:9300 -e <span class="string">&quot;discovery.type=single-node&quot;</span> elasticsearch:8.11.3</span><br></pre></td></tr></table></figure>
+
+<p>使用<code>docker run</code>命令启动 ES 服务，<code>-d</code>参数表示以后台方式运行，<code>--name</code>参数表示容器的名称，<code>-p</code>参数表示端口映射，<code>-e</code>参数表示环境变量，<code>elasticsearch:8.11.3</code>表示使用<code>elasticsearch</code>相关版本的镜像。如果你是单机部署的话，可以不需要映射<code>9300</code>端口，这个端口主要用于 ES 集群内部节点之间的通信。</p>
+<h3 id="修改-ES-用户密码"><a href="#修改-ES-用户密码" class="headerlink" title="修改 ES 用户密码"></a>修改 ES 用户密码</h3><p>ES 默认的配置会开启安全认证，这意味着在访问 ES 时需要通过用户名和密码认证，因此我们需要先获取到 ES 的用户名和密码，ES 的默认用户是<code>elastic</code>，如果不清楚该用户的密码，可以通过以下命令来重置用户密码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入 ES 容器</span></span><br><span class="line">$ docker <span class="built_in">exec</span> -it es bash</span><br><span class="line"><span class="comment"># 重置密码</span></span><br><span class="line">$ bin/elasticsearch-reset-password -u elastic -i</span><br><span class="line">This tool will reset the password of the [elastic] user.</span><br><span class="line">You will be prompted to enter the password.</span><br><span class="line">Please confirm that you would like to <span class="built_in">continue</span> [y/N]y</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Enter password <span class="keyword">for</span> [elastic]:</span><br><span class="line">Re-enter password <span class="keyword">for</span> [elastic]:</span><br><span class="line">Password <span class="keyword">for</span> the [elastic] user successfully reset.</span><br></pre></td></tr></table></figure>
+
+<p>在 ES 容器中我们通过<code>elasticsearch-reset-password</code>命令来重置<code>elastic</code>用户的密码，重置完成后，我们可以通过在浏览器中输入<code>https://localhost:9200</code>来访问 ES（注意 url 地址是 <strong>https</strong>，不是 http，后面会讲如何关闭 https），首次访问时会提示你输入用户名和密码：</p>
+<img src="/images/post/2024/01/es-sign.png" class="" width="600" height="400">
+
+<p>输入用户名和密码后，我们就可以看到 ES 相关的 JSON 信息。</p>
+<h3 id="关闭-ES-SSL-认证"><a href="#关闭-ES-SSL-认证" class="headerlink" title="关闭 ES SSL 认证"></a>关闭 ES SSL 认证</h3><p>ES 为了加强系统的安全性，会默认开启 SSL 认证，在访问 ES 时需要使用 HTTPS 协议，但如果我们只是本地使用的话不太需要这种级别的安全认证，因此我们可以关闭 ES 的 SSL 认证，关闭 SSL 认证的需要修改 ES 的配置文件<code>elascitsearch.yml</code>。修改该文件我们先要将 ES 默认的配置文件拷贝到本地磁盘，然后修改配置文件，最后在 ES 容器启动时挂载修改后的配置文件。</p>
+<p>首先我们将刚才启动的 ES 容器中的配置目录拷贝到本地磁盘，然后原来的 ES 容器就可以关闭了，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 拷贝配置文件</span></span><br><span class="line">docker <span class="built_in">cp</span> es:/usr/share/elasticsearch/config ./config</span><br><span class="line"><span class="comment"># 关闭 ES 容器</span></span><br><span class="line">docker <span class="built_in">rm</span> -f es</span><br></pre></td></tr></table></figure>
+
+<p><code>config</code>文件夹包含了<code>elascitsearch.yml</code>和其他配置文件，然后我们修改<code>elascitsearch.yml</code>文件来关闭 SSL 认证，修改内容如下：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># Enable encryption for HTTP API client connections, such as Kibana, Logstash, and Agents</span><br><span class="line">xpack.security.http.ssl:</span><br><span class="line"><span class="deletion">-  enabled: true</span></span><br><span class="line"><span class="addition">+  enabled: false</span></span><br><span class="line">  keystore.path: certs/http.p12</span><br><span class="line"></span><br><span class="line"># Enable encryption and mutual authentication between cluster nodes</span><br><span class="line">xpack.security.transport.ssl:</span><br><span class="line"><span class="deletion">-  enabled: true</span></span><br><span class="line"><span class="addition">+  enabled: false</span></span><br><span class="line">  verification_mode: certificate</span><br><span class="line">  keystore.path: certs/transport.p12</span><br><span class="line">  truststore.path: certs/transport.p12</span><br></pre></td></tr></table></figure>
+
+<p>修改完成后，我们需要重新运行一个新的 ES 容器，并将修改后的配置文件挂载到容器中，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name es -p 9200:9200 -p 9300:9300 -v <span class="string">&quot;<span class="variable">$PWD</span>/config&quot;</span>:/usr/share/elasticsearch/config -e <span class="string">&quot;discovery.type=single-node&quot;</span> elasticsearch:8.11.3</span><br></pre></td></tr></table></figure>
+
+<p>等容器启动后，我们就可以通过<code>http://localhost:9200</code>来访问 ES 了。这里要注意的是因为重新部署了 ES 容器，所以刚才修改的用户密码也会失效，需要重新重置用户密码。</p>
+<h3 id="ES-监控工具"><a href="#ES-监控工具" class="headerlink" title="ES 监控工具"></a>ES 监控工具</h3><p>想要查看 ES 中的数据，如果是使用命令行工具的话可能不太方便，因此我们需要一个 GUI 工具，这里推荐<a target="_blank" rel="noopener" href="https://github.com/cars10/elasticvue">elasticvue</a>，一个基于浏览器的 ES GUI 工具，安装也非常简单，同样是使用 docker 来进行安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 9080:8080 --name elasticvue -d cars10/elasticvue</span><br></pre></td></tr></table></figure>
+
+<p>然后我们在浏览器中输入<code>http://localhost:9080</code>来访问 elasticvue，进到首页后点击<code>ADD ELASTICSEARCH CLUSTER</code>按钮，可以看到如下界面：</p>
+<img src="/images/post/2024/01/elasticvue-add.png" class="" width="1000" height="600">
+
+<p>根据上图上半部分的<code>Configure</code>提示，需要修改 ES 的配置文件<code>elascitsearch.yml</code>以接入 elasticvue，修改内容可以参考图中的<code>Configure</code>部分，修改完后重启 ES 容器即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker restart es</span><br></pre></td></tr></table></figure>
+
+<p>然后在 elasticvue 中添加 ES 集群，输入 ES 的地址<code>http://localhost:9200</code>，选择<code>Basic auth</code>输入用户名和密码，这样就可以连上我们的 ES 服务了。</p>
+<h2 id="Embedding-模型部署"><a href="#Embedding-模型部署" class="headerlink" title="Embedding 模型部署"></a>Embedding 模型部署</h2><p>向量检索的核心是向量，而向量是由 Embedding 模型生成的，我们可以使用一些线上的 Embedding 模型，比如 OpenAI 的 Embedding 模型，也可以自己部署 Embedding 模型。这里我们选择部署自己的 Embedding 模型，我们使用 <a target="_blank" rel="noopener" href="https://huggingface.co/BAAI/bge-base-en-v1.5">BAAI&#x2F;bge-base-en-v1.5</a> 模型，这是一个英文 Embedding 模型，可以用于英文的向量生成。</p>
+<p>我们使用 <a target="_blank" rel="noopener" href="https://github.com/lm-sys/FastChat">FastChat</a> 来部署 Embedding 模型，FastChat 是一个模型训练、部署、评估的开发平台，不仅支持 LLM 模型，还支持 Embedding 模型，下面来介绍如何使用 FastChat 部署 Embedding 模型。</p>
+<p>首先我们要安装 FastChat，然后通过 FastChat 来部署一个兼容 OpenAI API 的 Embedding API 服务，安装命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install <span class="string">&quot;fschat[model_worker,api]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>安装完成后，先使用 FastChat 的命令行工具来启动 controller 服务，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m fastchat.serve.controller --host 0.0.0.0</span><br><span class="line">2024-01-14 18:29:43 | INFO | controller | args: Namespace(dispatch_method=<span class="string">&#x27;shortest_queue&#x27;</span>, host=<span class="string">&#x27;0.0.0.0&#x27;</span>, port=21001, ssl=False)</span><br><span class="line">2024-01-14 18:29:43 | ERROR | stderr | INFO:     Started server process [1154]</span><br><span class="line">2024-01-14 18:29:43 | ERROR | stderr | INFO:     Waiting <span class="keyword">for</span> application startup.</span><br><span class="line">2024-01-14 18:29:43 | ERROR | stderr | INFO:     Application startup complete.</span><br><span class="line">2024-01-14 18:29:43 | ERROR | stderr | INFO:     Uvicorn running on http://0.0.0.0:21001 (Press CTRL+C to quit)</span><br></pre></td></tr></table></figure>
+
+<p>然后重新打开一个终端，使用 FastChat 的命令行工具来启动 worker 服务，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m fastchat.serve.model_worker --model-path BAAI/bge-base-en-v1.5 --host 0.0.0.0</span><br><span class="line">2024-01-14 18:32:39 | INFO | model_worker | Loading the model [<span class="string">&#x27;bge-base-en-v1.5&#x27;</span>] on worker 339a9e30 ...</span><br><span class="line">2024-01-14 18:32:40 | INFO | model_worker | Register to controller</span><br><span class="line">2024-01-14 18:32:40 | ERROR | stderr | INFO:     Started server process [1229]</span><br><span class="line">2024-01-14 18:32:40 | ERROR | stderr | INFO:     Waiting <span class="keyword">for</span> application startup.</span><br><span class="line">2024-01-14 18:32:40 | ERROR | stderr | INFO:     Application startup complete.</span><br><span class="line">2024-01-14 18:32:40 | ERROR | stderr | INFO:     Uvicorn running on http://0.0.0.0:21002 (Press CTRL+C to quit)</span><br></pre></td></tr></table></figure>
+
+<p>执行命令后，FastChat 会自动从 huggingface 上下载 BAAI&#x2F;bge-base-en-v1.5 模型，下载完成后就会启动 worker 服务，worker 服务会自动连接到 controller 服务。</p>
+<p>我们再打开一个终端，使用 FastChat 的命令行工具来启动 兼容 OpenAI API 的 API 服务，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ python3 -m fastchat.serve.openai_api_server --host 0.0.0.0 --port 8000</span><br><span class="line">2024-01-14 18:37:10 | ERROR | stderr | INFO:     Started server process [1405]</span><br><span class="line">2024-01-14 18:37:10 | ERROR | stderr | INFO:     Waiting <span class="keyword">for</span> application startup.</span><br><span class="line">2024-01-14 18:37:10 | ERROR | stderr | INFO:     Application startup complete.</span><br><span class="line">2024-01-14 18:37:10 | ERROR | stderr | INFO:     Uvicorn running on http://0.0.0.0:8000(Press CTRL+C to quit)</span><br></pre></td></tr></table></figure>
+
+<p>服务启动后，我们可以访问<code>http://localhost:8000/docs</code>来查看 API 服务的 swagger 文档：</p>
+<img src="/images/post/2024/01/fastchat-api.png" class="" width="1000" height="600">
+
+<p>可以看到图中的<code>/v1/embeddings</code>接口就是我们需要调用的 Embedding 接口，我们可以通过 curl 命令来测试一下该接口，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">curl -X <span class="string">&#x27;POST&#x27;</span> \</span><br><span class="line">  <span class="string">&#x27;https://localhost:8000/v1/embeddings&#x27;</span> \</span><br><span class="line">  -H <span class="string">&#x27;accept: application/json&#x27;</span> \</span><br><span class="line">  -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> \</span><br><span class="line">  -d <span class="string">&#x27;&#123;</span></span><br><span class="line"><span class="string">  &quot;model&quot;: &quot;bge-base-en-v1.5&quot;,</span></span><br><span class="line"><span class="string">  &quot;input&quot;: &quot;hello&quot;</span></span><br><span class="line"><span class="string">&#125;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;object&quot;</span>: <span class="string">&quot;list&quot;</span>,</span><br><span class="line">  <span class="string">&quot;data&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;object&quot;</span>: <span class="string">&quot;embedding&quot;</span>,</span><br><span class="line">      <span class="string">&quot;embedding&quot;</span>: [0.013750563375651836, …], <span class="comment"># 向量数据</span></span><br><span class="line">      <span class="string">&quot;index&quot;</span>: 0</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;model&quot;</span>: <span class="string">&quot;bge-base-en-v1.5&quot;</span>,</span><br><span class="line">  <span class="string">&quot;usage&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;prompt_tokens&quot;</span>: 3,</span><br><span class="line">    <span class="string">&quot;total_tokens&quot;</span>: 3</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们在请求参数中输入模型名称和需要被向量化的文本，命令执行完成后，我们可以看到返回的结果包含了 embedding 后的向量数据，并且返回格式跟 <a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/embeddings">OpenAI API 的格式</a>是一样的。</p>
+<p>FastChat 更多的相关部署内容可以参考 FastChat 的<a target="_blank" rel="noopener" href="https://github.com/lm-sys/FastChat/blob/main/docs/openai_api.md">文档</a>。</p>
+<h2 id="LlamaIndex-文件加载与检索"><a href="#LlamaIndex-文件加载与检索" class="headerlink" title="LlamaIndex 文件加载与检索"></a>LlamaIndex 文件加载与检索</h2><p><a target="_blank" rel="noopener" href="https://www.llamaindex.ai/">LlamaIndex</a> 是继 LangChain 之后另外一个 LLM 应用开发框架，整体功能以 RAG 为主，现在也慢慢在开发一些 Agent 相关的功能。该框架的主要编程语言是 Python，具有广泛的社区支持和贡献，包括众多的 forks 和 stars，表明其在开发社区中的受欢迎程度和实用性。</p>
+<p>下面我们来介绍使用 LlamaIndex 结合 ES 进行文档加载与检索，在开始编写代码之前，我们需要安装 LlamaIndex 和 ES 的 Python 包，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install llama-index elasticsearch</span><br></pre></td></tr></table></figure>
+
+<h3 id="Embedding-自定义类"><a href="#Embedding-自定义类" class="headerlink" title="Embedding 自定义类"></a>Embedding 自定义类</h3><p>安装完依赖包后，我们开始编写相关代码，首先我们需要创建一个自定义的 Embedding 类，这个 Embedding 类会调用我们刚才部署的 Embedding API 接口来实现文本的向量化，代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.embeddings.base <span class="keyword">import</span> BaseEmbedding, Embedding</span><br><span class="line"><span class="keyword">from</span> llama_index.bridge.pydantic <span class="keyword">import</span> PrivateAttr</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Any</span>, <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CustomEmbeddings</span>(<span class="title class_ inherited__">BaseEmbedding</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Custom class for embeddings.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        model_name (str): Mode for embedding.</span></span><br><span class="line"><span class="string">        url(str): Url for embedding model.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    _model_name: <span class="built_in">str</span> = PrivateAttr()</span><br><span class="line">    _url: <span class="built_in">str</span> = PrivateAttr()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, model_name: <span class="built_in">str</span>, url: <span class="built_in">str</span>, **kwargs: <span class="type">Any</span></span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="variable language_">self</span>._model_name = model_name</span><br><span class="line">        <span class="variable language_">self</span>._url = url</span><br><span class="line">        <span class="built_in">super</span>().__init__(**kwargs)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">class_name</span>(<span class="params">cls</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;custom_embedding&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_aget_query_embedding</span>(<span class="params">self, query: <span class="built_in">str</span></span>) -&gt; Embedding:</span><br><span class="line">        <span class="keyword">return</span> get_embedding(text=query, model_uid=<span class="variable language_">self</span>._model_name, url=<span class="variable language_">self</span>._url)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_aget_text_embedding</span>(<span class="params">self, text: <span class="built_in">str</span></span>) -&gt; Embedding:</span><br><span class="line">        <span class="keyword">return</span> get_embedding(text=text, model_uid=<span class="variable language_">self</span>._model_name, url=<span class="variable language_">self</span>._url)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_get_query_embedding</span>(<span class="params">self, query: <span class="built_in">str</span></span>) -&gt; Embedding:</span><br><span class="line">        <span class="keyword">return</span> get_embedding(text=query, model_uid=<span class="variable language_">self</span>._model_name, url=<span class="variable language_">self</span>._url)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_get_text_embedding</span>(<span class="params">self, text: <span class="built_in">str</span></span>) -&gt; Embedding:</span><br><span class="line">        <span class="keyword">return</span> get_embedding(text=text, model_uid=<span class="variable language_">self</span>._model_name, url=<span class="variable language_">self</span>._url)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_get_text_embeddings</span>(<span class="params">self, texts: <span class="type">List</span>[<span class="built_in">str</span>]</span>) -&gt; <span class="type">List</span>[Embedding]:</span><br><span class="line">        <span class="keyword">return</span> get_embeddings(</span><br><span class="line">            list_of_text=texts, model_uid=<span class="variable language_">self</span>._model_name, url=<span class="variable language_">self</span>._url</span><br><span class="line">        )</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用 LlamaIndex 实现自定义的 Embedding 类，需要继承 BaseEmbedding 类，并实现相关的方法</li>
+<li>这里我们实现了<code>_aget_query_embedding</code>、<code>_aget_text_embedding</code>、<code>_get_query_embedding</code>、<code>_get_text_embedding</code>、<code>_get_text_embeddings</code>这几个方法，这几个方法会调用其他公共方法来实现文本转向量的功能。</li>
+</ul>
+<p>我们再来看一下<code>get_embedding</code>和<code>get_embeddings</code>这两个方法的实现，代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">send_request</span>(<span class="params">model_uid: <span class="built_in">str</span>, text: <span class="built_in">str</span>, url: <span class="built_in">str</span></span>):</span><br><span class="line">    url = <span class="string">f&quot;<span class="subst">&#123;url&#125;</span>/v1/embeddings&quot;</span></span><br><span class="line">    request_body = &#123;<span class="string">&quot;model&quot;</span>: model_uid, <span class="string">&quot;input&quot;</span>: text&#125;</span><br><span class="line">    response = requests.post(url, json=request_body)</span><br><span class="line">    <span class="keyword">if</span> response.status_code != <span class="number">200</span>:</span><br><span class="line">        <span class="keyword">raise</span> RuntimeError(</span><br><span class="line">            <span class="string">f&quot;Failed to create the embeddings, detail: <span class="subst">&#123;_get_error_string(response)&#125;</span>&quot;</span></span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">return</span> response.json()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_embedding</span>(<span class="params">text: <span class="built_in">str</span>, model_uid: <span class="built_in">str</span>, url: <span class="built_in">str</span></span>) -&gt; Embedding:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Get embedding.&quot;&quot;&quot;</span></span><br><span class="line">    text = text.replace(<span class="string">&quot;\n&quot;</span>, <span class="string">&quot; &quot;</span>)</span><br><span class="line">    response_data = send_request(model_uid, text, url)</span><br><span class="line">    <span class="keyword">return</span> response_data[<span class="string">&quot;data&quot;</span>][<span class="number">0</span>][<span class="string">&quot;embedding&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_embeddings</span>(<span class="params"></span></span><br><span class="line"><span class="params">    list_of_text: <span class="type">List</span>[<span class="built_in">str</span>], model_uid: <span class="built_in">str</span>, url: <span class="built_in">str</span></span></span><br><span class="line"><span class="params"></span>) -&gt; <span class="type">List</span>[Embedding]:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Get embeddings.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">len</span>(list_of_text) &lt;= <span class="number">2048</span>, <span class="string">&quot;The batch size should not be larger than 2048.&quot;</span></span><br><span class="line"></span><br><span class="line">    list_of_text = [text.replace(<span class="string">&quot;\n&quot;</span>, <span class="string">&quot; &quot;</span>) <span class="keyword">for</span> text <span class="keyword">in</span> list_of_text]</span><br><span class="line">    response_data = send_request(model_uid, list_of_text, url)</span><br><span class="line">    <span class="keyword">return</span> [d[<span class="string">&quot;embedding&quot;</span>] <span class="keyword">for</span> d <span class="keyword">in</span> response_data[<span class="string">&quot;data&quot;</span>]]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>get_embedding</code>和<code>get_embeddings</code>都使用<code>send_request</code>来获取文本的向量数据，不同的地方在于一个参数是字符串，一个参数是字符串数组</li>
+<li><code>send_request</code>方法会发起 HTTP 请求调用 Embedding API 接口来实现文本向量化</li>
+<li>参考之前的 API 返回结果，Embedding 向量保存在一个数组中</li>
+<li><code>get_embedding</code>获取返回结果的第一个向量数据，<code>get_embeddings</code>获取所有的向量数据</li>
+</ul>
+<h3 id="向量化文档"><a href="#向量化文档" class="headerlink" title="向量化文档"></a>向量化文档</h3><p>有了自定义 Embedding 类，我们就可以使用 LlamaIndex 来实现文档的向量存储了，首先我们连接 ES 数据库，代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.vector_stores <span class="keyword">import</span> ElasticsearchStore</span><br><span class="line"><span class="keyword">from</span> llama_index <span class="keyword">import</span> StorageContext</span><br><span class="line"></span><br><span class="line">es_url = <span class="string">&quot;http://&#123;username&#125;:&#123;password&#125;@localhost:9200&quot;</span></span><br><span class="line">index_name = <span class="string">&quot;my_index&quot;</span></span><br><span class="line">store = ElasticsearchStore(</span><br><span class="line">   es_url=es_url,</span><br><span class="line">   index_name=index_name,</span><br><span class="line">)</span><br><span class="line">storage_context = StorageContext.from_defaults(vector_store=store)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>新建一个 ES store 来连接 ES，需要指定 ES 的地址和索引名称</li>
+<li>ES 如果开启了安全认证，需要在 ES 的地址中添加用户名和密码</li>
+<li>使用 LlamaIndex 的 StorageContext 来集成 ES 的 store</li>
+</ul>
+<p>我们再定义带有 Embedding 模型的 ServiceContext，代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index <span class="keyword">import</span> ServiceContext</span><br><span class="line"><span class="keyword">from</span> custom_embedding <span class="keyword">import</span> CustomEmbeddings</span><br><span class="line"></span><br><span class="line">embedding_model_url = <span class="string">&quot;http://localhost:8000&quot;</span></span><br><span class="line">embedding_model_name = <span class="string">&quot;bge-base-en-v1.5&quot;</span></span><br><span class="line">service_context = ServiceContext.from_defaults(</span><br><span class="line">    embed_model=CustomEmbeddings(</span><br><span class="line">        url=embedding_model_url, model_name=embedding_model_name</span><br><span class="line">    ),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>embedding_model_url 是我们刚才部署的 Embedding API 的地址，model_name 是模型名称</li>
+</ul>
+<p>接着我们来将文档转换为 LlamaIndex 的 Document 对象，我们可以使用 LlamaIndex 的示例文档<a target="_blank" rel="noopener" href="https://github.com/run-llama/llama_index/blob/b01426e6b467b0da6d6a5948b3566d3251bf38fa/docs/examples/data/paul_graham/paul_graham_essay.txt">paul_graham_essay</a>来做演示，这篇文章是 Paul Graham 关于他个人生涯和工作经历的回顾，代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index <span class="keyword">import</span> SimpleDirectoryReader</span><br><span class="line"></span><br><span class="line">data_path = <span class="string">&quot;./data&quot;</span> <span class="comment"># paul_graham_essay.txt 所在的目录</span></span><br><span class="line">documents = SimpleDirectoryReader(data_path).load_data()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>SimpleDirectoryReader 对象可以对文件夹中的文件进行解析，txt 文件的解析不需要额外的依赖，但如果是其他格式的文件，比如 pdf，则需要安装相关的依赖 pypdf</li>
+</ul>
+<p>我们将以上的对象组装在一起，示例代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index <span class="keyword">import</span> VectorStoreIndex</span><br><span class="line"></span><br><span class="line">index = VectorStoreIndex.from_documents(</span><br><span class="line">    documents,</span><br><span class="line">    storage_context=storage_context,</span><br><span class="line">    service_context=service_context,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用 VectorStoreIndex 集成 storage_context 和 service_context，并加载 documents</li>
+<li>不需要担心 ES 的索引是否已创建，如果没有该索引，LlamaIndex 会自动创建</li>
+</ul>
+<p>代码执行后，我们就可以在 ES 中看到索引的文档了，我们通过 elasticvue 来查看索引的文档，如下图所示：</p>
+<img src="/images/post/2024/01/elasticvue-index1.png" class="" width="1000" height="400">
+
+<img src="/images/post/2024/01/elasticvue-index2.png" class="" width="1000" height="400">
+
+<p>除了可以对整个文件夹进行加载外，我们还可以在已有的索引中添加新的文档，代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">filepath = <span class="string">&quot;./data/paul_graham_essay.txt&quot;</span></span><br><span class="line">index = VectorStoreIndex.from_vector_store(</span><br><span class="line">    vector_store=store,</span><br><span class="line">    storage_context=storage_context,</span><br><span class="line">    service_context=service_context,</span><br><span class="line">)</span><br><span class="line">document = SimpleDirectoryReader(input_files=[filepath]).load_data()[<span class="number">0</span>]</span><br><span class="line">index.insert(document)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在 VectorStoreIndex 中传入 ES store 来加载已有的 ES 索引</li>
+<li>SimpleDirectoryReader 也可以传入单个文件路径，这样就可以加载单个文件</li>
+<li>使用 VectorStoreIndex 的 insert 方法来添加新的文档</li>
+</ul>
+<h3 id="问题检索与生成"><a href="#问题检索与生成" class="headerlink" title="问题检索与生成"></a>问题检索与生成</h3><p>接下来我们再使用 LlamaIndex 来对问题进行检索，代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">query_engine = index.as_query_engine()</span><br><span class="line">response = query_engine.query(<span class="string">&quot;What did the author do growing up?&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;response: <span class="subst">&#123;response&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line"><span class="comment"># response: The author took philosophy courses, but found them boring.</span></span><br><span class="line"><span class="comment"># As a result, the author decided to switch to AI and started teaching</span></span><br><span class="line"><span class="comment"># themselves Lisp, which was regarded as the language of AI at the time.</span></span><br><span class="line"><span class="comment"># The author also reverse-engineered SHRDLU for their undergraduate thesis.</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>LlamaIndex 默认使用 OpenAI 的 LLM 来做生成，因此在执行代码之前，需要将 OPENAI_API_KEY 环境变量设置为你的 API KEY</li>
+</ul>
+<p>我们询问了一个关于作者成长经历的问题，LlamaIndex 会先使用向量检索来检索相关的文档，然后再使用 LLM 来生成答案，我们可以看到 LlamaIndex 生成的答案是正确的。</p>
+<p>如果我们将 LlamaIndex 中的 LLM 取消，那么 response 的结果会变成结合了相关文档的提示词模板，如下所示：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">service_context = ServiceContext.from_defaults(</span><br><span class="line">    llm=<span class="literal">None</span>, <span class="comment"># 取消LLM</span></span><br><span class="line">    embed_model=CustomEmbeddings(</span><br><span class="line">        url=embedding_model_url, model_name=embedding_model_name</span><br><span class="line">    ),</span><br><span class="line">)</span><br><span class="line">......</span><br><span class="line">response = query_engine.query(<span class="string">&quot;What did the author do growing up?&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;response: <span class="subst">&#123;response&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示结果</span></span><br><span class="line"><span class="comment"># LLM is explicitly disabled. Using MockLLM.</span></span><br><span class="line"><span class="comment"># response: Context information is below.</span></span><br><span class="line"><span class="comment"># ---------------------</span></span><br><span class="line"><span class="comment"># file_path: data/paul_graham_essay.txt</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># I don&#x27;t think it was entirely blabla ......</span></span><br><span class="line"><span class="comment"># ---------------------</span></span><br><span class="line"><span class="comment"># Given the context information and not prior knowledge, answer the query.</span></span><br><span class="line"><span class="comment"># Query: What did the author do growing up?</span></span><br><span class="line"><span class="comment"># Answer:</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>只需在 ServiceContext 中添加参数<code>llm=none</code>即可取消默认的 OpenAI LLM</li>
+<li>其他代码与原来的一样</li>
+</ul>
+<p>可以看到同样的问题，不使用 LLM 的情况下返回的结果是一个包含了相关文档的提示词模板。</p>
+<p>在 response 对象中，我们还可以通过<code>response.source_nodes</code>可以获取到检索到的文档信息，文档的 JSON 信息如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">   <span class="attr">&quot;py/object&quot;</span><span class="punctuation">:</span> <span class="string">&quot;llama_index.schema.NodeWithScore&quot;</span><span class="punctuation">,</span></span><br><span class="line">   <span class="attr">&quot;py/state&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">     <span class="attr">&quot;__dict__&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">       <span class="attr">&quot;node&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">         <span class="attr">&quot;py/object&quot;</span><span class="punctuation">:</span> <span class="string">&quot;llama_index.schema.TextNode&quot;</span><span class="punctuation">,</span></span><br><span class="line">         <span class="attr">&quot;py/state&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">           <span class="attr">&quot;__dict__&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">             <span class="attr">&quot;metadata&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;file_path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;data/paul_graham_essay.txt&quot;</span><span class="punctuation">,</span> …<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">             <span class="attr">&quot;hash&quot;</span><span class="punctuation">:</span> <span class="string">&quot;72baf405cfa89677a1a409d46d58dab2f4c183adcba5602d8b01a27a05d9a7a5&quot;</span><span class="punctuation">,</span></span><br><span class="line">             <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;blabla...&quot;</span><span class="punctuation">,</span></span><br><span class="line">             <span class="attr">&quot;start_char_idx&quot;</span><span class="punctuation">:</span> <span class="number">53611</span><span class="punctuation">,</span></span><br><span class="line">             <span class="attr">&quot;end_char_idx&quot;</span><span class="punctuation">:</span> <span class="number">57967</span></span><br><span class="line">           <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">         <span class="punctuation">&#125;</span></span><br><span class="line">       <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">       <span class="attr">&quot;score&quot;</span><span class="punctuation">:</span> <span class="number">1.0</span></span><br><span class="line">     <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">   <span class="punctuation">&#125;</span></span><br><span class="line"> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"> <span class="punctuation">&#123;</span></span><br><span class="line">   <span class="attr">&quot;py/object&quot;</span><span class="punctuation">:</span> <span class="string">&quot;llama_index.schema.NodeWithScore&quot;</span><span class="punctuation">,</span></span><br><span class="line">   <span class="attr">&quot;py/state&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;__dict__&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>…<span class="punctuation">&#125;</span><span class="punctuation">,</span> …<span class="punctuation">&#125;</span></span><br><span class="line"> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以看到 LlamaIndex 根据问题检索出 2 个 Node（可以把 Node 理解成文档的分块）</li>
+<li>每个 Node 有文本内容 text，匹配分数 score 等属性</li>
+</ul>
+<p>LlamaIndex 默认是使用向量检索，我们也可以将其替换为其他检索方式，代码如下：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.vector_stores.types <span class="keyword">import</span> VectorStoreQueryMode</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用关键字检索</span></span><br><span class="line">query_engine = index.as_query_engine(</span><br><span class="line">  vector_store_query_mode=VectorStoreQueryMode.TEXT_SEARCH,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用混合检索</span></span><br><span class="line">query_engine = index.as_query_engine(</span><br><span class="line">  vector_store_query_mode=VectorStoreQueryMode.HYBRID,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>更多的 LlamaIndex 用法可以参考<a target="_blank" rel="noopener" href="https://docs.llamaindex.ai/en/stable/">官方文档</a>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>RAG 是 LLM 技术的一个重要方向，它不仅可以解决 LLM 中存在的一些问题，而且可以帮助我们打造更高质量的 LLM 应用。本文从 ES 和 Embedding 模型的部署一步步展开，结合 LLM 框架 LlamaIndex 来实现 RAG 的检索增强生成，并介绍了在实践过程中相关的原理和注意事项。希望本文能够帮助大家更好地理解 RAG 技术，如果对文章内容有疑问或者建议，欢迎在评论区留言。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2024/01/13/llamaindex-eleasticsearch-rga-practice/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2024/01/13/llamaindex-eleasticsearch-rga-practice/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

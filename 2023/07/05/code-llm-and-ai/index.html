@@ -1,0 +1,386 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>大语言模型代码生成工具 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="大语言模型代码生成工具"> <!-- TODO: truncate -->
+	<meta name="keywords" content="code ai">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">大语言模型代码生成工具</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-07-05T02:35:22.000Z" itemprop="datePublished">7月 5, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/code-ai/">code ai</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/07/code-ai.jpg" class="" width="400" height="300">
+
+<p>随着大语言模型技术的发展，人工智能的能力应用到了各个领域，包括与开发人员息息相关的代码生成领域，这个领域并不新鲜，但借助大型语言模型的力量，它被赋予了全新的生命力和可能性。在数字化的世界中，代码是一种语言，是人类与机器沟通的桥梁。借助大型语言模型的力量，我们可以让这座桥梁更加强大，更加智能。今天我们将深入探讨大型语言模型在代码生成方面的应用。</p>
+<span id="more"></span>
+
+<h2 id="代码辅助的历史"><a href="#代码辅助的历史" class="headerlink" title="代码辅助的历史"></a>代码辅助的历史</h2><p>代码辅助功能的发展历史可以追溯到计算机编程的早期阶段。以下是一些关键的里程碑：</p>
+<ul>
+<li>语法高亮（1970 年代）：最早的代码辅助功能之一，通过使用不同的颜色和字体样式来区分源代码的不同部分，如关键字、变量、字符串等。</li>
+<li>自动补全（1980 年代）：自动补全是另一种早期的代码辅助功能，它可以帮助开发者更快地编写代码，同时减少错误。</li>
+<li>代码提示和文档查看（1990 年代）：这些功能可以在开发者编写代码时提供实时的帮助和参考信息。</li>
+<li>重构和代码导航（2000 年代）：这些功能可以帮助开发者更有效地组织和理解他们的代码。</li>
+<li>静态代码分析（2010 年代）：这种功能可以在开发者编写代码时自动检测可能的错误和问题。</li>
+<li>代码生成和模板（2010 年代）：这些功能可以帮助开发者快速生成常见的代码结构和模式。</li>
+<li>AI 辅助编程（2020 年代）：这是最新的代码辅助功能，它使用人工智能技术来帮助开发者编写代码。</li>
+</ul>
+<img src="/images/post/2023/07/assistance-history.png" class="" width="1200" height="400">
+
+<h2 id="自动补全和代码生成的区别"><a href="#自动补全和代码生成的区别" class="headerlink" title="自动补全和代码生成的区别"></a>自动补全和代码生成的区别</h2><p>可能会有人混淆自动补全和 AI 辅助编程，这两者都是编程辅助工具，但它们的工作方式和提供的功能有很大的区别。</p>
+<p>自动补全，是一种在用户输入代码时提供代码片段建议的功能。这些建议通常基于当前的语法环境和已经输入的字符。例如，如果你在 Java 环境中输入”System.out.”, 自动补全可能会建议”println”作为下一个输入。<br>自动补全的主要目标是提高编程速度和准确性，通过减少手动输入和避免拼写错误。它通常基于语言的语法规则和已定义的变量、函数、类等进行工作。自动补全通常不会理解代码的上下文或意图，也不会生成新的代码逻辑。</p>
+<p>AI 辅助编程是一种更先进的编程辅助工具，它使用人工智能技术（如机器学习和自然语言处理）来理解和生成代码。这种工具可以理解代码的上下文和意图，可以生成新的代码逻辑，也可以在更大的范围内提供代码建议。<br>例如，GitHub 的 Copilot 就是一个 AI 辅助编程工具，它可以根据你的输入和上下文来生成代码建议。如果你输入一个函数的描述，Copilot 可以生成一个完整的函数实现。如果你输入一个循环的一部分，Copilot 可以生成循环的其余部分。</p>
+<h2 id="代码生成工具介绍"><a href="#代码生成工具介绍" class="headerlink" title="代码生成工具介绍"></a>代码生成工具介绍</h2><h3 id="Github-Copliot"><a href="#Github-Copliot" class="headerlink" title="Github Copliot"></a>Github Copliot</h3><p>GitHub Copilot 是由 OpenAI 和 GitHub 共同开发的，它使用了一个大型的语言模型（Codex），这个模型是在大量的公开源代码上进行训练的。Copilot 可以理解自然语言和代码，因此它可以根据开发者的描述来生成代码，也可以根据已有的代码来生成新的代码。这使得 Copilot 不仅可以帮助开发者快速编写代码，还可以帮助他们学习新的编程语言和技术。</p>
+<p>Copilot 的 <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=GitHub.copilot">VsCode 插件</a>具备代码生成功能（效果如下），建议配合另外一个<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-labs">Copilot 插件</a>效果更佳，支持代码解释，语言翻译等功能：</p>
+<img src="/images/post/2023/07/copilot.png" class="" width="400" height="300">
+
+<h4 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h4><ul>
+<li>丰富的训练数据：由于 OpenAI 和 GitHub 的合作，因此 CodeX 的训练数据是 GitHub 上面的代码（可能包括私有仓库），在数据集上有比较大的优势（光 Github 的数据就有 159G），其他公司想要爬取所有 github 上的所有代码会有一些难度。</li>
+<li>更好的模型基座：Codex 基于 GPT-3 使用 GitHub 等数据进行了 Fine-Tuning，它也具有强大的自然语言处理能力。这使得它可以理解自然语言的指令，并将其转化为代码。</li>
+</ul>
+<h4 id="劣势"><a href="#劣势" class="headerlink" title="劣势"></a>劣势</h4><ul>
+<li>不开源：OpenAI 的 LLM 都是闭源，无法基于该模型进行训练，也就是无法得到属于自己的模型。</li>
+<li>数据安全：因为是闭源的 LLM，所以该模型也无法本地部署，只能通过调用 OpenAI 的 API 来实现功能，存在数据泄露风险。</li>
+<li>插件收费：在 VSCode 上该插件需要收费，只对学生和开源作者免费</li>
+</ul>
+<h3 id="StarCoder"><a href="#StarCoder" class="headerlink" title="StarCoder"></a>StarCoder</h3><p>StarCoder 是一个在源代码和自然语言文本上训练的语言模型。它的训练数据包含超过 80 种不同的编程语言，以及从 GitHub 问题、提交中提取的文本。<br>所有的代码和模型权重都公开可用于研究目的。StarCoder 支持在多种硬件上运行，包括使用 FP32、FP16、BF16 或 8 位的内存。<br>StarCoder 在 VSCode 上也有对应的插件，叫做 <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=HuggingFace.huggingface-vscode">HF Code AutoComplete</a>，这个插件也可以实现代码补全的功能。</p>
+<img src="/images/post/2023/07/startcode.png" class="" width="400" height="300">
+
+<h4 id="优势-1"><a href="#优势-1" class="headerlink" title="优势"></a>优势</h4><ul>
+<li>开源：LLM 开源，可以在 HuggingFace 上下载它的模型，然后在自己的机器上训练</li>
+<li>插件免费：VSCode 插件是免费的，不过需要填入 HuggingFace 的 token，最近国内连 HuggingFace 经常超时，因此需要科学上网才能使用。</li>
+</ul>
+<h4 id="劣势-1"><a href="#劣势-1" class="headerlink" title="劣势"></a>劣势</h4><ul>
+<li>延迟较高：与 Copilot 相比功能延迟比较大，不知道是不是网络问题。</li>
+<li>配置要求高：训练该模型需要的机器配置比较高</li>
+</ul>
+<h3 id="CodeGeeX"><a href="#CodeGeeX" class="headerlink" title="CodeGeeX"></a>CodeGeeX</h3><p>CodeGeeX 是清华大学（ChatGLM 也是他们团队开发的）开发的一个大规模的多语言代码生成模型，拥有 130 亿个参数，预训练在超过 20 种编程语言的大型代码语料库上。<br>CodeGeeX 支持不同语言之间的代码片段翻译。只需一键，CodeGeeX 就可以将一个程序转换成任何预期的语言，并具有高准确性。<br>CodeGeeX 在 VS Code 扩展市场中免费提供（<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=aminer.codegeex">CodeGeeX</a>）。它支持代码补全、解释、总结等功能，为用户提供更好的编码体验。</p>
+<img src="/images/post/2023/07/codegeex.png" class="" width="400" height="300">
+
+<h4 id="优势-2"><a href="#优势-2" class="headerlink" title="优势"></a>优势</h4><ul>
+<li>开源：下载模型需要提交申请，然后可以在自己的机器上训练</li>
+<li>插件免费：VSCode 插件是免费的，插件的 API 调用的是 CodeGeeX 服务器的 API，速度还比较快，功能也比较多，有代码解释，代码注释和代码翻译等功能。</li>
+</ul>
+<h4 id="劣势-2"><a href="#劣势-2" class="headerlink" title="劣势"></a>劣势</h4><ul>
+<li>插件无法配置服务端 API：这意味着编辑器中的代码需要经过 CodeGeeX 服务器，即使你训练了自己的代码 LLM 并提供了后端的 API，也无法修改插件的后端配置，只有自己开发相关的插件。</li>
+</ul>
+<h3 id="Codeium"><a href="#Codeium" class="headerlink" title="Codeium"></a>Codeium</h3><p>Codeium 是一家位于美国硅谷的人工智能公司，致力于为开发者提供更智能、高效的编程体验。 Codeium 提供的主要服务包括代码自动补全、搜索和聊天式助手，支持超过 70 种编程语言和 40 多个集成开发环境（IDE）。<br><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=Codeium.codeium">VSCode 插件</a>安装完成后需要进行登录，并下载安装 Codeium 的服务端到本地。</p>
+<img src="/images/post/2023/07/codeium.png" class="" width="400" height="300">
+
+<h4 id="优势-3"><a href="#优势-3" class="headerlink" title="优势"></a>优势</h4><ul>
+<li>多 IDE：支持 VSCode、Jetbrains 等常用的 IDE，甚至还支持 Vim 和 Emacs。</li>
+<li>免费：插件个人使用完全免费</li>
+<li>功能强大：除了代码生成外，还有代码解释，注释生成，单元测试生成等功能。</li>
+</ul>
+<h4 id="劣势-3"><a href="#劣势-3" class="headerlink" title="劣势"></a>劣势</h4><ul>
+<li>不开源：底层也是 AI 技术，但是用的 LLM 是 Codeium 公司自己研发的，不开源，无法用来训练自己的模型</li>
+<li>代码补全行数少：不像其他代码生成的插件，这个插件补全的代码比较少，要分几次才能完成。</li>
+</ul>
+<h3 id="CodeWhisperer"><a href="#CodeWhisperer" class="headerlink" title="CodeWhisperer"></a>CodeWhisperer</h3><p>CodeWhisperer 是一个由 Amazon Web Services 推出的自动化代码优化工具。 它采用最前沿的机器学习和人工智能技术，来实现对您的应用程序进行代码分析、性能分析和建议最佳优化方法等功能。<br>AWS 的 <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=AmazonWebServices.aws-toolkit-vscode">VSCode 插件</a>推测也是用了自家的 LLM，除了代码生成外，还有安全扫描功能，但只对 Java 和 Python 语言有效。</p>
+<img src="/images/post/2023/07/codewhisperer.png" class="" width="400" height="300">
+
+<h4 id="优势-4"><a href="#优势-4" class="headerlink" title="优势"></a>优势</h4><ul>
+<li>免费：插件是免费使用，同时还有代码安全扫描的功能</li>
+</ul>
+<h4 id="劣势-4"><a href="#劣势-4" class="headerlink" title="劣势"></a>劣势</h4><ul>
+<li>不开源：底层用的 LLM 是 AWS 公司自己研发的，不开源，无法用来训练自己的模型</li>
+</ul>
+<h2 id="综合对比"><a href="#综合对比" class="headerlink" title="综合对比"></a>综合对比</h2><table>
+<thead>
+<tr>
+<th align="left">工具名称</th>
+<th align="left">代码生成</th>
+<th align="left">代码解释</th>
+<th align="left">代码注释</th>
+<th align="left">代码翻译</th>
+<th align="left">代码重构</th>
+<th align="left">生成单测</th>
+<th align="left">多 IDE</th>
+<th align="left">安全扫描</th>
+<th align="left">代码问答</th>
+<th align="left">是否免费</th>
+<th align="left">推荐指数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Copilot + Labs</td>
+<td align="left">✅</td>
+<td align="left">✅</td>
+<td align="left">✅</td>
+<td align="left">✅</td>
+<td align="left"></td>
+<td align="left">✅</td>
+<td align="left">✅</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">⭐️️⭐️⭐⭐️️️</td>
+</tr>
+<tr>
+<td align="left">StartCode</td>
+<td align="left">✅</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">✅</td>
+<td align="left">⭐️</td>
+</tr>
+<tr>
+<td align="left">CodeGeex</td>
+<td align="left">✅</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">✅</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">✅</td>
+<td align="left"></td>
+<td align="left">✅</td>
+<td align="left">✅</td>
+<td align="left">⭐️⭐️⭐️</td>
+</tr>
+<tr>
+<td align="left">Codeium</td>
+<td align="left">✅</td>
+<td align="left">✅</td>
+<td align="left">✅</td>
+<td align="left">✅</td>
+<td align="left">✅</td>
+<td align="left">✅</td>
+<td align="left">✅</td>
+<td align="left"></td>
+<td align="left">✅</td>
+<td align="left">✅</td>
+<td align="left">⭐️⭐️⭐️⭐️⭐️</td>
+</tr>
+<tr>
+<td align="left">CodeWhisperer</td>
+<td align="left">✅</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">✅</td>
+<td align="left">✅</td>
+<td align="left"></td>
+<td align="left">✅</td>
+<td align="left">⭐️⭐️</td>
+</tr>
+</tbody></table>
+<p>上面是各个代码生成工具的综合比较，从比较结果上看，Codeium 的功能最全，而且是免费的，因此比较推荐，其次是 Copilot，但是 Copilot 是收费的，可以在淘宝上买个学生号，20 块钱可以管 2 年，整体性价比还是比较高的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文主要介绍了代码生成工具的发展历史，以及目前比较流行的代码生成工具，希望可以帮助大家可以借助大语言模型的技术下提高编码效率，如果有更好的工具推荐，也请留言告知。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2023/07/05/code-llm-and-ai/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2023/07/05/code-llm-and-ai/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

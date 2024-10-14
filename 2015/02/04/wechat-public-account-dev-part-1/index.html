@@ -1,0 +1,258 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>微信公众账号开发part1——开发者验证 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="微信公众账号开发part1——开发者验证"> <!-- TODO: truncate -->
+	<meta name="keywords" content="wechat,java">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">微信公众账号开发part1——开发者验证</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2015-02-04T05:51:00.000Z" itemprop="datePublished">2月 4, 2015</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/java/">java</a> <a href="/tags/wechat/">wechat</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2015-2/wechat.jpg" class="">  
+<p>最近在了解微信公众账号的开发，准备边学边写一些文章来记录学习的过程，主要是基于微信的开发者模式来进行公共账号的开发，服务器选择新浪云SAE，语言还是选择比较熟悉的JAVA。  </p>
+<span id="more"></span>  
+
+<h2 id="基本准备"><a href="#基本准备" class="headerlink" title="基本准备"></a>基本准备</h2><ul>
+<li>登陆微信公众平台网站: <code>https://mp.weixin.qq.com</code>，进行账号注册，具体可以参考<a target="_blank" rel="noopener" href="http://segmentfault.com/blog/zetd/1190000000356021">青龙老贼的这篇文章</a>，虽然内容有点老跟现在的不大一样，但不影响参考。</li>
+<li>在SAE上面新建一个JAVA应用，这里还是可以参照<a target="_blank" rel="noopener" href="http://segmentfault.com/blog/zetd/1190000000356067">青龙老贼的文章</a>，跟里面不同的是我们要创建一个JAVA的应用，而不是PHP的。</li>
+</ul>
+<h2 id="修改开发者中心的配置"><a href="#修改开发者中心的配置" class="headerlink" title="修改开发者中心的配置"></a>修改开发者中心的配置</h2><ul>
+<li>登陆进到微信公众平台后，点击左下角的开发者中心，再点击图中的修改配置按钮，就可以进到修改配置页面。</li>
+</ul>
+<img src="/images/post/2015-2/wechat_config_1.png" class="">  
+<ul>
+<li>填写配置项<ul>
+<li>输入你的SAE的应用URL，比如:<code>http://xxx.sinaapp.com</code>，不一定要写应用的基本URL，可以在上面加一些扩展，比如<code>http://xxx.sinaapp.com/xxx</code>，这个要看你的应用的restful怎么定了。  </li>
+<li>TOKEN随便输入一个字符串就可以，这个值后面是要配置到java应用里面的，可以理解为一个加密的密钥。</li>
+<li>EncodingAESKey随机生成。</li>
+<li>消息加解密方式暂时选择明文模式。</li>
+</ul>
+</li>
+</ul>
+<img src="/images/post/2015-2/wechat_config_2.png" class="">  
+<h2 id="微信服务端开发"><a href="#微信服务端开发" class="headerlink" title="微信服务端开发"></a>微信服务端开发</h2><ul>
+<li><p>新建一个spring mvc工程，可以参照<a target="_blank" rel="noopener" href="https://confluence.jetbrains.com/display/IntelliJIDEA/Getting+Started+with+Spring+MVC,+Hibernate+and+JSON">这个文章</a>，但我们暂时不需要数据库和页面，只需要定义restful接口就可以了。  </p>
+</li>
+<li><p>新建Controller并定义认证的api，可以参考微信公众平台开发者文档里面的<a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/wiki/17/2d4265491f12608cd170a95559800f2d.html">接入指南</a>，里面有段php代码是指导服务端怎么开发的，我们要做的只是把它翻译成JAVA。</p>
+</li>
+</ul>
+<figure class="highlight java"><figcaption><span>MainController.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.google.common.base.Joiner;</span><br><span class="line"><span class="keyword">import</span> com.google.common.collect.Lists;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.logging.Log;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.logging.LogFactory;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;</span><br><span class="line"><span class="keyword">import</span> org.springframework.http.HttpStatus;</span><br><span class="line"><span class="keyword">import</span> org.springframework.http.ResponseEntity;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.security.MessageDigest;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Collections;</span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainController</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Log</span> <span class="variable">log</span> <span class="operator">=</span> LogFactory.getLog(MainController.class);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//从配置文件获取的token值，就是刚才在修改配置项里面定义的那个Token</span></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;token&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String token;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//定义一个GET请求，url为xxx/index</span></span><br><span class="line">    <span class="meta">@RequestMapping(value = &quot;/index&quot;, method = RequestMethod.GET, produces = &quot;text/html;charset=UTF-8&quot;)</span></span><br><span class="line">    <span class="keyword">public</span></span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="comment">//接收新手指南里面提到的那4个参数</span></span><br><span class="line">    ResponseEntity&lt;String&gt; <span class="title function_">auth</span><span class="params">(<span class="meta">@RequestParam(&quot;signature&quot;)</span> String signature,</span></span><br><span class="line"><span class="params">                                <span class="meta">@RequestParam(&quot;timestamp&quot;)</span> String timestamp,</span></span><br><span class="line"><span class="params">                                <span class="meta">@RequestParam(&quot;nonce&quot;)</span> String nonce,</span></span><br><span class="line"><span class="params">                                <span class="meta">@RequestParam(&quot;echostr&quot;)</span> String echostr)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        log.info(<span class="string">&quot;wechat auth start&quot;</span>);</span><br><span class="line">        log.info(String.format(<span class="string">&quot;signature:%s, timestamp:%s, nonce:%s, echostr:%s&quot;</span>,</span><br><span class="line">                signature, timestamp, nonce, echostr));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//如果认证通过，原样返回echostr值，并返回200的response</span></span><br><span class="line">        <span class="keyword">if</span> (wechatAuth(signature, timestamp, nonce)) &#123;</span><br><span class="line">            log.info(<span class="string">&quot;wechat auth success&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ResponseEntity</span>&lt;String&gt;(echostr, HttpStatus.OK);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//如果失败，则返回400，并提示认证失败</span></span><br><span class="line">        log.info(<span class="string">&quot;wechat auth failed&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ResponseEntity</span>&lt;String&gt;(<span class="string">&quot;wechat auth failed.&quot;</span>, HttpStatus.BAD_REQUEST);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">wechatAuth</span><span class="params">(String signature, String timestamp, String nonce)</span> &#123;</span><br><span class="line">    	<span class="comment">//将这3个string放到一个list里</span></span><br><span class="line">        ArrayList&lt;String&gt; strings = Lists.newArrayList(token, timestamp, nonce);</span><br><span class="line">        log.info(String.format(<span class="string">&quot;before sort array:%s&quot;</span>, strings));</span><br><span class="line">        <span class="comment">//按字母顺序做一下排序</span></span><br><span class="line">        Collections.sort(strings);</span><br><span class="line">        log.info(String.format(<span class="string">&quot;after sort array:%s&quot;</span>, strings));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//将list里面所有string组合成一个string，这里用到了guava的Joiner</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">groupString</span> <span class="operator">=</span> Joiner.on(<span class="string">&quot;&quot;</span>).join(strings);</span><br><span class="line">        log.info(String.format(<span class="string">&quot;groupString string:%s&quot;</span>, groupString));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//用SHA1加密该string</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> sha1(groupString);</span><br><span class="line">        log.info(String.format(<span class="string">&quot;sha1:%s&quot;</span>, result));</span><br><span class="line">        <span class="comment">//加密后的值和signature进行比较，注意用java加密后都是字母都是大写的，而传过来的signature是小写字母，所以要大小写转换一下</span></span><br><span class="line">        <span class="type">boolean</span> <span class="variable">compareResult</span> <span class="operator">=</span> result.equals(signature.toUpperCase());</span><br><span class="line">        log.info(String.format(<span class="string">&quot;compare result:%b&quot;</span>, compareResult));</span><br><span class="line">        <span class="keyword">return</span> compareResult;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//类似php的sha1方法</span></span><br><span class="line">    <span class="keyword">private</span> String <span class="title function_">sha1</span><span class="params">(String s)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// Create MD5 Hash</span></span><br><span class="line">            <span class="type">MessageDigest</span> <span class="variable">digest</span> <span class="operator">=</span> MessageDigest.getInstance(<span class="string">&quot;SHA-1&quot;</span>);</span><br><span class="line">            digest.update(s.getBytes());</span><br><span class="line">            <span class="type">byte</span> messageDigest[] = digest.digest();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Create Hex String</span></span><br><span class="line">            <span class="type">StringBuilder</span> <span class="variable">hexString</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">byte</span> aMessageDigest : messageDigest) &#123;</span><br><span class="line">                hexString.append(String.format(<span class="string">&quot;%02X&quot;</span>, <span class="number">0xFF</span> &amp; aMessageDigest));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> hexString.toString();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;sha1 failed&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 
+
+<ul>
+<li>将工程打包成war，上传到SAE完成部署，启动应用</li>
+</ul>
+<h2 id="启用开发者模式"><a href="#启用开发者模式" class="headerlink" title="启用开发者模式"></a>启用开发者模式</h2><ul>
+<li>进到微信公众平台的开发者中心，点击服务器配置那一行后面的启用按钮，如果服务器正常启动的话，就可以看到启用成功的提示了。</li>
+</ul>
+<img src="/images/post/2015-2/wechat_start.png" class="">  
+<p>更多代码可以看这里: <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming/wechat-blog%EF%BC%8C%E8%A7%89%E5%BE%97%E5%A5%BD%E7%9A%84%E8%AF%9D%E8%AF%B7Star%E4%B8%80%E4%B8%8B%E5%90%A7%EF%BC%8C%E8%B0%A2%E8%B0%A2">https://github.com/zhaozhiming/wechat-blog，觉得好的话请Star一下吧，谢谢</a>  </p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2015/02/04/wechat-public-account-dev-part-1/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2015/02/04/wechat-public-account-dev-part-1/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

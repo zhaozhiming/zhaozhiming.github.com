@@ -1,0 +1,291 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>Alfred和一些有用的workflow介绍 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="Alfred和一些有用的workflow介绍"> <!-- TODO: truncate -->
+	<meta name="keywords" content="Alfred">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">Alfred和一些有用的workflow介绍</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2015-10-25T05:36:00.000Z" itemprop="datePublished">10月 25, 2015</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/Alfred/">Alfred</a> <a href="/tags/tools/">tools</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2015-10/alfred.png" class="">  
+<p>最近发现了一个超级好用的工具——<a target="_blank" rel="noopener" href="https://www.alfredapp.com/">Alfred</a>，可以通过快捷方式找到任何你MAC上的任何应用、文件，甚至可以自定义工作流的方式找到或者打开你想要的资源，后面会推荐几个有用的workflow。  </p>
+<span id="more"></span>  
+<h2 id="Alfred-vs-Spotlight"><a href="#Alfred-vs-Spotlight" class="headerlink" title="Alfred vs. Spotlight"></a>Alfred vs. Spotlight</h2><p>有人可能会说Mac从Yosemite版本开始就有了类似Alfred的自带工具Spotlight，但仔细使用后会发现Spotlight的功能只是Alfred免费版的一小部分而已，如果使用Alfred付费的Powerpack后功能更加强大，可以配合各种软件快速定位你想要的资源。  </p>
+<p>所以如果你使用Alfred的话，完全可以替代MAC系统默认的Spotlight，替换方法如下：  </p>
+<ul>
+<li>Spotlight的默认快捷键是<code>⌘ + 空格</code>，可以在系统配置中取消该快捷键。</li>
+</ul>
+<img src="/images/post/2015-10/spotlight.png" class="">  
+<ul>
+<li>安装Alfred后，在Alfred设置页面将弹出快捷键设置为<code>⌘ + 空格</code>。</li>
+</ul>
+<img src="/images/post/2015-10/alfred_config.png" class="">  
+<h2 id="Alfred使用介绍"><a href="#Alfred使用介绍" class="headerlink" title="Alfred使用介绍"></a>Alfred使用介绍</h2><p>网上有比较多的关于Alfred的介绍，我这里就不一一列举其功能了，就挑一些重点的讲。  </p>
+<h4 id="设置默认搜索引擎"><a href="#设置默认搜索引擎" class="headerlink" title="设置默认搜索引擎"></a>设置默认搜索引擎</h4><p>Alfred默认使用google，amazon和维基百科来做前3个搜索引擎（可能不同的MAC机器有不同的默认设置，至少我机器上是这3个，这些搜索是在本地应用、文件查找不到之后通过网络进行搜索的设置。  </p>
+<p>当然你可以更改这些默认设置，操作如下图所示：  
+   </p>
+<img src="/images/post/2015-10/alfred_search_config1.png" class="">  
+
+<img src="/images/post/2015-10/alfred_search_config2.png" class="">  
+<p>在<code>Fetures-&gt;Default Results-&gt;Setup fallback resULT</code>中设置，虽然百度搜索不怎么样，但是在国内找一些非科技的东西还是需要的，将其设为默认搜索引擎，去掉原来的amazon和维基百科，效果如下图。  </p>
+<img src="/images/post/2015-10/alfred_search_config6.png" class="">  
+<h4 id="自定义Web搜索"><a href="#自定义Web搜索" class="headerlink" title="自定义Web搜索"></a>自定义Web搜索</h4><p>在上图中可以看到百度是一个自定义的搜索，因为在我的机器上没有百度搜索，所以需要自己添加，添加的步骤如下：  </p>
+<ul>
+<li>在<code>Fetures-&gt;Web Search-&gt;Add Custom Search</code>中添加，如下图所示：</li>
+</ul>
+<img src="/images/post/2015-10/alfred_search_config3.png" class="">  
+<ul>
+<li>在弹出窗口中设置url, 其中<code>&#123;query&#125;</code>就是你要查询的东西，再填上标题和关键字，有logo图片的话拖放到右边的框框上，最下面的<code>Validation</code>是来测试新建的搜索是否有用的。</li>
+</ul>
+<img src="/images/post/2015-10/alfred_search_config4.png" class="">  
+<ul>
+<li>这样在Alfred输入框中输入<code>baidu Alfred</code>就可以用百度来搜<code>Alfred</code>了。</li>
+</ul>
+<img src="/images/post/2015-10/alfred_search_config5.png" class="">  
+<h4 id="其他使用技巧"><a href="#其他使用技巧" class="headerlink" title="其他使用技巧"></a>其他使用技巧</h4><p>Alfred还有其他比较方便的使用方法，比如：  </p>
+<ul>
+<li>当计算器使用</li>
+</ul>
+<img src="/images/post/2015-10/alfred_use1.png" class="">  
+<ul>
+<li>输入<code>&gt;</code>直接执行bash命令</li>
+</ul>
+<img src="/images/post/2015-10/alfred_use2.png" class="">  
+<p>还有其他更多的使用技巧可以在网上找到。  </p>
+<h2 id="workflow"><a href="#workflow" class="headerlink" title="workflow"></a>workflow</h2><p>Alfred的这部分功能是需要付费的，最便宜的个人版本折合人民币大概160多。  </p>
+<img src="/images/post/2015-10/alfred_price.png" class="">  
+<p>workflow的安装非常简单，把后缀为alfredworkflow的文件下下来后，点击文件就会提示你是否安装了，这个网站涵盖了很多workflow——<a target="_blank" rel="noopener" href="http://www.alfredworkflow.com/">alfredworkflow</a>，有需要的可以在这上面招，我在这里推荐一些程序员比较有用的workflow：  </p>
+<ul>
+<li>Dash workflow : <a target="_blank" rel="noopener" href="https://kapeli.com/dash">Dash</a>是一个api查询工具，不仅可以查询各种语言的api，还可以查各种工具或者框架的api，对于程序员来讲非常有用，当然首先你需要安装Dash，再来安装这个workflow——<a target="_blank" rel="noopener" href="https://github.com/Kapeli/Dash-Alfred-Workflow">Dash-Alfred-Workflow</a>。 </li>
+<li>Stackoverflow workflow : Stackoverflow是程序员经常上的网站，通过Alfred可以快速查看网站上的相关问题——<a target="_blank" rel="noopener" href="https://github.com/xhinking/Alfred">st-workflow</a>。</li>
+</ul>
+<img src="/images/post/2015-10/workflow1.png" class="">  
+<ul>
+<li>pkgman workflow: 这个workflow可以查找各种语言和工具的依赖包信息，对程序开发非常有用——<a target="_blank" rel="noopener" href="https://github.com/willfarrell/alfred-pkgman-workflow">pkgman-workflow</a>。</li>
+</ul>
+<img src="/images/post/2015-10/workflow2.png" class="">  
+<img src="/images/post/2015-10/workflow3.png" class="">  
+<p>下面这些workflow跟程序员不是很相关，但是也是非常有用的，个人推荐：   </p>
+<ul>
+<li>youdao workflow: 经常看到不会的单词要先打开翻译器，再把要翻译的单词拷贝到里面翻译，是不是很麻烦，有了这个workflow就很方便了，直接在Alfred上翻译就可以了——<a target="_blank" rel="noopener" href="https://github.com/wensonsmith/YoudaoTranslate">yd-workflow</a>。</li>
+</ul>
+<img src="/images/post/2015-10/workflow4.png" class="">  
+<ul>
+<li>douban workflow: 这个workflow可以查看豆瓣上的书籍，电影和音乐，非常方便——<a target="_blank" rel="noopener" href="https://github.com/lucifr/Alfredv2-Extensions">douban-workflow</a>。</li>
+</ul>
+<img src="/images/post/2015-10/workflow5.png" class="">  
+<ul>
+<li>evernote workflow: 使用evernote的同学可以使用这个workflow快速找到自己的笔记——<a target="_blank" rel="noopener" href="https://github.com/hzlzh/AlfredWorkflow.com">evernote-workflow</a>。</li>
+</ul>
+<img src="/images/post/2015-10/workflow6.png" class="">  
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2015/10/25/alfred-intro-and-good-workflow/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2015/10/25/alfred-intro-and-good-workflow/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

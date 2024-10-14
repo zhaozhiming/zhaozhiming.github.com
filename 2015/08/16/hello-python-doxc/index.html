@@ -1,0 +1,255 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>python-docx使用简介 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="python-docx使用简介"> <!-- TODO: truncate -->
+	<meta name="keywords" content="python-docx">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">python-docx使用简介</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2015-08-16T12:18:00.000Z" itemprop="datePublished">8月 16, 2015</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/python-docx/">python-docx</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2015-8/python-docx.png" class="" width="400" height="300">  
+<p>使用word文档来展现内容是很多企业使用的方式之一，但如果文档内容比较多，或者需要制作很多重复文档的话，编写文档的过程会十分枯燥无聊，如果这个时候有一个程序可以帮助你来完成文档制作工作的话那就太好了，这就是<a target="_blank" rel="noopener" href="https://python-docx.readthedocs.org/en/latest/">python-docx</a>可以做的事情，下面我们就来看看python-docx的强大功能。  </p>
+<span id="more"></span>  
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>python-docx安装非常简单，可以使用<code>pip install python-docx</code>进行安装。  </p>
+<h2 id="创建文档"><a href="#创建文档" class="headerlink" title="创建文档"></a>创建文档</h2><p>使用python-docx创建一个文档非常简单，只需要2行代码就可以搞定，代码如下：  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">document = Document()</span><br><span class="line">document.save(<span class="string">&#x27;foo.docx&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="编写段落"><a href="#编写段落" class="headerlink" title="编写段落"></a>编写段落</h2><p>word文档最基本的内容就是一段段的文字信息，使用python-docx可以轻松的生成各种不同风格的段落。  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 普通段落</span></span><br><span class="line">document.add_paragraph(<span class="string">u&#x27;我是普通文档&#x27;</span>)</span><br><span class="line"><span class="comment"># 带风格的段落</span></span><br><span class="line">document.add_paragraph(<span class="string">u&#x27;我是好看的文档&#x27;</span>, style=<span class="string">&#x27;IntenseQuote&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>style属性是使用一个定制好的风格，名称必须是document对象包含了这个style名称才能使用，否则在生成文档的过程会报错或者style没有生效。  </p>
+<p>add_paragraph方法会返回一个paragraph对象，这个对象中有一个ParagraphFormat属性，通过设置ParagraphFormat属性的内容可以展示不同的风格：  </p>
+<ul>
+<li>alignment: 段落对齐方式，值为<code>WD_PARAGRAPH_ALIGNMENT</code>常量中的一个。</li>
+<li>line_spacing: 行间隔，单位可以有多种，详情参见<a target="_blank" rel="noopener" href="https://python-docx.readthedocs.org/en/latest/api/shared.html">这里</a>。</li>
+<li>first_line_indent: 首行缩进，值为整数，单位与line_spacing相同。</li>
+</ul>
+<p>还有其他更多的属性就不一一介绍了，我们还可以更加细粒度地控制一个段落的风格，比如前两句话我们使用粗体展示，后两句使用斜体，这就需要用到Run对象的属性设置了，Run可以看成是段落中的一句话，一个段落包含了n个Run。  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">p = document.add_paragraph(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">run1 = p.add_run(<span class="string">u&#x27;句子一&#x27;</span>)</span><br><span class="line">run1.bold = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">run2 = p.add_run(<span class="string">u&#x27;句子二&#x27;</span>)</span><br><span class="line">run1.italic = <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<p>在document中我们还可以添加标题<code>Heading</code>，新建的文档有<code>0~9</code>级的标题让你选择（默认是1级），其实标题也是段落的一种，我们可以使用设置段落风格的方式来设置标题的风格。  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">h = document.add_heading(<span class="string">u&#x27;标题&#x27;</span>, <span class="number">0</span>)</span><br><span class="line">h.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT</span><br></pre></td></tr></table></figure>
+<h2 id="绘制表格"><a href="#绘制表格" class="headerlink" title="绘制表格"></a>绘制表格</h2><p>在文档中我们可能会添加一些表格作为数据内容的展示，在python-docx里面可以轻松的绘制不同的表格。  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 绘制一个2 * 2的表格</span></span><br><span class="line">t = document.add_table(rows=<span class="number">2</span>, cols=<span class="number">2</span>)</span><br><span class="line">t.cell(<span class="number">0</span>, <span class="number">0</span>).text = <span class="string">u&#x27;单元1&#x27;</span></span><br><span class="line">t.cell(<span class="number">0</span>, <span class="number">1</span>).text = <span class="string">u&#x27;单元2&#x27;</span></span><br><span class="line">t.cell(<span class="number">1</span>, <span class="number">0</span>).text = <span class="string">u&#x27;单元3&#x27;</span></span><br><span class="line">t.cell(<span class="number">1</span>, <span class="number">1</span>).text = <span class="string">u&#x27;单元4&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>还可以对单元格进行合并：  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">t = document.add_table(rows=<span class="number">2</span>, cols=<span class="number">2</span>)</span><br><span class="line"><span class="comment"># 将第一行的2个单元格合并</span></span><br><span class="line">merge_cell = t.cell(<span class="number">0</span>, <span class="number">0</span>).merge(t.cell(<span class="number">0</span>, <span class="number">1</span>))</span><br><span class="line">merge_cell.text = <span class="string">u&#x27;合并单元格&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>默认的表格是不带边框的，如果想让表格有边框，可以使用<code>Table Grid</code>这种表格的style。  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">t = document.add_table(rows=<span class="number">2</span>, cols=<span class="number">2</span>)</span><br><span class="line">t.style = <span class="string">&#x27;Table Grid&#x27;</span></span><br></pre></td></tr></table></figure>
+<h2 id="添加图片"><a href="#添加图片" class="headerlink" title="添加图片"></a>添加图片</h2><p>添加图片也非常简单，在添加图片的方法中输入图片的相对路径即可。  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">document.add_picture(<span class="string">&#x27;demo.png&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>甚至可以添加网络上的图片到文档中，但前提是把图片下载到内存。  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib2</span><br><span class="line"><span class="keyword">import</span> StringIO</span><br><span class="line"></span><br><span class="line"><span class="comment"># img_url为网络图片url地址</span></span><br><span class="line">image_from_url = urllib2.urlopen(img_url)</span><br><span class="line">io_url = StringIO.StringIO()</span><br><span class="line">io_url.write(image_from_url.read())</span><br><span class="line">io_url.seek(<span class="number">0</span>)</span><br><span class="line">document.add_picture(io_url)</span><br></pre></td></tr></table></figure>
+<h2 id="文档风格"><a href="#文档风格" class="headerlink" title="文档风格"></a>文档风格</h2><p>每个document对象里面都有一个styles对象，styles对象包含了文档可以使用的style，包括段落，表格，图片等的风格。  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">document = Document()</span><br><span class="line"><span class="built_in">print</span> <span class="built_in">len</span>(document.styles)</span><br><span class="line"><span class="keyword">for</span> s <span class="keyword">in</span> document.styles:</span><br><span class="line">    <span class="built_in">print</span> s.name</span><br><span class="line"></span><br><span class="line">console---------------</span><br><span class="line"><span class="number">160</span></span><br><span class="line">Normal</span><br><span class="line">Heading <span class="number">1</span></span><br><span class="line">Heading <span class="number">2</span></span><br><span class="line">Heading <span class="number">3</span></span><br><span class="line">Heading <span class="number">4</span></span><br><span class="line">Heading <span class="number">5</span></span><br><span class="line">Heading <span class="number">6</span></span><br><span class="line">Heading <span class="number">7</span></span><br><span class="line">Heading <span class="number">8</span></span><br><span class="line">Heading <span class="number">9</span></span><br><span class="line">Default Paragraph Font</span><br><span class="line">Normal Table</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>这是新建的文档所包含的style，比较齐全，但如果是基于已有文档的document就只能使用已有文档的styles，可能会比新建的文档少很多。  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">document = Document(<span class="string">&#x27;exist.docx&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> <span class="built_in">len</span>(document.styles)</span><br><span class="line"></span><br><span class="line">console---------------</span><br><span class="line"><span class="number">12</span></span><br></pre></td></tr></table></figure>
+<p>python-docx是没有设置页眉页脚功能的，但是通过打开一个已经存在页眉页脚的文档，我们就可以拥有包含页眉页脚的document了。  </p>
+<p>这些是python-docx的一些基本使用方法，更多的内容请参考官方文档，谢谢。  </p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2015/08/16/hello-python-doxc/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2015/08/16/hello-python-doxc/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

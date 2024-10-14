@@ -1,0 +1,259 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>gitlab CI runner的创建和配置 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="gitlab CI runner的创建和配置"> <!-- TODO: truncate -->
+	<meta name="keywords" content="gitlab, CI">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">gitlab CI runner的创建和配置</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2015-11-30T14:13:00.000Z" itemprop="datePublished">11月 30, 2015</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/gitlab/">gitlab</a> <a href="/tags/CI/">CI</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2015-11/gitlab-ci-runner.png" class="" width="400" height="350">  
+<p><a target="_blank" rel="noopener" href="https://gitlab.com/">gitlab</a>不仅是一个代码托管的开源框架，同时它还集成了CI的功能，可以方便地为gitlab上的项目添加CI功能。  </p>
+<span id="more"></span>  
+<h2 id="创建Runner"><a href="#创建Runner" class="headerlink" title="创建Runner"></a>创建Runner</h2><ul>
+<li>Runner服务器</li>
+</ul>
+<p>首先要找一台服务器来创建Runner，因为是要跟你的gitlab服务关联，所以服务器要可以访问你的gitlab服务。  </p>
+<ul>
+<li>安装gitlab-CI-multi-runner</li>
+</ul>
+<p>gitlab-ci-multi-runner是CI runner的运行程序，这里有多种安装方式（<a target="_blank" rel="noopener" href="https://gitlab.com/gitlab-org/gitlab-ci-multi-runner#installation/">见这里</a>），这里我们使用了第一种：在linux中安装软件。</p>
+<h2 id="gitlab-ci-multi-runner命令介绍"><a href="#gitlab-ci-multi-runner命令介绍" class="headerlink" title="gitlab-ci-multi-runner命令介绍"></a>gitlab-ci-multi-runner命令介绍</h2><p>执行<code>gitlab-ci-multi-runner help</code>可以看到所有命令的简介，在每个命令加<code>--help</code>可以看到更加具体的参数，比如<code>gitlab-ci-multi-runner start --help</code>，命令的执行顺序为：<code>register(注册runner)--&gt;install(安装服务)--&gt;start(运行服务)</code>。  </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">COMMANDS:</span><br><span class="line">   run          run multi runner service</span><br><span class="line">   register     register a new runner</span><br><span class="line">   install      install service</span><br><span class="line">   uninstall    uninstall service</span><br><span class="line">   start        start service</span><br><span class="line">   stop         stop service</span><br><span class="line">   restart      restart service</span><br><span class="line">   run-single   start single runner</span><br><span class="line">   unregister   unregister specific runner</span><br><span class="line">   verify       verify all registered runners</span><br><span class="line">   <span class="built_in">help</span>, h      Shows a list of commands or <span class="built_in">help</span> <span class="keyword">for</span> one <span class="built_in">command</span></span><br><span class="line"></span><br><span class="line">GLOBAL OPTIONS:</span><br><span class="line">   --debug                      debug mode [<span class="variable">$DEBUG</span>]</span><br><span class="line">   --log-level, -l <span class="string">&quot;info&quot;</span>       Log level (options: debug, info, warn, error, fatal, panic)</span><br><span class="line">   --<span class="built_in">help</span>, -h                   show <span class="built_in">help</span></span><br><span class="line">   --version, -v                <span class="built_in">print</span> the version</span><br></pre></td></tr></table></figure>
+<h2 id="gitlab-CI配置"><a href="#gitlab-CI配置" class="headerlink" title="gitlab CI配置"></a>gitlab CI配置</h2><ul>
+<li>打开网址（比如你的gitlab服务地址是：<code>http://gitlab.your.company/</code>，那gitlab CI的地址就是：<code>http://gitlab.your.company/ci</code>），找到想要配置CI的项目，点击后面的按钮<code>Add project to CI</code>，给项目配置CI功能。  </li>
+<li>进入CI项目，进入<code>Runners</code>标签页面，可以看到CI的url和token，这2个值是待会用命令注册runner时所需要的。</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">How to setup a new project specific runner</span><br><span class="line">Install GitLab Runner software. Checkout the GitLab Runner section to install it</span><br><span class="line">Specify following URL during runner setup: </span><br><span class="line">http://gitlab.your.company/ci</span><br><span class="line">Use the following registration token during setup: </span><br><span class="line">7c92da80317b5f5e1fe1c62a1b0767</span><br><span class="line">Start runner!</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在runner的服务器上注册runner，执行命令<code>gitlab-ci-multi-runner register</code>，下面是执行命令后的交互信息。<br><code>PS：如果你用的是docker的执行方式，可以先把对应的docker的image下载下来，不然第一次执行CI会比较慢。</code></li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">root@cloudeye:~# gitlab-ci-multi-runner register</span><br><span class="line">Please enter the gitlab-ci coordinator URL (e.g. https://gitlab.com/ci): <span class="comment">## 输入你CI服务器的地址</span></span><br><span class="line">http://gitlab.your.company/ci</span><br><span class="line">Please enter the gitlab-ci token <span class="keyword">for</span> this runner: <span class="comment">## 输入你CI项目的token</span></span><br><span class="line">7c92da80317b5f5e1fe1c62a1b0767</span><br><span class="line">Please enter the gitlab-ci description <span class="keyword">for</span> this runner: <span class="comment">## 描述信息，只是表述不是很重要</span></span><br><span class="line">[your-project]: your-project</span><br><span class="line">Please enter the gitlab-ci tags <span class="keyword">for</span> this runner (comma separated): <span class="comment">## runner的标签</span></span><br><span class="line">dev</span><br><span class="line">INFO[0032] fc6e1ee6 Registering runner... succeeded</span><br><span class="line">Please enter the executor: docker-ssh, ssh, shell, parallels, docker: <span class="comment">## runner的执行方式，有5种，这里我选择了docker</span></span><br><span class="line">docker</span><br><span class="line">Please enter the Docker image (eg. ruby:2.1): <span class="comment">## docker镜像</span></span><br><span class="line">node:0.12.7</span><br><span class="line">If you want to <span class="built_in">enable</span> mysql please enter version (X.Y) or enter latest? <span class="comment">## 不需要的话直接空格就可以了 </span></span><br><span class="line"></span><br><span class="line">If you want to <span class="built_in">enable</span> postgres please enter version (X.Y) or enter latest? <span class="comment">## 不需要的话直接空格就可以了 </span></span><br><span class="line"></span><br><span class="line">If you want to <span class="built_in">enable</span> redis please enter version (X.Y) or enter latest? <span class="comment">## 不需要的话直接空格就可以了 </span></span><br><span class="line"></span><br><span class="line">If you want to <span class="built_in">enable</span> mongo please enter version (X.Y) or enter latest? <span class="comment">## 不需要的话直接空格就可以了 </span></span><br><span class="line"></span><br><span class="line">INFO[0043] Runner registered successfully. Feel free to start it, but <span class="keyword">if</span> it<span class="string">&#x27;s running already the config should be automatically reloaded!</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>注册完成后，打开runner的配置文件：<code>vi /etc/gitlab-runner/config.toml</code>，可以看到配置文件里面增加了刚才注册的相关信息，更多参数的信息可以看<a target="_blank" rel="noopener" href="https://gitlab.com/gitlab-org/gitlab-ci-multi-runner/blob/master/docs/configuration/advanced-configuration.md">官方文档</a>。</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">root@cloudeye:~# gitlab-ci-multi-runner register</span><br><span class="line">concurrent = 2</span><br><span class="line"></span><br><span class="line">[[runners]]</span><br><span class="line">  url = <span class="string">&quot;http://gitlab.your.company/ci&quot;</span></span><br><span class="line">  token = <span class="string">&quot;79bf814ac37a52427345b01e135a78&quot;</span></span><br><span class="line">  name = <span class="string">&quot;your-project&quot;</span></span><br><span class="line">  executor = <span class="string">&quot;docker&quot;</span></span><br><span class="line">  [runners.docker]</span><br><span class="line">    image = <span class="string">&quot;node:0.12.7&quot;</span></span><br><span class="line">    privileged = <span class="literal">false</span></span><br><span class="line">    disable_cache = <span class="literal">true</span></span><br><span class="line">    volumes = [<span class="string">&quot;/cache:/cache:rw&quot;</span>]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>安装服务，执行命令<code>gitlab-ci-multi-runner install -n &quot;服务名&quot;</code>，后面的服务名是自己定义的名称，用来后面启动命名使用，与其相对的命令是<code>uninstall</code>。</li>
+<li>启动服务，执行命令<code>gitlab-ci-multi-runner start -n &quot;服务名&quot;</code>，与其相类似的命令有<code>stop</code>和<code>restart</code>。</li>
+<li>验证runner，执行<code>gitlab-ci-multi-runner verify</code>，可以看到runner的运行情况。</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">root@cloudeye:~# gitlab-ci-multi-runner verify</span><br><span class="line">INFO[0000] 79bf814a Veryfing runner... is alive</span><br><span class="line">INFO[0000] 207a4b34 Veryfing runner... is alive</span><br><span class="line">INFO[0000] 20f849f7 Veryfing runner... is alive</span><br><span class="line">INFO[0000] 6e07e13a Veryfing runner... is alive</span><br><span class="line">INFO[0000] 23be6deb Veryfing runner... is alive</span><br><span class="line">INFO[0000] 4e348964 Veryfing runner... is alive</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启动服务后，可以在刚才的CI runners页面看到已经有runner出现了。</li>
+</ul>
+<h2 id="gitlab-ci-yaml文件"><a href="#gitlab-ci-yaml文件" class="headerlink" title="gitlab-ci.yaml文件"></a>gitlab-ci.yaml文件</h2><p>配置好了runner，要让CI跑起来，还需要在项目根目录放一个<code>.gitlab-ci.yaml</code>文件，在这个文件里面可以定制CI的任务，下面是简单的示例文件，更多的用法可以看<a target="_blank" rel="noopener" href="http://doc.gitlab.com/ci/yaml/README.html">官方文档</a>。  </p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">efore_script:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">bundle_install</span></span><br><span class="line"><span class="attr">job1:</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">execute-script-for-job1</span></span><br></pre></td></tr></table></figure>
+
+
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2015/11/30/gitlab-ci-runner-create-and-config/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2015/11/30/gitlab-ci-runner-create-and-config/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

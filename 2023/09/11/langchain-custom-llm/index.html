@@ -1,0 +1,287 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>LangChain 自定义LLM - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="LangChain 自定义LLM"> <!-- TODO: truncate -->
+	<meta name="keywords" content="langchain, llm, chatglm">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">LangChain 自定义LLM</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2023-09-11T03:16:42.000Z" itemprop="datePublished">9月 11, 2023</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/langchain/">langchain</a> <a href="/tags/chatglm/">chatglm</a> <a href="/tags/llm/">llm</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2023/09/langchain-custom-llm.jpg" class="" width="400" height="300">
+
+<p>Langchain 默认使用 OpenAI 的 LLM（大语言模型）来进行文本推理工作，但主要的问题就是数据的安全性，跟 OpenAI LLM 交互的数据都会上传到 OpenAI 的服务器，企业内部如果想要使用 LangChain 来构建应用，那最好是让 LangChain 使用企业内部的 LLM，这样才能保证数据不泄露。LangChain 提供了集成多种 LLM 的能力，包括自定义的 LLM，今天我们就来介绍一下如何使用 LangChain 来集成自定义的 LLM 以及其中的实现原理。</p>
+<span id="more"></span>
+
+<h2 id="开源大模型"><a href="#开源大模型" class="headerlink" title="开源大模型"></a>开源大模型</h2><p>虽然现在的商业大模型（OpenAI 和 Anthropic）功能十分强大，但开源大模型愈来愈有迎头赶上的趋势，比如最近刚发布的<a target="_blank" rel="noopener" href="https://huggingface.co/spaces/tiiuae/falcon-180b-demo">Falcon-180B</a>大模型，具备 1800 亿参数，（号称）性能甚至直逼 GPT-4。所以对于想构建 AI 应用，又不想自身数据泄露的企业来说，开源大模型是首要选择。</p>
+<p>开源大模型也有很多选择，要根据自身的需求来考虑。比如需要大量自然语言处理的项目，选择一个专注于文本处理的模型会比选择图像或视频的模型更合适，再比如需要提供多语言的项目，那么大模型就需要支持多语言而不仅仅是英文。另外模型的大小和复杂性也是一个考虑因素，大模型虽然能够处理更复杂的任务，但它们通常需要更多的计算资源和存储空间。对于有限资源的中小企业，可能需要选择一个更轻量级的模型。</p>
+<p>对于一些简单的应用，我们可以选择现在国内比较流行的中文开源大模型——ChatGLM 或者 BaiChuan，它们不仅支持中英文，还开源了小参数的 LLM，比如 ChatGLM2-6B、Baichuan2-13B 等。</p>
+<h2 id="LLM-部署"><a href="#LLM-部署" class="headerlink" title="LLM 部署"></a>LLM 部署</h2><p>后面我们会用 LangChain 来集成 ChatGLM2 进行介绍，所以我们需要先部署 ChatGLM2-6B 这个 LLM。ChatGLM2-6B 部署有多种方式，可以使用它自身的代码仓库进行部署，也可以使用其他框架来进行部署。我们主要部署 ChatGLM2-6B 的 API 服务，具体步骤可以参考我之前的文章：<a href="https://zhaozhiming.github.io/2023/08/22/use-fastchat-deploy-llm/">使用 FastChat 部署 LLM</a>，这里就不再赘述。</p>
+<p>部署后的 API 服务地址我们假设是<code>http://localhost:5000</code>，调用<code>/chat/completions</code>接口会返回类似 OpenAI 接口的信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">$ curl -X <span class="string">&#x27;POST&#x27;</span> \</span><br><span class="line">  <span class="string">&#x27;http://localhost:5000/v1/chat/completions&#x27;</span> \</span><br><span class="line">  -H <span class="string">&#x27;accept: application/json&#x27;</span> \</span><br><span class="line">  -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> \</span><br><span class="line">  -d <span class="string">&#x27;&#123;</span></span><br><span class="line"><span class="string">  &quot;model&quot;: &quot;chatglm2-6b&quot;,</span></span><br><span class="line"><span class="string">  &quot;messages&quot;: [&#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;你好&quot;&#125;]</span></span><br><span class="line"><span class="string">&#125;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出结果</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;id&quot;</span>: <span class="string">&quot;chatcmpl-TPvsyLsybHEJ2nd953q7E2&quot;</span>,</span><br><span class="line">  <span class="string">&quot;object&quot;</span>: <span class="string">&quot;chat.completion&quot;</span>,</span><br><span class="line">  <span class="string">&quot;created&quot;</span>: 1694497436,</span><br><span class="line">  <span class="string">&quot;model&quot;</span>: <span class="string">&quot;chatglm2-6b&quot;</span>,</span><br><span class="line">  <span class="string">&quot;choices&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;index&quot;</span>: 0,</span><br><span class="line">      <span class="string">&quot;message&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span>,</span><br><span class="line">        <span class="string">&quot;content&quot;</span>: <span class="string">&quot;你好！我是人工智能助手 ChatGLM2-6B，很高兴见到你，欢迎问我任何问题。&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">&quot;finish_reason&quot;</span>: <span class="string">&quot;stop&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;usage&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;prompt_tokens&quot;</span>: 4,</span><br><span class="line">    <span class="string">&quot;total_tokens&quot;</span>: 145,</span><br><span class="line">    <span class="string">&quot;completion_tokens&quot;</span>: 141</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个接口是兼容 OpenAI 接口的，其中 model 和 messages 参数是必须的，messages 中 role 的值有<code>user</code>，<code>assistant</code>, <code>system</code>这几项，content 是对应角色的内容，更多参数信息可以参考<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/chat/create">OpenAI 的 API 官方文档</a>。下面我们主要使用这个 API 来封装我们的自定义 LLM。</p>
+<h2 id="封装自定义-LLM"><a href="#封装自定义-LLM" class="headerlink" title="封装自定义 LLM"></a>封装自定义 LLM</h2><p>使用 LangChain 封装自定义的 LLM 并不复杂，可以看下面的代码示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Any</span>, <span class="type">List</span>, Mapping, <span class="type">Optional</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> langchain.callbacks.manager <span class="keyword">import</span> CallbackManagerForLLMRun</span><br><span class="line"><span class="keyword">from</span> langchain.llms.base <span class="keyword">import</span> LLM</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CustomLLM</span>(<span class="title class_ inherited__">LLM</span>):</span><br><span class="line">    endpoint: <span class="built_in">str</span> = <span class="string">&quot;http://localhost:5000&quot;</span></span><br><span class="line">    model: <span class="built_in">str</span> = <span class="string">&quot;chatglm2-6b&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_call</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self,</span></span><br><span class="line"><span class="params">        prompt: <span class="built_in">str</span>,</span></span><br><span class="line"><span class="params">        stop: <span class="type">Optional</span>[<span class="type">List</span>[<span class="built_in">str</span>]] = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">        callbacks: <span class="type">Optional</span>[CallbackManagerForLLMRun] = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">        **kwargs: <span class="type">Any</span>,</span></span><br><span class="line"><span class="params">    </span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        headers = &#123;<span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span>&#125;</span><br><span class="line">        data = &#123;<span class="string">&quot;model&quot;</span>: <span class="variable language_">self</span>.model, <span class="string">&quot;messages&quot;</span>: [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: prompt&#125;]&#125;</span><br><span class="line">        response = requests.post(<span class="string">f&quot;<span class="subst">&#123;self.endpoint&#125;</span>/chat/completions&quot;</span>, headers=headers, json=data)</span><br><span class="line">        response.raise_for_status()</span><br><span class="line"></span><br><span class="line">        result = response.json()</span><br><span class="line">        text = result[<span class="string">&quot;choices&quot;</span>][<span class="number">0</span>][<span class="string">&quot;message&quot;</span>][<span class="string">&quot;content&quot;</span>]</span><br><span class="line">        <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>首先我们需要创建一个类继承自<code>LLM</code>，然后实现<code>_call</code>方法</li>
+<li>方法的最主要的参数是提示词<code>prompt</code>，这个参数就是上面接口中的<code>messages</code>参数中的用户内容</li>
+<li>在<code>_call</code>方法中，我们构造 API 接口所需参数，包括 headers 和 data</li>
+<li>调用 API 接口，获取到返回结果，最后返回<code>choices</code>中<code>message</code>的内容</li>
+</ul>
+<p><code>_call</code>方法的实现逻辑就是接收用户的输入，然后将其传递给 LLM，然后获取到 LLM 的输出，最后再返回结果给用户。在方法中可以调用 API 服务，也可以用 transformer 来初始化模型然后直接调用模型进行推理，总之可以用各种方法来调用 LLM，只要能得到LLM返回的结果即可。</p>
+<h3 id="自定义-LLM-的其他方法"><a href="#自定义-LLM-的其他方法" class="headerlink" title="自定义 LLM 的其他方法"></a>自定义 LLM 的其他方法</h3><p>除了<code>_call</code>方法外，我们还需要实现其他方法，比如<code>_llm_type</code>方法，这个方法是用来定义 LLM 的名称，因为我们用的是 ChatGLM2-6B 模型，所以我们可以这样实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@property</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_llm_type</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;chatglm2-6b&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>还有<code>_identifying_params</code>方法，这个方法是用来打印自定义 LLM 类的参数信息，方便我们做调试，它返回的是一个字典，代码示例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@property</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_identifying_params</span>(<span class="params">self</span>) -&gt; Mapping[<span class="built_in">str</span>, <span class="type">Any</span>]:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Get the identifying parameters.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;endpoint&quot;</span>: <span class="variable language_">self</span>.endpoint, <span class="string">&quot;model&quot;</span>: <span class="variable language_">self</span>.model&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="自定义-LLM-的使用"><a href="#自定义-LLM-的使用" class="headerlink" title="自定义 LLM 的使用"></a>自定义 LLM 的使用</h3><p>自定义 LLM 的使用跟使用其他 LLM 一样，我们可以直接调用自定义 LLM 的实例，代码示例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">llm = CustomLLM()</span><br><span class="line"><span class="built_in">print</span>(llm(<span class="string">&quot;你好&quot;</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出结果</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">你好！我是人工智能助手 ChatGLM2-6B，很高兴见到你，欢迎问我任何问题。</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="call-方法的其他参数"><a href="#call-方法的其他参数" class="headerlink" title="_call 方法的其他参数"></a><code>_call</code> 方法的其他参数</h3><p>在<code>_call</code>方法中除了 prompt 参数外，我们还看到了其他参数，这些参数都是可选的，我们来看一下这些参数的作用：</p>
+<p><strong>stop</strong></p>
+<p>这个参数是传入一个字符串集合，当检测到 LLM 的输出内容中包含了这些字符串时，输出内容会立即截断，只保留前面的内容。比如我们得到的 LLM 结果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">你好！我是人工智能助手 ChatGLM2-6B，很高兴见到你，欢迎问我任何问题。</span><br></pre></td></tr></table></figure>
+
+<p>当我们将<code>stop</code>参数设置为<code>[&quot;欢迎&quot;]</code>时，输出结果就会变成：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">你好！我是人工智能助手 ChatGLM2-6B，很高兴见到你，</span><br></pre></td></tr></table></figure>
+
+<p>如果是自定义 LLM，<code>stop</code>参数的逻辑也需要我们自己来实现，LangChain 其实提供了对应的工具方法，我们直接使用就可以了，代码示例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.llms.utils <span class="keyword">import</span> enforce_stop_tokens</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_call</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self,</span></span><br><span class="line"><span class="params">        prompt: <span class="built_in">str</span>,</span></span><br><span class="line"><span class="params">        stop: <span class="type">Optional</span>[<span class="type">List</span>[<span class="built_in">str</span>]] = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">        callbacks: <span class="type">Optional</span>[CallbackManagerForLLMRun] = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">        **kwargs: <span class="type">Any</span>,</span></span><br><span class="line"><span class="params">    </span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        .....</span><br><span class="line">        <span class="keyword">if</span> stop <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            text = enforce_stop_tokens(text, stop)</span><br></pre></td></tr></table></figure>
+
+<p><strong>callbacks</strong></p>
+<p>这个参数是一个<code>CallbackManagerForLLMRun</code>对象，用于在 LLM 运行过程中执行回调函数，比如在 LLM 运行前后执行一些操作，比如记录日志、保存模型等。这个参数是可选的，我们使用 LangChain 提供的日志记录回调函数来演示下功能：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> loguru <span class="keyword">import</span> logger</span><br><span class="line"><span class="keyword">from</span> langchain.callbacks <span class="keyword">import</span> FileCallbackHandler</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    llm = CustomLLM()</span><br><span class="line">    logfile = <span class="string">&quot;output.log&quot;</span></span><br><span class="line">    logger.add(logfile, colorize=<span class="literal">True</span>, enqueue=<span class="literal">True</span>)</span><br><span class="line">    handler = FileCallbackHandler(logfile)</span><br><span class="line">    result = llm(<span class="string">&quot;你好&quot;</span>, stop=[<span class="string">&quot;欢迎&quot;</span>], callbacks=[handler])</span><br><span class="line">    logger.info(result)</span><br></pre></td></tr></table></figure>
+
+<p>执行完程序后，会在当前目录下生成一个<code>output.log</code>文件，文件内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2023-09-12 11:28:19.029 | INFO     | __main__:&lt;module&gt;:110 - 你好！我是人工智能助手 ChatGLM2-6B，很高兴见到你，</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong>在 LangChain 官方文档的示例代码中将<code>callbacks</code>参数写成了<code>run_manager</code>，其实最新代码中这个参数名已经改成了<code>callbacks</code>了，可能官方文档还没有及时更新。</p>
+<p>LangChain 还提供了更多的回调方法，想了解更多信息的可以参考<a target="_blank" rel="noopener" href="https://python.langchain.com/docs/modules/callbacks/">这个文档</a>。</p>
+<p>LangChain 官方文档上也给出了自定义 LLM 的简单代码示例，可以参考：<a target="_blank" rel="noopener" href="https://python.langchain.com/docs/modules/model_io/models/llms/custom_llm">Custom LLM</a>。</p>
+<h2 id="其他自定义的-LLM"><a href="#其他自定义的-LLM" class="headerlink" title="其他自定义的 LLM"></a>其他自定义的 LLM</h2><p>除了参考以上示例来编写自定义的 LLM 外，还可以参考 LangChain 中已经集成的其他 LLM。</p>
+<h3 id="ChatGLM"><a href="#ChatGLM" class="headerlink" title="ChatGLM"></a>ChatGLM</h3><p>这个是封装比较早的 ChatGLM LLM，用的还是一代的 ChatGLM，除非部署方式一致，否则不建议直接使用该 LLM，建议参照其中的代码来实现自己的 LLM。</p>
+<ul>
+<li>相关文档：<a target="_blank" rel="noopener" href="https://python.langchain.com/docs/integrations/llms/chatglm">ChatGLM LLM</a></li>
+<li>相关代码：<a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langchain/blob/master/libs/langchain/langchain/llms/chatglm.py">chatglm.py</a></li>
+</ul>
+<h3 id="Fake-LLM"><a href="#Fake-LLM" class="headerlink" title="Fake LLM"></a>Fake LLM</h3><p>这是一个假的 LLM，用于测试，自定义内容来模拟 LLM 的输出，可以参考其中的代码来实现自己的 LLM，其中包含了流式输出，异步调用等功能的实现逻辑。</p>
+<ul>
+<li>相关文档：<a target="_blank" rel="noopener" href="https://python.langchain.com/docs/modules/model_io/models/llms/fake_llm">Fake LLM</a></li>
+<li>相关代码：<a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langchain/blob/master/libs/langchain/langchain/llms/fake.py">fake.py</a></li>
+</ul>
+<p>还有很多其他的 LLM，包括 OpenAI 的 LLM，如果感兴趣的也可以去看看它们的源码，相对会比较复杂，更多信息可以参考<a target="_blank" rel="noopener" href="https://python.langchain.com/docs/integrations/llms/">这里</a>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>今天我们主要介绍了如何使用 LangChain 来集成自定义的 LLM，以及其中的实现原理，实现自己的 LangChain LLM 并不复杂，但如果要实现一个功能强大，性能高效的 LLM，就需要花费更多的时间和精力了，好在 LangChain 提供了一系列的工具和组件，可以帮助我们快速实现自己的功能。希望今天的文章能够帮助到大家，也希望使用过 LangChain 的同学一起来交流学习，欢迎在评论区留言。</p>
+<p>关注我，一起学习各种人工智能和 AIGC 新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2023/09/11/langchain-custom-llm/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2023/09/11/langchain-custom-llm/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

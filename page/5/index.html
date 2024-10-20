@@ -134,6 +134,10 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
+		  <a href="/2024/10/18/maybe-you-donot-known-5-way-to-mock-golang-programm/">Go 开发中你应该了解的 5 种 Mock 方法</a>
+	    </li>
+	  
+	    <li class="post">
 		  <a href="/2024/10/04/use-github-action-to-deploy-aws-ecs/">部署 AWS ECS 超详细攻略</a>
 	    </li>
 	  
@@ -147,10 +151,6 @@
 	  
 	    <li class="post">
 		  <a href="/2024/09/15/publish-company-npm-package-guide/">一步一步发布公司的 NPM 包</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/08/06/rag-query-router/">高级 RAG 检索策略之查询路由</a>
 	    </li>
 	  
     </ul>
@@ -170,7 +170,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">27</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -179,6 +179,33 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2023/09/11/langchain-custom-llm/">LangChain 自定义LLM</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2023-09-11T03:16:42.000Z" itemprop="datePublished">9月 11, 2023</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/langchain/">langchain</a> <a href="/tags/chatglm/">chatglm</a> <a href="/tags/llm/">llm</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2023/09/langchain-custom-llm.jpg" class="" width="400" height="300">
+
+<p>Langchain 默认使用 OpenAI 的 LLM（大语言模型）来进行文本推理工作，但主要的问题就是数据的安全性，跟 OpenAI LLM 交互的数据都会上传到 OpenAI 的服务器，企业内部如果想要使用 LangChain 来构建应用，那最好是让 LangChain 使用企业内部的 LLM，这样才能保证数据不泄露。LangChain 提供了集成多种 LLM 的能力，包括自定义的 LLM，今天我们就来介绍一下如何使用 LangChain 来集成自定义的 LLM 以及其中的实现原理。</p>
+        
+          <p class="more-link">
+            <a href="2023/09/11/langchain-custom-llm/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -416,33 +443,6 @@
         
           <p class="more-link">
             <a href="2023/08/09/notion-api-usage/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2023/08/08/v2ray-install-and-deploy/">新版V2Ray安装及部署</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2023-08-08T06:30:19.000Z" itemprop="datePublished">8月 8, 2023</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/V2Ray/">V2Ray</a> <a href="/tags/gfw/">gfw</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2023/08/cross-wall.jpg" class="" width="400" height="300">
-
-<p>年初在 Azure 的网站上看到免费试用的宣传，宣传内容包括新建账号送 200 美元，可以免费试用 12 个月等等优惠活动，于是便在上面创建了一台 VPS 并搭建好了梯子，白嫖了一段时间后，最近发现 Azure 服务器突然开始收费，每个月要收 10 美元，要花这个钱我还不如去其他云厂商买服务器，上网查了一下说是可能免费额度的金额用完了，或者是创建的 VPS 中使用的其他配件不符合免费计划的要求。总之为了以后不再被收费，我便将 Azure 上的相关组件全部删除了。重新在其他云厂商上购买了一台服务器，重新搭建了梯子，但发现新建的梯子无法使用，于是便开始了一番折腾。</p>
-        
-          <p class="more-link">
-            <a href="2023/08/08/v2ray-install-and-deploy/#more">Read More</a>
           </p>
         
       

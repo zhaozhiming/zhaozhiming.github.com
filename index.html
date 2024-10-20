@@ -134,6 +134,10 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
+		  <a href="/2024/10/18/maybe-you-donot-known-5-way-to-mock-golang-programm/">Go 开发中你应该了解的 5 种 Mock 方法</a>
+	    </li>
+	  
+	    <li class="post">
 		  <a href="/2024/10/04/use-github-action-to-deploy-aws-ecs/">部署 AWS ECS 超详细攻略</a>
 	    </li>
 	  
@@ -147,10 +151,6 @@
 	  
 	    <li class="post">
 		  <a href="/2024/09/15/publish-company-npm-package-guide/">一步一步发布公司的 NPM 包</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/08/06/rag-query-router/">高级 RAG 检索策略之查询路由</a>
 	    </li>
 	  
     </ul>
@@ -170,7 +170,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">26</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">27</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -179,6 +179,33 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2024/10/18/maybe-you-donot-known-5-way-to-mock-golang-programm/">Go 开发中你应该了解的 5 种 Mock 方法</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2024-10-18T01:17:48.000Z" itemprop="datePublished">10月 18, 2024</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/golang/">golang</a> <a href="/tags/mock/">mock</a> <a href="/tags/unit-test/">unit-test</a> <a href="/tags/sql-mock/">sql-mock</a> <a href="/tags/httpmock/">httpmock</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2024/10/golang-mock-tech.jpeg" class="" width="400" height="300">
+
+<p>在软件开发过程中，单元测试是确保代码质量的重要环节，而在编写单元测试时，我们通常需要隔离待测试的代码与其依赖的外部组件，例如引用的外部方法、数据库等。Mock 技术可以帮助我们模拟这些外部组件，控制它们的行为和输出，从而让我们可以专注于测试目标代码的逻辑。本文将介绍在 Golang 中常用的 5 种 Mock 方法，帮助你在编写单元测试时更加得心应手。</p>
+        
+          <p class="more-link">
+            <a href="2024/10/18/maybe-you-donot-known-5-way-to-mock-golang-programm/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -416,33 +443,6 @@
         
           <p class="more-link">
             <a href="2024/06/16/llamaindex-buildin-evaluation/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2024/06/08/rag-module-pipeline/">高级 RAG 检索策略之流程与模块化</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2024-06-08T12:54:26.000Z" itemprop="datePublished">6月 8, 2024</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/llamaindex/">llamaindex</a> <a href="/tags/rag/">rag</a> <a href="/tags/pipeline/">pipeline</a> <a href="/tags/module/">module</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2024/06/rag-module-flow.jpg" class="" width="400" height="300">
-
-<p>我们介绍了很多关于高级 RAG（Retrieval Augmented Generation）的检索策略，每一种策略就像是机器中的零部件，我们可以通过对这些零部件进行不同的组合，来实现不同的 RAG 功能，从而满足不同的需求。今天我们就来介绍高级 RAG 检索中一些常见的 RAG 模块，以及如何通过流程的方式来组合这些模块，实现高级 RAG 检索功能。</p>
-        
-          <p class="more-link">
-            <a href="2024/06/08/rag-module-pipeline/#more">Read More</a>
           </p>
         
       

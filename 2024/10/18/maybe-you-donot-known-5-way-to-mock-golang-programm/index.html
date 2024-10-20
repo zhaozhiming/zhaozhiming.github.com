@@ -1,0 +1,340 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>Go 开发中你应该了解的 5 种 Mock 方法 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="介绍在 Golang 中对不同测试对象进行 Mock 的 5 种方法"> <!-- TODO: truncate -->
+	<meta name="keywords" content="golang, mock, unit-test, sql-mock, httpmock">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">Go 开发中你应该了解的 5 种 Mock 方法</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2024-10-18T01:17:48.000Z" itemprop="datePublished">10月 18, 2024</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/golang/">golang</a> <a href="/tags/mock/">mock</a> <a href="/tags/unit-test/">unit-test</a> <a href="/tags/sql-mock/">sql-mock</a> <a href="/tags/httpmock/">httpmock</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2024/10/golang-mock-tech.jpeg" class="" width="400" height="300">
+
+<p>在软件开发过程中，单元测试是确保代码质量的重要环节，而在编写单元测试时，我们通常需要隔离待测试的代码与其依赖的外部组件，例如引用的外部方法、数据库等。Mock 技术可以帮助我们模拟这些外部组件，控制它们的行为和输出，从而让我们可以专注于测试目标代码的逻辑。本文将介绍在 Golang 中常用的 5 种 Mock 方法，帮助你在编写单元测试时更加得心应手。</p>
+<span id="more"></span>
+
+<h2 id="Testify-Mock"><a href="#Testify-Mock" class="headerlink" title="Testify Mock"></a>Testify Mock</h2><p><a target="_blank" rel="noopener" href="https://github.com/stretchr/testify">Testify</a> 是 Go 生态中一个非常流行的测试工具库，主要用于简化 Go 语言中的单元测试工作。它是一个包含多个包的集合，提供了断言、Mock 和其他便捷的测试功能。</p>
+<p>Testify 的 Mock 是其中一个功能强大的模块，它提供了模拟接口和方法调用的能力，支持参数匹配、调用次数和顺序的验证。它允许开发者通过链式调用设置不同的返回值和行为，并能精确匹配参数或自定义参数验证，帮助模拟外部依赖如 API 调用，使其在复杂的逻辑测试中非常灵活和高效。它与 Go 原生测试框架无缝集成，提供直观易用的 API，简化了测试代码编写和维护。</p>
+<p>下面我们通过代码示例介绍 Testify Mock 的功能，首先来看被测试的函数：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;encoding/json&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/org/proj/server/third-party/amazonx&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/aws/aws-sdk-go-v2/aws&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/aws/aws-sdk-go-v2/service/secretsmanager&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> (</span><br><span class="line">	service <span class="keyword">struct</span> &#123;</span><br><span class="line">		amazon amazonx.Amazon</span><br><span class="line">	&#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(svc *service)</span></span> GetTokenFromAWSSecret(c context.Context) (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">	input := &amp;secretsmanager.GetSecretValueInput&#123;</span><br><span class="line">		SecretId:     aws.String(<span class="string">&quot;SECRET_ID&quot;</span>),</span><br><span class="line">		VersionStage: aws.String(<span class="string">&quot;AWSCURRENT&quot;</span>),</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	resp, err := svc.amazon.GetSecretValue(c, input)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	resMap := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;)</span><br><span class="line">	<span class="keyword">if</span> err := json.Unmarshal([]<span class="type">byte</span>(*resp.SecretString), &amp;resMap); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> resMap[<span class="string">&quot;token&quot;</span>].(<span class="type">string</span>), <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>被测试方法 <code>GetTokenFromAWSSecret</code> 输入参数是一个 <code>context.Context</code> 对象，返回一个 <code>string</code> 类型的 <code>token</code> 和一个 <code>error</code> 对象</li>
+<li><code>GetTokenFromAWSSecret</code> 方法依赖于 <code>amazonx.Amazon</code> 接口，通过 <code>svc.amazon.GetSecretValue</code> 方法获取 AWS Secret Value，并解析其中的 <code>token</code> 字段。</li>
+</ul>
+<p>了解完被测函数后， 我们来看如何使用 Testify Mock 对 <code>amazonx.Amazon</code> 接口进行 Mock：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;context&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/aws/aws-sdk-go-v2/service/secretsmanager&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/stretchr/testify/mock&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MockAmazon <span class="keyword">struct</span> &#123;</span><br><span class="line">	mock.Mock</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *MockAmazon)</span></span> GetSecretValue(ctx context.Context, input *secretsmanager.GetSecretValueInput) (*secretsmanager.GetSecretValueOutput, <span class="type">error</span>) &#123;</span><br><span class="line">	args := m.Called(ctx, input)</span><br><span class="line">	<span class="keyword">return</span> args.Get(<span class="number">0</span>).(*secretsmanager.GetSecretValueOutput), args.Error(<span class="number">1</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>首先我们使用 Testify Mock 定义了一个 <code>MockAmazon</code> 结构体</li>
+<li>然后使用 Mock 对象来实现 <code>amazonx.Amazon</code> 接口的 <code>GetSecretValue</code> 方法</li>
+</ul>
+<p>接下来我们编写单元测试代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;testing&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/aws/aws-sdk-go-v2/service/secretsmanager&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/stretchr/testify/assert&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestGetTokenFromAWSSecretSuccess</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	mockAmazon := <span class="built_in">new</span>(MockAmazon)</span><br><span class="line">	svc := &amp;service&#123;</span><br><span class="line">		amazon: mockAmazon,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	ctx := context.TODO()</span><br><span class="line">	secretString := <span class="string">`&#123;&quot;token&quot;: &quot;test-token&quot;&#125;`</span></span><br><span class="line">	mockAmazon.On(<span class="string">&quot;GetSecretValue&quot;</span>, ctx,</span><br><span class="line">	    mock.AnythingOfType(<span class="string">&quot;*secretsmanager.GetSecretValueInput&quot;</span>)).</span><br><span class="line">	Return(&amp;secretsmanager.GetSecretValueOutput&#123;</span><br><span class="line">	    SecretString: &amp;secretString,</span><br><span class="line">	&#125;, <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">	token, err := svc.GetTokenFromAWSSecret(ctx)</span><br><span class="line">	assert.NoError(t, err)</span><br><span class="line">	assert.Equal(t, <span class="string">&quot;test-token&quot;</span>, token)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在测试函数中，我们首先创建了一个 <code>MockAmazon</code> 对象，并将其传入 <code>service</code> 结构体中</li>
+<li>然后模拟 <code>GetSecretValue</code> 方法的行为，设置返回值为 <code>&#123; &quot;token&quot;: &quot;test-token&quot; &#125;</code></li>
+<li>最后调用 <code>GetTokenFromAWSSecret</code> 方法，验证返回值是否符合预期</li>
+</ul>
+<p>这里需要注意的地方是，<code>mockAmazon</code> 对象需要模拟真实对象 <code>amazonx.Amazon</code> 的<strong>所有方法</strong>，如果有其中一个方法没有实现的话，就<strong>无法赋值</strong>给 <code>service</code> 结构体。一旦真实对象的接口方法很多，那么手动实现所有方法就会十分繁琐，这个时候如果有一种工具可以自动生成 Mock 方法就会非常方便，这就是我们接下来要介绍的 Mock 工具——GoMock。</p>
+<h2 id="GoMock"><a href="#GoMock" class="headerlink" title="GoMock"></a>GoMock</h2><p><a target="_blank" rel="noopener" href="https://github.com/uber-go/mock">GoMock</a> 是一个为 Go 语言提供模拟框架的工具库，由 Uber 维护，支持 Go 官方支持的最新两个版本。GoMock 允许开发者使用 <code>mockgen</code> 工具来生成用于测试的模拟对象，支持源文件模式和包模式生成模拟对象，并且与 Go 的内置 <code>testing</code> 包兼容，同时支持类型安全的模拟方法，并允许设置详细的期望调用。</p>
+<p>使用 GoMock 首先需要安装 <code>mockgen</code> 工具：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go install github.com/golang/mock/mockgen@latest</span><br></pre></td></tr></table></figure>
+
+<p>然后在要模拟的接口文件中添加接口生成注释，以之前的被测方法为例，我们需要在 <code>amazonx</code> 包中的 <code>amazon.go</code> 文件中添加如下注释：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//go:generate mockgen -destination ./amazon_mock.go -package amazonx -source amazon.go Amazon</span></span><br></pre></td></tr></table></figure>
+
+<p>这个注释表示使用 <code>mockgen</code> 在当前目录下生成一个 <code>amazon_mock.go</code> 文件，包名为 <code>amazonx</code>，并且使用 <code>amazon.go</code> 文件中的 <code>Amazon</code> 接口生成 Mock 对象。一般支持 Golang 的编辑器都支持 <code>go:generate</code> 注释，可以直接在编辑器中执行生成 Mock 对象的命令。</p>
+<img src="/images/post/2024/10/golang-mockgen.png" class="" width="1000" height="600">
+
+<p>生成后的 <code>amazon_mock.go</code> 文件内容大概是这个样子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// MockAmazon is a mock of Amazon interface.</span></span><br><span class="line"><span class="keyword">type</span> MockAmazon <span class="keyword">struct</span> &#123;</span><br><span class="line">	ctrl     *gomock.Controller</span><br><span class="line">	recorder *MockAmazonMockRecorder</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// MockAmazonMockRecorder is the mock recorder for MockAmazon.</span></span><br><span class="line"><span class="keyword">type</span> MockAmazonMockRecorder <span class="keyword">struct</span> &#123;</span><br><span class="line">	mock *MockAmazon</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// NewMockAmazon creates a new mock instance.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewMockAmazon</span><span class="params">(ctrl *gomock.Controller)</span></span> *MockAmazon &#123;</span><br><span class="line">	mock := &amp;MockAmazon&#123;ctrl: ctrl&#125;</span><br><span class="line">	mock.recorder = &amp;MockAmazonMockRecorder&#123;mock&#125;</span><br><span class="line">	<span class="keyword">return</span> mock</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Other methods...</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以使用 <code>NewMockAmazon</code> 方法来模拟 <code>amazonx.Amazon</code> 接口，下面来看下我们使用 GoMock 写的测试代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;testing&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/org/proj/server/third-party/amazonx&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/golang/mock/gomock&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/stretchr/testify/assert&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestGetTokenFromAWSSecretByGomock</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	ctrl := gomock.NewController(t)</span><br><span class="line">	<span class="keyword">defer</span> ctrl.Finish()</span><br><span class="line"></span><br><span class="line">	mockAmazon := amazonx.NewMockAmazon(ctrl)</span><br><span class="line">	svc := &amp;service&#123;</span><br><span class="line">		amazon: mockAmazon,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	ctx := context.TODO()</span><br><span class="line"></span><br><span class="line">	secretString := <span class="string">`&#123;&quot;token&quot;:&quot;test-token&quot;&#125;`</span></span><br><span class="line">	mockAmazon.EXPECT().GetSecretValue(ctx, gomock.Any()).</span><br><span class="line">		Return(&amp;secretsmanager.GetSecretValueOutput&#123;</span><br><span class="line">			SecretString: &amp;secretString,</span><br><span class="line">		&#125;, <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">	token, err := svc.GetTokenFromAWSSecret(ctx)</span><br><span class="line">	assert.NoError(t, err)</span><br><span class="line">	assert.Equal(t, <span class="string">&quot;test-token&quot;</span>, token)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在测试函数中，我们首先创建了一个 GoMock 的 <code>controller</code> 对象，然后使用 <code>amazonx.NewMockAmazon</code> 方法创建一个 <code>MockAmazon</code> 对象</li>
+<li>然后通过 <code>EXPECT</code> 方法设置 <code>GetSecretValue</code> 方法的行为和返回值</li>
+<li>最后调用 <code>GetTokenFromAWSSecret</code> 方法，验证返回值是否符合预期</li>
+</ul>
+<p>使用 GoMock 写的测试代码跟 Testify Mock 类似，但是我们不再需要手动的编写 Mock 对象，而是通过 <code>mockgen</code> 工具生成 Mock 对象，这样就可以大大提高测试代码的编写效率。</p>
+<h2 id="引用包-Mock"><a href="#引用包-Mock" class="headerlink" title="引用包 Mock"></a>引用包 Mock</h2><p>在单元测试中，我们经常会遇到被测试代码直接调用引用包方法的情况，举个例子，比如我们经常使用 Go 内置的 <code>os</code> 包进行文件读写，如果真实地去调用 <code>os</code> 包的方法，那么我们就需要在测试中构造测试文件，然后再对测试文件进行清理，这样会增加测试代码的复杂度。我们更希望可以直接 Mock <code>os</code> 包中的方法，这样就可以避免对文件系统的依赖，同时可以更加灵活地控制返回值。</p>
+<p>下面我们就来介绍一下如何 Mock 引用包的方法，首先我们来看下被测试代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;os&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetEnvVariable</span><span class="params">()</span></span> <span class="type">string</span> &#123;</span><br><span class="line">    value := os.Getenv(<span class="string">&quot;MY_ENV_VAR&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> value == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;default&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>被测试代码中直接使用 <code>os</code> 包的 <code>Getenv</code> 方法获取环境变量，如果我们要 Mock <code>os</code> 包中的 <code>Getenv</code> 方法，我们需要对这个方法进行一些改造，修改后的代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;os&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> getenv = os.Getenv</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetEnvVariable</span><span class="params">()</span></span> <span class="type">string</span> &#123;</span><br><span class="line">    value := getenv(<span class="string">&quot;MY_ENV_VAR&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> value == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;default&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们将 <code>os.Getenv</code> 方法赋值给了一个变量 <code>getenv</code>，这样我们就可以在测试代码中修改 <code>getenv</code> 的值，从而实现 Mock <code>os</code> 包中的 <code>Getenv</code> 方法。下面我们来看下测试代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;testing&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/stretchr/testify/assert&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestGetEnvVariable</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    oldGetenv := getenv</span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; getenv = oldGetenv &#125;()</span><br><span class="line"></span><br><span class="line">    getenv = <span class="function"><span class="keyword">func</span><span class="params">(key <span class="type">string</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> key == <span class="string">&quot;MY_ENV_VAR&quot;</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;mock_value&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    result := GetEnvVariable()</span><br><span class="line">    assert.Equal(t, <span class="string">&quot;mock_value&quot;</span>, result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在测试函数中，我们首先保存了原始的 <code>getenv</code> 方法</li>
+<li>然后通过给 <code>getenv</code> 赋值的方式对 <code>os.Getenv</code> 方法进行 Mock</li>
+<li>最后调用 <code>GetEnvVariable</code> 方法，验证返回值是否符合预期</li>
+</ul>
+<p>其实对于 <code>os.getenv</code> 的测试，我们也可以通过 <code>os.setenv</code> 方法来设置期望值，但我们现在不是讨论如何让这个测试案例通过，而是如何 Mock 引用包的方法。这种方法无需引用任何第三方库，只需要对被测试代码做一点简单的修改，就可以实现 Mock 引用包的目的，如果你遇到了引用其他包的情况，可以通过这种方式来进行 Mock。</p>
+<h2 id="数据库-Mock"><a href="#数据库-Mock" class="headerlink" title="数据库 Mock"></a>数据库 Mock</h2><p>对于数据库的 Mock， 如果使用之前提到的 Testify Mock 或 GoMock 往往力不从心，你会发现当你写了一大堆 Mock 逻辑后，代码不是编译不通过就是运行起来各种报错。这个时候我们需要更专业的数据库 Mock 工具，比如 <a target="_blank" rel="noopener" href="https://github.com/DATA-DOG/go-sqlmock">go-sqlmock</a>。</p>
+<p>go-sqlmock 是一个用于 Go 语言的 SQL 驱动模拟库，旨在测试中模拟真实数据库交互，支持事务、多连接、上下文和命名 SQL 参数，无需修改源代码，且不依赖任何第三方库，它能够模拟任何 SQL 驱动方法的行为，并具有严格的预期顺序匹配。</p>
+<p>下面我们来看下如何使用 go-sqlmock 对数据库进行 Mock，首先我们来看下被测试代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;errors&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/org/proj/server/db&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/org/proj/server/model&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;gorm.io/gorm&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> (</span><br><span class="line">	userRepo <span class="keyword">struct</span> &#123;</span><br><span class="line">		Instance *db.Instance</span><br><span class="line">	&#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(ur *userRepo)</span></span> FindUser(c context.Context, id <span class="type">uint64</span>) (*model.User, <span class="type">error</span>) &#123;</span><br><span class="line">	user := <span class="built_in">new</span>(model.User)</span><br><span class="line">	<span class="keyword">if</span> err := ur.Instance.Conn(c).</span><br><span class="line">		Table(model.TabNameUser()).</span><br><span class="line">		Where(<span class="string">&quot;id = ?&quot;</span>, id).</span><br><span class="line">		First(user).Error; err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> errors.Is(err, gorm.ErrRecordNotFound) &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">nil</span>, errors.New(<span class="string">&quot;user not found&quot;</span>)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> user, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>被测试代码中的 <code>FindUser</code> 方法是一个查询用户信息的方法</li>
+<li>它依赖于项目中的 <code>db.Instance</code> 对象，这个对象是一个 PostgreSQL 数据库连接对象</li>
+<li>该方法使用 <code>grom</code> 库以 ORM 方式查询数据库信息，简化了 SQL 查询的操作</li>
+<li>转换成 SQL 语句大概是这样：<code>SELECT * FROM users WHERE id = ?</code></li>
+</ul>
+<p>下面我们来看下如何创建一个数据库 Mock 对象：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;database/sql&quot;</span></span><br><span class="line">	<span class="string">&quot;testing&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/DATA-DOG/go-sqlmock&quot;</span></span><br><span class="line">	<span class="string">&quot;gorm.io/driver/postgres&quot;</span></span><br><span class="line">	<span class="string">&quot;gorm.io/gorm&quot;</span></span><br><span class="line">	<span class="string">&quot;gorm.io/gorm/logger&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">DbMock</span><span class="params">(t *testing.T)</span></span> (*sql.DB, *gorm.DB, sqlmock.Sqlmock) &#123;</span><br><span class="line">	sqldb, mock, _ := sqlmock.New()</span><br><span class="line">	dialector := postgres.New(postgres.Config&#123;</span><br><span class="line">		Conn:       sqldb,</span><br><span class="line">		DriverName: <span class="string">&quot;postgres&quot;</span>,</span><br><span class="line">	&#125;)</span><br><span class="line">	gormdb, _ := gorm.Open(dialector, &amp;gorm.Config&#123;</span><br><span class="line">		Logger: logger.Default.LogMode(logger.Info),</span><br><span class="line">	&#125;)</span><br><span class="line">	<span class="keyword">return</span> sqldb, gormdb, mock</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>DbMock</code> 方法使用 <code>sqlmock.New()</code> 方法创建 <code>sqldb</code> 和 <code>mock</code> 对象</li>
+<li><code>sqldb</code> 对象主要用来模拟数据库，<code>mock</code> 对象用来设置预期的查询和结果</li>
+<li>使用 <code>gorm.Open</code> 方法创建一个 PostgreSQL 数据库连接对象 <code>gormdb</code></li>
+</ul>
+<p>接下来我们来看下测试代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;testing&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/org/proj/server/db&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/DATA-DOG/go-sqlmock&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/stretchr/testify/assert&quot;</span></span><br><span class="line">	<span class="string">&quot;gorm.io/gorm&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestFindUserSuccess</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	sqldb, gormdb, mock := DbMock(t)</span><br><span class="line">	<span class="keyword">defer</span> sqldb.Close()</span><br><span class="line"></span><br><span class="line">	testName := <span class="string">&quot;user1&quot;</span></span><br><span class="line">	testOrg := <span class="string">&quot;org1&quot;</span></span><br><span class="line">	rows := sqlmock.NewRows([]<span class="type">string</span>&#123;<span class="string">&quot;id&quot;</span>, <span class="string">&quot;name&quot;</span>, <span class="string">&quot;organization&quot;</span>&#125;).AddRow(<span class="number">1</span>, testName, testOrg)</span><br><span class="line">	mock.ExpectQuery(<span class="string">`SELECT`</span>).WillReturnRows(rows)</span><br><span class="line"></span><br><span class="line">	ctx := context.TODO()</span><br><span class="line">	repo := &amp;userRepo&#123;</span><br><span class="line">		Instance: &amp;db.Instance&#123;DB: gormdb&#125;,</span><br><span class="line">	&#125;</span><br><span class="line">	user, err := repo.FindUser(ctx, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">	assert.NoError(t, err)</span><br><span class="line">	assert.Equal(t, testName, user.Name)</span><br><span class="line">	assert.Equal(t, testOrg, user.Organization)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在测试函数中，我们首先调用 <code>DbMock</code> 方法创建返回几个数据库 Mock 对象</li>
+<li>然后使用 <code>sqlmock</code> 设置数据库查询的预期结果，我们使用用户表的 3 个字段设置了一条记录</li>
+<li>再使用 <code>mock</code> 对象模拟查询语句的执行结果，这里的查询语句使用了正则表达式的匹配方式，也就是说，这里的 <code>SELECT</code> 可以匹配任何以 <code>SELECT</code> 开头的 SQL 语句，包括 <code>SELECT * FROM users WHERE id = ?</code></li>
+<li>使用模拟的 <code>gormdb</code> 实例化 <code>userRepo</code> 对象</li>
+<li>最后调用 <code>FindUser</code> 方法，验证返回值是否符合预期</li>
+</ul>
+<h2 id="Http-请求-Mock"><a href="#Http-请求-Mock" class="headerlink" title="Http 请求 Mock"></a>Http 请求 Mock</h2><p>在 Web 开发中，我们经常会遇到对外部 HTTP 服务的调用，比如调用第三方 API、调用微服务等。在单元测试中，我们不可能对这些外部服务进行真实的调用，这样会使得单元测试变得缓慢且不稳定，我们需要对这些 HTTP 请求进行 Mock，这样就可以模拟外部服务的行为，从而使得单元测试更加高效和可靠。</p>
+<p><a target="_blank" rel="noopener" href="https://pkg.go.dev/net/http/httptest">httptest</a> 是 Go 语言标准库中提供的一个 HTTP 服务测试工具，它可以模拟 HTTP 请求和响应，用于测试 HTTP 服务的功能和性能。httptest 包中的 <code>NewRequest</code> 和 <code>NewRecorder</code> 方法可以模拟 HTTP 请求和响应，我们可以使用这两个方法来模拟 HTTP 请求和响应，从而实现对 HTTP 服务的 Mock。</p>
+<p>下面我们来看下如何使用 httptest 对 HTTP 请求进行 Mock，以常用的 Web 开发框架 <a target="_blank" rel="noopener" href="https://github.com/gin-gonic/gin">Gin</a> 为例，下面是一个 Gin 的 Controller 例子，Controller 中有一个 <code>Login</code> 方法，用于处理用户登录请求：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;net/http&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/org/proj/server/dto&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> (</span><br><span class="line">	controller <span class="keyword">struct</span> &#123;</span><br><span class="line">		service FooService</span><br><span class="line">	&#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(re *controller)</span></span> Login(c *gin.Context) &#123;</span><br><span class="line">	req := <span class="built_in">new</span>(dto.ReqLogin)</span><br><span class="line">	<span class="keyword">if</span> err := c.BindJSON(req); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.Error(err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	resp, err := re.service.Login(c, *req)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		c.Error(err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	c.JSON(http.StatusOK, resp)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>Login</code> 方法从请求 Body 中获取数据并转换为 <code>ReqLogin</code> 对象</li>
+<li>然后调用 service 中的 <code>Login</code> 方法处理登录逻辑</li>
+<li>最后将 server 方法的返回结果序列化为 JSON 返回给客户端</li>
+</ul>
+<p>下面我们来看下如何对 Controller 的 <code>Login</code> 方法进行单元测试，这里我们需要使用 GoMock 对 <code>service</code> 进行 Mock，同时使用 httptest 对 HTTP 请求进行 Mock：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;encoding/json&quot;</span></span><br><span class="line">	<span class="string">&quot;net/http&quot;</span></span><br><span class="line">	<span class="string">&quot;net/http/httptest&quot;</span></span><br><span class="line">	<span class="string">&quot;testing&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/org/proj/server/dto&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/golang/mock/gomock&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/stretchr/testify/assert&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestResourceLoginSuccess</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	ctrl := gomock.NewController(t)</span><br><span class="line">	<span class="keyword">defer</span> ctrl.Finish()</span><br><span class="line"></span><br><span class="line">	jsonBody := []<span class="type">byte</span>(<span class="string">`&#123; &quot;account&quot;: &quot;foo&quot;, &quot;password&quot;: &quot;baz&quot; &#125;`</span>)</span><br><span class="line">	req := httptest.NewRequest(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;/login&quot;</span>, bytes.NewBuffer(jsonBody))</span><br><span class="line">	req.Header.Set(<span class="string">&quot;Content-Type&quot;</span>, <span class="string">&quot;application/json&quot;</span>)</span><br><span class="line"></span><br><span class="line">	w := httptest.NewRecorder()</span><br><span class="line">	ctx, _ := gin.CreateTestContext(w)</span><br><span class="line">	ctx.Request = req</span><br><span class="line"></span><br><span class="line">	mockService := NewMockOAuthService(ctrl)</span><br><span class="line">	expectedResp := &amp;dto.RespLogin&#123;</span><br><span class="line">		Account:      <span class="string">&quot;test-account&quot;</span>,</span><br><span class="line">		Organization: <span class="string">&quot;test-org&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	mockService.EXPECT().Login(ctx, gomock.Any()).Return(expectedResp, <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">	cd := &amp;controller&#123;</span><br><span class="line">		service: mockService,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	cd.Login(ctx)</span><br><span class="line"></span><br><span class="line">	assert.Equal(t, http.StatusOK, ctx.Writer.Status())</span><br><span class="line">	assert.Nil(t, ctx.Errors)</span><br><span class="line"></span><br><span class="line">	resp := &amp;dto.RespLogin&#123;&#125;</span><br><span class="line">	err := json.Unmarshal(w.Body.Bytes(), resp)</span><br><span class="line">	assert.Nil(t, err)</span><br><span class="line">	assert.Equal(t, expectedResp, resp)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>首先使用 <code>httptest.NewRequest</code> 方法创建一个 URL 为 <code>/login</code> 的 POST 请求，请求 Body 为一个我们设置好的 JSON 数据</li>
+<li>然后使用 <code>httptest.NewRecorder</code> 方法创建一个 Response 对象，用于保存请求的返回结果，使用 <code>gin.CreateTestContext</code> 方法创建一个测试上下文对象，将 Request 对象赋值给上下文对象</li>
+<li>接着使用 GoMock 对 <code>service</code> 的 <code>Login</code> 方法进行 Mock，设置预期的返回值</li>
+<li>调用 Controller 的 <code>Login</code> 方法，传入上下文对象</li>
+<li>在验证阶段，先验证返回状态码和 <code>ctx.Errors</code> 是否正确</li>
+<li>最后验证被测方法中 <code>c.JSON(http.StatusOK, resp)</code> 返回的 JSON 数据是否符合预期，这个 JSON 在原方法中被添加到了 <code>ctx.Writer</code> 中，我们可以通过 <code>w.Body.Bytes()</code> 获取到这个 JSON 数据</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>今天我们介绍了在 Golang 中对不同测试对象进行 Mock 的 5 种方法，包括常用的测试工具库 Testify Mock 和 GoMock，以及如何 Mock 引用包、数据库和 HTTP 请求。通过这些 Mock 技术，我们能够灵活替换外部依赖，定制其行为和返回值，确保测试环境的可控性。掌握了这些 Mock 技术，以后无论是模拟任何数据或方法，都能让你的单元测试更加高效和可靠。</p>
+<p>关注我，一起学习最新的开发编程新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2024/10/18/maybe-you-donot-known-5-way-to-mock-golang-programm/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2024/10/18/maybe-you-donot-known-5-way-to-mock-golang-programm/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2024
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

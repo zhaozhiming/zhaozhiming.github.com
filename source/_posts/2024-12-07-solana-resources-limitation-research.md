@@ -440,14 +440,14 @@ pub fn other_func(_ctx: Context<Initialize>) -> Result<()> {
 
 ## 参考
 
-- https://solana.com/docs/core/fees
-- https://solana.com/docs/core/accounts
-- https://solana.com/docs/core/transactions
-- https://solana.com/developers/courses/native-onchain-development/program-derived-addresses
-- https://solana.com/docs/programs/limitations
-- https://solana.com/docs/programs/faq
-- https://github.com/solana-developers/program-examples
-- https://www.anchor-lang.com/
-- https://solana.com/developers/guides/advanced/how-to-optimize-compute
+- [Solana Docs: Core Fees](https://solana.com/docs/core/fees)
+- [Solana Docs: Core Accounts](https://solana.com/docs/core/accounts)
+- [Solana Docs: Core Transactions](https://solana.com/docs/core/transactions)
+- [Solana Docs: Program-Derived Addresses](https://solana.com/developers/courses/native-onchain-development/program-derived-addresses)
+- [Solana Docs: Program Limitations](https://solana.com/docs/programs/limitations)
+- [Solana Docs: Program FAQ](https://solana.com/docs/programs/faq)
+- [Solana Developers: Program Examples](https://github.com/solana-developers/program-examples)
+- [Anchor Lang](https://www.anchor-lang.com/)
+- [Solana Developers: How to Optimize Compute](https://solana.com/developers/guides/advanced/how-to-optimize-compute)
 
 关注我，一起学习最新的开发编程新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。

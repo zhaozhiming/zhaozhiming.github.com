@@ -1,5 +1,5 @@
 ---
-title: '关于我'
+title: "关于我"
 date: 2010-01-01 20:04:21
 ---
 
@@ -43,7 +43,11 @@ date: 2010-01-01 20:04:21
 
 # 工作经历
 
-## 知道创宇（ 2015 年 6 月 ~ 现在）
+## 57blocks（ 2024 年 8 月 ~ 现在）
+
+全栈工程师，负责客户项目的开发、技术调研、售前项目评估等工作。
+
+## 知道创宇（ 2015 年 6 月 ~ 2024 年 8 月）
 
 全栈工程师 && 架构师，负责团队搭建、人员面试、技术选型、培训分享和部门项目的开发等工作。
 
@@ -57,7 +61,59 @@ date: 2010-01-01 20:04:21
 
 # 项目经验
 
-## AI 安全平台
+## Exocore(57blocks)
+
+技术栈：Mocha, Chai, Automation Test, Node.js
+
+项目描述：这是一个为客户的区块链进行自动化测试的项目，客户基于以太坊搭建一个区块链，但很多功能的测试都依赖于手工测试，效率比较低且容易出错，我们帮助客户搭建一套自动化测试客户区块链核心功能的测试框架，可以执行常规测试、客户核心功能测试、性能测试、容量测试等，大大提升了客户的测试效率和及时发现问题的效率。
+
+我的职责：
+
+- 理解客户区块链业务规则
+- 手动测试客户提供的测试案例
+- 编写自动化测试脚本
+- 部署自动化测试环境
+
+## RainCard(57blocks)
+
+技术栈：Solana, Rust, Anchor, TypeScript
+
+项目描述：这是一个将以太坊智能合约迁移到 Solana 的项目，客户已经有了一套完整并部署上链的以太坊智能合约，我们需要将其转换成 Solana 的程序，其中一些以太坊的功能需要重新开发，比如签名功能、所有者权限功能等。
+
+我的职责：
+
+- 开发 Solana 智能合约
+- 编写合约对应的测试代码
+- 调研在 Solana 中集成 Oracle 的方案
+- 协助解决开发中遇到的难题
+
+## Stellar AutoAction(57blocks)
+
+技术栈：Stellar, Go, AWS, Node.js, Npm
+
+项目描述：这是一个为 Stellar 区块链开发的自动化工具，类似 Openzeppelin Defender 的功能，用户可以上传自定义的 JS 脚本，并将其部署到 AWS 的 lambda，并通过 AWS 的 Scheduler 自动化运行这些脚本功能。同时支持用户创建 Stellar 钱包，并在交易中使用我们开发的 SDK 进行签名交易。
+
+我的职责：
+
+- 命令行工具开发
+- 后端服务开发
+- AWS 资源管理开发
+- Stellar 钱包 KMS 管理
+- 交付文档编写和功能演示
+
+## Capstack(57blocks)
+
+技术栈：React、Node js, Solidity, Jenkins, Docker, Mysql
+
+项目描述：这是一个 web3 defi 项目，可以快速统计资金账号在各种 defi 协议上的收益率，并解析和记录 defi 智能合约上的交易记录，最终可生成一个每周、月的 PDF 报告。
+
+我的职责：
+
+- 支持新投资策略的开发
+- 修复系统中发现的错误
+- 部署新功能上线
+
+## AI 安全平台(知道创宇)
 
 技术栈：LangChain, OpenAI API, Function calling, React, Next.js, Node.js, TypeScript, Python
 
@@ -65,7 +121,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责系统初期的框架搭建，核心功能开发和部署等工作。
 
-## 知识库 AI 问答系统
+## 知识库 AI 问答系统(知道创宇)
 
 技术栈：LangChain, ChatGLM2, React, Node.js, TypeScript, Python
 
@@ -73,7 +129,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责本地大语言模型部署，后端系统开发等工作。
 
-## AI 小项目
+## AI 小项目(知道创宇)
 
 技术栈：ChatGPT, LangChain, Prompt Engineering, ChatGLM, Vector DB, React, Next.js, AI SDK, Nest.js, Vercel
 
@@ -84,7 +140,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责项目的架构设计，核心功能开发等工作。
 
-## 流水线平台
+## 流水线平台(知道创宇)
 
 技术栈: Tekten, Node.js, Typescript, Docker, K8s
 
@@ -92,7 +148,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责功能设计、功能开发、设计评审、代码评审等工作。
 
-## 开发空间
+## 开发空间(知道创宇)
 
 技术栈: Code-server, Node.js, Typescript, Docker, K8s
 
@@ -100,7 +156,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责功能设计、功能开发、设计评审、代码评审等工作。
 
-## 效能平台
+## 效能平台(知道创宇)
 
 技术栈: React, Node.js, Typescript, Ant Design, microservice, Docker, K8s
 
@@ -108,7 +164,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责系统架构设计、核心功能开发、功能设计评审、代码评审等工作。
 
-## 标准盒子
+## 标准盒子(知道创宇)
 
 技术栈: React, Node.js, Python, Typescript, Ant Design, micro-frontend, microservice, grpc, Linux, Docker, Docker-compose
 
@@ -116,7 +172,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责项目的架构设计、产品设计、项目管理，主要功能开发等工作。
 
-## 蜜罐系统
+## 蜜罐系统(知道创宇)
 
 技术栈： React, Node.js, Typescript, Python, Linux KVM
 
@@ -124,7 +180,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责系统架构设计、核心功能开发、项目管理代码评审等工作。
 
-## 加密货币美股交易
+## 加密货币美股交易(知道创宇)
 
 技术栈：React Natvie，Node.js
 
@@ -132,7 +188,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责 APP 客户端开发、后端部分功能开发、代码评审，项目管理等工作。
 
-## 以太坊电子钱包
+## 以太坊电子钱包(知道创宇)
 
 技术栈：React Natvie，Etheresum，智能合约，web3，geth
 
@@ -140,7 +196,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责其中的主要架构设置，核心以太坊功能开发以及 App 页面的开发。
 
-## 区块链德州扑克
+## 区块链德州扑克(知道创宇)
 
 技术栈：Electron，websocket，testrpc
 
@@ -148,7 +204,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责项目的基础框架搭建，整合后端数据结构供前端调用，前端页面开发，代码 review 和整体项目进度把控等工作。
 
-## 前端开发平台
+## 前端开发平台(知道创宇)
 
 技术栈：React, Redux，React-Router，Webpack，Ant Design，yarn，eslint，stylelint，commitlint，prettier，Hapi，mongoose
 
@@ -156,7 +212,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责项目的基础框架搭建，攻关基础组件的使用难题，包括 redux，react-router，webpack 等基础组件
 
-## 大数据可视化项目
+## 大数据可视化项目(知道创宇)
 
 技术栈：React, Redux，React-Router，GraphQL，ElasticSearch，Hapi，mongoose
 
@@ -164,7 +220,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责项目框架搭建，程序设计，代码编写，性能优化等工作。
 
-## 客户关系管理项目
+## 客户关系管理项目(知道创宇)
 
 技术栈: React, Hapi, Mongoose, Redis
 
@@ -172,7 +228,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责需求对接，程序开发，演示调试，测试部署等工作。
 
-## 云存储项目
+## 云存储项目(平安科技)
 
 技术栈: Java, Python, Ceph, OpenStack
 
@@ -180,7 +236,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责架构设计、功能设计、环境部署、功能开发等工作。
 
-## 车联网项目
+## 车联网项目(平安科技)
 
 技术栈: Java, Spring, MyBatis, HBase, Memcache
 
@@ -188,7 +244,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责后端车载数据入库功能开发，设计评审、代码评审等工作。
 
-## 网上金融超市
+## 网上金融超市(平安科技)
 
 技术栈: Java, Spring, Hibernate, Oracle
 
@@ -196,7 +252,7 @@ date: 2010-01-01 20:04:21
 
 我的职责：我主要负责功能开发、系统测试、设计评审、代码评审等工作。
 
-## 档案管理系统
+## 档案管理系统(平安科技)
 
 技术栈: Java, Spring, Oracle
 

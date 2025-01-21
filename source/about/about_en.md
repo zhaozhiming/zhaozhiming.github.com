@@ -1,5 +1,5 @@
 ---
-title: 'About Me'
+title: "About Me"
 date: 2010-01-01 20:04:21
 ---
 
@@ -8,7 +8,6 @@ date: 2010-01-01 20:04:21
 # Contact
 
 - Email: zhaozhiming003@gmail.com
-- Wahtsapp: +86 159 2851 5643
 
 ---
 
@@ -39,7 +38,11 @@ date: 2010-01-01 20:04:21
 
 # Work Experience
 
-## Knownsec (June 2015 ~ Now)
+## 57blocks (August 2024 ~ Now)
+
+Full Stack Engineer, responsible for client project development, technical research, pre-sales project evaluation, etc.
+
+## Knownsec (June 2015 ~ August 2024)
 
 Full-stack engineer && Architect, responsible for team building, staff interview, technology selection, training sharing and development of departmental projects.
 
@@ -53,7 +56,59 @@ Software engineer, responsible for the development and maintenance of medical in
 
 # Project Experience
 
-## AI Security Platform
+## Exocore(57blocks)
+
+Tech Stack: Mocha, Chai, Automation Test, Node.js
+
+Project Description: This is a project to automate testing for a client's blockchain. The client built a blockchain based on Ethereum, but many functions rely on manual testing, which is inefficient and error-prone. We helped the client build an automated testing framework for testing the core functions of the client's blockchain, which can perform routine testing, client core function testing, performance testing, capacity testing, etc., greatly improving the client's testing efficiency and the efficiency of timely problem discovery.
+
+My Responsibilities:
+
+- Understand the client's blockchain business rules
+- Manually test the test cases provided by the client
+- Write automated test scripts
+- Deploy automated testing environment
+
+## RainCard(57blocks)
+
+Tech Stack: Solana, Rust, Anchor, TypeScript
+
+Project Description: This is a project to migrate Ethereum smart contracts to Solana. The client already has a complete and deployed Ethereum smart contract, and we need to convert it into a Solana program. Some Ethereum functions need to be redeveloped, such as signature functions, owner permission functions, etc.
+
+My Responsibilities:
+
+- Develop Solana smart contracts
+- Write test code corresponding to the contract
+- Investigate the integration of Oracle in Solana
+- Assist in solving the difficulties encountered in development
+
+## Stellar AutoAction(57blocks)
+
+Tech Stack: Stellar, Go, AWS, Node.js, Npm
+
+Project Description: This is an automation tool developed for the Stellar blockchain, similar to the functionality of Openzeppelin Defender. Users can upload custom JS scripts, deploy them to AWS lambda, and automate the running of these scripts using AWS Scheduler. It also supports users in creating Stellar wallets and signing transactions using the SDK we developed.
+
+My Responsibilities:
+
+- Command-line tool development
+- Backend service development
+- AWS resource management development
+- Stellar wallet KMS management
+- Delivery document writing and feature demonstration
+
+## Capstack(57blocks)
+
+Tech Stack: React, Node.js, Solidity, Jenkins, Docker, Mysql
+
+Project Description: This is a web3 defi project that can quickly calculate the yield of fund accounts on various defi protocols, parse and record transaction records on defi smart contracts, and ultimately generate a weekly or monthly PDF report.
+
+My Responsibilities:
+
+- Support the development of new investment strategies
+- Fix errors found in the system
+- Deploy new features online
+
+## AI Security Platform(Knownsec)
 
 Tech Stack: LangChain, OpenAI API, Function calling, React, Next.js, Node.js, TypeScript, Python
 
@@ -61,7 +116,7 @@ Project Description: This is an AI security system that incorporates multiple se
 
 My Responsibilities: My main responsibilities include initial framework setup, core feature development, and deployment of the system.
 
-## Knowledge Base AI Question-Answering System
+## Knowledge Base AI Question-Answering System(Knownsec)
 
 Tech Stack: LangChain, ChatGLM2, React, Node.js, TypeScript, Python
 
@@ -69,7 +124,7 @@ Project Description: This is an AI-based knowledge base question-answering syste
 
 My Responsibilities: My main responsibilities include local deployment of large language models and backend system development.
 
-## AI mini Projects
+## AI mini Projects(Knownsec)
 
 Technology stack：ChatGPT, LangChain, Prompt Engineering, ChatGLM, Vector DB, React, Next.js, AI SDK, Nest.js, Vercel
 
@@ -80,7 +135,7 @@ Project Description:
 
 My Responsibilities: I am primarily responsible for project architecture design, core feature development, and other related tasks.
 
-## Pipeline
+## Pipeline(Knownsec)
 
 Technology stack: Tekten, Node.js, Typescript, Docker, K8s
 
@@ -88,7 +143,7 @@ Project Description: This is a CI/CD platform based on Tekton that helps users q
 
 My Responsibilities: I am primarily responsible for feature design, development, design reviews, code reviews, and other related tasks.
 
-## Development Space
+## Development Space(Knownsec)
 
 Technology stack: Code-server, Node.js, Typescript, Docker, K8s
 
@@ -96,7 +151,7 @@ Project Description: This is a project that allows developers to run their devel
 
 My Responsibilities: I am primarily responsible for feature design, development, design reviews, code reviews, and other related tasks.
 
-## Efficiency Platform
+## Efficiency Platform(Knownsec)
 
 Technology stack: React, Node.js, Typescript, Ant Design, microservice, Docker, K8s
 
@@ -104,7 +159,7 @@ Project Description: This is a project management platform that integrates with 
 
 My Responsibilities: I am primarily responsible for system architecture design, core feature development, feature design reviews, code reviews, and other related tasks.
 
-## Standard Box
+## Standard Box(Knownsec)
 
 Technology stack: React(Hooks), Node.js, Python, Typescript, Ant Design, micro-frontend, microservice, grpc, Linux, Docker, Docker-compose
 
@@ -112,7 +167,7 @@ Project Description: It is a development platform designed for hardware products
 
 My Responsibilities: I am mainly responsible for project architecture design, product design, project management, and main function development.
 
-## Honeypot System
+## Honeypot System(Knownsec)
 
 Technology stack: React(Hooks), Node.js, Typescript, Python, Linux KVM
 
@@ -120,7 +175,7 @@ Project Description: This is a product developed for enterprise security, which 
 
 My Responsibilities: I am mainly responsible for system architecture design, core function development, project management code review, etc.
 
-## Cryptocurrency and US Stock Trading
+## Cryptocurrency and US Stock Trading(Knownsec)
 
 Tech Stack: React Native, Node.js
 
@@ -128,7 +183,7 @@ Project Description: This is a platform for trading cryptocurrencies and US stoc
 
 My Responsibilities: My main responsibilities include developing the mobile app client, backend feature development, code reviews, project management, etc.
 
-## Ethereum Wallet
+## Ethereum Wallet(Knownsec)
 
 Technology stack: React Natvie, Etheresum, smart contracts, web3, geth
 
@@ -136,7 +191,7 @@ Project Description: Using React Native to develop an wallet App based on Ethere
 
 My Responsibilities: I am mainly responsible for the main architecture setup, core ethereum function development and App page development.
 
-## Blockchain Texas Poker
+## Blockchain Texas Poker(Knownsec)
 
 Technology stack: Electron, websocket, testrpc
 
@@ -144,7 +199,7 @@ Project Description: A Texas Pocker game developed based on blockchain technolog
 
 My Responsibilities: I am mainly responsible for building the basic framework of the project, integrating back-end data structure for front-end calls, front-end page development, code review and overall project progress control.
 
-## Front-end development platform
+## Front-end development platform(Knownsec)
 
 Technology stack: React, Redux, React-Router, Webpack, Ant Design, yarn, eslint, stylelint, commitlint, prettier, Hapi, mongoose
 
@@ -152,7 +207,7 @@ Project Description: This is a scaffold tool for a departmental web project, int
 
 My Responsibilities: I am mainly responsible for building the basic framework of the project, and tackling the problems of using basic components, including redux, react-router, webpack and other basic components.
 
-## Big Data Visualization Project
+## Big Data Visualization Project(Knownsec)
 
 Tech Stack: React, Redux，React-Router，GraphQL，ElasticSearch，Hapi，mongoose
 
@@ -160,7 +215,7 @@ Project Description: This is a data visualization system where users can view an
 
 My Responsibilities: I am mainly responsible for project framework building, programming, code writing, performance optimization, etc.
 
-## Customer Relationship Management Project
+## Customer Relationship Management Project(Knownsec)
 
 Tech Stack: React, Hapi, Mongoose, Redis
 
@@ -168,7 +223,7 @@ Project Description: This is an internal system for the company, designed for sa
 
 My Responsibilities: I was responsible for requirement matching, application development, demo debugging, testing and deployment.
 
-## Cloud Storage Project (July 2012 - December 2014)
+## Cloud Storage Project (Ping An Technology Company)
 
 Tech Stack: Java, Python, Ceph, OpenStack
 
@@ -176,7 +231,7 @@ Project Description: This is a distributed storage system, using Ceph as the und
 
 My Responsibilities: I was mainly responsible for architecture design, feature design, environment deployment, feature development, etc.
 
-## Telematics project (March 2012 - June 2012)
+## Telematics project (Ping An Technology Company)
 
 Tech Stack: Java, Spring, MyBatis, HBase, Memcache
 
@@ -184,7 +239,7 @@ Project Description: This project provides services for car owners, with a backe
 
 My Responsibilities: I was mainly responsible for backend development of in-car data storage, design review, code review, etc.
 
-## Online financial supermarket (January 2011 - September 2011)
+## Online financial supermarket (Ping An Technology Company)
 
 Tech Stack: Java, Spring, Hibernate, Oracle
 
@@ -192,7 +247,7 @@ Project Description: This was an online financial project. Due to its importance
 
 My Responsibilities: I was mainly responsible for feature development, system testing, design review, code review, etc.
 
-## Archive Management System (January 2008 - December 2010)
+## Archive Management System (Ping An Technology Company)
 
 Tech Stack: Java, Spring, Oracle
 

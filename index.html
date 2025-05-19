@@ -134,23 +134,23 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
+		  <a href="/2025/05/14/solana-bloom-filter/">在 Solana 上实现布隆过滤器</a>
+	    </li>
+	  
+	    <li class="post">
+		  <a href="/2025/02/22/solana-storage-limitation/">深入解密 Solana 开发中的资源限制——存储篇</a>
+	    </li>
+	  
+	    <li class="post">
+		  <a href="/2024/12/07/solana-resources-limitation-research/">深入解密 Solana 开发中的资源限制——CU 篇</a>
+	    </li>
+	  
+	    <li class="post">
 		  <a href="/2024/11/04/curve-pool-base-invest-and-data-computer/">深入浅出 Curve 流动性池子：投资指南与数据分析</a>
 	    </li>
 	  
 	    <li class="post">
 		  <a href="/2024/10/18/maybe-you-donot-known-5-way-to-mock-golang-programm/">Go 开发中你应该了解的 5 种 Mock 方法</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/10/04/use-github-action-to-deploy-aws-ecs/">部署 AWS ECS 超详细攻略</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/10/03/use-aws-role-to-isolate-resources-and-privilege/">使用 AWS 角色隔离资源和权限</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/09/21/Cursor-helped-me-get-up-to-speed-with-Go-in-just-one-day/">Cursor 让我一天上手 Go 语言</a>
 	    </li>
 	  
     </ul>
@@ -170,7 +170,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">28</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025 年</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -179,6 +179,87 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2025/05/14/solana-bloom-filter/">在 Solana 上实现布隆过滤器</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2025-05-14T13:47:57.000Z" itemprop="datePublished">5月 14, 2025</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/solana/">solana</a> <a href="/tags/anchor/">anchor</a> <a href="/tags/bloom-filter/">bloom filter</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2025/05/solana-bloom-filter.png" class="" width="400" height="300">
+
+<p>在编程世界里，<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Bloom_filter">布隆过滤器</a>早已是耳熟能详的高效工具，它能迅速判定一个元素是否存在于集合中，其应用在网络爬虫、数据库查询和缓存系统中屡见不鲜。布隆过滤器凭借其超快的查询速度和极低的内存占用，能巧妙地减少无谓的数据传输与处理，从而极大地提升运行效率。但如果我们想在区块链上实现一个布隆过滤器，是否也能跟中心化互联网世界一样，达到既能存储大量数据又能快速查询的效果呢？今天我们就来带大家在 Solana 这个高性能区块链网络上实现一个布隆过滤器，同时揭示其在实际运行中可能遇到的各种奇妙问题。</p>
+        
+          <p class="more-link">
+            <a href="2025/05/14/solana-bloom-filter/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2025/02/22/solana-storage-limitation/">深入解密 Solana 开发中的资源限制——存储篇</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2025-02-22T09:04:40.000Z" itemprop="datePublished">2月 22, 2025</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/blockchain/">blockchain</a> <a href="/tags/web3/">web3</a> <a href="/tags/solana/">solana</a> <a href="/tags/account/">account</a> <a href="/tags/storage-limitation/">storage limitation</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2025/02/solana-limitation-storage.jpeg" class="" width="400" height="300">
+
+<p>上一期我们介绍了 Solana 程序资源限制中的 Compute Unit（以下简称 CU ）部分，今天我们再来介绍 Solana 程序资源限制中的存储部分。Solana 的存储限制主要是指 Solana 账号中的存储限制，这个限制是为了保障 Solana 网络的稳定性和安全性，同时也是为了防止恶意程序占用过多的存储空间。在这个限制下，如何设计程序的数据结构，如何确保账户的数据不超过限制，这些都是 Solana 开发者关心的问题，我们今天将通过详细的讲解和一些实际案例分析来为大家揭开 Solana 存储限制的神秘面纱。</p>
+        
+          <p class="more-link">
+            <a href="2025/02/22/solana-storage-limitation/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2024/12/07/solana-resources-limitation-research/">深入解密 Solana 开发中的资源限制——CU 篇</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2024-12-07T13:44:32.000Z" itemprop="datePublished">12月 7, 2024</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/blockchain/">blockchain</a> <a href="/tags/web3/">web3</a> <a href="/tags/solana/">solana</a> <a href="/tags/anchor/">anchor</a> <a href="/tags/computer-unit/">computer-unit</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2024/12/solana-limitation-cu.jpeg" class="" width="400" height="300">
+
+<p>很多开发人员在开发 Solana 程序（智能合约）时经常遇到这样的问题，明明程序逻辑没有问题，但是在程序运行的时候就会出现奇怪的错误，错误的提示会出现<code>限制</code>或者<code>超出</code>等字眼，这表示你的程序可能落入了 Solana 的资源限制中。Solana 作为高性能区块链，其核心特性之一在于通过并行处理显著提升交易吞吐量，这种高效能背后依赖严格的资源管理机制，开发者需要深刻理解这些限制，才能有效开发和优化 Solana 程序。本文旨在介绍 Solana 开发中的资源限制，并详细介绍其中关于计算单元（Compute Unit，以下简称 CU）的限制，剖析实际场景，探讨优化策略。</p>
+        
+          <p class="more-link">
+            <a href="2024/12/07/solana-resources-limitation-research/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -369,87 +450,6 @@
 
 </article>
 
-      <article class="post">
-	<h2 class="title">
-		<a href="/2024/07/15/modern-python-project-tools-config/">都 2024 年了，你还在用 pip 吗？</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2024-07-15T02:49:25.000Z" itemprop="datePublished">7月 15, 2024</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/python/">python</a> <a href="/tags/miniconda/">miniconda</a> <a href="/tags/poetry/">poetry</a> <a href="/tags/ruff/">ruff</a> <a href="/tags/uv/">uv</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2024/07/next-generation-python-tools.jpg" class="" width="400" height="300">
-
-<p>编程语言 Python 随着 AI 的发展越来越受开发人员的喜爱，目前已经是最流行的编程语言，但由于 Python 是一门相对较老的语言，并且经过 Python2 到 Python3 这一漫长而复杂的迁移历程，使得一些 Python 开发人员可能还在使用一些过时的工具和库。今天我们就来带大家了解当前 Python 生态系统中最流行最实用的开发工具，让你彻底告别那些<code>老古董</code>。</p>
-        
-          <p class="more-link">
-            <a href="2024/07/15/modern-python-project-tools-config/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2024/07/04/rag-knowledge-graphs/">高级 RAG 检索策略之知识图谱</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2024-07-04T14:12:57.000Z" itemprop="datePublished">7月 4, 2024</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/llamaindex/">llamaindex</a> <a href="/tags/rag/">rag</a> <a href="/tags/knownledge-graph/">knownledge-graph</a> <a href="/tags/graphrag/">graphrag</a> <a href="/tags/neo4j/">neo4j</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2024/07/rag-knowledge-graph.jpg" class="" width="400" height="300">
-
-<p>RAG（Retrieval Augmented Generation）技术中检索是一个非常重要的环节，检索的准确性直接影响到生成的质量，但普通 RAG 的向量检索技术并不能满足所有场景下的需求，比如在一些大型私有文档库中，传统的检索技术往往表现不好。目前已经有很多研究团队在 RAG 中引入知识图谱来提高检索的准确性，并且取得了很好的效果。今天我们就来了解一下知识图谱的原理，以及如何在 RAG 中进行使用。</p>
-        
-          <p class="more-link">
-            <a href="2024/07/04/rag-knowledge-graphs/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2024/06/30/rag-selfrag/">高级 RAG 检索策略之 Self-RAG</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2024-06-30T08:22:07.000Z" itemprop="datePublished">6月 30, 2024</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/llamaindex/">llamaindex</a> <a href="/tags/rag/">rag</a> <a href="/tags/selfrag/">selfrag</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2024/07/rag-selfrag.jpg" class="" width="400" height="300">
-
-<p>Self-RAG 是另外一种形式的 RAG（Retrieval Augmented Generation），它与其他 RAG 检索策略不同，它并不是在 RAG 流程上对某个模块进行增强， 而是在 RAG 不同的模块上进行优化改进，从而达到改进整体 RAG 流程的目的。如果你对 Self-RAG 比较陌生或者只是听说它的名字，那么今天请跟我一起来了解 Self-RAG 的实现原理，以及通过学习 Self-RAG 的代码实现来更好地理解其中的细节。</p>
-        
-          <p class="more-link">
-            <a href="2024/06/30/rag-selfrag/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
 
     <nav id="pagenavi">
     
@@ -466,7 +466,7 @@
     </div>
     <footer id="footer">
     <div style="display:inline">
-    Copyright &copy; 2024
+    Copyright &copy; 2025
 
     赵芝明
 . Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |

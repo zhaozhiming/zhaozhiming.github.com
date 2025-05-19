@@ -1,0 +1,322 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>深入解密 Solana 开发中的资源限制——存储篇 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="深入浅出地介绍 Solana 开发中的账号存储限制。"> <!-- TODO: truncate -->
+	<meta name="keywords" content="web3, blockchain, solana, account, storage limitation">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">深入解密 Solana 开发中的资源限制——存储篇</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2025-02-22T09:04:40.000Z" itemprop="datePublished">2月 22, 2025</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/blockchain/">blockchain</a> <a href="/tags/web3/">web3</a> <a href="/tags/solana/">solana</a> <a href="/tags/account/">account</a> <a href="/tags/storage-limitation/">storage limitation</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2025/02/solana-limitation-storage.jpeg" class="" width="400" height="300">
+
+<p>上一期我们介绍了 Solana 程序资源限制中的 Compute Unit（以下简称 CU ）部分，今天我们再来介绍 Solana 程序资源限制中的存储部分。Solana 的存储限制主要是指 Solana 账号中的存储限制，这个限制是为了保障 Solana 网络的稳定性和安全性，同时也是为了防止恶意程序占用过多的存储空间。在这个限制下，如何设计程序的数据结构，如何确保账户的数据不超过限制，这些都是 Solana 开发者关心的问题，我们今天将通过详细的讲解和一些实际案例分析来为大家揭开 Solana 存储限制的神秘面纱。</p>
+<span id="more"></span>
+
+<h2 id="Solana-存储限制"><a href="#Solana-存储限制" class="headerlink" title="Solana 存储限制"></a>Solana 存储限制</h2><p>在了解 <a target="_blank" rel="noopener" href="https://solana.com/">Solana</a> 存储限制之前，我们需要先来了解一下 Solana 的账号模型。</p>
+<img src="/images/post/2025/02/solana-account-model.png" class="" width="600" height="400">
+
+<p>在 Solana 区块链中，每个账户的数据结构被称为 <code>AccountInfo</code>，这个数据结构包含了以下字段：</p>
+<ul>
+<li>Data：账户数据</li>
+<li>Executable：是否为可执行程序</li>
+<li>Lamports：账户余额（以 lamports 为单位，1 SOL 等于 10 亿 lamports）</li>
+<li>Owner：账户所有者程序</li>
+</ul>
+<p>账户根据 <code>Executable</code> 字段可以分为两种类型：<strong>程序账户</strong>和<strong>数据账户</strong>。程序账户用来保存运行在 Solana 网络上的程序（也称为智能合约），它是无状态的，仅存储执行代码。而程序相关的数据则需要保存在数据账户中，数据账户可以保存任意格式的数据。两者的内容都保存在 <code>Data</code> 字段中，程序账户保存的是程序的字节码，数据账户保存的是具体数据。</p>
+<p>Solana 的存储限制是：每个账户的最大存储空间为 <strong>10MB</strong>，这里的存储空间指的就是 <code>Data</code> 字段的大小，保存到账户的数据单位一般是字节，所以 10MB 等于 10 x 1024 x 1024 字节。</p>
+<h2 id="存储大小查询"><a href="#存储大小查询" class="headerlink" title="存储大小查询"></a>存储大小查询</h2><p>既然我们已经了解了 Solana 的存储限制，那么如何确定账户实际占用了多少存储空间呢？实际上，Solana 提供了多种方法来查询账户的存储大小，无论是在程序代码中还是在测试代码中，都可以轻松实现这一功能。</p>
+<blockquote>
+<p>Solana 的程序代码使用 Rust 语言编写，而测试代码一般使用 JavaScript 或 TypeScript 语言编写。<br>Solana 的程序开发分为 Native 和 <a target="_blank" rel="noopener" href="https://www.anchor-lang.com/docs">Anchor</a> 两种方式，在下面的代码示例中，我们默认以 Anchor 为例进行说明。</p>
+</blockquote>
+<p>如果你希望在 Solana 的程序中查询账户的存储大小，我们可以在 Rust 程序通过 <code>AccountInfo</code> 结构的 <code>data.len()</code> 方法来查询账户的存储大小，如下所示：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">account_size</span> = ctx.accounts.your_account.<span class="title function_ invoke__">to_account_info</span>().<span class="title function_ invoke__">data_len</span>();</span><br><span class="line">msg!(<span class="string">&quot;account size: &#123;&#125;&quot;</span>, account_size);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>其中 ctx 为 Anchor 的上下文对象，其中包含了当前程序的所有账户信息，<code>your_account</code> 为你的账户变量名。</li>
+</ul>
+<p>另外比较常见的做法是在测试代码中查询账户的存储大小，我们可以通过 Solana 的 JavaScript SDK 来查询账户的存储大小，如下所示：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Connection</span>,<span class="title class_">PublicKey</span> &#125; <span class="keyword">from</span> <span class="string">&quot;@solana/web3.js&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="attr">connection</span>: <span class="title class_">Connection</span> = ...;</span><br><span class="line"><span class="keyword">const</span> yourAccount = <span class="keyword">new</span> <span class="title class_">PublicKey</span>(<span class="string">&quot;your_account_address&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> accountInfo = <span class="keyword">await</span> connection.<span class="title function_">getAccountInfo</span>(yourAccount);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;account size:&quot;</span>, accountInfo?.<span class="property">data</span>.<span class="property">length</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>其中 Connection 为 Solana SDK 的连接对象，<code>your_account_address</code> 为你的账户地址。</li>
+</ul>
+<p>通过以上方法可以查询到账号的大小，单位为字节，比如我们得到的查询结果为：<code>account size: 1000</code>，那么这个账户的大小就是 1000 字节。</p>
+<h2 id="存储大小计算"><a href="#存储大小计算" class="headerlink" title="存储大小计算"></a>存储大小计算</h2><p>现在我们知道如何查询账户的存储大小了，那么账户的存储大小究竟是如何计算的呢？Anchor 的官方文档中详细上列出了<a target="_blank" rel="noopener" href="https://www.anchor-lang.com/docs/references/space#type-chart">基础数据类型的大小以及相应的计算方法</a>，借助这些信息，我们就能准确地计算出账户实际占用的存储空间。</p>
+<p>我们列举几个文档上的数据类型的大小来做示例说明：</p>
+<ul>
+<li><code>bool</code>：1 字节</li>
+<li><code>u8/i8</code>：1 字节</li>
+<li><code>Vec&lt;T&gt;</code>：4 + (space(T) x amount)</li>
+</ul>
+<p>其中 <code>bool</code> 和 <code>u8/i8</code> 类型的大小都是 1 字节，<code>Vec</code> 类型的大小是 4 字节加上泛型 <code>T</code> 类型的大小乘以 <code>Vec</code> 的长度，我们以具体的示例来说明 <code>Vec</code> 大小的计算方法：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[account]</span></span><br><span class="line"><span class="meta">#[derive(InitSpace)]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">struct</span> <span class="title class_">MyStorage</span> &#123;</span><br><span class="line">    <span class="meta">#[max_len(10)]</span></span><br><span class="line">    data: <span class="type">Vec</span>&lt;<span class="type">u8</span>&gt;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个数据结构中，<code>data</code> 字段是一个 <code>Vec</code> 类型的数据，<code>Vec</code> 的长度最大为 10，<code>Vec</code> 中每个元素的类型是 <code>u8</code>，那么这个数据结构的大小就是 4 + 1 x 10 &#x3D; 14 字节。</p>
+<p>由于 <code>MyStorage</code> 结构体采用了 <code>#[derive(InitSpace)]</code> 宏，在 Solana 的 Anchor 框架中，该宏能够自动计算并初始化账户所需的存储空间，因此我们可以直接通过 <code>MyStorage::INIT_SPACE</code> 方法来获取该数据结构的大小。</p>
+<h2 id="存储费用查询"><a href="#存储费用查询" class="headerlink" title="存储费用查询"></a>存储费用查询</h2><p>现在我们已经知道了如何计算账户大小，接下来让我们来探讨在 Solana 区块链上存储数据所需支付的费用。实际上每个账户都必须为其存储的数据支付一定的费用，那么我们要如何得知账户所需的费用呢？实际上 Solana 提供了一个命令行工具，可以通过输入字节数就能计算出相应的存储费用，工具的使用示例如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">solana rent 100</span><br><span class="line"></span><br><span class="line"><span class="comment"># output result</span></span><br><span class="line">Rent-exempt minimum: 0.00158688 SOL</span><br></pre></td></tr></table></figure>
+
+<p>这里表示存储 100 字节的数据需要支付 0.00158688 SOL 的费用，可能有朋友会比较好奇，如果一个 10MB 的账号需要多少费用，我们来看一下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">solana rent 10485760</span><br><span class="line"></span><br><span class="line"><span class="comment"># output result</span></span><br><span class="line">Rent-exempt minimum: 72.98178048 SOL</span><br></pre></td></tr></table></figure>
+
+<p>如果我们存储一个 10MB 的账户，字节数为 10 x 1024 x1024 &#x3D; 10485760，则需要支付 72.98178048 SOL 的费用，截至目前为止（2025-02），1 SOL 约等于 196 美元，所以存储一个 10MB 的账户大约需要支付 14330.5 美元的费用，这是一笔非常昂贵的开销。因此，在设计账户时，应谨慎评估哪些数据必须保存在链上，哪些数据可以存储在其他地方，以便有效地控制成本。</p>
+<p>我们再来看一个例子，当我们输入的字节数为 0 时，我们会发现输出结果并不是 0 SOL：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">solana rent 0</span><br><span class="line"></span><br><span class="line"><span class="comment"># output result</span></span><br><span class="line">Rent-exempt minimum: 0.00089088 SOL</span><br></pre></td></tr></table></figure>
+
+<p>这是因为 Solana 区块链中的账户有一个最小存储开销，即使账户中没有数据，也需要支付一定的费用。</p>
+<h2 id="存储费用计算"><a href="#存储费用计算" class="headerlink" title="存储费用计算"></a>存储费用计算</h2><p>在实际的开发中，我们不需要手动计算账户的存储费用，Solana 可以根据账户的大小自动计算出存储费用。但我们还是有必要了解一下 Solana 的存储费用计算方法，这样我们可以更好地理解账户的存储费用。</p>
+<p>在 Solana 的源码定义了一些常量和方法来计算账户的存储费用，我们可以通过查看<a target="_blank" rel="noopener" href="https://github.com/anza-xyz/agave/blob/v2.1.13/sdk/rent/src/lib.rs#L93-L97">这些源码</a>来了解存储费用的计算方法，源码内容如下：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pub</span> <span class="keyword">const</span> DEFAULT_LAMPORTS_PER_BYTE_YEAR: <span class="type">u64</span> = <span class="number">1_000_000_000</span> / <span class="number">100</span> * <span class="number">365</span> / (<span class="number">1024</span> * <span class="number">1024</span>);</span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">const</span> DEFAULT_EXEMPTION_THRESHOLD: <span class="type">f64</span> = <span class="number">2.0</span>;</span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">const</span> ACCOUNT_STORAGE_OVERHEAD: <span class="type">u64</span> = <span class="number">128</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">minimum_balance</span>(&amp;<span class="keyword">self</span>, data_len: <span class="type">usize</span>) <span class="punctuation">-&gt;</span> <span class="type">u64</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">bytes</span> = data_len <span class="keyword">as</span> <span class="type">u64</span>;</span><br><span class="line">    (((ACCOUNT_STORAGE_OVERHEAD + bytes) * <span class="keyword">self</span>.lamports_per_byte_year) <span class="keyword">as</span> <span class="type">f64</span></span><br><span class="line">        * <span class="keyword">self</span>.exemption_threshold) <span class="keyword">as</span> <span class="type">u64</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>DEFAULT_EXEMPTION_THRESHOLD：默认豁免时间点，默认是 2.0 年</li>
+<li>DEFAULT_LAMPORTS_PER_BYTE_YEAR：默认每字节每年度费用，默认是 3480 lamports</li>
+<li>ACCOUNT_STORAGE_OVERHEAD：账户最小开销，默认是 128 字节，这里就是我们之前查询的 0 字节账户时的 最小字节开销</li>
+<li>费用的计算公式为：<code>((ACCOUNT_STORAGE_OVERHEAD + 账户存储大小) x DEFAULT_LAMPORTS_PER_BYTE_YEAR) x DEFAULT_EXEMPTION_THRESHOLD</code></li>
+</ul>
+<p>以 0 字节账号为例，当账户存储大小为 0 时，存储费用为：<code>((128 + 0) x 3480) x 2.0 = 890880 lamports</code>，转换为 SOL 即为 0.00089088 SOL，结果和我们之前查询的一致。</p>
+<h3 id="租借机制"><a href="#租借机制" class="headerlink" title="租借机制"></a>租借机制</h3><p>在存储费用计算中，有一个常量引起了我们的注意，比如 <code>DEFAULT_EXEMPTION_THRESHOLD</code>，表示默认的豁免时间点，默认值为 2.0 年，为什么会设计这个常量呢？这还要从 Solana 的租借机制说起。</p>
+<p>还记得之前介绍过的账户结构 <code>AccountInfo</code> 吗？在这个结构中，大家通常会注意到 <code>Data</code>、<code>Executable</code> 等主要字段，它们分别存储了账户的数据和是否为可执行程序等信息。但实际上，<code>AccountInfo</code> 内部还包含了一个历史遗留字段，名为 <code>rent_epoch</code>。这个字段用于记录账户开始进入租借状态的 epoch 值，即标志着账户租金计算的起始时间。最初设计时，Solana 希望借助这个字段来追踪账户的租金缴纳情况和剩余租金状态，确保系统能够及时回收那些长时间未活跃且租金不足的账户。尽管如今系统的租金扣费方式已经发生了较大变化，<code>rent_epoch</code> 依然保留在账户结构中，以便兼容历史数据和为需要查询账户租借信息的应用程序提供参考。</p>
+<p>最初的 Solana 系统中采用的是按年计费的租金机制，也就是说，账户需要定期支付租金来维持其在链上的存在。如果用户只预付了半年的租金，那么系统会在每个新的 epoch 开始时，从账户余额中扣除相应的租金金额。这样一来，经过大约六个月后，账户余额会逐步减少至零，届时系统就会自动删除该账户，认为它已不再满足持续存在的条件。相反，如果用户选择预付<strong>两年</strong>的租金，那么该账户就会获得一个特殊状态，被称为<strong>免租账户</strong>，从而在之后的周期中不再需要继续扣除租金。这样一来，账户可以长期稳定地存在于链上，而不必担心因余额耗尽而被清理。</p>
+<p>随着技术的不断发展和生态系统的成熟，Solana 对租金机制进行了优化和调整，旧有的定期扣费方式已经被全面废弃。现在，所有新创建的账户必须在初始化时至少预存两年租金，以确保账户有足够的余额来支持长时间的存续。这种机制不仅简化了租金计算和管理流程，也大大提高了系统资源的利用效率。更重要的是，当用户决定关闭账户时，系统会全额退还预存的租金押金，从而避免了资金的长期占用和不必要的经济负担。这种改进使得账户管理变得更加透明、简单，并且更好地保护了用户的资产权益。</p>
+<h2 id="账户重分配大小限制"><a href="#账户重分配大小限制" class="headerlink" title="账户重分配大小限制"></a>账户重分配大小限制</h2><p>虽然 Solana 的账户最大存储大小为 10MB，但是在实际创建账户时，我们无法一下子创建一个 10MB 的账户，下面是创建账户的代码示例：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> anchor_lang::prelude::*;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[account]</span></span><br><span class="line"><span class="meta">#[derive(InitSpace)]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">struct</span> <span class="title class_">MyStorage</span> &#123;</span><br><span class="line">    <span class="meta">#[max_len(10230)]</span></span><br><span class="line">    data: <span class="type">Vec</span>&lt;<span class="type">u8</span>&gt;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[derive(Accounts)]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">struct</span> <span class="title class_">Init</span>&lt;<span class="symbol">&#x27;info</span>&gt; &#123;</span><br><span class="line">    <span class="meta">#[account(mut)]</span></span><br><span class="line">    <span class="keyword">pub</span> user: Signer&lt;<span class="symbol">&#x27;info</span>&gt;,</span><br><span class="line"></span><br><span class="line">    <span class="meta">#[account(</span></span><br><span class="line"><span class="meta">        init,</span></span><br><span class="line"><span class="meta">        payer = user,</span></span><br><span class="line"><span class="meta">        space = 8 + MyStorage::INIT_SPACE,</span></span><br><span class="line"><span class="meta">        seeds = [b<span class="string">&quot;my_storage&quot;</span>]</span>,</span><br><span class="line">        bump</span><br><span class="line">    )]</span><br><span class="line">    <span class="keyword">pub</span> my_storage: <span class="type">Box</span>&lt;Account&lt;<span class="symbol">&#x27;info</span>, MyStorage&gt;&gt;,</span><br><span class="line"></span><br><span class="line">    <span class="keyword">pub</span> system_program: Program&lt;<span class="symbol">&#x27;info</span>, System&gt;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">init</span>(_ctx: Context&lt;Init&gt;) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;()&gt; &#123;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们首先定义了一个数据结构 <code>MyStorage</code>，根据之前的计算方法，这个数据结构的大小为 4 + 1 x 10230 &#x3D; 10234 字节</li>
+<li>在 <code>Init</code> 结构中，我们定义了一个 <code>my_storage</code> 账户，这个账户的大小为 8 字节加上 <code>MyStorage</code> 的大小，即 8 + 10234 &#x3D; 10242 字节</li>
+</ul>
+<p>当运行这个程序，程序在初始化 <code>my_storage</code> 账号时，会报一个 <code>Account data size realloc limited to 10240 in inner instructions</code> 的错误，这是因为 Anchor 通过 <a target="_blank" rel="noopener" href="https://solana.com/docs/core/cpi">Cross Program Invocation（CPI）</a>作为内部指令来为账户分配存储空间，每个内部指令允许的最大重新分配空间为 10240 字节，也就是 <strong>10KB</strong>，但我们的账户大小为 10242 字节，已经超过了这个限制，所以会报错。</p>
+<p>这个限制的常量名为 <code>MAX_PERMITTED_DATA_INCREASE</code>，我们可以通过<a target="_blank" rel="noopener" href="https://docs.rs/solana-account-info/2.2.0/src/solana_account_info/lib.rs.html#17">这里</a>来查看相关代码。</p>
+<h3 id="增加账户存储大小"><a href="#增加账户存储大小" class="headerlink" title="增加账户存储大小"></a>增加账户存储大小</h3><p>初始创建的账户大小最大只有 10240 字节，那么我们该如何扩展其存储容量呢？我们可以通过重新分配账户存储空间来增加账户的存储大小，下面是扩展账户存储大小的代码示例：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[derive(Accounts)]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">struct</span> <span class="title class_">IncreaseAccountSize</span>&lt;<span class="symbol">&#x27;info</span>&gt; &#123;</span><br><span class="line">    <span class="meta">#[account(mut)]</span></span><br><span class="line">    <span class="keyword">pub</span> user: Signer&lt;<span class="symbol">&#x27;info</span>&gt;,</span><br><span class="line"></span><br><span class="line">    <span class="meta">#[account(mut,</span></span><br><span class="line"><span class="meta">              realloc = my_storage.to_account_info().data_len() + 10240,</span></span><br><span class="line"><span class="meta">              realloc::payer = user,</span></span><br><span class="line"><span class="meta">              realloc::zero = false,</span></span><br><span class="line"><span class="meta">              seeds = [b<span class="string">&quot;my_storage&quot;</span>]</span>,</span><br><span class="line">              bump)]</span><br><span class="line">    <span class="keyword">pub</span> my_storage: Account&lt;<span class="symbol">&#x27;info</span>, MyStorage&gt;,</span><br><span class="line"></span><br><span class="line">    <span class="keyword">pub</span> system_program: Program&lt;<span class="symbol">&#x27;info</span>, System&gt;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">increase_account_size</span>(_ctx: Context&lt;IncreaseAccountSize&gt;) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;()&gt; &#123;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在 <code>IncreaseAccountSize</code> 结构体中，我们使用<a target="_blank" rel="noopener" href="https://solana.com/docs/core/pda">程序派生地址（PDA）</a>得到之前创建的 <code>my_storage</code> 账户，其重新分配的大小是在当前账户大小上再增加 10240 字节</li>
+<li><code>realloc::zero</code> 属性用于控制在重新分配账户存储空间时，是否将新分配的空间初始化为零，false 表示不会将新分配的空间初始化为零</li>
+</ul>
+<p>这里我们在账户<strong>原有的基础</strong>上增加了 10240 字节的存储空间，这个大小刚好满足 CPI 最大重新分配空间的限制，因此程序可以正常执行。但如果增加的大小超过 10240 字节，那么程序会报之前同样的错误。也就是说，每次扩展账户存储空间的大小不能超过 10240 字节，如果需要增加更多的存储空间，可以多次执行这个操作。每次为账户增加 10240 字节的存储空间，需要执行 1024 次操作才能达到 10MB 的上限。</p>
+<p>此外，由于账户存储空间会产生费用，请务必确保账户余额充足以覆盖新增存储空间的费用。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过本文的介绍，我们了解到 Solana 的存储限制包括：</p>
+<ul>
+<li>账户的最大存储空间为 <strong>10MB</strong></li>
+<li>创建或者重分配账户存储空间的限制为 <strong>10KB</strong></li>
+</ul>
+<p>我们还介绍了如何查询和计算账户的存储大小与存储费用，以及账户的租借机制等内容。在实际开发中，我们需要根据账户的存储需求合理设计数据结构，确保账户存储空间不超限，同时合理控制存储费用，从而提升程序的性能和效率。希望本文能够帮助大家更好地理解 Solana 的存储限制，为 Solana 开发提供一些参考。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://solana.com/docs/core/accounts">Solana Docs: Core Accounts</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.rareskills.io/post/solana-account-rent">Cost of storage, maximum storage size, and account resizing in Solana</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.anchor-lang.com/docs/references/space">Account Space</a></li>
+</ul>
+<p>关注我，一起学习最新的开发编程新技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2025/02/22/solana-storage-limitation/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2025/02/22/solana-storage-limitation/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2025
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

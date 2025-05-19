@@ -134,23 +134,23 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
+		  <a href="/2025/05/14/solana-bloom-filter/">在 Solana 上实现布隆过滤器</a>
+	    </li>
+	  
+	    <li class="post">
+		  <a href="/2025/02/22/solana-storage-limitation/">深入解密 Solana 开发中的资源限制——存储篇</a>
+	    </li>
+	  
+	    <li class="post">
+		  <a href="/2024/12/07/solana-resources-limitation-research/">深入解密 Solana 开发中的资源限制——CU 篇</a>
+	    </li>
+	  
+	    <li class="post">
 		  <a href="/2024/11/04/curve-pool-base-invest-and-data-computer/">深入浅出 Curve 流动性池子：投资指南与数据分析</a>
 	    </li>
 	  
 	    <li class="post">
 		  <a href="/2024/10/18/maybe-you-donot-known-5-way-to-mock-golang-programm/">Go 开发中你应该了解的 5 种 Mock 方法</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/10/04/use-github-action-to-deploy-aws-ecs/">部署 AWS ECS 超详细攻略</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/10/03/use-aws-role-to-isolate-resources-and-privilege/">使用 AWS 角色隔离资源和权限</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/09/21/Cursor-helped-me-get-up-to-speed-with-Go-in-just-one-day/">Cursor 让我一天上手 Go 语言</a>
 	    </li>
 	  
     </ul>
@@ -170,7 +170,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">28</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025 年</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -179,6 +179,82 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2012/12/07/the-elements-of-jacoco/">Jacoco的原理</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2012-12-07T11:47:00.000Z" itemprop="datePublished">12月 7, 2012</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/jacoco/">jacoco</a>
+</div>
+    </div>
+      
+        <h2 id="覆盖率计数器"><a href="#覆盖率计数器" class="headerlink" title="覆盖率计数器"></a>覆盖率计数器</h2><p>Jacoco使用一系列的不同的计数器来做覆盖率的度量计算。所有这些计数器都是从java的class文件中获取信息，这些class文件可以（可选）包含调试的信息在里面。即使在没有源码的情况下，这种方法也可以实时有效地对应用程序进行度量和分析。在大部分情况下，收集到的信息可以映射到源码，可视化到每一行代码的粒度。但这种方法还是有一些限制。这些class文件必须使用调试信息来编译，这样才可以计算行的覆盖率和提供出源码的高亮。但不是所有的JAVA语言的结构都可以直接编译成一致的二进制代码。在这种情况下，java 编译器会创建所谓的“合成”代码，会导致产生一些不期望得到的覆盖率结果。  </p>
+        
+          <p class="more-link">
+            <a href="2012/12/07/the-elements-of-jacoco/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2012/12/02/use-jacoco-in-jenkins-and-sonar-part-4/">在jenkins和sonar中集成jacoco(四)--在sonar中集成jacoco</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2012-12-02T06:46:00.000Z" itemprop="datePublished">12月 2, 2012</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/jenkins/">jenkins</a> <a href="/tags/sonar/">sonar</a> <a href="/tags/jacoco/">jacoco</a>
+</div>
+    </div>
+      
+        <p>首先要得到之前的单元测试和集成测试的覆盖率文件，还有对应的class文件以及单元测试的覆盖率报告，材料准备齐全之后，使用如下命令：  </p>
+        
+          <p class="more-link">
+            <a href="2012/12/02/use-jacoco-in-jenkins-and-sonar-part-4/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2012/12/01/use-jacoco-in-jenkins-and-sonar-part-3/">在jenkins和sonar中集成jacoco(三)--使用jacoco收集集成测试的覆盖率</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2012-12-01T06:45:00.000Z" itemprop="datePublished">12月 1, 2012</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/jenkins/">jenkins</a> <a href="/tags/sonar/">sonar</a> <a href="/tags/jacoco/">jacoco</a>
+</div>
+    </div>
+      
+        <p>我们系统使用weblogic做服务器，集成测试框架使用的是junit+selenium。  </p>
+<p>首先，要把jacoco的jacocoagent.jar包放到部署应用的服务器上，接着在系统服务的JAVA_OPTIONS 后面添加如下参数：  </p>
+        
+          <p class="more-link">
+            <a href="2012/12/01/use-jacoco-in-jenkins-and-sonar-part-3/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -361,87 +437,6 @@
 
 </article>
 
-      <article class="post">
-	<h2 class="title">
-		<a href="/2012/07/23/working-with-files-in-javascript-part-3/">在JavaScript中进行文件处理，第三部分：处理事件和错误</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2012-07-23T13:46:00.000Z" itemprop="datePublished">7月 23, 2012</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/javascript/">javascript</a>
-</div>
-    </div>
-      
-        <p><strong>译注：原文是《JavaScript高级程序设计》的作者Nicholas Zakas写的，本翻译纯属为自己学习而做，仅供参考。原文链接：<a target="_blank" rel="noopener" href="http://www.nczonline.net/blog/2012/05/22/working-with-files-in-javascript-part-3/">这里</a></strong>  </p>
-<hr>
-<p>FileReader对象用来读取浏览器可以访问的文件的内容。在我前一篇blog中，你学习到了如何使用FileReader对象轻松读取文件，并将文件内容转换为各种形式。FileReader在很多方面和XMLHttpRequest非常相似。  </p>
-        
-          <p class="more-link">
-            <a href="2012/07/23/working-with-files-in-javascript-part-3/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2012/07/16/working-with-files-in-javascript-part-2/">在JavaScript中进行文件处理，第二部分：文件读取</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2012-07-16T02:09:00.000Z" itemprop="datePublished">7月 16, 2012</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/javascript/">javascript</a>
-</div>
-    </div>
-      
-        <p><strong>译注：原文是《JavaScript高级程序设计》的作者Nicholas Zakas写的，本翻译纯属为自己学习而做，仅供参考。原文链接：<a target="_blank" rel="noopener" href="http://www.nczonline.net/blog/2012/05/15/working-with-files-in-javascript-part-2/">这里</a></strong>  </p>
-<hr>
-<p>在我的前一篇blog中，我介绍了在JavaScript中如何使用文件，具体重点放在如何获得File对象。只有当用户通过上传或者拖拽的方式上传了文件，这些对象才拥有文件的元数据。一旦你有了这些文件，下一步就是从这些文件中读取数据。  </p>
-        
-          <p class="more-link">
-            <a href="2012/07/16/working-with-files-in-javascript-part-2/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2012/07/08/working-with-files-in-javascript-part-1/">在JavaScript中进行文件处理，第一部分：基础</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2012-07-08T08:26:00.000Z" itemprop="datePublished">7月 8, 2012</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/javascript/">javascript</a>
-</div>
-    </div>
-      
-        <p><strong>译注：原文是《JavaScript高级程序设计》的作者Nicholas Zakas写的，本翻译纯属为自己学习而做，仅供参考。原文链接：<a target="_blank" rel="noopener" href="http://www.nczonline.net/blog/2012/05/08/working-with-files-in-javascript-part-1/">这里</a></strong>  </p>
-<hr>
-<p>很多年前，我在一次Goole面试被问到，如何在web应用中提供更好的用户体验。浮现在我脑海里的第一个想法是，通过比<code>&lt;input type=&quot;file&quot;&gt;</code>标签更好的方式来进行文件操作。虽然web发展一路高歌猛进，但自从该标签引进以来，我们操作文件的方式就一直使用它而从来没有改变过。幸运的是，有了HTML5和相关API，我们在最新版本的浏览器上可以有更多的方式进行文件操作（iOS 仍然不支持File的API）。  </p>
-        
-          <p class="more-link">
-            <a href="2012/07/08/working-with-files-in-javascript-part-1/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
 
     <nav id="pagenavi">
     
@@ -460,7 +455,7 @@
     </div>
     <footer id="footer">
     <div style="display:inline">
-    Copyright &copy; 2024
+    Copyright &copy; 2025
 
     赵芝明
 . Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |

@@ -1,0 +1,388 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+    
+	<title>在 Solana 上实现布隆过滤器 - Hacker and Geeker&#39;s Way</title>
+    <meta name="author" content="">
+    
+	<meta name="description" content="通过一个完整的代码示例来介绍布隆过滤器在 Solana 上如何实现。"> <!-- TODO: truncate -->
+	<meta name="keywords" content="solana, anchor, bloom filter">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Hacker and Geeker&#39;s Way" type="application/atom+xml">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/custom.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/hljs.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='/stylesheets/font.css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='/stylesheets/font.css?family=Amethysta+One' rel='stylesheet' type='text/css'>
+	  <script src="/javascripts/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![}]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <!-- <script src="/javascripts/ajaxify.js"></script> -->
+
+    
+
+    
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-100485541-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Hacker and Geeker&#39;s Way
+    </div>
+</h1>
+<span class="subtitle"></span>
+<br>
+
+<ul id="social-links" style="text-align:center; clear:both;">
+  
+  <!-- GitHub -->
+  <li>
+  <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming" class="github" title="Github"></a>
+  </li>
+  
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.twitter.com/kingzzm" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  <!-- LinkedIn -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://www.linkedin.com/in/zhaozhiming" class="linkedin" title="LinkedIn"></a>
+  </li>
+  
+  
+  
+  
+  
+  <!-- Stackoverflow -->
+  <li>
+  <a target="_blank" rel="noopener" href="http://stackoverflow.com/users/1954315/zhaozhiming" class="stackoverflow" title="Stackoverflow"></a>
+  </li>
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/archives/index.html">Archives</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    <li><a href="/about/index.html">About</a></li>
+    
+    <li>
+    <div id="dark">
+        <form action="//www.google.com.hk/search" method="get" accept-charset="UTF-8" id="search">
+            <input type="hidden" name="sitesearch" value="https://zhaozhiming.github.io" />
+            <input type="text" name="q" results="0" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+
+<div id="toload">
+<!-- begin toload -->
+    <div id="content">
+        <div class="inner">
+<article class="post">
+	<h2 class="title">在 Solana 上实现布隆过滤器</h2>
+    <div class="meta">
+        <div class="date">Published on: <time datetime="2025-05-14T13:47:57.000Z" itemprop="datePublished">5月 14, 2025</time>
+</div>
+        <div class="tags">Tags: 
+
+<a href="/tags/solana/">solana</a> <a href="/tags/anchor/">anchor</a> <a href="/tags/bloom-filter/">bloom filter</a>
+</div>
+    </div>
+	<div class="entry-content"><img src="/images/post/2025/05/solana-bloom-filter.png" class="" width="400" height="300">
+
+<p>在编程世界里，<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Bloom_filter">布隆过滤器</a>早已是耳熟能详的高效工具，它能迅速判定一个元素是否存在于集合中，其应用在网络爬虫、数据库查询和缓存系统中屡见不鲜。布隆过滤器凭借其超快的查询速度和极低的内存占用，能巧妙地减少无谓的数据传输与处理，从而极大地提升运行效率。但如果我们想在区块链上实现一个布隆过滤器，是否也能跟中心化互联网世界一样，达到既能存储大量数据又能快速查询的效果呢？今天我们就来带大家在 Solana 这个高性能区块链网络上实现一个布隆过滤器，同时揭示其在实际运行中可能遇到的各种奇妙问题。</p>
+<span id="more"></span>
+
+<h2 id="布隆过滤器"><a href="#布隆过滤器" class="headerlink" title="布隆过滤器"></a>布隆过滤器</h2><p>布隆过滤器由布尔顿・霍华德・布隆（Burton Howard Bloom）在 1970 年提出，它是一种用于检查元素是否属于集合的数据结构，以及在数据库和网络应用中进行高效的数据查询。布隆过滤器使用多个不同的哈希函数将元素映射到一个二进制数组中，通过检查相应的索引位置是否都被设置为 1 来判断元素是否存在。虽然布隆过滤器可能会产生误报（false positive），但不会产生漏报（false negative），即它能准确判断某元素不在集合中，但无法保证判断存在的元素确实存在。布隆过滤器的优势在于不管你要检测的集合有多大，使用布隆过滤器进行查找时所需的内存和时间都是非常低且固定的。此外，布隆过滤器的误报率可以通过调整哈希函数的数量和位数组的大小来控制。</p>
+<h3 id="重要属性"><a href="#重要属性" class="headerlink" title="重要属性"></a>重要属性</h3><img src="/images/post/2025/05/bloom-filter.png" class="" width="1000" height="600">
+
+<p>这是布隆过滤器的一个示例图，我们可以从中看到布隆过滤器的几个重要的属性：</p>
+<ul>
+<li>位图大小（m）：位图数组的长度，决定了布隆过滤器所需的存储空间。</li>
+<li>哈希函数的数量（k）：用于将元素映射到位图中的哈希函数个数，影响布隆过滤器的查询性能和误报率。</li>
+<li>存储元素的数量（n）：布隆过滤器中需要存储的元素个数。</li>
+<li>误报率（p）：表示的是一个不在布隆过滤器中的元素被错误地判断为在布隆过滤器中的概率。</li>
+</ul>
+<p>以上面的示例图为例，位图（值为 0 和 1）数组长度为 10， 所以 m 为 10，哈希函数有 3 个，所以 k 为 3，存储的元素 分别是 <code>Foo</code> 和 <code>Bar</code>，所以 n 为 2。根据其中的任意 3 个属性，我们都可以计算出第 4 个属性的值，它们的计算公式分别为：</p>
+<ul>
+<li><code>n = ceil(m / (-k / log(1 - exp(log(p) / k))))</code></li>
+<li><code>p = pow(1 - exp(-k / (m / n)), k)</code></li>
+<li><code>m = ceil((n \* log(p)) / log(1 / pow(2, log(2))))</code></li>
+<li><code>k = round((m / n) \* log(2))</code></li>
+</ul>
+<h3 id="为什么会出现误报率"><a href="#为什么会出现误报率" class="headerlink" title="为什么会出现误报率"></a>为什么会出现误报率</h3><p>以示例图中的例子为例，我们假设的情形如下：</p>
+<ol>
+<li>初始化布隆过滤器，长度 m &#x3D; 10 的布隆过滤器，初始时所有位都是 0，表示为：<code>0 0 0 0 0 0 0 0 0 0</code>。</li>
+<li>插入元素 <code>Foo</code>，假设使用的 3 个哈希函数得到的索引分别为：0、2、4，插入 <code>Foo</code> 后，将索引 0、2、4 位置的位设为 1，布隆过滤器变为：<code>1 0 1 0 1 0 0 0 0 0</code>。</li>
+<li>插入元素 <code>Bar</code>，假设 <code>Bar</code> 的 3 个哈希函数得到的索引分别为：4、7、9，插入 <code>Bar</code> 后，将索引 4、7、9 位置的位设为 1，布隆过滤器变为：<code>1 0 1 0 1 0 0 1 0 1</code>。</li>
+<li>产生误报的情况，现在假设查询一个未插入的元素 <code>Baz</code>，如果 <code>Baz</code> 的 3 个哈希函数计算出来的索引碰巧为：2、4、9，此时，我们在布隆过滤器中查看索引 2、4、9 的位，发现它们都为 1。因为所有对应位置都是 1，布隆过滤器会判断 <code>Baz</code> 可能存在，即返回<strong>存在</strong>的结果，实际上 <code>Baz</code> 并没有被插入，这就是误报。</li>
+</ol>
+<p>那么误报率多少是合适的呢？一般来说，1% 左右的误报率常见且合适，在很多应用场景中，1% 的误报率被认为是一个较好的折衷方案：既能节省内存，又不会对系统的整体性能产生太大影响。如果应用对准确性要求非常高，可以将误报率降低到 0.1% 甚至更低。但这通常会需要更大的位图大小 <code>m</code> 或者更多的哈希函数 <code>k</code>（但 <code>k</code> 并不是越大越好，太大了反而可能加大误报率），从而增加存储和计算开销。所以这个问题没有标准答案，选择多少误报率合适取决于你的具体场景。例如，在缓存系统、数据库索引等场景下，1% 的误报率已经足够；而在医疗或金融系统中，可能会追求更低的误报率以减少潜在风险。</p>
+<p>在这里推荐一个布隆过滤器的在线计算工具：<a target="_blank" rel="noopener" href="https://hur.st/bloomfilter">Bloom Filter Calculator</a>，可以帮助你快速计算布隆过滤器的各种属性。</p>
+<h2 id="实现布隆过滤器"><a href="#实现布隆过滤器" class="headerlink" title="实现布隆过滤器"></a>实现布隆过滤器</h2><p>下面我们来演示如何在 <a target="_blank" rel="noopener" href="https://solana.com/">Solana</a> 上实现一个布隆过滤器，我们将使用 Anchor 来编写程序，实现的代码包括布隆过滤器的初始化、插入元素、查询元素等操作，同时有相关的测试代码，以便验证布隆过滤器的正确性。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.anchor-lang.com/">Anchor</a> 是 Solana 区块链上广泛使用的开发框架，用于简化程序（智能合约）和去中心化应用（DApp）的开发流程。它为开发者提供了一套高效且直观的工具和库，极大降低了 Solana 应用开发的门槛，Solana 官方推荐使用 Anchor 进行开发。</p>
+</blockquote>
+<h3 id="初始化指令"><a href="#初始化指令" class="headerlink" title="初始化指令"></a>初始化指令</h3><p>首先我们需要定义一个布隆过滤器的数据结构，包括布隆过滤器的名称、位图大小、哈希函数数量等属性，示例代码如下：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// state.rs</span></span><br><span class="line"><span class="keyword">use</span> anchor_lang::prelude::*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">const</span> MAX_FILTER_SIZE: <span class="type">usize</span> = <span class="number">10000</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[account]</span></span><br><span class="line"><span class="meta">#[derive(InitSpace)]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">struct</span> <span class="title class_">BloomFilter</span> &#123;</span><br><span class="line">    <span class="comment">// filter name</span></span><br><span class="line">    <span class="meta">#[max_len(32)]</span></span><br><span class="line">    <span class="keyword">pub</span> name: <span class="type">String</span>,</span><br><span class="line">    <span class="comment">// the bit array</span></span><br><span class="line">    <span class="meta">#[max_len(MAX_FILTER_SIZE)]</span></span><br><span class="line">    <span class="keyword">pub</span> bit_array: <span class="type">Vec</span>&lt;<span class="type">bool</span>&gt;,</span><br><span class="line">    <span class="comment">// size of the bit array</span></span><br><span class="line">    <span class="keyword">pub</span> m: <span class="type">u32</span>,</span><br><span class="line">    <span class="comment">// number of hash functions</span></span><br><span class="line">    <span class="keyword">pub</span> k: <span class="type">u8</span>,</span><br><span class="line">    <span class="comment">// number of elements in the filter</span></span><br><span class="line">    <span class="keyword">pub</span> n: <span class="type">u32</span>,</span><br><span class="line">    <span class="comment">// false positive rate</span></span><br><span class="line">    <span class="keyword">pub</span> false_positive_rate: <span class="type">f64</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>名称 name 用于标识布隆过滤器，长度最大为 32 字节</li>
+<li><code>bit_array</code> 是一个布尔类型的数组，用于存储布隆过滤器的位图，因为 Solana Account 在初始化时需要指定固定的长度，所以我们定义了一个最大长度 <code>MAX_FILTER_SIZE</code> 来作为 bit_array 的最大长度</li>
+<li><code>m</code> 是位图的大小，是 bit_array 的实际长度</li>
+<li><code>k</code> 是哈希函数的数量</li>
+<li><code>n</code> 是布隆过滤器中存储的元素数量</li>
+<li><code>false_positive_rate</code> 是误报率，范围为 0 到 1</li>
+</ul>
+<p>定义好数据结构后，我们来实现布隆过滤器的初始化指令，示例代码如下：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// instructions/init.rs</span></span><br><span class="line"><span class="keyword">use</span> anchor_lang::prelude::*;</span><br><span class="line"><span class="keyword">use</span> solana_program::log::sol_log_compute_units;</span><br><span class="line"><span class="keyword">use</span> crate::state::&#123;BloomFilter, NewFilter, BLOOM_FILTER_NAME&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[derive(Accounts)]</span></span><br><span class="line"><span class="meta">#[instruction(new_filter: NewFilter)]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">struct</span> <span class="title class_">Init</span>&lt;<span class="symbol">&#x27;info</span>&gt; &#123;</span><br><span class="line">    <span class="meta">#[account(mut)]</span></span><br><span class="line">    <span class="keyword">pub</span> user: Signer&lt;<span class="symbol">&#x27;info</span>&gt;,</span><br><span class="line"></span><br><span class="line">    <span class="meta">#[account(</span></span><br><span class="line"><span class="meta">        init,</span></span><br><span class="line"><span class="meta">        payer = user,</span></span><br><span class="line"><span class="meta">        space = 8 + BloomFilter::INIT_SPACE,</span></span><br><span class="line"><span class="meta">        seeds = [</span></span><br><span class="line"><span class="meta">            BLOOM_FILTER_NAME.as_bytes(),</span></span><br><span class="line"><span class="meta">            user.key().as_ref(),</span></span><br><span class="line"><span class="meta">            new_filter.name.as_bytes()</span></span><br><span class="line"><span class="meta">        ]</span>,</span><br><span class="line">        bump</span><br><span class="line">    )]</span><br><span class="line">    <span class="keyword">pub</span> filter: <span class="type">Box</span>&lt;Account&lt;<span class="symbol">&#x27;info</span>, BloomFilter&gt;&gt;,</span><br><span class="line"></span><br><span class="line">    <span class="keyword">pub</span> system_program: Program&lt;<span class="symbol">&#x27;info</span>, System&gt;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">init</span>(ctx: Context&lt;Init&gt;, new_filter: NewFilter) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;()&gt; &#123;</span><br><span class="line">    <span class="comment">// validate the filter parameters</span></span><br><span class="line">    new_filter.<span class="title function_ invoke__">validate</span>()?;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// initialize the bloom filter</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">filter</span> = &amp;<span class="keyword">mut</span> ctx.accounts.filter;</span><br><span class="line">    filter.<span class="title function_ invoke__">init</span>(new_filter)?;</span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>定义了一个 <code>Init</code> 上下文结构，在 Anchor 框架中，每个指令都需要有一个关联的 Context 结构</li>
+<li>在这个结构中，我们用到了指令的参数 <code>new_filter</code>，可以看到在 <code>init</code> 方法中也有同样的参数。<code>#[instruction(...)]</code> 属性用于声明指令的参数，这些参数会被传递到指令处理函数中作为额外的参数，参数可以在账户验证逻辑中使用</li>
+<li><code>Init</code> 结构中包含了用户签名、布隆过滤器账号、系统程序等信息，其中 <code>filter</code> 是 通过<a target="_blank" rel="noopener" href="https://solana.com/docs/core/pda">程序派生地址（PDA）</a> 创建的账号</li>
+<li>这个 PDA 账号使用了 <code>BLOOM_FILTER_NAME</code>、用户地址和新布隆过滤器的名称作为种子，通过 <code>bump</code> 参数来生成地址</li>
+<li><code>filter</code> 账号的数据结构实际上就是我们之前定义的 <code>BloomFilter</code></li>
+<li><code>init</code> 函数用于初始化布隆过滤器，首先使用参数 <code>new_filter</code> 来验证新布隆过滤器的参数，然后通过上下文对象 <code>ctx</code> 获取 <code>filter</code> 账号，最后调用 <code>filter</code> 的 <code>init</code> 方法来初始化布隆过滤器</li>
+</ul>
+<p>我们再来看初始化指令中用到的一些参数和方法：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// state.rs</span></span><br><span class="line"><span class="meta">#[derive(AnchorSerialize, AnchorDeserialize)]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">struct</span> <span class="title class_">NewFilter</span> &#123;</span><br><span class="line">    <span class="keyword">pub</span> name: <span class="type">String</span>,</span><br><span class="line">    <span class="keyword">pub</span> size: <span class="type">u32</span>,</span><br><span class="line">    <span class="keyword">pub</span> num_hashes: <span class="type">u8</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">NewFilter</span> &#123;</span><br><span class="line">    <span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">validate</span>(&amp;<span class="keyword">self</span>) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;()&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">self</span>.size == <span class="number">0</span> || <span class="keyword">self</span>.num_hashes == <span class="number">0</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> err!(BloomFilterError::InvalidParameters);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">self</span>.size <span class="keyword">as</span> <span class="type">usize</span> &gt; MAX_FILTER_SIZE &#123;</span><br><span class="line">            <span class="keyword">return</span> err!(BloomFilterError::FilterTooLarge);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">BloomFilter</span> &#123;</span><br><span class="line">    <span class="comment">// initialize the bloom filter</span></span><br><span class="line">    <span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">init</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, new_filter: NewFilter) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;()&gt; &#123;</span><br><span class="line">        <span class="keyword">self</span>.bit_array = <span class="built_in">vec!</span>[<span class="literal">false</span>; new_filter.size <span class="keyword">as</span> <span class="type">usize</span>];</span><br><span class="line">        <span class="keyword">self</span>.name = new_filter.name.<span class="title function_ invoke__">clone</span>();</span><br><span class="line">        <span class="keyword">self</span>.m = new_filter.size;</span><br><span class="line">        <span class="keyword">self</span>.k = new_filter.num_hashes;</span><br><span class="line">        <span class="keyword">self</span>.n = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">self</span>.false_positive_rate = <span class="number">0.0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>NewFilter</code> 结构用于表示初始化指令的参数，表示我们初始化一个布隆过滤器需要传入这几个参数：名称、位图大小和哈希函数数量</li>
+<li><code>validate</code> 方法用于验证参数的有效性，包括位图大小和哈希函数数量不能为 0，位图大小不能超过 <code>MAX_FILTER_SIZE</code></li>
+<li><code>init</code> 方法用于初始化布隆过滤器，首先根据参数 <code>new_filter</code> 初始化位图数组 <code>bit_array</code>，然后设置布隆过滤器的名称、位图大小、哈希函数数量，位图数组中的元素数量初始化时为 0，误报率也为 0</li>
+</ul>
+<p>最后在 <code>lib.rs</code> 中导入相关模块和方法，这样我们的初始化指令就完成了：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lib.rs</span></span><br><span class="line"><span class="meta">#[program]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">mod</span> bloom_filter &#123;</span><br><span class="line">    <span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">init</span>(ctx: Context&lt;Init&gt;, new_filter: NewFilter) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;()&gt; &#123;</span><br><span class="line">        instructions::<span class="title function_ invoke__">init</span>(ctx, new_filter)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其他还有<code>add</code>、<code>check</code> 等指令的实现，这里就不再赘述了，完整代码可以参考 <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming/bloom-filter-solana">bloom-filter-solana</a> 仓库。</p>
+<h3 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h3><p>所有的程序指令完成之后，我们需要编写测试来验证我们的布隆过滤器是否能正常工作，所幸 Anchor 提供了一套完善的测试框架，可以方便地编写测试代码。</p>
+<p>在写测试案例之前，我们需要准备好测试的上下文环境，示例代码如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  <span class="title class_">AnchorError</span>,</span><br><span class="line">  <span class="title class_">AnchorProvider</span>,</span><br><span class="line">  <span class="title class_">Program</span>,</span><br><span class="line">  setProvider,</span><br><span class="line">  workspace,</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">&quot;@coral-xyz/anchor&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  <span class="title class_">Connection</span>,</span><br><span class="line">  <span class="title class_">Keypair</span>,</span><br><span class="line">  <span class="variable constant_">LAMPORTS_PER_SOL</span>,</span><br><span class="line">  <span class="title class_">PublicKey</span>,</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">&quot;@solana/web3.js&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; expect &#125; <span class="keyword">from</span> <span class="string">&quot;chai&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; v4 <span class="keyword">as</span> uuidv4 &#125; <span class="keyword">from</span> <span class="string">&quot;uuid&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">BloomFilter</span> &#125; <span class="keyword">from</span> <span class="string">&quot;../target/types/bloom_filter&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">BLOOM_FILTER_NAME</span> = <span class="string">&quot;bloom-filter&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">BLOOM_FILTER_SEED</span> = <span class="title class_">Buffer</span>.<span class="title function_">from</span>(<span class="variable constant_">BLOOM_FILTER_NAME</span>, <span class="string">&quot;utf-8&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;bloom-filter&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// Solana attributes</span></span><br><span class="line">  <span class="keyword">const</span> <span class="attr">provider</span>: <span class="title class_">AnchorProvider</span> = <span class="title class_">AnchorProvider</span>.<span class="title function_">local</span>();</span><br><span class="line">  <span class="title function_">setProvider</span>(provider);</span><br><span class="line">  <span class="keyword">const</span> <span class="attr">connection</span>: <span class="title class_">Connection</span> = provider.<span class="property">connection</span>;</span><br><span class="line">  <span class="keyword">const</span> program = workspace.<span class="property">BloomFilter</span> <span class="keyword">as</span> <span class="title class_">Program</span>&lt;<span class="title class_">BloomFilter</span>&gt;;</span><br><span class="line">  <span class="keyword">let</span> <span class="attr">user</span>: <span class="title class_">Keypair</span>;</span><br><span class="line">  <span class="keyword">let</span> <span class="attr">filterAddress</span>: <span class="title class_">PublicKey</span>;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">before</span>(<span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">    user = <span class="title class_">Keypair</span>.<span class="title function_">generate</span>();</span><br><span class="line">    <span class="keyword">const</span> airdropTxSignature = <span class="keyword">await</span> connection.<span class="title function_">requestAirdrop</span>(</span><br><span class="line">      user.<span class="property">publicKey</span>,</span><br><span class="line">      <span class="variable constant_">LAMPORTS_PER_SOL</span> * <span class="number">500</span></span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">const</span> lastBlockHash = <span class="keyword">await</span> connection.<span class="title function_">getLatestBlockhash</span>();</span><br><span class="line">    <span class="keyword">await</span> connection.<span class="title function_">confirmTransaction</span>(</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">signature</span>: airdropTxSignature,</span><br><span class="line">        <span class="attr">blockhash</span>: lastBlockHash.<span class="property">blockhash</span>,</span><br><span class="line">        <span class="attr">lastValidBlockHeight</span>: lastBlockHash.<span class="property">lastValidBlockHeight</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">&quot;confirmed&quot;</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> [pda] = <span class="title class_">PublicKey</span>.<span class="title function_">findProgramAddressSync</span>(</span><br><span class="line">      [</span><br><span class="line">        <span class="variable constant_">BLOOM_FILTER_SEED</span>,</span><br><span class="line">        user.<span class="property">publicKey</span>.<span class="title function_">toBuffer</span>(),</span><br><span class="line">        <span class="title class_">Buffer</span>.<span class="title function_">from</span>(<span class="variable constant_">BLOOM_FILTER_NAME</span>, <span class="string">&quot;utf-8&quot;</span>),</span><br><span class="line">      ],</span><br><span class="line">      program.<span class="property">programId</span></span><br><span class="line">    );</span><br><span class="line">    filterAddress = pda;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>首先我们初始化 Solana 环境的 Provider、Connection 和 Program</li>
+<li>然后在 <code>before</code> 钩子函数中创建一个用户账号 <code>user</code>，并对这个账号空投了 500 SOL 作为账号的测试费用</li>
+<li>接着通过 PDA 推导的方式得到布隆过滤器账号 <code>filterAddress</code> 的账号地址，后面可以用这个账号来进行验证</li>
+</ul>
+<p>接着我们再来看布隆过滤器初始化指令 <code>init</code> 的测试代码：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tests/bloom_filter.ts</span></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;initialize bloom filter&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&quot;initialize bloom filter with correct name, size and hash functions&quot;</span>, <span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> newFilter = &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="variable constant_">BLOOM_FILTER_NAME</span>,</span><br><span class="line">      <span class="attr">size</span>: <span class="number">1000</span>,</span><br><span class="line">      <span class="attr">numHashes</span>: <span class="number">8</span>,</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> program.<span class="property">methods</span></span><br><span class="line">      .<span class="title function_">init</span>(newFilter)</span><br><span class="line">      .<span class="title function_">accounts</span>(&#123;</span><br><span class="line">        <span class="attr">user</span>: user.<span class="property">publicKey</span>,</span><br><span class="line">      &#125;)</span><br><span class="line">      .<span class="title function_">signers</span>([user])</span><br><span class="line">      .<span class="title function_">rpc</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> filter = <span class="keyword">await</span> program.<span class="property">account</span>.<span class="property">bloomFilter</span>.<span class="title function_">fetch</span>(filterAddress);</span><br><span class="line">    <span class="title function_">expect</span>(filter.<span class="property">name</span>).<span class="property">to</span>.<span class="title function_">equal</span>(<span class="variable constant_">BLOOM_FILTER_NAME</span>);</span><br><span class="line">    <span class="title function_">expect</span>(filter.<span class="property">m</span>).<span class="property">to</span>.<span class="title function_">equal</span>(newFilter.<span class="property">size</span>);</span><br><span class="line">    <span class="title function_">expect</span>(filter.<span class="property">k</span>).<span class="property">to</span>.<span class="title function_">equal</span>(newFilter.<span class="property">numHashes</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>测试程序中首先定义了 <code>init</code> 方法的参数 <code>newFilter</code>，包括布隆过滤器的名称、位图大小和哈希函数数量</li>
+<li>然后调用 <code>program.methods.init</code> 方法来初始化布隆过滤器，传入参数 <code>newFilter</code>，并指定用户账号 <code>user</code> 为签名者</li>
+<li>虽然在 Rust 代码中 <code>init</code> 方法的 Context 结构中有 3 个账号， 但在测试代码中只需要传入一个用户账号 <code>user</code> 即可，<code>program.methods.init</code> 方法会根据 Rust 程序中定义的 seeds 和 bump 自动推导出 filter 账户的地址，并且会自动包含 system_program 作为依赖</li>
+<li>最后通过 <code>program.account.bloomFilter.fetch</code> 方法获取布隆过滤器账号的数据，然后验证布隆过滤器的名称、位图大小和哈希函数数量是否正确</li>
+</ul>
+<p>其他指令的测试代码与 <code>init</code> 指令的测试代码类似，这里就不再赘述了，完整代码可以参考 <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming/bloom-filter-solana">bloom-filter-solana</a> 仓库。</p>
+<h2 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h2><p>现在我们了解了布隆过滤器在 Solana 程序中的基本实现，但是布隆过滤器在 Solana 网络中实际运行的结果可能与我们期望的有所不同。虽然布隆过滤器可以使用少量的资源来存储和检查大量的数据，但是区块链网络的资源是非常受限的，不管是存储空间还是计算单元（CU），只要程序运行时超过任何一方的限制都会导致程序运行失败，接下来我们就来看看布隆过滤器在 Solana 网络中实际运行的情况。</p>
+<blockquote>
+<p>在 Solana 区块链中，CU 是衡量交易执行时消耗的计算资源最小单位。每笔交易在链上运行时，由于执行不同的指令（如账户写入、跨程序调用、系统调用等），会消耗一定数量的 CU。</p>
+</blockquote>
+<h3 id="存储大小"><a href="#存储大小" class="headerlink" title="存储大小"></a>存储大小</h3><p>我们可以通过 <code>init</code> 初始化指令的测试代码来分析布隆过滤器在 Solana 网络中实际的存储大小，我们在之前的测试代码上加上获取布隆过滤器账号存储大小的代码：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tests/bloom_filter.ts</span></span><br><span class="line"><span class="title function_">it</span>(<span class="string">&quot;initialize bloom filter with correct name, size and hash functions&quot;</span>, <span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> newFilter = &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="variable constant_">BLOOM_FILTER_NAME</span>,</span><br><span class="line">      <span class="attr">size</span>: <span class="number">1000</span>,</span><br><span class="line">      <span class="attr">numHashes</span>: <span class="number">8</span>,</span><br><span class="line">    &#125;;</span><br><span class="line">  ......</span><br><span class="line">  <span class="comment">// add the code to get the account size</span></span><br><span class="line">  <span class="keyword">const</span> accountInfo = <span class="keyword">await</span> connection.<span class="title function_">getAccountInfo</span>(filterAddress);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;account size:&quot;</span>, accountInfo?.<span class="property">data</span>.<span class="property">length</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在测试代码中，我们初始化了一个位图数组长度为 1000 且哈希函数数量为 8 的布隆过滤器</li>
+<li>在测试方法最后通过 <code>connection.getAccountInfo</code> 方法获取布隆过滤器账号的存储大小</li>
+</ul>
+<p>然后我们运行这个测试用例，看看实际的存储大小是多少：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ anchor <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line">bloom-filter</span><br><span class="line">    initialize bloom filter</span><br><span class="line">account size: 10065</span><br><span class="line">      ✔ initialize bloom filter with correct name, size and <span class="built_in">hash</span> <span class="built_in">functions</span> (461ms)</span><br></pre></td></tr></table></figure>
+
+<p>从测试结果中我们可以看到，布隆过滤器账号的存储大小为 10065 字节。我们继续实验，将测试代码中的位图数组长度 <code>size</code> 修改为 2000，看看修改后账号的存储大小是否有变化，再次运行完程序后，我们惊奇地发现，布隆过滤器账号的存储大小并没有变化，仍然是 10065 字节。这是什么原因呢？</p>
+<p>我们回过头去看下 <code>init</code> 指令的 Rust 代码，发现布隆过滤器的位图数组的最大长度在最开始时是由常量 <code>MAX_FILTER_SIZE</code> 决定的，因为 Solana 账号在初始化时需要指定固定长度，而 <code>init</code> 指令中传递的位图数组长度是实际使用的长度，这个长度不能超过 <code>MAX_FILTER_SIZE</code> 的值。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// state.rs</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">const</span> MAX_FILTER_SIZE: <span class="type">usize</span> = <span class="number">10000</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">struct</span> <span class="title class_">BloomFilter</span> &#123;</span><br><span class="line">    <span class="meta">#[max_len(MAX_FILTER_SIZE)]</span></span><br><span class="line">    <span class="keyword">pub</span> bit_array: <span class="type">Vec</span>&lt;<span class="type">bool</span>&gt;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">BloomFilter</span> &#123;</span><br><span class="line">    <span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">init</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, new_filter: NewFilter) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;()&gt; &#123;</span><br><span class="line">        <span class="keyword">self</span>.bit_array = <span class="built_in">vec!</span>[<span class="literal">false</span>; new_filter.size <span class="keyword">as</span> <span class="type">usize</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以无论我们在测试代码中初始化时设置的位图数组长度是多少，布隆过滤器的账号的存储大小都不会变化，其大小都是按照位图数组最大长度 10000 来计算的。</p>
+<p>如果我们修改了位图数组最大长度 <code>MAX_FILTER_SIZE</code> 的值，比如设置为 2000（原来的五分之一），看看实际的存储大小是否有变化：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ anchor <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line">bloom-filter</span><br><span class="line">    initialize bloom filter</span><br><span class="line">account size: 2065</span><br><span class="line">      ✔ initialize bloom filter with correct name, size and <span class="built_in">hash</span> <span class="built_in">functions</span> (463ms)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，这一次布隆过滤器账号的存储大小变成了 2065 字节，证明我们的推断是正确的。然而当我们把最大长度修改为 20000 后（原来的两倍），运行程序则会直接报错，这是因为 Anchor 通过 <a target="_blank" rel="noopener" href="https://solana.com/docs/core/cpi">Cross Program Invocation</a>（CPI）作为内部指令来为账户分配存储空间，每个内部指令允许的最大重新分配空间为 10240 字节，也就是 10KB，当我们的账号大小超过这个限制时，就会报错。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">bloom-filter</span><br><span class="line">       initialize bloom filter</span><br><span class="line">         initialize bloom filter with correct name, size and <span class="built_in">hash</span> <span class="built_in">functions</span>:</span><br><span class="line">     Error: Simulation failed.</span><br><span class="line">Message: Transaction simulation failed: Error processing Instruction 0: Failed to reallocate account data.</span><br><span class="line">Logs:</span><br><span class="line">[</span><br><span class="line">  <span class="string">&quot;Program 25vTrRPxj41T6BituXJC3fDh8PxS3Jf14AfzFU44gfCS invoke [1]&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Program log: Instruction: Init&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Program 11111111111111111111111111111111 invoke [2]&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Program 11111111111111111111111111111111 success&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Account data size realloc limited to 10240 in inner instructions&quot;</span>,</span><br><span class="line">  ......</span><br><span class="line">].</span><br></pre></td></tr></table></figure>
+
+<p><strong>小结：</strong> 布隆过滤器的存储大小与账号初始化时设置的位图数组最大长度有关，最大长度越大，账号的存储大小越大，但最大长度建议不要超过 10000，否则会报超过账号重分配大小限制的错误。</p>
+<h3 id="CU-消耗"><a href="#CU-消耗" class="headerlink" title="CU 消耗"></a>CU 消耗</h3><p>现在我们知道布隆过滤器在 Solana 网络的存储大小限制下，可以存储的位图数组是大约 10000 个元素，但在实际运行中，布隆过滤器真的可以存储这么多元素吗？我们可以通过运行测试代码来观察布隆过滤器在实际运行中消耗的 CU 情况。</p>
+<h4 id="init-指令"><a href="#init-指令" class="headerlink" title="init 指令"></a><code>init</code> 指令</h4><p>首先我们看下 <code>init</code> 指令的 CU 消耗情况，<code>init</code> 指令的测试代码如之前所示（<code>it(&quot;initialize bloom filter with correct name, size and hash functions&quot;</code> 方法），我们分别运行当 size &#x3D; 1000、2000、3000 且 k &#x3D; 8 时的测试程序，当执行测试命令 <code>anchor test</code> 后，我们可以在 <code>.anchor/program-logs</code> 目录下找到对应的日志文件，日志文件中会记录每个测试方法的 CU 消耗情况，运行后的测试结果如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tests/bloom_filter.ts</span></span><br><span class="line"><span class="title function_">it</span>(<span class="string">&quot;initialize bloom filter with correct name, size and hash functions&quot;</span>, <span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> newFilter = &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="variable constant_">BLOOM_FILTER_NAME</span>,</span><br><span class="line">    <span class="attr">size</span>: <span class="number">1000</span>, <span class="comment">// modify the size to observe the CU consumption</span></span><br><span class="line">    <span class="attr">numHashes</span>: <span class="number">8</span>,</span><br><span class="line">  &#125;;</span><br><span class="line">  ......</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// test result:</span></span><br><span class="line"><span class="comment">// 1000 size, 8 numHashes: 65965 CU</span></span><br><span class="line"><span class="comment">// 2000 size, 8 numHashes: 122965 CU</span></span><br><span class="line"><span class="comment">// 3000 size, 8 numHashes: 179967 CU</span></span><br></pre></td></tr></table></figure>
+
+<p>从测试结果可以看出，当 size &#x3D; 1000 时，<code>init</code> 指令的 CU 消耗为 65965 CU，而当 size 为 2000 和 3000 时，<code>init</code> 指令的 CU 消耗成倍增长，分别为 122965 CU 和 179967 CU。如果继续将 size 增加到 4000 ，<code>init</code> 指令的 CU 消耗就会超过指令的 CU 限制，导致程序运行失败：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">bloom-filter</span><br><span class="line">       initialize bloom filter</span><br><span class="line">         initialize bloom filter with correct name, size and <span class="built_in">hash</span> <span class="built_in">functions</span>:</span><br><span class="line">     Error: Simulation failed.</span><br><span class="line">Message: Transaction simulation failed: Error processing Instruction 0: Program failed to complete.</span><br><span class="line">Logs:</span><br><span class="line">[</span><br><span class="line">  <span class="string">&quot;Program 25vTrRPxj41T6BituXJC3fDh8PxS3Jf14AfzFU44gfCS invoke [1]&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Program log: Instruction: Init&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Program 11111111111111111111111111111111 invoke [2]&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Program 11111111111111111111111111111111 success&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Program log: init bloom filter&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Program consumption: 191663 units remaining&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Program 25vTrRPxj41T6BituXJC3fDh8PxS3Jf14AfzFU44gfCS consumed 200000 of 200000 compute units&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Program 25vTrRPxj41T6BituXJC3fDh8PxS3Jf14AfzFU44gfCS failed: exceeded CUs meter at BPF instruction&quot;</span></span><br><span class="line">].</span><br></pre></td></tr></table></figure>
+
+<p>我们再来看修改函数数量 <code>k</code> 的 CU 消耗情况，我们用同样的方式进行测试，分别运行当 k &#x3D; 8、16、32 且 size &#x3D; 1000 时的测试程序，运行后的测试结果如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tests/bloom_filter.ts</span></span><br><span class="line"><span class="title function_">it</span>(<span class="string">&quot;initialize bloom filter with correct name, size and hash functions&quot;</span>, <span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> newFilter = &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="variable constant_">BLOOM_FILTER_NAME</span>,</span><br><span class="line">    <span class="attr">size</span>: <span class="number">1000</span>,</span><br><span class="line">    <span class="attr">numHashes</span>: <span class="number">8</span>, <span class="comment">// modify the numHashes to observe the CU consumption</span></span><br><span class="line">  &#125;;</span><br><span class="line">  ......</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// test result:</span></span><br><span class="line"><span class="comment">// 1000 size, 8 numHashes: 65965 CU</span></span><br><span class="line"><span class="comment">// 1000 size, 16 numHashes: 65965 CU</span></span><br><span class="line"><span class="comment">// 1000 size, 32 numHashes: 65965 CU</span></span><br></pre></td></tr></table></figure>
+
+<p>从测试结果可以看出，函数数量的增长对于 CU 的消耗影响不大，<code>init</code> 指令的 CU 消耗基本保持不变。</p>
+<h4 id="add-指令"><a href="#add-指令" class="headerlink" title="add 指令"></a><code>add</code> 指令</h4><p>接下来我们看下 <code>add</code> 指令的 CU 消耗情况，<code>add</code> 指令的测试代码（<code>describe(&quot;add element&quot;)</code> 方法）可在 <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming/bloom-filter-solana">bloom-filter-solana</a> 仓库中找到，我们分别运行当布隆过滤器的 size &#x3D; 1000、2000、3000 且 k &#x3D; 8 时的 <code>add</code> 指令测试程序，运行后的测试结果如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tests/bloom_filter.ts</span></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;add element&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">beforeEach</span>(<span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> newFilter = &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="variable constant_">BLOOM_FILTER_NAME</span>,</span><br><span class="line">      <span class="attr">size</span>: <span class="number">1000</span>, <span class="comment">// modify the size to observe the CU consumption</span></span><br><span class="line">      <span class="attr">numHashes</span>: <span class="number">8</span>,</span><br><span class="line">    &#125;;</span><br><span class="line">    ......</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&quot;successfully add a single element&quot;</span>, <span class="title function_">async</span> () =&gt; &#123;......&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// test result:</span></span><br><span class="line"><span class="comment">// 1000 size, 8 numHashes: 99756 CU</span></span><br><span class="line"><span class="comment">// 2000 size, 8 numHashes: 179865 CU</span></span><br><span class="line"><span class="comment">// 3000 size, 8 numHashes: Reached maximum CU limit</span></span><br></pre></td></tr></table></figure>
+
+<p>从测试结果可以看出，当 size &#x3D; 1000 时，<code>add</code> 指令的 CU 消耗为 99756 CU，当 size 为 2000 时，<code>add</code> 指令的 CU 消耗为 179865 CU，当 size 为 3000 时，<code>add</code> 指令的 CU 消耗超过了单个指令的 CU 限制(200000 CU)，导致程序运行失败。</p>
+<p>我们再来看修改函数数量 <code>k</code> 后 <code>add</code> 指令的 CU 消耗情况，我们用同样的方式进行测试，分别运行当 k &#x3D; 8、16、32 且 size &#x3D; 1000 时的测试程序，运行后的测试结果如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tests/bloom_filter.ts</span></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;add element&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">beforeEach</span>(<span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> newFilter = &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="variable constant_">BLOOM_FILTER_NAME</span>,</span><br><span class="line">      <span class="attr">size</span>: <span class="number">1000</span>,</span><br><span class="line">      <span class="attr">numHashes</span>: <span class="number">8</span>, <span class="comment">// modify the numHashes to observe the CU consumption</span></span><br><span class="line">    &#125;;</span><br><span class="line">    ......</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&quot;successfully add a single element&quot;</span>, <span class="title function_">async</span> () =&gt; &#123;......&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// test result:</span></span><br><span class="line"><span class="comment">// 1000 size, 8 numHashes: 99756 CU</span></span><br><span class="line"><span class="comment">// 1000 size, 16 numHashes: 104770 CU</span></span><br><span class="line"><span class="comment">// 1000 size, 32 numHashes: 114390 CU</span></span><br></pre></td></tr></table></figure>
+
+<p>从测试结果可以看出，函数数量的增长对于 CU 的消耗影响不大，<code>add</code> 指令的 CU 消耗随着函数数量的增加而增加，增幅大约为 10000 CU。</p>
+<h4 id="check-指令"><a href="#check-指令" class="headerlink" title="check 指令"></a><code>check</code> 指令</h4><p>最后我们来看下 <code>check</code> 指令的 CU 消耗情况，<code>check</code> 指令的测试代码（<code>describe(&quot;check element&quot;)</code> 方法）可在 <a target="_blank" rel="noopener" href="https://github.com/zhaozhiming/bloom-filter-solana">bloom-filter-solana</a> 仓库中找到，我们分别运行当布隆过滤器的 size &#x3D; 1000、2000、3000 且 k &#x3D; 8 时的 <code>check</code> 指令测试程序，运行后的测试结果如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tests/bloom_filter.ts</span></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;check element&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">before</span>(<span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">    <span class="comment">// init bloom filter</span></span><br><span class="line">    <span class="keyword">const</span> newFilter = &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="variable constant_">BLOOM_FILTER_NAME</span>,</span><br><span class="line">      <span class="attr">size</span>: <span class="number">1000</span>,</span><br><span class="line">      <span class="attr">numHashes</span>: <span class="number">8</span>,</span><br><span class="line">    &#125;;</span><br><span class="line">    ......</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="title function_">beforeEach</span>(<span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">    <span class="comment">// add element</span></span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&quot;should return true if element is in bloom filter&quot;</span>, <span class="title function_">async</span> () =&gt; &#123;......&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// test result:</span></span><br><span class="line"><span class="comment">// 1000 size, 8 numHashes: 29886 CU</span></span><br><span class="line"><span class="comment">// 2000 size, 8 numHashes: 52886 CU</span></span><br><span class="line"><span class="comment">// 3000 size, 8 numHashes: Reached maximum CU limit</span></span><br></pre></td></tr></table></figure>
+
+<p><code>check</code> 指令首先需要通过 <code>add</code> 指令来添加布隆过滤器的元素，所以它的 CU 消耗受限于 <code>add</code> 指令的 CU 消耗。从测试结果可以看出，<code>check</code> 指令的 CU 消耗从位图数组长度 1000 增加到 2000 时，增加的幅度不足位图数组长度 1000 时的 2 倍。当位图数组长度增加到 3000 时，<code>check</code> 指令由于 <code>add</code> 指令的 CU 消耗超过了单个指令的 CU 限制，导致程序运行失败。</p>
+<p>我们再来看修改函数数量 <code>k</code> 后 <code>check</code> 指令的 CU 消耗情况，我们用同样的方式进行测试，分别运行当 k &#x3D; 8、16、32 且 size &#x3D; 1000 时的测试程序，运行后的测试结果如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tests/bloom_filter.ts</span></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;check element&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">before</span>(<span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">    <span class="comment">// init bloom filter</span></span><br><span class="line">    <span class="keyword">const</span> newFilter = &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="variable constant_">BLOOM_FILTER_NAME</span>,</span><br><span class="line">      <span class="attr">size</span>: <span class="number">1000</span>,</span><br><span class="line">      <span class="attr">numHashes</span>: <span class="number">8</span>,</span><br><span class="line">    &#125;;</span><br><span class="line">    ......</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="title function_">beforeEach</span>(<span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">    <span class="comment">// add element</span></span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&quot;should return true if element is in bloom filter&quot;</span>, <span class="title function_">async</span> () =&gt; &#123;......&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// test result:</span></span><br><span class="line"><span class="comment">// 1000 size, 8 numHashes: 29886 CU</span></span><br><span class="line"><span class="comment">// 1000 size, 16 numHashes: 34774 CU</span></span><br><span class="line"><span class="comment">// 1000 size, 32 numHashes: 44550 CU</span></span><br></pre></td></tr></table></figure>
+
+<p>从测试结果可以看出，函数数量的增长对于 CU 的消耗影响不大，<code>check</code> 指令的 CU 消耗随着函数数量的增加而增加，增幅大约为 5000~10000 CU。</p>
+<h3 id="最终结论"><a href="#最终结论" class="headerlink" title="最终结论"></a>最终结论</h3><p>通过以上测试，我们可以得到以下结论：</p>
+<ul>
+<li>布隆过滤器在 Solana 网络中，位图数组长度 <code>m</code> 最大可以设置为 2000 多一些，且不能超过 3000</li>
+<li>函数数量 <code>k</code> 可以设置为 1~32+ ，但不是越大越好，<code>k</code> 超过一定数量之后误判率反而会升高</li>
+</ul>
+<p>如果我们想控制布隆过滤器的误报率 <code>p</code> 在 <code>0.01</code> 以下，那么根据公式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">n = ceil(m / (-k / log(1 - exp(log(p) / k))))</span><br></pre></td></tr></table></figure>
+
+<p>我们可以算出存储元素的数量 <code>n</code> 的值：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">p = 0.01 (1 in 100)</span><br><span class="line">m = 2000 (250B)</span><br><span class="line">k = 8</span><br><span class="line">n = 207</span><br></pre></td></tr></table></figure>
+
+<p>也就是说，当布隆过滤器的位图数组长度为 2000 且函数数量为 8 时，最多可以存储 207 个元素，如果超过这个数量，布隆过滤器的误报率会超过 0.01，我们可以写一个性能测试来验证这个结论：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;performance&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">before</span>(<span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">      <span class="comment">// init bloom filter</span></span><br><span class="line">      <span class="keyword">const</span> newFilter = &#123;</span><br><span class="line">        <span class="attr">name</span>: <span class="variable constant_">BLOOM_FILTER_NAME</span>,</span><br><span class="line">        <span class="attr">size</span>: <span class="number">2000</span>,</span><br><span class="line">        <span class="attr">numHashes</span>: <span class="number">8</span>,</span><br><span class="line">      &#125;;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">await</span> program.<span class="property">methods</span></span><br><span class="line">        .<span class="title function_">init</span>(newFilter)</span><br><span class="line">        .<span class="title function_">accounts</span>(&#123;</span><br><span class="line">          <span class="attr">user</span>: user.<span class="property">publicKey</span>,</span><br><span class="line">        &#125;)</span><br><span class="line">        .<span class="title function_">signers</span>([user])</span><br><span class="line">        .<span class="title function_">rpc</span>();</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="title function_">it</span>(<span class="string">&quot;performance test&quot;</span>, <span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">      <span class="comment">// Add elements with a delay between each call</span></span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt;= <span class="number">207</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">await</span> program.<span class="property">methods</span></span><br><span class="line">          .<span class="title function_">add</span>(<span class="title class_">Buffer</span>.<span class="title function_">from</span>(<span class="string">`element-<span class="subst">$&#123;i&#125;</span>`</span>, <span class="string">&quot;utf-8&quot;</span>))</span><br><span class="line">          .<span class="title function_">accounts</span>(&#123;</span><br><span class="line">            <span class="attr">user</span>: user.<span class="property">publicKey</span>,</span><br><span class="line">            <span class="attr">filter</span>: filterAddress,</span><br><span class="line">          &#125;)</span><br><span class="line">          .<span class="title function_">signers</span>([user])</span><br><span class="line">          .<span class="title function_">rpc</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Wait for 10ms before the next call</span></span><br><span class="line">        <span class="keyword">await</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> <span class="built_in">setTimeout</span>(resolve, <span class="number">10</span>));</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> filter = <span class="keyword">await</span> program.<span class="property">account</span>.<span class="property">bloomFilter</span>.<span class="title function_">fetch</span>(filterAddress);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;filter name&quot;</span>, filter.<span class="property">name</span>);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;filter m&quot;</span>, filter.<span class="property">m</span>);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;filter k&quot;</span>, filter.<span class="property">k</span>);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;filter n&quot;</span>, filter.<span class="property">n</span>);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;filter falsePositiveRate&quot;</span>, filter.<span class="property">falsePositiveRate</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"># test <span class="attr">result</span>:</span><br><span class="line"></span><br><span class="line">  bloom-filter</span><br><span class="line">    performance</span><br><span class="line">filter name bloom-filter</span><br><span class="line">filter m <span class="number">2000</span></span><br><span class="line">filter k <span class="number">8</span></span><br><span class="line">filter n <span class="number">207</span></span><br><span class="line">filter falsePositiveRate <span class="number">0.010105245890285032</span></span><br><span class="line">      ✔ check account size when add <span class="title function_">elements</span> (100192ms)</span><br></pre></td></tr></table></figure>
+
+<p>测试中我们通过调用 <code>add</code> 方法添加了 207 个元素， 然后分别打印出布隆过滤器的名称、位图数组长度、函数数量、存储元素的数量、误报率，通过测试结果可以看出，布隆过滤器的误报率大约为 0.01，与理论计算结果一致。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Solana 上的布隆过滤器虽然有诸多限制，但通过合理的设计和优化，它仍然能在许多场景中发挥重要作用。以下是几个典型的应用场景：</p>
+<ul>
+<li>特定场景下的应用价值：即使只能存储 200 多个元素，在某些特定用例中仍然非常有用。例如验证小型白名单、简单权限控制或轻量级重复数据检测等场景。</li>
+<li>链下与链上结合使用：可以将布隆过滤器作为链上和链下系统的桥梁。大量数据存储在链下，只在链上保存验证所需的布隆过滤器。</li>
+<li>分片使用：可以创建多个布隆过滤器账号，每个处理不同的数据子集，类似于分布式哈希表的思想。</li>
+<li>作为初筛工具：布隆过滤器可以作为第一道防线，快速排除明确不在集合中的元素，减少需要进行更详细验证的数据量。</li>
+</ul>
+<p>布隆过滤器在 Solana 上的应用需要针对其限制进行优化设计。它不适合存储大量数据，但对于特定用例和优化场景下仍有其独特价值，关键是理解你的应用需求，评估布隆过滤器是否真的是最佳选择。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://hur.st/bloomfilter">Bloom Filter Calculator</a></li>
+</ul>
+<p>关注我，一起学习各种最新的 AI 和编程开发技术，欢迎交流，如果你有什么想问想说的，欢迎在评论区留言。</p>
+</div>
+
+</article>
+<section id="appreciates">
+  <center>
+	<h2>赞赏</h2>
+    <div class="post-footer">
+      <div>
+	    <h4>如果文章对您有所帮助，可以捐赠我喝杯咖啡😌，捐赠方式：</h4>
+        <div class="digital-wallet">
+          <h6>BTC 地址：3LYgSyf7ddMALwGWPQr3PY4wzjsTDdg1oV</h6>
+          <h6>ETH 地址：0x0C9b27c89A61aadb0aEC24CA8949910Cbf77Aa73</h6>
+        </div>
+        <div class="wechat_appreciates">
+          <img src="/images/wechat_appreciates.png" alt="qrcode" width="250" >
+        </div>
+      </div>
+      <div>
+	    <h4>文章已同步更新公众号，欢迎关注</h4>
+        <div class="wechat_appreciates">
+          <img src="/images/wxgzh_qrcode.jpg" alt="qrcode" width="250" >
+        </div>
+      </div>
+    </div>
+  </center>
+</section>
+
+
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = 'https://zhaozhiming.github.io/2025/05/14/solana-bloom-filter/';
+            this.page.identifier = 'https://zhaozhiming.github.io/2025/05/14/solana-bloom-filter/';
+        };
+
+        (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//zhaozhiming.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+</div>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2025
+
+    赵芝明
+. Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |
+    Theme is <a target="_blank" rel="noopener" href="https://github.com/wd/hexo-fabric">hexo-fabric</a>, fork from <a target="_blank" rel="noopener" href="http://github.com/panks/fabric">fabric</a> by <a target="_blank" rel="noopener" href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script>
+ <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5608723650603289" crossorigin="anonymous"></script>
+</body>
+</html>

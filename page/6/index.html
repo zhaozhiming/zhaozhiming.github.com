@@ -134,23 +134,23 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
+		  <a href="/2025/05/14/solana-bloom-filter/">在 Solana 上实现布隆过滤器</a>
+	    </li>
+	  
+	    <li class="post">
+		  <a href="/2025/02/22/solana-storage-limitation/">深入解密 Solana 开发中的资源限制——存储篇</a>
+	    </li>
+	  
+	    <li class="post">
+		  <a href="/2024/12/07/solana-resources-limitation-research/">深入解密 Solana 开发中的资源限制——CU 篇</a>
+	    </li>
+	  
+	    <li class="post">
 		  <a href="/2024/11/04/curve-pool-base-invest-and-data-computer/">深入浅出 Curve 流动性池子：投资指南与数据分析</a>
 	    </li>
 	  
 	    <li class="post">
 		  <a href="/2024/10/18/maybe-you-donot-known-5-way-to-mock-golang-programm/">Go 开发中你应该了解的 5 种 Mock 方法</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/10/04/use-github-action-to-deploy-aws-ecs/">部署 AWS ECS 超详细攻略</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/10/03/use-aws-role-to-isolate-resources-and-privilege/">使用 AWS 角色隔离资源和权限</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/09/21/Cursor-helped-me-get-up-to-speed-with-Go-in-just-one-day/">Cursor 让我一天上手 Go 语言</a>
 	    </li>
 	  
     </ul>
@@ -170,7 +170,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">28</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025 年</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -179,6 +179,87 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2023/08/15/use-docker-image-within-nvidia-host/">使用 Docker 部署 AI 环境</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2023-08-15T06:18:27.000Z" itemprop="datePublished">8月 15, 2023</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/ubuntu/">ubuntu</a> <a href="/tags/docker/">docker</a> <a href="/tags/cuda/">cuda</a> <a href="/tags/pytorch/">pytorch</a> <a href="/tags/nvidia/">nvidia</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2023/08/nvidia-docker.png" class="" width="400" height="300">
+
+<p>之前给大家介绍了主机安装方式——<a href="https://zhaozhiming.github.io/2023/08/12/ubuntu22-install-cuda-and-nvidia-driver-and-pytorch/">如何在 Ubuntu 操作系统下安装部署 AI 环境</a>，但随着容器化技术的普及，越来越多的程序以容器的形式进行部署，通过容器的方式不仅可以简化部署流程，还可以随时切换不同的环境。实际上很多云服务厂商也是这么干的，用一台带有 NVIDIA 显卡的机器来部署多个容器，然后通过容器的方式来提供给用户使用，这样就可以充分利用显卡资源了。今天给大家介绍一下如何使用 Docker 的方式来部署我们之前部署过的 AI 环境。</p>
+        
+          <p class="more-link">
+            <a href="2023/08/15/use-docker-image-within-nvidia-host/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2023/08/12/ubuntu22-install-cuda-and-nvidia-driver-and-pytorch/">如何在 Ubuntu 22 上安装 CUDA、NVIDIA 显卡驱动以及 PyTorch</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2023-08-12T03:07:05.000Z" itemprop="datePublished">8月 12, 2023</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/cuda/">cuda</a> <a href="/tags/nvidia-driver/">nvidia driver</a> <a href="/tags/pytorch/">pytorch</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2023/08/ubuntu-cuda.png" class="" width="400" height="300">
+
+<p>虽然现在有很多云厂商都提供了 GPU 服务器，但由于 GPU 的资源稀缺，云 GPU 服务器要么就是价格居高不下，要么就是数量不足无法购买。因此能拥有一块属于自己的 NVIDIA 显卡来跑 AI 程序是最好不过了，虽然现在高端的 NVIDIA 显卡又贵又不好买，但是稍微低端的显卡还是好入手的，随着大模型的配置要求越来越低，在低端显卡上跑一些大模型也不是什么问题。不过即使你拥有了一块自己的 NVIDIA 显卡，但环境配置也是一个麻烦的问题，今天就来分享一下如何在 Ubuntu 22 上安装 CUDA、NVIDIA 显卡驱动以及 PyTorch。</p>
+        
+          <p class="more-link">
+            <a href="2023/08/12/ubuntu22-install-cuda-and-nvidia-driver-and-pytorch/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2023/08/10/azure-openai-api-introduct/">Azure OpenAI 服务开通及使用</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2023-08-10T01:40:20.000Z" itemprop="datePublished">8月 10, 2023</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/azure/">azure</a> <a href="/tags/openai/">openai</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2023/08/azure-openai.jpg" class="" width="400" height="300">
+
+<p>ChatGPT 面世以来持续引领 AI 技术的火爆，具有专业技能的开发人员也热衷于使用 OpenAI 的 API 来构建自己的应用程序，但由于 OpenAI 并不对国内开放，因此调用 OpenAI API 还比较麻烦。幸运的是，微软的 Azure 推出 OpenAI 服务，他们的服务跟 OpenAI API 是一样的，并且可以在国内进行访问，费用收取也相差不大。今天我们就来看看如何开通 Azure OpenAI 服务，并介绍其使用方法。</p>
+        
+          <p class="more-link">
+            <a href="2023/08/10/azure-openai-api-introduct/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -369,87 +450,6 @@
 
 </article>
 
-      <article class="post">
-	<h2 class="title">
-		<a href="/2023/07/05/code-llm-and-ai/">大语言模型代码生成工具</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2023-07-05T02:35:22.000Z" itemprop="datePublished">7月 5, 2023</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/code-ai/">code ai</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2023/07/code-ai.jpg" class="" width="400" height="300">
-
-<p>随着大语言模型技术的发展，人工智能的能力应用到了各个领域，包括与开发人员息息相关的代码生成领域，这个领域并不新鲜，但借助大型语言模型的力量，它被赋予了全新的生命力和可能性。在数字化的世界中，代码是一种语言，是人类与机器沟通的桥梁。借助大型语言模型的力量，我们可以让这座桥梁更加强大，更加智能。今天我们将深入探讨大型语言模型在代码生成方面的应用。</p>
-        
-          <p class="more-link">
-            <a href="2023/07/05/code-llm-and-ai/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2023/07/03/chatgpt-plus-and-api-payment/">ChatGPT Plus 开通及 ChatGPT API 绑定付款方式</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2023-07-03T08:01:55.000Z" itemprop="datePublished">7月 3, 2023</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/chatgpt-plus/">chatgpt plus</a> <a href="/tags/openai-api-payment/">openai api payment</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2023/07/ChatGPT-Plus.png" class="" width="400" height="300">
-
-<p>ChatGPT 面世也有半年多时间了，因为对国内用户不开放，导致了国内用户要注册和使用 ChatGPT 都比较麻烦。<br>ChatGPT 的注册和使用网上有大量文章，这里就不再赘述了，今天主要介绍一下 ChatGPT 的使用方式以及计费模式的区别，并教大家如何开通 Plus，以及如何设置 ChatGPT API 的付款方式。</p>
-        
-          <p class="more-link">
-            <a href="2023/07/03/chatgpt-plus-and-api-payment/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2023/05/01/chatgpt-prompt-learn-two/">学习 ChatGPT 的提示工程（下）</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2023-05-01T07:05:42.000Z" itemprop="datePublished">5月 1, 2023</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/chatgpt/">chatgpt</a> <a href="/tags/prompt/">prompt</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2023/05/prompt-lesson.png" class="" width="400" height="300">
-
-<p>上次我们讲解了 <a target="_blank" rel="noopener" href="https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/">ChatGPT 提示工程课程</a> 的一部分内容，今天讲继续介绍课程的剩下内容，其实最重要的内容在上次已经介绍了，剩下的内容会比较简单。</p>
-        
-          <p class="more-link">
-            <a href="2023/05/01/chatgpt-prompt-learn-two/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
 
     <nav id="pagenavi">
     
@@ -468,7 +468,7 @@
     </div>
     <footer id="footer">
     <div style="display:inline">
-    Copyright &copy; 2024
+    Copyright &copy; 2025
 
     赵芝明
 . Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> |

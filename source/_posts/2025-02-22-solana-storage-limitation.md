@@ -95,7 +95,7 @@ pub struct MyStorage {
 ```bash
 solana rent 100
 
-# 输出结果
+# output result
 Rent-exempt minimum: 0.00158688 SOL
 ```
 
@@ -104,7 +104,7 @@ Rent-exempt minimum: 0.00158688 SOL
 ```bash
 solana rent 10485760
 
-# 输出结果
+# output result
 Rent-exempt minimum: 72.98178048 SOL
 ```
 
@@ -115,7 +115,7 @@ Rent-exempt minimum: 72.98178048 SOL
 ```bash
 solana rent 0
 
-# 输出结果
+# output result
 Rent-exempt minimum: 0.00089088 SOL
 ```
 

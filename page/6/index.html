@@ -134,6 +134,10 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
+		  <a href="/2025/05/23/deep-dive-into-solana-transaction/">深入解析 Solana 交易</a>
+	    </li>
+	  
+	    <li class="post">
 		  <a href="/2025/05/14/solana-bloom-filter/">在 Solana 上实现布隆过滤器</a>
 	    </li>
 	  
@@ -147,10 +151,6 @@
 	  
 	    <li class="post">
 		  <a href="/2024/11/04/curve-pool-base-invest-and-data-computer/">深入浅出 Curve 流动性池子：投资指南与数据分析</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/10/18/maybe-you-donot-known-5-way-to-mock-golang-programm/">Go 开发中你应该了解的 5 种 Mock 方法</a>
 	    </li>
 	  
     </ul>
@@ -170,7 +170,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025 年</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025 年</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -179,6 +179,33 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2023/08/17/deploy-langchain-chatchat/">Langchain ChatChat 本地知识库问答系统部署</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2023-08-17T03:10:02.000Z" itemprop="datePublished">8月 17, 2023</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/langchain/">langchain</a> <a href="/tags/chatglm/">chatglm</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2023/08/langchain-chatchat.jpeg" class="" width="400" height="300">
+
+<p>之前写了一篇文章介绍<a href="https://zhaozhiming.github.io/2023/07/12/deploy-langchain-chatglm-on-cloud%20gpu/">Langchain-ChatGLM 项目的部署</a>，最近该项目更新了<code>0.2</code>新版本，这个版本与之前的版本差别很大，底层的架构发生了很大的变化。该项目最早是基于 ChatGLM 这个 LLM（大语言模型）来搭建的，但后来集成的 LLM 越来越多, (我估计）项目团队也借此机会将项目名称改成了<code>Langchain-Chatchat</code>。版本更新之后，项目的部署方式也发生了变化，之前的部署方式已经不适用了，这里我将介绍一下新版本的部署方式。</p>
+        
+          <p class="more-link">
+            <a href="2023/08/17/deploy-langchain-chatchat/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -416,33 +443,6 @@
         
           <p class="more-link">
             <a href="2023/07/10/vercel-ai-sdk-screwed-guide/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2023/07/06/prompt-use-case/">Prompt 提示词在开发中的使用</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2023-07-06T05:39:56.000Z" itemprop="datePublished">7月 6, 2023</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/chatgpt/">chatgpt</a> <a href="/tags/prompt/">prompt</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2023/07/prompt.png" class="" width="400" height="300">
-
-<p>OpenAI 的 ChatGPT 是一种领先的人工智能模型，它以其出色的语言理解和生成能力，为我们提供了一种全新的与机器交流的方式。但不是每个问题都可以得到令人满意的答案，如果想得到你所要的回答就要构建好你的提示词 Prompt。本文将探讨 Prompt 提示词在开发中的应用和优势，以及如何利用它来解决常见问题和加速开发过程。无论是初学者还是经验丰富的开发人员，Prompt 提示词都能为我们带来更高效的开发体验。</p>
-        
-          <p class="more-link">
-            <a href="2023/07/06/prompt-use-case/#more">Read More</a>
           </p>
         
       

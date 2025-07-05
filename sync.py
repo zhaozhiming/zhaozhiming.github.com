@@ -274,8 +274,100 @@ def format_fix(content):
     content = content.replace("line-height: 125%;", gen_css("code"))
     content = content.replace(
         """<pre style="line-height: 125%">""",
-        """<pre style="line-height: 125%; color: white; font-size: 11px;">""",
+        """<pre style="line-height: 125%; color: white; font-size: 11px; white-space: pre-wrap;">""",
     )
+    # Fix code blocks to preserve line breaks for WeChat
+    content = content.replace(
+        '<div class="codehilite"',
+        '<div class="codehilite" style="white-space: pre-wrap;"'
+    )
+    return content
+
+
+def wechat_cleanup(content):
+    """
+    Clean up content specifically for WeChat public platform compatibility
+    """
+    import re
+    
+    # Remove empty list items that might cause extra bullet points
+    content = re.sub(r'<li>\s*<section>\s*<span[^>]*><br[^>]*></span>\s*</section>\s*</li>', '', content)
+    content = re.sub(r'<li>\s*<section>\s*</section>\s*</li>', '', content)
+    content = re.sub(r'<li>\s*</li>', '', content)
+    
+    # Clean up WeChat editor artifacts
+    content = re.sub(r'<br class="ProseMirror-trailingBreak">', '', content)
+    content = re.sub(r'<span leaf="">', '<span>', content)
+    content = re.sub(r'<span leaf="([^"]*)">', r'<span>\1', content)
+    
+    # Remove any remaining &nbsp; entities that might cause display issues
+    content = content.replace('&amp;nbsp', ' ')
+    
+    # Clean up extra whitespace in lists
+    content = re.sub(r'<ul[^>]*>\s*<li>', '<ul><li>', content)
+    content = re.sub(r'</li>\s*<li>', '</li><li>', content)
+    content = re.sub(r'</li>\s*</ul>', '</li></ul>', content)
+    
+    # Fix code blocks - handle the special case of syntax-highlighted spaces
+    def replace_code_content(match):
+        code_content = match.group(1)
+        # Replace newlines with <br> tags to preserve line breaks in WeChat
+        code_content = code_content.replace('\n', '<br>')
+        
+        # Handle syntax-highlighted spaces that appear as <span style="color: #6e7681"> </span>
+        # Convert these to &nbsp; to prevent WeChat from removing them
+        code_content = re.sub(r'<span style="color: #6e7681">\s*</span>', '&nbsp;', code_content)
+        
+        # WeChat merges adjacent text nodes, so we need to prevent that
+        # by ensuring every piece of text is wrapped in a span
+        import re as inner_re
+        
+        # Strategy: Process the content character by character and build proper structure
+        result = []
+        i = 0
+        while i < len(code_content):
+            char = code_content[i]
+            
+            if char == '<':
+                # Find the end of the HTML tag
+                tag_end = code_content.find('>', i)
+                if tag_end != -1:
+                    tag = code_content[i:tag_end + 1]
+                    result.append(tag)
+                    i = tag_end + 1
+                else:
+                    # Malformed tag, treat as text
+                    result.append('&lt;')
+                    i += 1
+            elif char == ' ':
+                # Space should be preserved as &nbsp;
+                result.append('&nbsp;')
+                i += 1
+            elif char == '&':
+                # Check if this is already an entity
+                entity_match = inner_re.match(r'&[a-zA-Z0-9#]+;', code_content[i:])
+                if entity_match:
+                    result.append(entity_match.group(0))
+                    i += len(entity_match.group(0))
+                else:
+                    result.append('&amp;')
+                    i += 1
+            else:
+                # Regular character - collect consecutive non-space, non-tag characters
+                text_start = i
+                while i < len(code_content) and code_content[i] not in ' <&':
+                    i += 1
+                text = code_content[text_start:i]
+                if text:
+                    result.append(text)
+        
+        code_content = ''.join(result)
+        
+        return '<code>' + code_content + '</code>'
+    
+    # Apply to all code blocks
+    content = re.sub(r'<code>(.*?)</code>', replace_code_content, content, flags=re.DOTALL)
+    
     return content
 
 
@@ -286,6 +378,7 @@ def css_beautify(content):
     content = replace_code(content)
     content = format_fix(content)
     content = fix_image(content)
+    content = wechat_cleanup(content)  # Apply WeChat-specific cleanup
     content = gen_css("header") + content + "</section>"
     return content
 

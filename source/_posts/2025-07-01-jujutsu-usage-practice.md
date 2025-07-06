@@ -2,14 +2,11 @@
 layout: post
 title: 新一代的版本管理工具 Jujutsu 使用实践
 date: 2025-07-01 14:51:12
-description: 新一代的版本管理工具 jujutsu 使用实践
+description: 通过和 Git 的对比来介绍 Jujutsu 的基本操作和高级特性
 keywords: jujutsu, version control, git, mercurial, svn
 comments: true
 categories: code
-tags:
-  - jujutsu
-  - git
-  - version-control
+tags: [jujutsu, git, version-control]
 ---
 
 {% img /images/post/2025/07/jj-intro.jpg 400 300 %}

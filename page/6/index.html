@@ -134,6 +134,10 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
+		  <a href="/2025/07/01/jujutsu-usage-practice/">新一代的版本管理工具 Jujutsu 使用实践</a>
+	    </li>
+	  
+	    <li class="post">
 		  <a href="/2025/05/23/deep-dive-into-solana-transaction/">深入解析 Solana 交易</a>
 	    </li>
 	  
@@ -147,10 +151,6 @@
 	  
 	    <li class="post">
 		  <a href="/2024/12/07/solana-resources-limitation-research/">深入解密 Solana 开发中的资源限制——CU 篇</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/11/04/curve-pool-base-invest-and-data-computer/">深入浅出 Curve 流动性池子：投资指南与数据分析</a>
 	    </li>
 	  
     </ul>
@@ -170,7 +170,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025 年</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025 年</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -179,6 +179,33 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2023/08/22/use-fastchat-deploy-llm/">使用 FastChat 部署 LLM</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2023-08-22T05:53:28.000Z" itemprop="datePublished">8月 22, 2023</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/chatglm/">chatglm</a> <a href="/tags/fastchat/">fastchat</a> <a href="/tags/llama2/">llama2</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2023/08/fastchat.png" class="" width="400" height="300">
+
+<p>之前介绍了<a href="https://zhaozhiming.github.io/2023/08/17/deploy-langchain-chatchat/">Langchain-Chatchat 项目的部署</a>，该项目底层改用了 FastChat 来提供 LLM(大语言模型)的 API 服务，下来出于好奇又研究了一下 FastChat，发现它的功能很强大，可以用来部署市面上大部分的 LLM 模型，可以将 LLM 部署为带有标准应用程序编程接口（API）的软件服务，它还提供了 WebUI 界面方便用户通过浏览器来使用 LLM。今天我们就来介绍一下如何使用 FastChat 来部署 ChatGLM2-6B 和 Llama2 模型。</p>
+        
+          <p class="more-link">
+            <a href="2023/08/22/use-fastchat-deploy-llm/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -416,33 +443,6 @@
         
           <p class="more-link">
             <a href="2023/07/12/deploy-langchain-chatglm-on-cloud gpu/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2023/07/10/vercel-ai-sdk-screwed-guide/">Vercel AI SDK 避坑指南</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2023-07-10T13:49:30.000Z" itemprop="datePublished">7月 10, 2023</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/vercel/">vercel</a> <a href="/tags/ai/">ai</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2023/07/vercel.jpg" class="" width="400" height="300">
-
-<p>随着 ChatGPT 的出现，很多开发人员都想开发一款 AI 聊天机器人，Vercel 最近开发了一款 AI SDK，可以帮助开发人员快速开发聊天机器人，包括调用 OpenAI 的 API，对话记录传递，流式输出等功能，非常方便。Vercel 的开发团队也是很多著名工具的开发者，包括前端开发框架 Next.js 、前端部署工具 Vercel 、React 数据查询工具 SWR 等，这些工具都是非常优秀的，所以这款 AI SDK 也是非常值得期待的。然而，每个工具都有其特性和潜在的坑点，Vercel AI SDK 也不例外。本文将为你提供一份详尽的 Vercel AI SDK 避坑指南，帮助你更好地理解和使用这款工具，从而提升你的开发效率和应用质量。</p>
-        
-          <p class="more-link">
-            <a href="2023/07/10/vercel-ai-sdk-screwed-guide/#more">Read More</a>
           </p>
         
       

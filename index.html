@@ -134,6 +134,10 @@
     <ul class="recent-posts">
 	  
 	    <li class="post">
+		  <a href="/2025/07/01/jujutsu-usage-practice/">新一代的版本管理工具 Jujutsu 使用实践</a>
+	    </li>
+	  
+	    <li class="post">
 		  <a href="/2025/05/23/deep-dive-into-solana-transaction/">深入解析 Solana 交易</a>
 	    </li>
 	  
@@ -147,10 +151,6 @@
 	  
 	    <li class="post">
 		  <a href="/2024/12/07/solana-resources-limitation-research/">深入解密 Solana 开发中的资源限制——CU 篇</a>
-	    </li>
-	  
-	    <li class="post">
-		  <a href="/2024/11/04/curve-pool-base-invest-and-data-computer/">深入浅出 Curve 流动性池子：投资指南与数据分析</a>
 	    </li>
 	  
     </ul>
@@ -170,7 +170,7 @@
   <div class="widget-wrap">
     <h2 class="widget-title">历年文章</h2>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025 年</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025 年</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/">2024 年</a><span class="archive-list-count">29</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019 年</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">2016 年</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/">2015 年</a><span class="archive-list-count">21</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/">2014 年</a><span class="archive-list-count">36</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/">2013 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/">2012 年</a><span class="archive-list-count">33</span></li></ul>
     </div>
   </div>
 
@@ -179,6 +179,33 @@
   </div>
   <div class="left-content">
     <div class="left-post">
+
+      <article class="post">
+	<h2 class="title">
+		<a href="/2025/07/01/jujutsu-usage-practice/">新一代的版本管理工具 Jujutsu 使用实践</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: <time datetime="2025-07-01T06:51:12.000Z" itemprop="datePublished">7月 1, 2025</time>
+</div>
+      <div class="tags">Tags: 
+
+<a href="/tags/git/">git</a> <a href="/tags/jujutsu/">jujutsu</a> <a href="/tags/version-control/">version-control</a>
+</div>
+    </div>
+      
+        <img src="/images/post/2025/07/jj-intro.jpg" class="" width="400" height="300">
+
+<p>在当今软件开发领域，Git 已成为事实上的版本控制标准。虽然 Git 功能强大，但在日常使用中，我们常常会遇到一些令人头疼的情况：比如正在专注开发功能 feature 时，突然需要处理紧急 bug，不得不手忙脚乱地执行 <code>git stash</code> 保存工作；合并远端分支大量代码时，在复杂的 <code>git rebase -i</code> 操作中一步走错，整个提交历史变得混乱不堪；或者提交了一个庞大的 PR 后，被要求拆分成多个小 PR 再提交。如果这些痛点让你感同身受，那么 Jujutsu 值得你关注。这个基于 Rust 开发的新一代版本控制工具，正在改变开发者对版本管理的思维方式。本文将深入探讨 Jujutsu 在日常的开发中如何优雅地实现 Git 的操作，以及它如何通过创新的设计理念提升我们的开发效率和体验。</p>
+        
+          <p class="more-link">
+            <a href="2025/07/01/jujutsu-usage-practice/#more">Read More</a>
+          </p>
+        
+      
+	</div>
+
+</article>
 
       <article class="post">
 	<h2 class="title">
@@ -416,33 +443,6 @@
         
           <p class="more-link">
             <a href="2024/09/21/Cursor-helped-me-get-up-to-speed-with-Go-in-just-one-day/#more">Read More</a>
-          </p>
-        
-      
-	</div>
-
-</article>
-
-      <article class="post">
-	<h2 class="title">
-		<a href="/2024/09/15/publish-company-npm-package-guide/">一步一步发布公司的 NPM 包</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: <time datetime="2024-09-15T07:18:54.000Z" itemprop="datePublished">9月 15, 2024</time>
-</div>
-      <div class="tags">Tags: 
-
-<a href="/tags/javascript/">javascript</a> <a href="/tags/npm/">npm</a>
-</div>
-    </div>
-      
-        <img src="/images/post/2024/09/publish-company-npm.jpeg" class="" width="400" height="300">
-
-<p>在项目开发中，有时候需要将自研的 NPM 包会发布到 NPM 的<a target="_blank" rel="noopener" href="https://registry.npmjs.org/">公共注册表</a>让别人进行使用，NPM 的公共注册表是一个全球性的包管理库，任何用户都可以访问和下载你发布的公开包。如果你发布的是个人的 NPM 包，那么直接发布就可以了，但是如果你发布的是公司的 NPM 包，那么就需要通过一些流程和规范，来和公司其他同事进行协同合作。本文将为你介绍如何从零开始一步一步发布公司的 NPM 包，如果你的公司现在或以后也有这种需求，那么请跟我一起来学习吧。</p>
-        
-          <p class="more-link">
-            <a href="2024/09/15/publish-company-npm-package-guide/#more">Read More</a>
           </p>
         
       

@@ -10,3 +10,5 @@ cache.bin
 output/
 
 !/markdown-to-medium-tool/public
+
+evm-to-solana-contract

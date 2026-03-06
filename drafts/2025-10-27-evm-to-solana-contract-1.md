@@ -73,42 +73,56 @@ use anchor_lang::prelude::*;
 
 // The program itself is stateless.
 #[program]
-pub mod staking {
+pub mod solana_staking {
+    use super::*;
+
     pub fn stake(ctx: Context<Stake>, amount: u64) -> Result<()> {
-        // Business logic operates on accounts passed via the context.
-        // The context `ctx` contains all necessary accounts,
-        // such as `GlobalState` and `UserStakeInfo`, defined in the `Stake` struct below.
-        let state = &mut ctx.accounts.state;
-        let user_info = &mut ctx.accounts.user_stake_info;
-        state.total_staked += amount;
-        user_info.amount += amount;
-        // ...
-        Ok(())
+        instructions::stake::stake_handler(ctx, amount)
     }
-    // ... other instructions like unstake()
+
+    pub fn unstake(ctx: Context<Unstake>, amount: u64) -> Result<()> {
+        instructions::unstake::unstake_handler(ctx, amount)
+    }
 }
 
 // The `Stake` context struct, defining all accounts for the `stake` instruction.
 #[derive(Accounts)]
 pub struct Stake<'info> {
     #[account(mut)]
-    pub state: Account<'info, GlobalState>,
+    pub user: Signer<'info>,
     #[account(mut)]
-    pub user_stake_info: Account<'info, UserStakeInfo>,
-    // ... other necessary accounts
+    pub pool_config: Box<Account<'info, PoolConfig>>,
+    #[account(mut)]
+    pub pool_state: Box<Account<'info, PoolState>>,
+    #[account(mut)]
+    pub user_stake_info: Box<Account<'info, UserStakeInfo>>,
+    // ... other required accounts
 }
 
 // State is defined in separate account structs.
 #[account]
-pub struct GlobalState {
+pub struct PoolConfig {
+    pub admin: Pubkey,
+    pub pool_id: Pubkey,
+    pub staking_mint: Pubkey,
+    pub reward_mint: Pubkey,
+    pub reward_per_second: u64,
+    pub bump: u8,
+}
+
+#[account]
+pub struct PoolState {
     pub total_staked: u64,
-    // ... other global state
+    pub acc_reward_per_share: u128,
+    pub last_reward_time: i64,
+    pub bump: u8,
 }
 
 #[account]
 pub struct UserStakeInfo {
     pub amount: u64,
-    // ... other user state
+    pub reward_debt: i128,
+    pub bump: u8,
 }
 ```
 
@@ -145,26 +159,34 @@ contract Staking {
 #[derive(Accounts)]
 pub struct Stake<'info> {
     #[account(mut)]
-    pub user_token_account: Account<'info, TokenAccount>,
+    pub user: Signer<'info>,
+    #[account(
+        seeds = [POOL_CONFIG_SEED, pool_config.pool_id.as_ref()],
+        bump = pool_config.bump
+    )]
+    pub pool_config: Box<Account<'info, PoolConfig>>,
     #[account(mut)]
+    pub user_token_account: Account<'info, TokenAccount>,
+    #[account(
+        mut,
+        seeds = [STAKING_VAULT_SEED, pool_config.key().as_ref()],
+        bump
+    )]
     pub staking_vault: Account<'info, TokenAccount>,
     pub token_program: Program<'info, Token>,
     // ...
 }
 
 // The instruction itself commands the Token Program to perform the transfer.
-pub fn stake(ctx: Context<Stake>, amount: u64) -> Result<()> {
-    token::transfer(
-        CpiContext::new(
-            ctx.accounts.token_program.to_account_info(),
-            Transfer {
-                from: ctx.accounts.user_token_account.to_account_info(),
-                to: ctx.accounts.staking_vault.to_account_info(),
-                authority: ctx.accounts.user.to_account_info(),
-            }
-        ),
-        amount
-    )?;
+pub fn stake_handler(ctx: Context<Stake>, amount: u64) -> Result<()> {
+    let cpi_accounts = Transfer {
+        from: ctx.accounts.user_token_account.to_account_info(),
+        to: ctx.accounts.staking_vault.to_account_info(),
+        authority: ctx.accounts.user.to_account_info(),
+    };
+    let cpi_program = ctx.accounts.token_program.to_account_info();
+    let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
+    token::transfer(cpi_ctx, amount)?;
     // ...
     Ok(())
 }
@@ -213,15 +235,20 @@ async function stakeTokens(
   amount: bigint
 ) {
   const userStakePda = getUserStakePda(statePda, user.publicKey);
+  const userBlacklistPda = getBlacklistPda(statePda, user.publicKey);
 
   // All required accounts must be explicitly passed.
   const stakeInstruction = programClient.getStakeInstruction({
     user: userSigner,
-    state: address(statePda.toBase58()),
+    poolConfig: address(statePda.toBase58()),
+    poolState: address(poolStatePda.toBase58()),
     userStakeInfo: address(userStakePda.toBase58()),
     userTokenAccount: address(stakingToken.toBase58()),
     stakingVault: address(stakingVaultPda.toBase58()),
-    // ... and other accounts
+    rewardVault: address(rewardVaultPda.toBase58()),
+    userRewardAccount: address(rewardToken.toBase58()),
+    tokenProgram: address(TOKEN_PROGRAM_ID.toBase58()),
+    blacklistEntry: address(userBlacklistPda.toBase58()),
     amount: amount,
   });
 
@@ -271,35 +298,49 @@ async function stakeTokens(
 在 Anchor 中，你只需要通过声明式的宏来定义账户和约束，框架会自动处理所有验证和初始化逻辑。
 
 ```rust
-// solana-staking/programs/solana-staking/src/instructions/initialize.rs
-#[program]
-pub mod staking {
-    pub fn initialize_handler(ctx: Context<Initialize>, reward_per_second: u64) -> Result<()> {
-        // Business logic is clean and focused.
-        let state = &mut ctx.accounts.state;
-        state.reward_per_second = reward_per_second;
-        state.admin = ctx.accounts.admin.key();
-        // ...
-        Ok(())
-    }
-}
-
-// Define accounts and constraints declaratively.
+// solana-staking/programs/solana-staking/src/instructions/create_pool.rs
 #[derive(Accounts)]
-pub struct Initialize<'info> {
+#[instruction(pool_id: Pubkey)]
+pub struct CreatePool<'info> {
     #[account(mut)]
     pub admin: Signer<'info>,
-    // Anchor handles the creation and rent payment for this account.
-    #[account(init, payer = admin, space = 8 + GlobalState::INIT_SPACE)]
-    pub state: Account<'info, GlobalState>,
+
+    #[account(
+        init,
+        payer = admin,
+        space = 8 + PoolConfig::INIT_SPACE,
+        seeds = [POOL_CONFIG_SEED, pool_id.as_ref()],
+        bump
+    )]
+    pub pool_config: Box<Account<'info, PoolConfig>>,
+
+    #[account(
+        init,
+        payer = admin,
+        space = 8 + PoolState::INIT_SPACE,
+        seeds = [POOL_STATE_SEED, pool_config.key().as_ref()],
+        bump
+    )]
+    pub pool_state: Box<Account<'info, PoolState>>,
+
     pub system_program: Program<'info, System>,
+    // ... staking_mint, reward_mint, vaults, token_program, clock
 }
 
-#[account]
-pub struct GlobalState {
-    pub admin: Pubkey,
-    pub reward_per_second: u64,
-    // ...
+pub fn create_pool_handler(
+    ctx: Context<CreatePool>,
+    pool_id: Pubkey,
+    reward_per_second: u64,
+) -> Result<()> {
+    let pool_config = &mut ctx.accounts.pool_config;
+    let pool_state = &mut ctx.accounts.pool_state;
+
+    pool_config.admin = ctx.accounts.admin.key();
+    pool_config.pool_id = pool_id;
+    pool_config.reward_per_second = reward_per_second;
+
+    pool_state.total_staked = 0;
+    Ok(())
 }
 ```
 
@@ -439,7 +480,7 @@ pub struct Stake<'info> {
         init_if_needed,
         payer = user,
         space = 8 + UserStakeInfo::INIT_SPACE,
-        seeds = [STAKE_SEED, state.key().as_ref(), user.key().as_ref()],
+        seeds = [STAKE_SEED, pool_config.key().as_ref(), user.key().as_ref()],
         bump
     )]
     pub user_stake_info: Box<Account<'info, UserStakeInfo>>,
@@ -450,10 +491,8 @@ pub struct Stake<'info> {
 #[account]
 #[derive(InitSpace)]
 pub struct UserStakeInfo {
-    pub owner: Pubkey,
     pub amount: u64,
     pub reward_debt: i128,
-    pub claimed: u64,
     pub bump: u8,
 }
 ```

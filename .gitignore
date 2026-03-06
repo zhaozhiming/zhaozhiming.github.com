@@ -12,3 +12,8 @@ output/
 !/markdown-to-medium-tool/public
 
 evm-to-solana-contract
+
+# AI
+findings.md
+progress.md
+task_plan.md

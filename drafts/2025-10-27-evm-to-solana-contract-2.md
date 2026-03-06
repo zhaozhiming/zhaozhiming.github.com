@@ -142,6 +142,7 @@ Solana 的原生运行时环境（Native）在这一点上则显得较为原始�
 // solana-staking/programs/solana-staking/src/events.rs
 #[event]
 pub struct Staked {
+    pub pool: Pubkey,
     pub user: Pubkey,
     pub amount: u64,
     pub timestamp: i64,
@@ -154,12 +155,15 @@ pub struct Staked {
 // solana-staking/programs/solana-staking/src/instructions/stake.rs
 pub fn stake_handler(ctx: Context<Stake>, amount: u64) -> Result<()> {
     // ... (staking logic)
+    let pool_config = &ctx.accounts.pool_config;
+    let clock = &ctx.accounts.clock;
 
     // Emit the structured event
     emit!(Staked {
+        pool: pool_config.pool_id,
         user: ctx.accounts.user.key(),
         amount,
-        timestamp: ctx.accounts.clock.unix_timestamp,
+        timestamp: clock.unix_timestamp,
     });
 
     Ok(())
@@ -289,32 +293,45 @@ function _claimRewards() private {
 // solana-staking/programs/solana-staking/src/lib.rs & state.rs
 // The program itself is stateless.
 #[program]
-pub mod staking {
+pub mod solana_staking {
+    pub fn create_pool(
+        ctx: Context<CreatePool>,
+        pool_id: Pubkey,
+        reward_per_second: u64,
+    ) -> Result<()> { /* ... */ }
     pub fn stake(ctx: Context<Stake>, amount: u64) -> Result<()> { /* ... */ }
     pub fn unstake(ctx: Context<Unstake>, amount: u64) -> Result<()> { /* ... */ }
     pub fn claim_rewards(ctx: Context<ClaimRewards>) -> Result<()> { /* ... */ }
     // ... other instructions
 }
 
-// Global state is stored in a dedicated account.
+// Pool-level config is stored in a dedicated account (one per pool).
 #[account]
-pub struct GlobalState {
+pub struct PoolConfig {
     pub admin: Pubkey,
+    pub pool_id: Pubkey,
     pub staking_mint: Pubkey,
     pub reward_mint: Pubkey,
     pub reward_per_second: u64,
+    pub bump: u8,
+}
+
+// Mutable pool runtime state is split into a separate account.
+#[account]
+pub struct PoolState {
+    pub pool_config: Pubkey,
+    pub acc_reward_per_share: u128,
+    pub last_reward_time: i64,
     pub total_staked: u64,
-    // ...
+    pub bump: u8,
 }
 
 // Per-user state is also in its own account, typically a PDA.
 #[account]
 pub struct UserStakeInfo {
-    pub owner: Pubkey,
     pub amount: u64,
     pub reward_debt: i128,
-    pub claimed: u64,
-    // ...
+    pub bump: u8,
 }
 ```
 
@@ -334,26 +351,71 @@ pub struct Stake<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
 
-    // The global state account
-    #[account(mut)]
-    pub state: Box<Account<'info, GlobalState>>,
+    #[account(
+        seeds = [POOL_CONFIG_SEED, pool_config.pool_id.as_ref()],
+        bump = pool_config.bump
+    )]
+    pub pool_config: Box<Account<'info, PoolConfig>>,
+
+    #[account(
+        mut,
+        seeds = [POOL_STATE_SEED, pool_config.key().as_ref()],
+        bump = pool_state.bump,
+        has_one = pool_config
+    )]
+    pub pool_state: Box<Account<'info, PoolState>>,
 
     // The user's personal stake info PDA
-    #[account(init_if_needed, payer = user, ...)]
+    #[account(
+        init_if_needed,
+        payer = user,
+        space = 8 + UserStakeInfo::INIT_SPACE,
+        seeds = [STAKE_SEED, pool_config.key().as_ref(), user.key().as_ref()],
+        bump
+    )]
     pub user_stake_info: Box<Account<'info, UserStakeInfo>>,
 
     // The user's token account holding the staking tokens
-    #[account(mut)]
+    #[account(
+        mut,
+        token::mint = pool_config.staking_mint,
+        token::authority = user
+    )]
     pub user_token_account: Account<'info, TokenAccount>,
 
     // The program's vault to store the staked tokens
-    #[account(mut)]
+    #[account(
+        mut,
+        seeds = [STAKING_VAULT_SEED, pool_config.key().as_ref()],
+        bump
+    )]
     pub staking_vault: Account<'info, TokenAccount>,
+
+    #[account(
+        mut,
+        seeds = [REWARD_VAULT_SEED, pool_config.key().as_ref()],
+        bump
+    )]
+    pub reward_vault: Account<'info, TokenAccount>,
+
+    #[account(
+        mut,
+        token::mint = pool_config.reward_mint,
+        token::authority = user
+    )]
+    pub user_reward_account: Account<'info, TokenAccount>,
+
+    /// CHECK: This account may or may not exist - used for blacklist validation
+    #[account(
+        seeds = [BLACKLIST_SEED, pool_config.key().as_ref(), user.key().as_ref()],
+        bump,
+    )]
+    pub blacklist_entry: UncheckedAccount<'info>,
 
     // Required external programs
     pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
-    // ...
+    pub clock: Sysvar<'info, Clock>,
 }
 ```
 
@@ -366,29 +428,46 @@ pub struct Stake<'info> {
 ```rust
 // solana-staking/programs/solana-staking/src/instructions/stake.rs
 pub fn stake_handler(ctx: Context<Stake>, amount: u64) -> Result<()> {
-    // ... (checks)
+    require!(amount > 0, StakingError::InvalidStakeAmount);
+
+    let blacklist_info = &ctx.accounts.blacklist_entry.to_account_info();
+    require!(
+        blacklist_info.data_is_empty() || blacklist_info.lamports() == 0,
+        StakingError::AddressBlacklisted
+    );
+
+    let pool_config = &ctx.accounts.pool_config;
+    let pool_state = &mut ctx.accounts.pool_state;
+    let user_stake = &mut ctx.accounts.user_stake_info;
+    let clock = &ctx.accounts.clock;
+
+    update_pool(pool_config, pool_state, clock)?;
 
     // 1. Command the Token Program to transfer tokens via CPI
-    token::transfer(
-        CpiContext::new(
-            ctx.accounts.token_program.to_account_info(),
-            Transfer {
-                from: ctx.accounts.user_token_account.to_account_info(),
-                to: ctx.accounts.staking_vault.to_account_info(),
-                authority: ctx.accounts.user.to_account_info(),
-            }
-        ),
-        amount
-    )?;
+    let cpi_accounts = Transfer {
+        from: ctx.accounts.user_token_account.to_account_info(),
+        to: ctx.accounts.staking_vault.to_account_info(),
+        authority: ctx.accounts.user.to_account_info(),
+    };
+    let cpi_program = ctx.accounts.token_program.to_account_info();
+    let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
+    token::transfer(cpi_ctx, amount)?;
 
     // 2. Update the data on the user_stake_info account
-    let user_stake = &mut ctx.accounts.user_stake_info;
     user_stake.amount += amount;
-    // ...
+    let debt_delta = reward_debt_delta(amount, pool_state.acc_reward_per_share)?;
+    user_stake.reward_debt += debt_delta;
+    user_stake.bump = ctx.bumps.user_stake_info;
 
-    // 3. Update the data on the global state account
-    let state = &mut ctx.accounts.state;
-    state.total_staked += amount;
+    // 3. Update the data on the pool state account
+    pool_state.total_staked += amount;
+
+    emit!(Staked {
+        pool: pool_config.pool_id,
+        user: ctx.accounts.user.key(),
+        amount,
+        timestamp: clock.unix_timestamp,
+    });
 
     Ok(())
 }
@@ -453,13 +532,15 @@ describe("Stake", () => {
     // 2. Action: Build and send the transaction to call the 'stake' instruction
     await stakeTokens(user, userSigner, stakingToken, rewardToken, stakeAmount);
 
-    // 3. Assertion: Fetch the account data from the local validator to verify state
+    // 3. Assertion: verify staking vault balance and account state
+    const stakingVaultAccount = getAccount(provider, stakingVaultPda);
+    expect(Number(stakingVaultAccount.amount)).to.equal(Number(stakeAmount));
+
     const userStakePda = getUserStakePda(statePda, user.publicKey);
     const userStakeInfo = getUserStakeInfo(provider, userStakePda);
     expect(userStakeInfo).to.not.be.null;
     expect(userStakeInfo!.amount.toString()).to.equal(stakeAmount.toString());
     expect(userStakeInfo!.rewardDebt.toString()).to.equal("0");
-    expect(userStakeInfo!.claimed.toString()).to.equal("0");
 
     const globalState = getGlobalState(provider, statePda);
     expect(globalState!.totalStaked.toString()).to.equal(

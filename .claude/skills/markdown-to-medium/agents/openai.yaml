@@ -1,0 +1,4 @@
+interface:
+  display_name: "Markdown 转 Medium"
+  short_description: "将 Markdown 转成适合粘贴到 Medium 的 HTML"
+  default_prompt: "Use $markdown-to-medium to convert this Markdown file into Medium-compatible HTML that I can paste into the Medium editor."

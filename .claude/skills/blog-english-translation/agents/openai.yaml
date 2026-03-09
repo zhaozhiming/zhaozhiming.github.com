@@ -1,0 +1,4 @@
+interface:
+  display_name: "博客英文翻译"
+  short_description: "将中文博客翻译成英文并保留 Markdown 格式"
+  default_prompt: "Use $blog-english-translation to translate this Chinese blog post into polished English while preserving the original Markdown structure."

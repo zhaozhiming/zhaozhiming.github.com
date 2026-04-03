@@ -6,7 +6,7 @@ description: 全面介绍 Claude Code 的 CLAUDE.md 文件，包括加载机制�
 keywords: claude code, claude.md, ai coding, anthropic
 comments: true
 categories: ai
-tags: [Claude Code, AI, CLAUDE.md]
+tags: [claude-code, claude.md, ai-coding, anthropic]
 ---
 
 {% img /images/post/2026/03/claude-md.jpg 400 300 %}

@@ -25,7 +25,7 @@
 
 EVM 后端的工作流很自然，合约触发事件，节点构建事件索引，后端按类型过滤查询。而 Solana 不支持这套模式，Anchor 的 `#[event]` 宏只是把数据写进交易日志，链上没有按事件类型查询的能力，后端只能以账户为入口，主动拉取交易，从 `logMessages` 中解析。
 
-差异的根源很简单，EVM 存历史，Solana 不存。EVM 的归档节点记录了每个高度的状态，漏了日志还能回头查，而 Solana 只保留当前值，写一笔覆盖一笔。所以 Solana 后端能依赖的唯一线索就是交易日志，必须自己从日志中重建事件，没法像 EVM 那样直接用现成的索引服务。
+差异的根源在于事件索引结构的不同，EVM 为事件构建了 topics 和 bloom filter 索引，后端可以通过事件签名直接过滤查询，而 Solana 虽然 validator 和归档节点也保留历史交易和日志，但没有原生的结构化事件索引，程序日志只是非结构化字符串，所以 Solana 后端能依赖的唯一线索就是交易日志，必须自己从日志中解析并重建事件，没法像 EVM 那样直接用现成的索引服务。
 
 ### 账户选址
 
@@ -33,7 +33,7 @@ EVM 后端的工作流很自然，合约触发事件，节点构建事件索引�
 
 - 监控全局状态：如果想追踪协议 TVL 变动或管理员更新奖励率，直接监听 `PoolConfig` PDA，这天然过滤掉所有普通用户的质押操作
 - 追踪特定用户：如果想监听某个用户的行为，就将该用户的钱包地址或 `UserStakeInfo` PDA 作为入口，这相当于一条极低噪音的专属通道
-- 监控全网代币流转：常规思路是监控代币地址，但这里有一个容易踩的坑，Solana 标准转账指令的参数中只包含源账户和目标账户，不强制携带代币地址，这意味着代币地址根本不会出现在大多数转账交易的账户列表中，因此这类需求应直接调用第三方索引服务（如 Solscan 或 Helius）的 Token Transfer API
+- 监控全网代币流转：常规思路是监控代币地址，但这里有一个容易踩的坑，[spl-token](https://solana.com/docs/tokens/basics) 的 `transfer` 指令只包含源账户和目标账户，不强制携带 mint 地址，因此代币地址不会出现在这类交易的账户列表中。而 [token-2022](https://www.solana-program.com/docs/token-2022) 的 `transfer_checked` 要求提供 mint account，此时代币地址会出现在账户列表里。如果你的场景恰好使用 `token-2022` 的标准转账，`getSignaturesForAddress` 可以捕获，但对于大多数 `spl-token` 转账，代币地址不在账户列表内，这类需求应直接调用第三方索引服务（如 Solscan 或 Helius）的 Token Transfer API
 
 ## 你需要注意的 Solana 事件过滤的限制
 
@@ -48,6 +48,16 @@ EVM 上交易回滚后事件也随之撤销，但 Solana 不同，即使交易�
 ### 账户变化订阅无法替代事件监听
 
 Solana 提供了 WebSocket 订阅账户变化的机制，但它只能感知账户数据被修改，无法直接告诉你发生了什么事件，事件语义仍然需要从账户差异和日志中推断，而且订阅连接可能中断，需要自行处理重连和数据补偿，不适合大规模账户或高吞吐场景。
+
+### 生产级替代：Geyser / Yellowstone
+
+本文聚焦于 RPC 轮询的实现方案，适合快速搭建和轻量级场景，但对于对实时性和吞吐量有更高要求的生产级后端，[Geyser gRPC（Yellowstone）](https://github.com/rpcpool/yellowstone-grpc) 是更主流的方案，它直接从 validator 内部状态流式推送数据，不经 RPC 层，没有轮询开销和速率限制，Helius、Triton（Yellowstone 维护方）、QuickNode 等基础设施提供商均已支持该服务。
+
+实际项目中，选择自建 RPC 轮询流水线还是接入 Geyser/Yellowstone，可以从三个维度判断：
+
+- 数据量：如果你的协议每天只产生几百到几千笔相关交易，RPC 轮询搭配合理的批量和 sleep 控制完全够用，而当日交易量达到十万级以上时，Geyser 的流式推送能显著降低延迟和 RPC 节点压力
+- 实时性： 轮询的延迟受 cron 间隔和 RPC 响应时间制约，通常秒级到分钟级，而 Geyser 从 validator 内部直接推送，延迟可到亚秒级，适合对实时性要求高的场景（如清算机器人、高频交易监控）
+- 运维成本：RPC 轮询不依赖额外基础设施，部署简单，而 Geyser 需要接入第三方 gRPC 服务或自行搭建 Yellowstone 节点，初期集成成本更高，但长远来看避免了速率限制的问题
 
 ## Solana 后端开发最佳实践
 
@@ -232,7 +242,7 @@ async parseTransactionEvents(
 }
 ```
 
-EVM 上失败的交易不会产生事件，但 Solana 不同，即使交易最终执行失败，失败前输出的日志仍然记录在链上，不加过滤地解析会把并未实际发生的状态变更写进数据库，所以这个检查不能跳过。
+这正是前文**失败交易仍可能包含事件日志**中讨论的陷阱，解析前先检查 `tx.meta.err` 是防止脏数据写入的唯一防线。
 
 **第四步，**分批持久化同步进度。
 
@@ -293,7 +303,7 @@ async getRewardVaultBalance(poolConfig: string): Promise<RewardVaultBalance> {
 }
 ```
 
-这个模式很通用，推导 PDA、查账户、返回结果，你可以换成读取任意 PDA 或普通账户的状态。
+这个模式很通用，推导 PDA、查账户、返回结果。
 
 #### 阈值告警与去重
 
@@ -348,13 +358,7 @@ private async checkPoolBalance(poolConfig: string): Promise<void> {
 
 ### 项目概述
 
-solana-backend 是为 Solana Staking 协议构建的后端服务，基于 NestJS 和 TypeScript，完整代码可参考 [solana-backend](https://github.com/57blocks/evm-to-solana/tree/main/backend/solana-backend) 仓库，它主要承担三类职责：
-
-- 事件索引：通过 cron 定时从 Solana 链上拉取 Staked、Unstaked、RewardsClaimed 等事件，解析后写入 SQLite 数据库
-- 链上查询：对外提供 Pool 配置、Pool 状态和用户质押数据的实时查询接口，包括链下计算的待领取奖励
-- 自动监控：定时检查各 Pool 的奖励金库余额，低于阈值时告警，恢复后自动解除
-
-本章聚焦从零搭建这样一个后端系统的完整过程，包括项目结构、核心模块、测试和 Docker 部署，事件同步的完整流水线已在上一章详细介绍，这里不再重复。
+solana-backend 是基于 NestJS 和 TypeScript 构建的后端服务，完整代码可参考 [solana-backend](https://github.com/57blocks/evm-to-solana/tree/main/backend/solana-backend) 仓库。下面展示项目结构、核心模块、测试和 Docker 部署的具体实现，事件同步流水线已在上一章详细介绍，这里补充两个前面没展开的部分——链下奖励计算和同步位点初始化。
 
 ### 项目结构
 
@@ -378,8 +382,6 @@ solana-backend/
 - `repositories` 封装 Prisma 操作和链上 PDA 查询
 
 ### 核心实现
-
-前面`最佳实践`章节已经展示了事件同步流水线的完整代码，这里补充两个前面没展开的部分——链下奖励计算和同步位点初始化。
 
 #### 链下奖励计算
 
@@ -413,7 +415,7 @@ pendingRewards(
 }
 ```
 
-后端计算公式对应 Solana Staking 合约中 [utils.rs](https://github.com/57blocks/evm-to-solana/blob/main/contract/solana-staking/programs/solana-staking/src/utils.rs) 文件中的方法，输入输出均为 BigInt，避免 JavaScript 浮点精度问题，对外的查询接口直接调用 `pendingRewards`，用户不需要理解链上公式也能拿到待领取数量。
+输入输出均为 BigInt，避免 JavaScript 浮点精度问题，对外的查询接口直接调用 `pendingRewards`，用户不需要理解链上公式也能拿到待领取数量。
 
 #### 同步位点初始化
 
@@ -504,7 +506,7 @@ it("goes through the full alert lifecycle: create → resolve → create again",
 });
 ```
 
-三个场景完整覆盖了告警去重和自动恢复的逻辑，mock 的 `rewardVaultReader` 和 `alertRepository` 替代了真实 RPC 和数据库。
+Mock 的 `rewardVaultReader` 和 `alertRepository` 替代了真实 RPC 和数据库。
 
 ### 项目部署
 

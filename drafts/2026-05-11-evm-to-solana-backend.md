@@ -575,3 +575,7 @@ EVM 后端更像在消费一个已经为你准备好的数据层，而 Solana �
 ## 参考
 
 - [Solana RPC Overview](https://solana.com/docs/rpc)
+- [Spl-token](https://solana.com/docs/tokens/basics)
+- [Token-2022](https://www.solana-program.com/docs/token-2022)
+- [Geyser gRPC (Yellowstone)](https://github.com/rpcpool/yellowstone-grpc)
+- [MasterChef](https://github.com/sushiswap/masterchef)

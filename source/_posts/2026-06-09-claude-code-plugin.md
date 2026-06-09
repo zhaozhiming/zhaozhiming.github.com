@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Claude Code 完全指南——Plugin
-date: 2026-05-29 16:00:00
+date: 2026-06-09 16:00:00
 description: 深入解析 Claude Code 的 Plugin 插件系统，包括插件概念、安装使用、市场机制、限制不足，以及与其他 Coding Agent 插件系统的对比
 keywords: claude code, plugin, ai coding, anthropic
 comments: true
@@ -11,42 +11,51 @@ tags: [claude-code, plugin, ai-coding, anthropic]
 
 {% img /images/post/2026/06/claude-code-plugin.jpg 400 300 %}
 
-在这个系列里，我们已经陆续聊过几样东西，用 CLAUDE.md 把项目背景和协作约束提前讲清楚，用 Slash Command 和 Skill 把反复出现的任务收敛成稳定的工作流，再用 Hooks 在执行的关键节点上守住行为边界。把这些放在一起看，你会发现我们其实一直在做同一件事，不断给 Claude Code 添加各种各样的定制，让它越来越懂你的项目，越来越贴合你的工作方式。但定制做得越多，一个很现实的问题也会跟着冒出来，这些散落在各个文件和目录里的配置、命令、技能和钩子，到底要怎么才能完整地复用起来？当你换一台机器、开一个新项目，或者想把这一整套用得很顺手的配置分享给同事时，难道每次都得一个文件一个文件地手动拷贝吗？这一篇，我们就来聊聊 Claude Code 为这个问题准备的答案——Plugin。
+在这个系列里，我们已经陆续聊过几样东西，用 CLAUDE.md 把项目背景和协作约束提前讲清楚，用 Slash Command 和 Skill 把反复出现的任务收敛成稳定的工作流，再用 Hooks 在执行的关键节点上守住行为边界。把这些放在一起看，你会发现我们其实一直不断在给 Claude Code 添加各种各样的能力，让它越来越懂你的项目，越来越贴合你的工作方式。但这些东西说到底还是各自为战。就像钢铁侠、蜘蛛侠、雷神，他们单打独斗个个一流，但真正让世界免于毁灭的，是他们组成的复仇者联盟。Claude Code 里有没有类似的东西，能把这些强大能力组成一个整体？有，这就是 Plugin，它把 Claude Code 各种能力拧成一股绳，变成一个可分发、可安装的单元，从而让复用和分享变得简单。
 
 <!--more-->
 
 ## Plugin 介绍
 
-Plugin 其实就是把前面这些散落的能力打包到一起的一个分发单元。我们这个系列前面讲过的 CLAUDE.md、Slash Command、Skill、Hook，再加上 Subagent 和 MCP Server，都是 Claude Code 的可定制能力，但它们在文件系统里是分开存放的。Plugin 做的事情，就是把这些组件按约定的目录结构收进同一个文件夹，再配上一份描述自己身份的 `plugin.json` 清单，让它们成为一个能被整体安装、启用和分发的单位。所以 Plugin 是一种组织和分发已有能力的方式，如果说 CLAUDE.md、Skill、Hook 是一件件单独的工具，那 Plugin 就是把它们打包好的一个 App，装上它，这一整套能力就同时生效了。
 
-> Claude Code 的 MCP Server 可以理解为一种通过标准协议接入外部工具、数据源或内部系统的服务，让 Claude Code 能像调用工具一样访问这些能力。
+我们来看下 Claude Code Plugin 最初的官方定义：
 
-之所以需要 Plugin，核心原因是复用。只在一个项目里给自己配置 Claude Code 时，直接把命令、技能、钩子写在 `.claude/` 下确实最省事，但只要你想换台机器、开个新项目，或者把这套配置分享给同事，如果靠的就是手动拷贝那就很痛苦了。手动拷贝既没有版本概念、又容易遗漏文件，有些组件甚至拷过去也没法直接用，比如你只拷贝了技能目录，但它依赖的命令、Hook、Subagent 等，还需要通过插件机制自动注册后才能生效。Plugin 就是把一套能力固定成有名字、有版本、结构清晰的整体，让分享、安装、更新、卸载都变成可管理、可重复的操作。
+> Plugins are a lightweight way to package and share any combination of: Slash commands, Subagents, MCP servers, Hooks.
 
-这样一来，使用者无需关心 Plugin 内部到底是通过命令还是 Hook 实现的，清单中的版本号还能让团队明确每个人正在使用的具体版本，插件也可以安装到项目范围内，随仓库一起共享。团队的 AI 协作规范，也因此第一次拥有了可打包、可分发的载体。此外，插件中的每个组件都会以插件名作为命名空间，比如 `/my-plugin:hello` 而不是 `/hello`，这样即便同时装了多个来源不同、且包含同名组件的插件也不会发生相互覆盖。
+并且官方明确表态：
+
+> plugins will be our standard way to bundle and share Claude Code customizations, and we'll continue to evolve the format as we add more extension points.
+
+也就是说 Plugin 被定位为分发定制能力的标准方式，且格式会随扩展点增加而演进（事实上后来确实加入了 LSP、monitor、theme 等）。
+
+{% img /images/post/2026/06/claude-code-plugin-package-concept.jpg 1000 563 %}
+
+之所以需要 Plugin，核心原因是复用，只在一个项目里给自己配置 Claude Code 时，直接把命令、技能、钩子写在 `.claude/` 下确实最省事，但只要你想换台机器、开个新项目，或者想把这套配置分享给同事，如果靠的就是手动拷贝那就很痛苦了。手动拷贝既没有版本概念、又容易遗漏文件，有些组件甚至拷过去也没法直接用，比如你只拷贝了技能目录，但它依赖的命令、Hook、Subagent 等，还需要通过插件机制自动注册后才能生效。Plugin 就是把一套能力固定成有名字、有版本、结构清晰的整体，让分享、安装、更新、卸载都变成可管理、可重复的操作。
+
+这样一来，使用者无需关心 Plugin 内部到底是通过命令还是 Hook 实现的，清单中的版本号还能让团队明确每个人正在使用的具体版本，插件也可以安装到项目范围内，随仓库一起共享。团队的 AI 协作规范，也因此第一次拥有了可打包、可分发的载体。此外，插件中的每个组件都会以插件名作为命名空间，比如 `/team-plugin:hello` 而不是 `/hello`，这样即便同时装了多个来源不同、但名字相同的组件的插件也不会发生冲突。
 
 ## Plugin 的安装与使用
 
 要理解安装流程，先得分清 Marketplace 和 Plugin 的关系。Plugin 是你最终要安装的那个能力包，而 Marketplace 是一个收录了很多 Plugin 的目录，本身并不包含能力，只是告诉 Claude Code，这里有哪些插件可以装。所以安装插件通常是两步：先把市场添加进来，让 Claude Code 能浏览它收录的内容，再从里面挑选具体的插件安装。官方文档给的类比很贴切，市场就像应用商店，添加商店让你能逛它的货架，但你仍然要单独挑选要下载的那个 App（Plugin）。
 
-举个例子。Anthropic 的官方市场 `claude-plugins-official` 在你启动 Claude Code 时就自动可用，所以安装官方插件不需要额外添加市场，直接一条命令即可，比如装 GitHub 集成：
+举个例子，Anthropic 的官方市场 [`claude-plugins-official`](https://github.com/anthropics/claude-plugins-official) 在你启动 Claude Code 时就自动可用，所以安装官方插件不需要额外添加市场，直接一条命令即可，比如装 `frontend-design` 插件，要写成这种格式 `plugin-name@marketplace-name`：
 
-```text
-/plugin install github@claude-plugins-official
+```shell
+/plugin install frontend-design@claude-plugins-official
 ```
 
-如果是第三方市场，就要先添加再安装。比如添加 Anthropic 的演示市场，然后从中安装一个提供 git 工作流命令的插件：
+如果是第三方市场，就要先添加市场再安装插件，比如添加 [`planning-with-files`](https://github.com/OthmanAdi/planning-with-files) 插件，它的市场名和插件名都是 `planning-with-files`，添加市场时填写的市场来源要写 Github 仓库的所有者和仓库名：
 
-```text
-/plugin marketplace add anthropics/claude-code
-/plugin install commit-commands@anthropics-claude-code
+```shell
+/plugin marketplace add OthmanAdi/planning-with-files
+/plugin install planning-with-files@planning-with-files
 ```
 
-装完后运行 `/reload-plugins` 让它生效，就能用 `/commit-commands:commit` 这样带命名空间的命令了。
+装完后运行 `/reload-plugins` 让它生效，就能用 `/planning-with-files:plan` 这样带命名空间的命令了。
 
-添加市场支持好几种来源，最常见的是 GitHub 仓库的 owner/repo 简写形式（也就是之前示例代码中的那种），此外也可以用任意 Git 仓库的完整 URL（GitLab、Bitbucket、自建都行，还能在 # 后面附上分支或 tag），或者指向本地目录、远程 `marketplace.json` 文件的路径。它们的共同点是，这个来源里需要有一份 [`.claude-plugin/marketplace.json`](https://code.claude.com/docs/en/plugin-marketplaces#create-the-marketplace-file) 来描述市场收录了哪些插件。
+添加市场支持好几种来源，最常见的是 GitHub 仓库的 `owner/repo` 简写形式（也就是之前示例代码中的那种），此外也可以用任意 Git 仓库的完整 URL（GitLab、Bitbucket、自建都行，还能在 # 后面附上分支或 tag），或者指向本地目录、远程 `marketplace.json` 文件的路径。它们的共同点是，这个来源里需要有一份 [`.claude-plugin/marketplace.json`](https://code.claude.com/docs/en/plugin-marketplaces#create-the-marketplace-file) 来描述市场收录了哪些插件。
 
-```text
+```shell
 # any Git repo
 /plugin marketplace add https://gitlab.com/my-team/ai-plugins.git
 
@@ -61,18 +70,18 @@ Plugin 其实就是把前面这些散落的能力打包到一起的一个分发�
 /plugin marketplace add https://example.com/marketplace.json
 ```
 
-安装和管理插件有两个入口：在 Claude Code 内部用 `/plugin` 命令，它会打开一个带**Discover / Installed / Marketplaces / Errors**四个标签页的交互界面，适合浏览和挑选。在 Claude Code 外部则用 `claude plugin` 这个 CLI 命令，适合写进脚本或在终端里批量操作。安装时还能选择范围，用户范围对自己所有项目生效，项目范围会写进 `.claude/settings.json` 跟仓库共享给协作者，本地范围则只在当前仓库对自己生效。
+安装和管理插件有两个入口：在 Claude Code 内部用 `/plugin` 命令，它会打开一个带**Discover / Installed / Marketplaces / Errors**四个标签页的交互界面，适合浏览和挑选。在 Claude Code 外部则用 `claude plugin` 这个 CLI 命令，适合写进脚本或在终端里批量操作。添加市场和安装插件时还能选择范围，用户范围对自己所有项目生效，项目范围会写进 `.claude/settings.json` 跟仓库共享给协作者，本地范围则只在当前仓库对自己生效。
 
 {% img /images/post/2026/06/ccplugin-command.png 800 600 %}
 
 ```shell
 # install from outside of Claude Code
-claude plugin install commit-commands@anthropics-claude-code 
+claude plugin install planning-with-files@planning-with-files
 # select the installation scope, default is user
-claude plugin install commit-commands@anthropics-claude-code --scope user/project/local
+claude plugin install planning-with-files@planning-with-files --scope user/project/local
 ```
 
-还有一种不走市场的方式，就是用 `--plugin-dir` 直接加载本地插件目录，这种方式不需要先添加市场，启动时指定一下就行，主要用于开发和调试自己的插件（现在它也支持直接加载 .zip 压缩包，无需先解压）。需要留意的是，当 `--plugin-dir` 加载的插件和已安装的市场插件同名时，本地这份会在当前会话里优先，方便你在不卸载已装版本的前提下测试改动。
+还有一种不走市场的方式，就是用 `--plugin-dir` 直接加载本地插件目录，这种方式不需要先添加市场，启动时指定一下就行，主要用于开发和调试自己的插件，现在它也支持直接加载 .zip 压缩包，无需先解压。需要注意的是，当 `--plugin-dir` 加载的插件和已安装的市场插件同名时，本地这份会在当前会话里优先，方便你在不卸载已装版本的前提下测试改动。
 
 ```shell
 # load local plugin directory
@@ -81,7 +90,7 @@ claude --plugin-dir /Users/jimmy/work/dev-helper
 claude --plugin-dir /Users/jimmy/work/dev-helper.zip
 ```
 
-日常管理也很直接，安装、启用、禁用之后记得用 `/reload-plugins` 在不重启的情况下应用变更，不想用的插件可以 `/plugin disable` 临时禁用或 `/plugin uninstall` 彻底卸载。最后有个容易忽略的点：删除一个市场会连带卸载你从这个市场安装过的所有插件，所以清理市场前最好先确认一下里面的插件还需不需要。
+日常管理也很直接，安装、启用、禁用之后记得用 `/reload-plugins` 在不重启的情况下应用变更，不想用的插件可以 `/plugin disable` 临时禁用或 `/plugin uninstall` 彻底卸载。最后需要注意的一点，删除一个市场会连带卸载你从这个市场安装过的所有插件，所以清理市场前最好先确认一下里面的插件还需不需要。
 
 ## Plugin 的开发
 
@@ -99,6 +108,8 @@ claude --plugin-dir /Users/jimmy/work/dev-helper.zip
 其中 `name` 既是唯一标识，也是前面提到的命名空间，`version` 用语义化版本号管理发布，`description` 会显示在插件管理器里，有了这份清单，插件就有了自己的身份信息，剩下的就是往里面放能力。
 
 插件的能力按约定的目录摆放，命令放 `commands/`、技能放 `skills/`、Subagent 放 `agents/`、钩子放 `hooks/hooks.json`、MCP 配置放 `.mcp.json`，需要代码智能还可以加 `.lsp.json`。这里有个新手最容易踩的坑要特别提醒，除了 `plugin.json` 之外，其它这些目录都必须放在插件根目录下，不要塞进 `.claude-plugin/` 里面，否则 Claude Code 加载不到。整体结构大致是这样：
+
+{% img /images/post/2026/06/claude-code-plugin-directory-structure.jpg 1000 563 %}
 
 > Claude Code 的代码智能 LSP 是指通过接入语言服务器，让 Claude Code 获得项目级代码理解能力，比如跳转定义、查找引用、类型信息和符号分析，从而更准确地读代码、改代码。
 
@@ -127,6 +138,8 @@ claude --plugin-dir ./my-plugin
 ## Plugin 的限制与不足
 
 Plugin 作为分发机制确实很方便，但它仍然是一个相对早期的能力，等到真正把它用在团队协作、项目规范和复杂工作流里，就会发现它在一些地方仍有明显限制。
+
+{% img /images/post/2026/06/claude-code-plugin-tradeoffs.jpg 1000 563 %}
 
 ### Plugin Subagent 的能力收敛
 

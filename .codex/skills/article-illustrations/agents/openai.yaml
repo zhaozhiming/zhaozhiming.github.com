@@ -1,0 +1,4 @@
+interface:
+  display_name: "文章插图"
+  short_description: "为博客正文生成中英文卡通讲解图、流程图并自动接入中文版"
+  default_prompt: "Use $article-illustrations to generate Chinese and English explanatory illustrations for this blog post."

@@ -13,3 +13,5 @@
 项目中配置了 `cover-image` 封面生成技能（`.codex/skills/cover-image/`），用于为文章生成「像素风 + 动物 + 标题」的封面图。当用户要求生成封面、做封面、给文章配题图、cover 时，**读取并严格遵循 `.codex/skills/cover-image/SKILL.md` 的完整流程**。
 
 要点：据文章联想一个**未用过**的动物（去重数据见同目录 `used-animals.md`，新封面动物不得与历史重复）、联想 2 件关联物品、提炼英文标题，用固定 prompt 模板经 Codex 内置 `image_gen` 工具生成，再归位到 `source/images/post/YYYY/MM/<slug>.png` 并接入文章题图行。生成前需向用户确认动物 / 物品 / 标题 / prompt / 路径。
+
+## Imported Claude Cowork project instructions

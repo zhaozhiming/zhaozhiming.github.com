@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <rect width="1600" height="900" fill="#fffdf8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1f2937"/>
+    </marker>
+    <style>
+      .title { font: 700 52px "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f2937; }
+      .group-title { font: 700 34px "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f2937; }
+      .node { font: 600 27px "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f2937; }
+      .small { font: 500 22px "PingFang SC", "Microsoft YaHei", sans-serif; fill: #4b5563; }
+      .line { fill: none; stroke: #1f2937; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+      .rough { fill: none; stroke: #64748b; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 8 12; opacity: .55; }
+    </style>
+  </defs>
+
+  <text x="800" y="78" text-anchor="middle" class="title">Claude Code Plugin 目录结构</text>
+
+  <rect x="65" y="125" width="1020" height="700" rx="34" fill="#f8fafc" stroke="#1f2937" stroke-width="5" stroke-dasharray="14 11"/>
+  <text x="105" y="180" class="group-title">正确结构</text>
+  <path d="M94 194 C360 187 660 201 1045 190" class="rough"/>
+
+  <rect x="385" y="215" width="380" height="92" rx="24" fill="#dbeafe" stroke="#1f2937" stroke-width="5"/>
+  <text x="575" y="272" text-anchor="middle" class="group-title">Plugin 根目录</text>
+
+  <path d="M575 308 L575 365" class="line"/>
+  <path d="M575 365 L250 365 L250 405" class="line" marker-end="url(#arrow)"/>
+  <path d="M575 365 L575 405" class="line" marker-end="url(#arrow)"/>
+  <path d="M575 365 L900 365 L900 405" class="line" marker-end="url(#arrow)"/>
+
+  <rect x="105" y="410" width="290" height="125" rx="24" fill="#fef3c7" stroke="#1f2937" stroke-width="5"/>
+  <text x="250" y="462" text-anchor="middle" class="node">.claude-plugin/</text>
+  <text x="250" y="500" text-anchor="middle" class="node">plugin.json</text>
+
+  <rect x="430" y="410" width="290" height="125" rx="24" fill="#dcfce7" stroke="#1f2937" stroke-width="5"/>
+  <text x="575" y="462" text-anchor="middle" class="node">commands/</text>
+  <text x="575" y="500" text-anchor="middle" class="node">skills/ · agents/</text>
+
+  <rect x="755" y="410" width="290" height="125" rx="24" fill="#dcfce7" stroke="#1f2937" stroke-width="5"/>
+  <text x="900" y="462" text-anchor="middle" class="node">hooks/hooks.json</text>
+  <text x="900" y="500" text-anchor="middle" class="node">.mcp.json · .lsp.json</text>
+
+  <path d="M250 536 L250 610" class="line" marker-end="url(#arrow)"/>
+  <path d="M575 536 L575 610" class="line" marker-end="url(#arrow)"/>
+  <path d="M900 536 L900 610" class="line" marker-end="url(#arrow)"/>
+
+  <rect x="105" y="615" width="290" height="115" rx="24" fill="#fff7d6" stroke="#1f2937" stroke-width="5"/>
+  <text x="250" y="660" text-anchor="middle" class="node">身份清单</text>
+  <text x="250" y="700" text-anchor="middle" class="small">这里唯一允许的文件</text>
+
+  <rect x="430" y="615" width="290" height="115" rx="24" fill="#ecfdf5" stroke="#1f2937" stroke-width="5"/>
+  <text x="575" y="660" text-anchor="middle" class="node">能力目录</text>
+  <text x="575" y="700" text-anchor="middle" class="small">必须放在 Plugin 根目录</text>
+
+  <rect x="755" y="615" width="290" height="115" rx="24" fill="#ecfdf5" stroke="#1f2937" stroke-width="5"/>
+  <text x="900" y="660" text-anchor="middle" class="node">配置文件</text>
+  <text x="900" y="700" text-anchor="middle" class="small">由 Claude Code 自动加载</text>
+
+  <rect x="1135" y="125" width="400" height="700" rx="34" fill="#fff7f7" stroke="#dc2626" stroke-width="5" stroke-dasharray="14 11"/>
+  <text x="1335" y="180" text-anchor="middle" class="group-title">常见错误</text>
+  <path d="M1168 194 C1280 184 1410 204 1505 190" class="rough"/>
+
+  <rect x="1190" y="245" width="290" height="110" rx="24" fill="#fee2e2" stroke="#1f2937" stroke-width="5"/>
+  <text x="1335" y="292" text-anchor="middle" class="node">.claude-plugin/</text>
+  <text x="1335" y="330" text-anchor="middle" class="small">不应成为能力目录容器</text>
+
+  <path d="M1335 356 L1335 420" class="line" marker-end="url(#arrow)"/>
+
+  <rect x="1190" y="425" width="290" height="190" rx="24" fill="#fee2e2" stroke="#dc2626" stroke-width="5"/>
+  <text x="1335" y="475" text-anchor="middle" class="node">commands/</text>
+  <text x="1335" y="515" text-anchor="middle" class="node">skills/ · agents/</text>
+  <text x="1335" y="555" text-anchor="middle" class="node">hooks/ · .mcp.json</text>
+  <text x="1335" y="595" text-anchor="middle" class="small">Claude Code 加载不到</text>
+
+  <path d="M1205 665 L1465 755 M1465 665 L1205 755" fill="none" stroke="#dc2626" stroke-width="18" stroke-linecap="round"/>
+  <text x="1335" y="800" text-anchor="middle" class="node" fill="#dc2626">不要这样放</text>
+</svg>

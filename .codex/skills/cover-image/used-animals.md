@@ -48,3 +48,4 @@
 | 2026-04-03 | claude-code-slash-command | 蛇 / snake | 中 | 幽绿丛林蛇游过石径（也可能是藤蔓） |
 | 2026-04-27 | claude-code-hooks | 寄居蟹 / hermit crab | 高 | 海边沙滩贝壳间一只寄居蟹 |
 | 2026-05-29 | claude-code-plugin | 喜鹊 / magpie | 本次生成 | 闪亮银币、树枝鸟巢；Claude Code Plugins |
+| 2026-07-11 | claude-code-mcp | 蜘蛛 / spider | 本次生成 | glowing web、USB cable；Claude Code MCP |

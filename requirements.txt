@@ -4,7 +4,7 @@ charset-normalizer==3.1.0
 cssselect==1.2.0
 idna==3.4
 importlib-metadata==6.1.0
-lxml==4.9.2
+lxml==6.1.0
 markdown==3.4.3
 pygments==2.14.0
 pyquery==2.0.0

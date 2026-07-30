@@ -2,7 +2,7 @@ bottle==0.12.25
 certifi==2022.12.7
 charset-normalizer==3.1.0
 cssselect==1.2.0
-idna==3.4
+idna==3.15
 importlib-metadata==6.1.0
 lxml==4.9.2
 markdown==3.4.3
